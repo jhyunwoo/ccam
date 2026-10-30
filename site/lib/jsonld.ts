@@ -1,6 +1,6 @@
 import { abs, REPO, SITE } from "./paths";
 
-export const VERSION = "0.13.0"; // shown on the site; bump with releases
+export const VERSION = "0.13.1"; // shown on the site; bump with releases
 export const CLAUDE_CODE_VERSION = "2.1.302";
 
 // "CCAM" also names other projects; the full name tells search engines which one this is.

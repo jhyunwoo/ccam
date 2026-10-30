@@ -1,5 +1,11 @@
 [
   {
+    "tag": "v0.13.1",
+    "date": "2026-10-30",
+    "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.13.1",
+    "notes": "<p>Changes to know about: the dashboard (<code>ccam</code> in a terminal) now shows <code>r to refresh</code> in the Accounts tab&#39;s key line. <code>r</code> refreshes the usage of every account, bypassing the short cache; it did so before, but only the <code>?</code> screen listed it. When the key line does not fit the terminal, its last keys are left out first and <code>? for shortcuts</code> stays: at 80 columns <code>s for groups</code> is left out (<code>?</code> still lists it).</p>\n<h3>New</h3>\n<ul>\n<li>The dashboard&#39;s Accounts key line names <code>r</code>, which refreshes every account&#39;s usage</li>\n</ul>\n"
+  },
+  {
     "tag": "v0.13.0",
     "date": "2026-10-28",
     "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.13.0",
