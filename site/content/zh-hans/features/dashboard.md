@@ -1,10 +1,10 @@
 ---
 title: 仪表盘
 description: 在终端中运行 ccam 会打开全屏仪表盘，显示账号、组、文件夹规则、扩展和检查结果；每项更改都会先显示计划。
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 `ccam` 不带参数运行时，如果标准输入和标准输出都是终端，就会打开全屏仪表盘；否则打印 `ccam list` 的输出。仪表盘显示每个账号及其用量和组，并能完成各个命令所做的事：启动、添加、登录、更改组、设置文件夹规则、列出后台会话、检查和修复。启动 Claude Code 或连接到后台会话时仪表盘会关闭；添加账号或登录时会暂时把终端交出去，完成后再回到仪表盘。
@@ -20,7 +20,7 @@ sourceHash: "4e763ca8aacf"
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 选项卡名称下面的一行用一句话说明当前选项卡的用途。终端较宽时，Accounts 选项卡还会显示每个账号的邮箱。在每个选项卡上，选项卡所在行的末尾都会显示 [`auto_switch`](/features/next#auto-switch) 是否开启（Linux 和 macOS；在 Windows 上会被忽略）。开启时，Health 选项卡会列出这项设置还需要什么：Claude Code 2.1.214 或更高版本，以及在每个使用 Claude 订阅登录的账号中开启 ccam 插件。

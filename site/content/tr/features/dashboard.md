@@ -1,10 +1,10 @@
 ---
 title: Kontrol paneli
 description: Terminalde ccam; hesapların, grupların, klasör kurallarının, uzantıların ve denetimlerin tam ekran kontrol panelini açar; her değişiklik önce planını gösterir.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: 4e763ca8aacf
+sourceHash: d65f1b5bb0c8
 ---
 
 Argümansız `ccam`, standart girdi ve çıktı bir terminal olduğunda tam ekran bir kontrol paneli açar; aksi halde `ccam list` çıktısını yazdırır. Kontrol paneli her hesabı kullanımı ve gruplarıyla birlikte gösterir ve komutların yaptığını yapar: başlatma, ekleme, giriş yapma, grupları değiştirme, klasör kuralları belirleme, arka plan oturumlarını listeleme, denetleme ve onarma. Başlatma ya da bir arka plan oturumuna bağlanma paneli kapatır; bir hesap eklemek veya giriş yapmak terminali kısa bir süre devreder, ardından kontrol paneline geri döner.
@@ -20,7 +20,7 @@ Argümansız `ccam`, standart girdi ve çıktı bir terminal olduğunda tam ekra
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 Sekme adlarının altındaki satır, geçerli sekmenin ne işe yaradığını tek bir cümleyle söyler. Daha geniş bir terminalde Accounts sekmesi her hesabın e-postasını da gösterir. Her sekmede, sekme satırının sonu [`auto_switch`](/features/next#auto-switch) ayarının açık olup olmadığını gösterir (Linux ve macOS; Windows'ta yok sayılır). Açıkken Health sekmesi, bu ayarın hâlâ neye ihtiyaç duyduğunu listeler: Claude Code 2.1.214 veya sonrası ve Claude aboneliğiyle giriş yapan her hesapta açık bir ccam eklentisi.

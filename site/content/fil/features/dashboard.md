@@ -1,10 +1,10 @@
 ---
 title: Ang dashboard
 description: Sa terminal, nagbubukas ang ccam ng full-screen dashboard ng mga account, group, folder rule, extension at pagsusuri; may plano muna ang bawat pagbabago.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 Binubuksan ng `ccam` na walang argument ang isang full-screen dashboard kapag terminal ang standard input at output; kung hindi, ipi-print nito ang `ccam list`. Ipinapakita ng dashboard ang bawat account kasama ang usage at mga group nito, at ginagawa nito ang ginagawa ng mga command: magsimula, magdagdag, mag-log in, magbago ng mga group, magtakda ng mga folder rule, maglista ng mga background session, magsuri at mag-ayos. Nagsasara ito kapag nagsimula ang isang account o kapag kumabit ka sa isang background session; kapag nagdagdag ng account o nag-log in, ibinibigay muna nito sandali ang terminal, saka bumabalik sa dashboard.
@@ -20,7 +20,7 @@ Binubuksan ng `ccam` na walang argument ang isang full-screen dashboard kapag te
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 Sinasabi ng linya sa ilalim ng mga pangalan ng tab, sa isang pangungusap, kung para saan ang kasalukuyang tab. Sa mas malapad na terminal, ipinapakita rin ng tab na Accounts ang email ng bawat account. Sa bawat tab, ipinapakita ng dulo ng linya ng mga tab kung naka-on ang [`auto_switch`](/features/next#auto-switch) (Linux at macOS; hindi ito pinapansin ng Windows). Kapag naka-on ito, inililista ng tab na Health kung ano pa ang kailangan nito: Claude Code 2.1.214 o mas bago, at ang ccam plugin na naka-on sa bawat account na nagsa-sign in gamit ang Claude subscription.

@@ -1,10 +1,10 @@
 ---
 title: ダッシュボード
 description: ターミナルでccamを実行すると、アカウント、グループ、フォルダーのルール、拡張機能、点検結果の全画面ダッシュボードが開きます。どの変更も先に計画を示します。
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: 4e763ca8aacf
+sourceHash: d65f1b5bb0c8
 ---
 
 引数なしの`ccam`は、標準入力と標準出力がターミナルであれば全画面のダッシュボードを開き、そうでなければ`ccam list`を出力します。ダッシュボードはすべてのアカウントを使用量とグループとともに表示し、起動、追加、ログイン、グループの変更、フォルダーのルールの設定、バックグラウンドセッションの一覧、点検と修復といった、コマンドと同じことを行えます。起動するか、バックグラウンドセッションにアタッチすると、ダッシュボードは閉じます。アカウントの追加やログインでは、少しの間ターミナルを渡し、その後ダッシュボードに戻ります。
@@ -20,7 +20,7 @@ sourceHash: 4e763ca8aacf
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 タブ名の下の行は、現在のタブが何のためのものかを1文で説明します。幅の広いターミナルでは、Accountsタブに各アカウントのメールアドレスも表示されます。タブ名の行の末尾には、どのタブでも、[`auto_switch`](/features/next#auto-switch)が有効かどうかが表示されます（LinuxとmacOS。Windowsでは無視されます）。有効なときは、それにまだ必要なもの（Claude Code 2.1.214以降と、Claudeのサブスクリプションでサインインするすべてのアカウントでオンになっているccamプラグイン）をHealthタブが一覧表示します。

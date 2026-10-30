@@ -1,10 +1,10 @@
 ---
 title: La dashboard
 description: ccam in un terminale apre una dashboard a schermo intero con account, gruppi, regole per cartella, estensioni e controlli; ogni modifica mostra prima il piano.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: 4e763ca8aacf
+sourceHash: d65f1b5bb0c8
 ---
 
 `ccam` senza argomenti apre una dashboard a schermo intero quando standard input e standard output sono un terminale; altrimenti stampa `ccam list`. La dashboard mostra ogni account con il suo utilizzo e i suoi gruppi, e fa ciò che fanno i comandi: avviare, aggiungere, effettuare il login, cambiare i gruppi, impostare le regole delle cartelle, elencare le sessioni in background, controllare e riparare. Avviare un account, o collegarsi a una sessione in background, la chiude; aggiungere un account o effettuare il login le fa cedere il terminale per un momento, poi si torna alla dashboard.
@@ -20,7 +20,7 @@ sourceHash: 4e763ca8aacf
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 La riga sotto i nomi delle schede dice in una frase a cosa serve la scheda corrente. In un terminale più largo la scheda Accounts mostra anche l'email di ogni account. In ogni scheda, la fine della riga delle schede mostra se [`auto_switch`](/features/next#auto-switch) è attivo (Linux e macOS; su Windows viene ignorato). Quando è attivo, la scheda Health elenca cosa gli serve ancora: Claude Code 2.1.214 o successivo, e il plugin di ccam attivato in ogni account che accede con un abbonamento Claude.

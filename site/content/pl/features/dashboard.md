@@ -1,10 +1,10 @@
 ---
 title: Panel
 description: ccam w terminalu otwiera pełnoekranowy panel kont, grup, reguł folderów, rozszerzeń i sprawdzeń; każda zmiana najpierw pokazuje swój plan.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 `ccam` bez argumentów otwiera pełnoekranowy panel, gdy standardowe wejście i wyjście są terminalem; w przeciwnym razie wypisuje `ccam list`. Panel pokazuje każde konto z jego użyciem i grupami i robi to samo co polecenia: uruchamia, dodaje, loguje, zmienia grupy, ustawia reguły folderów, wyświetla sesje w tle, sprawdza i naprawia. Uruchomienie konta albo podłączenie się do sesji w tle go zamyka; dodawanie konta lub logowanie na chwilę oddaje terminal, a potem wraca do panelu.
@@ -20,7 +20,7 @@ sourceHash: "4e763ca8aacf"
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 Wiersz pod nazwami kart mówi jednym zdaniem, do czego służy bieżąca karta. W szerszym terminalu karta Accounts pokazuje też adres e-mail każdego konta. Na każdej karcie koniec wiersza z nazwami kart pokazuje, czy [`auto_switch`](/features/next#auto-switch) jest włączone (Linux i macOS; w systemie Windows jest ignorowane). Gdy jest włączone, karta Health wymienia, czego mu jeszcze brakuje: Claude Code 2.1.214 lub nowszego oraz włączonego pluginu ccam na każdym koncie, które loguje się subskrypcją Claude.

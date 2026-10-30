@@ -659,7 +659,7 @@ func (d *Dashboard) render() string {
 	case d.notice.text != "":
 		tail = append(tail, " "+t.success().Render(symOK)+" "+d.notice.text)
 	}
-	tail = append(tail, " "+t.dim().Render(d.keysLine()))
+	tail = append(tail, " "+t.dim().Render(d.keysLine(w-1)))
 	// On a short screen the blank lines and the tab's description go
 	// first, then the end of a long error, so that the key line stays.
 	for i := len(spare) - 1; i >= 0 && len(top)+len(tail) > d.height; i-- {
@@ -754,8 +754,10 @@ func plural(n int, word string) string {
 	return fmt.Sprintf("%d %ss", n, word)
 }
 
-// keysLine is the short key list for the current screen.
-func (d *Dashboard) keysLine() string {
+// keysLine is the short key list for the current screen. Keys that do not
+// fit in w columns are left out, the last ones first; "? for shortcuts"
+// stays.
+func (d *Dashboard) keysLine(w int) string {
 	if d.dlg != nil {
 		return d.dlg.keys()
 	}
@@ -765,7 +767,7 @@ func (d *Dashboard) keysLine() string {
 	var keys []string
 	switch d.tab {
 	case tabAccounts:
-		keys = []string{"enter to launch", "n for most room", "a to add", "s for groups"}
+		keys = []string{"enter to launch", "n for most room", "r to refresh", "a to add", "s for groups"}
 	case tabAgents:
 		keys = []string{"enter to attach", "x to stop", "r to reload"}
 	case tabGroups:
@@ -782,7 +784,11 @@ func (d *Dashboard) keysLine() string {
 		keys = []string{"f to fix the selected box", "F to fix all", "r to check again"}
 	}
 	if !(d.tab == tabGroups && d.groups.editing) {
-		keys = append(keys, "? for shortcuts")
+		const more = "? for shortcuts"
+		for len(keys) > 1 && ansi.StringWidth(strings.Join(append(keys, more), symDot)) > w {
+			keys = keys[:len(keys)-1]
+		}
+		keys = append(keys, more)
 	}
 	return strings.Join(keys, symDot)
 }

@@ -1,10 +1,10 @@
 ---
 title: El panel
 description: ccam en una terminal abre un panel a pantalla completa con cuentas, grupos, reglas de carpeta, extensiones y comprobaciones; cada cambio muestra antes su plan.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 `ccam` sin argumentos abre un panel a pantalla completa cuando la entrada y la salida estándar son una terminal; si no, imprime `ccam list`. El panel muestra cada cuenta con su uso y sus grupos, y hace lo mismo que los comandos: iniciar, agregar, iniciar sesión, cambiar grupos, definir reglas de carpeta, listar sesiones en segundo plano, comprobar y reparar. Al iniciar una cuenta, o al conectarse a una sesión en segundo plano, se cierra; al agregar una cuenta o iniciar sesión, cede la terminal por un momento y luego vuelve al panel.
@@ -20,7 +20,7 @@ sourceHash: "4e763ca8aacf"
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 La línea bajo los nombres de las pestañas dice en una frase para qué sirve la pestaña actual. En una terminal más ancha, la pestaña Accounts también muestra el correo electrónico de cada cuenta. En todas las pestañas, el final de la línea con los nombres de las pestañas muestra si [`auto_switch`](/features/next#auto-switch) está activado (Linux y macOS; Windows ignora este ajuste). Cuando lo está, la pestaña Health lista qué le falta todavía: Claude Code 2.1.214 o posterior, y el plugin de ccam activado en cada cuenta que inicia sesión con una suscripción de Claude.

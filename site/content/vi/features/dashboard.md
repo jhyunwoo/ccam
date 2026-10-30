@@ -1,10 +1,10 @@
 ---
 title: Bảng điều khiển
 description: "ccam trên terminal mở bảng điều khiển toàn màn hình gồm tài khoản, nhóm, quy tắc thư mục, tiện ích mở rộng và kiểm tra; mọi thay đổi đều hiện kế hoạch trước."
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: 4e763ca8aacf
+sourceHash: d65f1b5bb0c8
 ---
 
 `ccam` không kèm đối số sẽ mở một bảng điều khiển toàn màn hình khi đầu vào và đầu ra chuẩn là terminal; nếu không, nó in ra `ccam list`. Bảng điều khiển hiển thị mọi tài khoản cùng mức sử dụng và các nhóm của chúng, và làm được những gì các lệnh làm: khởi động, thêm, đăng nhập, thay đổi nhóm, đặt quy tắc thư mục, liệt kê các phiên nền, kiểm tra và sửa chữa. Khởi động một tài khoản, hoặc gắn vào một phiên nền, sẽ đóng bảng điều khiển; thêm tài khoản hoặc đăng nhập thì tạm nhường terminal trong chốc lát, rồi quay lại bảng điều khiển.
@@ -20,7 +20,7 @@ sourceHash: 4e763ca8aacf
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 Dòng dưới tên các thẻ cho biết trong một câu thẻ hiện tại dùng để làm gì. Trên terminal rộng hơn, thẻ Accounts còn hiển thị email của từng tài khoản. Trên mọi thẻ, cuối dòng chứa các thẻ cho biết [`auto_switch`](/features/next#auto-switch) có đang bật hay không (Linux và macOS; trên Windows nó bị bỏ qua). Khi nó bật, thẻ Health liệt kê những gì tính năng này còn cần: Claude Code 2.1.214 trở lên, và plugin ccam được bật trong mọi tài khoản đăng nhập bằng gói đăng ký Claude.

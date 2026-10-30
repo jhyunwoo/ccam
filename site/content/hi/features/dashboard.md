@@ -1,10 +1,10 @@
 ---
 title: डैशबोर्ड
 description: टर्मिनल पर ccam अकाउंट्स, ग्रुप्स, फ़ोल्डर नियमों, एक्सटेंशन और जाँचों का एक full-screen डैशबोर्ड खोलता है; हर बदलाव पहले अपनी योजना दिखाता है।
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 बिना आर्ग्युमेंट के `ccam`, standard input और output के टर्मिनल होने पर एक full-screen डैशबोर्ड खोलता है; वरना यह `ccam list` प्रिंट करता है। डैशबोर्ड हर अकाउंट को उसके उपयोग और ग्रुप्स के साथ दिखाता है, और वही करता है जो कमांड करती हैं: शुरू करना, जोड़ना, लॉगिन करना, ग्रुप बदलना, फ़ोल्डर नियम सेट करना, background sessions की सूची देखना, जाँचना और मरम्मत करना। शुरू करने पर, या किसी background session से जुड़ने पर, यह बंद हो जाता है; अकाउंट जोड़ने या लॉगिन करने पर यह कुछ देर के लिए टर्मिनल सौंप देता है, फिर डैशबोर्ड पर लौट आता है।
@@ -20,7 +20,7 @@ sourceHash: "4e763ca8aacf"
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 टैब के नामों के नीचे वाली पंक्ति एक वाक्य में बताती है कि मौजूदा टैब किसलिए है। ज़्यादा चौड़े टर्मिनल पर Accounts टैब हर अकाउंट का ईमेल भी दिखाता है। हर टैब पर, टैब के नामों वाली पंक्ति का अंत दिखाता है कि [`auto_switch`](/features/next#auto-switch) चालू है या नहीं (Linux और macOS; Windows पर इसे अनदेखा किया जाता है)। चालू होने पर, Health टैब बताता है कि इसे अभी भी क्या चाहिए: Claude Code 2.1.214 या उसके बाद का वर्ज़न, और Claude subscription से साइन इन करने वाले हर अकाउंट में चालू ccam plugin।

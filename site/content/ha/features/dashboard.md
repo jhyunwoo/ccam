@@ -1,10 +1,10 @@
 ---
 title: Dashboard
 description: ccam a terminal yana buɗe dashboard mai cike allo na asusai, rukunoni, ƙa'idodin folda, extensions da dubawa; kowane canji yana fara nuna shirinsa.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: 4e763ca8aacf
+sourceHash: d65f1b5bb0c8
 ---
 
 `ccam` ba tare da arguments ba yana buɗe dashboard mai cike allo idan standard input da output terminal ne; in ba haka ba yana buga `ccam list`. Dashboard yana nuna kowane asusu tare da amfaninsa da rukunoninsa, kuma yana yin abin da umarnan ke yi: farawa, ƙarawa, shiga, canza rukunoni, saita ƙa'idodin folda, lissafa zaman bayan fage, dubawa da gyarawa. Farawa, ko haɗawa da zaman bayan fage, yana rufe shi; ƙara asusu ko shiga yana miƙa terminal na ɗan lokaci, sannan ya dawo kan dashboard.
@@ -20,7 +20,7 @@ sourceHash: 4e763ca8aacf
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 Layin da ke ƙarƙashin sunayen shafuka yana faɗin a jimla ɗaya abin da shafin yanzu yake yi. A terminal mai faɗi, shafin Accounts yana kuma nuna imel ɗin kowane asusu. A kowane shafi, ƙarshen layin shafuka yana nuna ko [`auto_switch`](/features/next#auto-switch) yana a kunne (Linux da macOS; a Windows ana watsi da shi). Idan yana a kunne, shafin Health yana lissafa abin da har yanzu yake buƙata: Claude Code 2.1.214 ko sabo, da plugin ɗin ccam a kunne a kowane asusu da ke shiga da biyan kuɗin Claude.

@@ -1,10 +1,10 @@
 ---
 title: Dasbor
 description: ccam di terminal membuka dasbor layar penuh berisi akun, grup, aturan folder, ekstensi, dan pemeriksaan; setiap perubahan menampilkan rencananya dulu.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 `ccam` tanpa argumen membuka dasbor layar penuh jika input dan output standar adalah terminal; jika bukan, ccam mencetak `ccam list`. Dasbor menampilkan setiap akun beserta penggunaan dan grupnya, dan melakukan apa yang dilakukan perintah-perintahnya: menjalankan, menambahkan, login, mengubah grup, menetapkan aturan folder, menampilkan sesi latar belakang, memeriksa, dan memperbaiki. Menjalankan akun, atau menyambung (attach) ke sesi latar belakang, akan menutupnya; menambahkan akun atau login menyerahkan terminal sebentar, lalu kembali ke dasbor.
@@ -20,7 +20,7 @@ sourceHash: "4e763ca8aacf"
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 Baris di bawah nama-nama tab menjelaskan dalam satu kalimat kegunaan tab yang sedang dibuka. Di terminal yang lebih lebar, tab Accounts juga menampilkan email setiap akun. Di setiap tab, ujung baris nama-nama tab menunjukkan apakah [`auto_switch`](/features/next#auto-switch) aktif (Linux dan macOS; di Windows fitur ini diabaikan). Saat fitur ini aktif, tab Health mencantumkan apa yang masih dibutuhkannya: Claude Code 2.1.214 atau yang lebih baru, dan plugin ccam yang diaktifkan di setiap akun yang login dengan langganan Claude.

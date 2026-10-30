@@ -1,10 +1,10 @@
 ---
 title: Dashibodi
 description: ccam kwenye terminal hufungua dashibodi ya skrini nzima ya akaunti, vikundi, kanuni za folda, viendelezi na ukaguzi; kila badiliko huonyesha mpango wake kwanza.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 `ccam` bila hoja hufungua dashibodi ya skrini nzima wakati ingizo na matokeo ya kawaida ni terminal; vinginevyo huchapisha `ccam list`. Dashibodi huonyesha kila akaunti pamoja na matumizi yake na vikundi vyake, na hufanya kile ambacho amri hufanya: kuanzisha, kuongeza, kuingia, kubadilisha vikundi, kuweka kanuni za folda, kuorodhesha vipindi vya chinichini, kukagua na kurekebisha. Kuanzisha, au kuunganishwa na kipindi cha chinichini, huifunga; kuongeza akaunti au kuingia hukabidhi terminal kwa muda mfupi, kisha hurudi kwenye dashibodi.
@@ -20,7 +20,7 @@ sourceHash: "4e763ca8aacf"
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 Mstari ulio chini ya majina ya vichupo husema kwa sentensi moja kichupo cha sasa ni cha nini. Kwenye terminal pana zaidi, kichupo cha Accounts pia huonyesha barua pepe ya kila akaunti. Kwenye kila kichupo, mwisho wa mstari wa vichupo huonyesha kama [`auto_switch`](/features/next#auto-switch) imewashwa (Linux na macOS; kwenye Windows hupuuzwa). Ikiwa imewashwa, kichupo cha Health huorodhesha bado inahitaji nini: Claude Code 2.1.214 au baadaye, na plugin ya ccam ikiwa imewashwa katika kila akaunti inayoingia kwa usajili wa Claude.
