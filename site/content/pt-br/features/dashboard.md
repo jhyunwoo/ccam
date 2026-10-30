@@ -1,10 +1,10 @@
 ---
 title: O painel
 description: O ccam em um terminal abre um painel em tela cheia com contas, grupos, regras de pasta, extensões e verificações; cada mudança mostra o plano antes.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 `ccam` sem argumentos abre um painel em tela cheia quando a entrada e a saída padrão são um terminal; caso contrário, imprime `ccam list`. O painel mostra todas as contas com o uso e os grupos de cada uma e faz o que os comandos fazem: iniciar, adicionar, fazer login, alterar grupos, definir regras de pasta, listar sessões em segundo plano, verificar e reparar. Iniciar uma conta, ou se conectar a uma sessão em segundo plano, fecha o painel; adicionar uma conta ou fazer login entrega o terminal por um momento e depois volta ao painel.
@@ -20,7 +20,7 @@ sourceHash: "4e763ca8aacf"
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 A linha abaixo dos nomes das abas diz em uma frase para que serve a aba atual. Em um terminal mais largo, a aba Accounts também mostra o e-mail de cada conta. Em todas as abas, o fim da linha das abas mostra se o [`auto_switch`](/features/next#auto-switch) está ativado (Linux e macOS; no Windows, ele é ignorado). Quando ele está ativado, a aba Health lista do que ele ainda precisa: o Claude Code 2.1.214 ou posterior e o plugin do ccam ativado em todas as contas que fazem login com uma assinatura do Claude.

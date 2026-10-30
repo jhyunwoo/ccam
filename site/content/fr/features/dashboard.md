@@ -1,10 +1,10 @@
 ---
 title: "Le tableau de bord"
 description: "ccam dans un terminal ouvre un tableau de bord plein écran : comptes, groupes, dossiers, extensions et vérifications ; chaque modification montre son plan."
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 `ccam` sans argument ouvre un tableau de bord plein écran quand l'entrée et la sortie standard sont un terminal ; sinon, il affiche `ccam list`. Le tableau de bord montre chaque compte avec son utilisation et ses groupes, et fait ce que font les commandes : lancer, ajouter, connecter, changer de groupes, définir des règles de dossier, lister les sessions en arrière-plan, vérifier et réparer. Un lancement, ou le rattachement à une session en arrière-plan, le ferme ; ajouter un compte ou se connecter cède le terminal un instant, puis revient au tableau de bord.
@@ -20,7 +20,7 @@ sourceHash: "4e763ca8aacf"
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 La ligne sous les noms des onglets indique en une phrase à quoi sert l'onglet courant. Dans un terminal plus large, l'onglet Accounts affiche aussi l'adresse e-mail de chaque compte. Sur chaque onglet, la fin de la ligne des onglets indique si [`auto_switch`](/features/next#auto-switch) est activé (Linux et macOS ; Windows l'ignore). Quand il l'est, l'onglet Health liste ce dont il a encore besoin : Claude Code 2.1.214 ou plus récent, et le plugin ccam activé dans chaque compte qui se connecte avec un abonnement Claude.

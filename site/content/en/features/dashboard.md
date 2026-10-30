@@ -1,7 +1,7 @@
 ---
 title: The dashboard
 description: ccam on a terminal opens a full-screen dashboard of accounts, groups, folder rules, extensions and checks; every change shows its plan first.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: source
 ---
@@ -19,7 +19,7 @@ translation: source
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 The line under the tab names says in one sentence what the current tab is for. On a wider terminal the Accounts tab also shows each account's email. On every tab, the end of the tab line shows whether [`auto_switch`](/features/next#auto-switch) is on (Linux and macOS; Windows ignores it). When it is on, the Health tab lists what it still needs: Claude Code 2.1.214 or later, and the ccam plugin turned on in every account that signs in with a Claude subscription.

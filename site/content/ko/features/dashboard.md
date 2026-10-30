@@ -1,10 +1,10 @@
 ---
 title: 대시보드
 description: 터미널에서 ccam을 실행하면 계정, 그룹, 폴더 규칙, 확장, 점검을 보여 주는 전체 화면 대시보드가 열리며, 모든 변경은 계획을 먼저 보여 줍니다.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 표준 입력과 출력이 터미널이면 인자 없는 `ccam`은 전체 화면 대시보드를 엽니다. 터미널이 아니면 `ccam list`를 출력합니다. 대시보드는 모든 계정을 사용량, 그룹과 함께 보여 주며, 명령으로 하는 일을 그대로 할 수 있습니다. 실행, 추가, 로그인, 그룹 변경, 폴더 규칙 지정, 백그라운드 세션 목록 보기, 점검과 복구가 모두 됩니다. 실행하거나 백그라운드 세션에 연결하면 대시보드가 닫히고, 계정을 추가하거나 로그인할 때는 잠시 터미널을 넘겨준 뒤 대시보드로 돌아옵니다.
@@ -20,7 +20,7 @@ sourceHash: "4e763ca8aacf"
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 탭 이름 아래 줄은 현재 탭이 무엇을 하는지 한 문장으로 알려 줍니다. 터미널이 넓으면 Accounts 탭에 각 계정의 이메일도 표시됩니다. 어느 탭에서든 탭 이름 줄 끝에 [`auto_switch`](/features/next#auto-switch)가 켜져 있는지 표시됩니다(Linux와 macOS 전용, Windows에서는 무시됨). 켜져 있으면 Health 탭이 이 기능에 아직 필요한 것을 나열합니다. Claude Code 2.1.214 이상, 그리고 Claude 구독으로 로그인하는 모든 계정에서 켜져 있는 ccam 플러그인입니다.

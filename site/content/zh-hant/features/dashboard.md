@@ -1,10 +1,10 @@
 ---
 title: 儀表板
 description: 在終端機中執行 ccam 會開啟全螢幕儀表板，顯示帳號、群組、資料夾規則、擴充功能和檢查結果；每項變更都會先顯示計畫。
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 不帶參數的 `ccam` 在標準輸入和輸出都是終端機時會開啟全螢幕儀表板，否則會印出 `ccam list`。儀表板會顯示每個帳號及其用量和群組，並能完成各個指令的工作：啟動、新增、登入、變更群組、設定資料夾規則、列出背景工作階段、檢查和修復。啟動帳號或連接到背景工作階段時，儀表板會關閉；新增帳號或登入時則會暫時把終端機交出去，完成後再回到儀表板。
@@ -20,7 +20,7 @@ sourceHash: "4e763ca8aacf"
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 分頁名稱下方的一行用一句話說明目前分頁的用途。在較寬的終端機上，Accounts 分頁還會顯示每個帳號的電子郵件。在每個分頁上，分頁所在那一行的結尾都會顯示 [`auto_switch`](/features/next#auto-switch) 是否開啟（Linux 和 macOS；在 Windows 上會被忽略）。開啟時，Health 分頁會列出這項設定還需要什麼：Claude Code 2.1.214 或更新版本，以及在每個以 Claude 訂閱登入的帳號中開啟 ccam 外掛。

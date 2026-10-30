@@ -827,6 +827,27 @@ func TestKeepsAnInstalledUpdate(t *testing.T) {
 	}
 }
 
+// The Accounts tab's key line names r; a narrower screen leaves out the
+// last keys first, never "? for shortcuts".
+func TestAccountsKeyLineFits(t *testing.T) {
+	f := newFake(t)
+	for _, c := range []struct {
+		width int
+		want  string
+	}{
+		{120, " enter to launch · n for most room · r to refresh · a to add · s for groups · ? for shortcuts"},
+		{80, " enter to launch · n for most room · r to refresh · a to add · ? for shortcuts"},
+		{40, " enter to launch · ? for shortcuts"},
+	} {
+		d := dash(f)
+		d.Update(tea.WindowSizeMsg{Width: c.width, Height: 24})
+		lines := strings.Split(screen(d), "\n")
+		if got := strings.TrimRight(lines[len(lines)-1], " "); got != c.want {
+			t.Errorf("width %d:\n got %q\nwant %q", c.width, got, c.want)
+		}
+	}
+}
+
 // Below 40x8 the dashboard says it needs more room; from there up every
 // line fits, the key line included, even with a long error.
 func TestSmallTerminals(t *testing.T) {

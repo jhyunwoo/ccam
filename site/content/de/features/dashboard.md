@@ -1,10 +1,10 @@
 ---
 title: Das Dashboard
 description: ccam öffnet im Terminal ein Vollbild-Dashboard mit Konten, Gruppen, Ordnerregeln, Erweiterungen und Prüfungen; jede Änderung zeigt zuerst ihren Plan.
-updated: 2026-10-26
+updated: 2026-10-30
 order: 15
 translation: machine
-sourceHash: "4e763ca8aacf"
+sourceHash: "d65f1b5bb0c8"
 ---
 
 `ccam` ohne Argumente öffnet ein Vollbild-Dashboard, wenn Standardeingabe und -ausgabe ein Terminal sind; andernfalls gibt es `ccam list` aus. Das Dashboard zeigt jedes Konto mit seiner Nutzung und seinen Gruppen und erledigt, was die Befehle tun: starten, hinzufügen, anmelden, Gruppen ändern, Ordnerregeln setzen, Hintergrundsitzungen auflisten, prüfen und reparieren. Ein Start oder das Verbinden mit einer Hintergrundsitzung schließt es; beim Hinzufügen eines Kontos oder bei der Anmeldung gibt es das Terminal kurz ab und kehrt dann zum Dashboard zurück.
@@ -20,7 +20,7 @@ sourceHash: "4e763ca8aacf"
  ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
    3. side         ✘ not logged in                        -     no group
 
- enter to launch · n for most room · a to add · s for groups · ? for shortcuts
+ enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
 
 Die Zeile unter den Tab-Namen sagt in einem Satz, wofür der aktuelle Tab da ist. In einem breiteren Terminal zeigt der Tab Accounts außerdem die E-Mail-Adresse jedes Kontos. Auf jedem Tab zeigt das Ende der Zeile mit den Tab-Namen, ob [`auto_switch`](/features/next#auto-switch) eingeschaltet ist (Linux und macOS; Windows ignoriert die Einstellung). Ist es eingeschaltet, listet der Tab Health auf, was dafür noch fehlt: Claude Code 2.1.214 oder neuer und das eingeschaltete ccam-Plugin in jedem Konto, das sich mit einem Claude-Abo anmeldet.
