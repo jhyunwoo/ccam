@@ -76,7 +76,9 @@ func TestCcusageRunnerStartsOutsideTheWorkingFolder(t *testing.T) {
 	settings := filepath.Join(repo, ".ccusage", "ccusage.json")
 	write(settings, "{}\n", 0o600)
 	runners, rec := filepath.Join(h.home, "runners"), filepath.Join(h.home, "runner-ran")
-	record := "#!/bin/sh\n{ pwd -P; printf '%s\\n' \"$PWD\" \"$@\"; } > '" + rec + "'\n"
+	// $PWD is read before pwd -P: bash as sh (Fedora, Arch, macOS) sets PWD
+	// to the folder itself when pwd -P runs.
+	record := "#!/bin/sh\nwas=$PWD\n{ pwd -P; printf '%s\\n' \"$was\" \"$@\"; } > '" + rec + "'\n"
 	write(filepath.Join(runners, "npx"), record+"if [ -x \"node_modules/.bin/$1\" ]; then exec \"node_modules/.bin/$1\"; fi\n", 0o755)
 	// CCAM_HOME through a link: ccam names its folder through the link and
 	// pwd -P names the folder itself, so a $PWD left naming the repository,
