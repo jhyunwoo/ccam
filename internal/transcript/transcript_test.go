@@ -444,3 +444,32 @@ func TestRemoteControl(t *testing.T) {
 		t.Error("no conversation")
 	}
 }
+
+// Agent is the agent the newest agent-setting row near the end of the
+// conversation names.
+func TestAgent(t *testing.T) {
+	// Made-up rows of the shape Claude Code 2.1.314 writes.
+	row := func(name string) string {
+		return `{"type":"agent-setting","agentSetting":"` + name + `","sessionId":"s"}` + "\n"
+	}
+	search := `{"isSidechain":false,"type":"assistant","message":{"id":"m9","model":"claude-opus-5-5","role":"assistant","content":[{"type":"tool_use","id":"t9","name":"Grep","input":{"pattern":"agent-setting"}}]}}` + "\n"
+	filler := strings.Repeat(`{"type":"system","subtype":"turn_duration","content":"`+strings.Repeat("x", 900)+`"}`+"\n", 1300)
+	base := fixture(t, "limit-2.1.306-five_hour.jsonl")
+	path := filepath.Join(t.TempDir(), "c.jsonl")
+	for _, c := range []struct{ name, body, want string }{
+		{"no row", base, ""},
+		{"one row", row("reviewer") + base, "reviewer"},
+		{"several rows", row("reviewer") + base + row("reviewer") + row("writer") + base, "writer"},
+		{"a half-written last row", base + row("reviewer") + `{"type":"agent-setting","agentSetting":"wri`, "reviewer"},
+		{"a tool call that names agent-setting", base + row("reviewer") + search, "reviewer"},
+		{"a row long before the end", row("reviewer") + filler, ""},
+	} {
+		write(t, path, c.body, time.Now())
+		if got := Agent(path); got != c.want {
+			t.Errorf("%s: %q, want %q", c.name, got, c.want)
+		}
+	}
+	if got := Agent(filepath.Join(t.TempDir(), "none.jsonl")); got != "" {
+		t.Errorf("no conversation: %q", got)
+	}
+}

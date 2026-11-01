@@ -132,6 +132,12 @@ func TestNoRoomNote(t *testing.T) {
 			hit + ". p3 has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch p3 moves it."},
 		{"usage credits on in two", target{credits: []string{"p3", "p4"}}, personal, hit, soon,
 			hit + ". p3 and p4 have room but their usage credits are on, so auto_switch did not move the conversation there; /ccam:switch p3 moves it."},
+		// One with room that may lack the conversation's agent, or define it
+		// otherwise, is left out too.
+		{"the agent's", target{full: true, first: "p2", freeAt: now.Add(time.Hour), agent: "reviewer", otherAgents: []string{"p3"}}, personal, hit, soon,
+			hit + `. This conversation runs as agent "reviewer", and p3 does not share p1's agents, plugins and settings, so auto_switch did not move it there.`},
+		{"the agent's in two", target{agent: "reviewer", otherAgents: []string{"p3", "p4"}}, personal, hit, soon,
+			hit + `. This conversation runs as agent "reviewer", and p3 and p4 do not share p1's agents, plugins and settings, so auto_switch did not move it there.`},
 		{"nothing known of the others", target{}, personal, hit, soon, ""},
 	} {
 		if got := c.tg.note(c.hit, "p1", c.id, now.Add(c.reset), now); got != c.want {
@@ -270,7 +276,7 @@ func TestAutoTarget(t *testing.T) {
 			}
 			e, cfg := c.env()
 			from, _ := cfg.Find("personal")
-			tg, err := autoTarget(context.Background(), e, cfg, from, folder, usage.Policy{})
+			tg, err := autoTarget(context.Background(), e, cfg, from, folder, "", usage.Policy{})
 			got := ""
 			if tg.to != nil {
 				got = tg.to.Name
@@ -281,6 +287,43 @@ func TestAutoTarget(t *testing.T) {
 			}
 			if got == "side" && tg.why != "10% of its 5 hours used, the least" || k.why != "" && tg.why != k.why {
 				t.Fatalf("why: %q", tg.why)
+			}
+		})
+	}
+}
+
+// While the conversation runs as an agent, autoTarget leaves out an account
+// with room that does not load the agents of the one at its limit the same
+// way, and names it for the notification.
+func TestAutoTargetKeepsTheAgent(t *testing.T) {
+	folder, _ := filepath.EvalSymlinks(t.TempDir())
+	for _, k := range []struct {
+		name, agent string
+		usage       map[string]int
+		want        string
+		other       []string
+	}{
+		{"no agent", "", map[string]int{"personal": 90, "work": 40, "side": 10}, "side", nil},
+		{"side has agents of its own", "reviewer", map[string]int{"personal": 90, "work": 40, "side": 10}, "work", []string{"side"}},
+		{"only side has room", "reviewer", map[string]int{"personal": 90, "work": 100, "side": 10}, "", []string{"side"}},
+	} {
+		t.Run(k.name, func(t *testing.T) {
+			c := newTestCLI(t, k.usage)
+			logInTrusting(t, c.p.ProfileDir("personal"), "u1", "p1", "claude_max", folder)
+			logInTrusting(t, c.p.ProfileDir("work"), "u2", "w1", "claude_max", folder)
+			logInTrusting(t, c.p.ProfileDir("side"), "u3", "s1", "claude_pro", folder)
+			if err := os.MkdirAll(filepath.Join(c.p.ProfileDir("side"), "agents"), 0o700); err != nil {
+				t.Fatal(err)
+			}
+			e, cfg := c.env()
+			from, _ := cfg.Find("personal")
+			tg, err := autoTarget(context.Background(), e, cfg, from, folder, k.agent, usage.Policy{})
+			got := ""
+			if tg.to != nil {
+				got = tg.to.Name
+			}
+			if err != nil || got != k.want || !slices.Equal(tg.otherAgents, k.other) || tg.agent != k.agent {
+				t.Fatalf("%v: %q %+v", err, got, tg)
 			}
 		})
 	}
@@ -308,7 +351,7 @@ func TestAutoTargetStartsNoClaude(t *testing.T) {
 	saveUsage(t, c, "side", 10, saved, false)
 	e, cfg := c.env()
 	from, _ := cfg.Find("personal")
-	tg, err := autoTarget(context.Background(), e, cfg, from, folder, usage.Policy{})
+	tg, err := autoTarget(context.Background(), e, cfg, from, folder, "", usage.Policy{})
 	if err != nil || tg.to == nil || tg.to.Name != "side" || tg.why != "10% of its 5 hours used, the least; saved 2m ago" || fileThere(ran) {
 		t.Fatalf("%v %+v, claude started: %v", err, tg, fileThere(ran))
 	}
@@ -358,12 +401,12 @@ func TestAutoTargetDeadline(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 200*time.Millisecond)
 	defer cancel()
 	begin := time.Now()
-	if tg, err := autoTarget(ctx, e, cfg, from, folder, usage.Policy{}); err == nil || time.Since(begin) > time.Second {
+	if tg, err := autoTarget(ctx, e, cfg, from, folder, "", usage.Policy{}); err == nil || time.Since(begin) > time.Second {
 		t.Fatalf("%v %+v after %v", err, tg, time.Since(begin))
 	}
 	ctx, cancel = context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	if tg, err := autoTarget(ctx, e, cfg, from, folder, usage.Policy{}); err != nil || tg.to == nil || tg.to.Name != "side" {
+	if tg, err := autoTarget(ctx, e, cfg, from, folder, "", usage.Policy{}); err != nil || tg.to == nil || tg.to.Name != "side" {
 		t.Fatalf("%v %+v", err, tg)
 	}
 }

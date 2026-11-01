@@ -152,6 +152,26 @@ func TestDryRunQuotes(t *testing.T) {
 	}
 }
 
+// A program that starts in a folder of its own (ccusage's bun x and npx)
+// has a dry run that starts it there too: in a subshell for sh, which
+// leaves the shell where it is, and with Start-Process's -WorkingDirectory
+// for PowerShell.
+func TestDryRunStartsInTheWorkDir(t *testing.T) {
+	environ := []string{"PATH=/bin"}
+	pl := &Plan{Bin: "/bin/npx", Argv: []string{"npx", "ccusage@latest", "daily"}, Env: append(environ, "CLAUDE_CONFIG_DIR=/d"),
+		WorkDir: "/state/it's"}
+	var buf bytes.Buffer
+	if err := pl.dryRun(&buf, environ); err != nil {
+		t.Fatal(err)
+	}
+	if want := `(cd '/state/it'\''s' && CLAUDE_CONFIG_DIR=/d /bin/npx ccusage@latest daily)` + "\n"; runtime.GOOS != "windows" && buf.String() != want {
+		t.Fatalf("got  %swant %s", buf.String(), want)
+	}
+	if want := ` -ArgumentList 'ccusage@latest daily' -WorkingDirectory '/state/it''s' -NoNewWindow `; runtime.GOOS == "windows" && !strings.Contains(buf.String(), want) {
+		t.Fatalf("got %s\nwant it to hold %s", buf.String(), want)
+	}
+}
+
 // PowerShell ends a '...' string at any of its single quotes, the
 // typographic ones too: each is doubled.
 func TestPSString(t *testing.T) {

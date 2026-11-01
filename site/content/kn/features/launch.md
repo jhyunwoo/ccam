@@ -1,10 +1,10 @@
 ---
 title: Claude Code ಆರಂಭಿಸುವುದು
 description: ccam <name|number>, ccam run ಅಥವಾ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಮೂಲಕ ಯಾವುದೇ ಖಾತೆಯಾಗಿ Claude Code ಆರಂಭಿಸಿ; ಆರ್ಗ್ಯುಮೆಂಟ್‌ಗಳು ಬದಲಾಗದೆ claude ಗೆ ಹೋಗುತ್ತವೆ.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` `work` ಖಾತೆಯಾಗಿ Claude Code ಅನ್ನು ಆರಂಭಿಸುತ್ತದೆ, ಮತ್ತು ಹೆಸರಿನ ನಂತರದ ಎಲ್ಲವೂ ಬದಲಾವಣೆ ಇಲ್ಲದೆ `claude` ಗೆ ಹೋಗುತ್ತದೆ. ನೀವು `claude` ಎಂದು ಟೈಪ್ ಮಾಡುವ ಎಲ್ಲೆಡೆ ಇದನ್ನು ಬಳಸಿ: ಟರ್ಮಿನಲ್‌ನಲ್ಲಿ, ಸ್ಕ್ರಿಪ್ಟ್‌ನಲ್ಲಿ, ಅಥವಾ ಪೈಪ್ ಮೂಲಕ ಇನ್‌ಪುಟ್ ನೀಡುವಾಗ.
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 ಶೆಲ್‌ನಲ್ಲಿ `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` ಅಥವಾ `ANTHROPIC_AUTH_TOKEN` ಹೊಂದಿಸಿದ್ದರೆ, Claude Code ಖಾತೆಯ ಸ್ವಂತ ಲಾಗಿನ್ ಬದಲು ಆ ಕೀ ಅಥವಾ ಟೋಕನ್ ಅನ್ನು ಬಳಸಬಹುದು, ಹೀಗಾಗಿ ccam ಆರಂಭಿಸುವ ಮೊದಲು ಸ್ಟ್ಯಾಂಡರ್ಡ್ ಎರರ್‌ನಲ್ಲಿ ನಿಮ್ಮನ್ನು ಎಚ್ಚರಿಸುತ್ತದೆ (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). ಅದು ವೇರಿಯಬಲ್‌ಗಳನ್ನು ಓದುತ್ತದೆ ಅಷ್ಟೇ; [API ಕೀ ಖಾತೆ](/features/api) ಬದಲಿಗೆ ಅವುಗಳನ್ನು ತೆರವುಗೊಳಿಸುತ್ತದೆ.
 
-ಡೀಫಾಲ್ಟ್ ಆಗಿ, ccam ತನ್ನ ಜಾಗವನ್ನು Claude Code ಗೆ ಬಿಟ್ಟುಕೊಡುತ್ತದೆ, ಹೀಗಾಗಿ ಬೇರೇನೂ ರನ್ ಆಗುತ್ತಿರುವುದಿಲ್ಲ. `config.toml` ನ ಮೇಲ್ಭಾಗದಲ್ಲಿ, ಮೊದಲ `[[group]]`, `[[profile]]` ಅಥವಾ `[[folder]]` ಗಿಂತ ಮೇಲೆ, `relay = true` (ಅಥವಾ Linux ಮತ್ತು macOS ನಲ್ಲಿ [`auto_switch = true`](/features/next#auto-switch)) ಇದ್ದರೆ, ccam ಬದಲಿಗೆ ಇಂಟರ್‌ಆಕ್ಟಿವ್ ಸೆಷನ್‌ಗಳನ್ನು ಚೈಲ್ಡ್ ಪ್ರೊಸೆಸ್ ಆಗಿ ಆರಂಭಿಸಿ ಅವುಗಳ ಜೊತೆಯಲ್ಲೇ ರನ್ ಆಗುತ್ತಿರುತ್ತದೆ. ಇದರಿಂದ `/ccam:switch`, ಅಥವಾ ಬಳಕೆಯ ಮಿತಿಯಲ್ಲಿ `auto_switch`, ಸೆಷನ್‌ನ ಆಯ್ಕೆಗಳು, ಅನುಮತಿ ಮೋಡ್ ಮತ್ತು effort ಮಟ್ಟದೊಂದಿಗೆ, ತಾನಾಗಿಯೇ ಸಂಭಾಷಣೆಯನ್ನು ಇನ್ನೊಂದು ಖಾತೆಯಲ್ಲಿ ಮುಂದುವರಿಸಬಲ್ಲದು ([ವಿವರಗಳು](/features/next#relay)).
+ಡೀಫಾಲ್ಟ್ ಆಗಿ, ccam ತನ್ನ ಜಾಗವನ್ನು Claude Code ಗೆ ಬಿಟ್ಟುಕೊಡುತ್ತದೆ, ಹೀಗಾಗಿ ಬೇರೇನೂ ರನ್ ಆಗುತ್ತಿರುವುದಿಲ್ಲ. `config.toml` ನ ಮೇಲ್ಭಾಗದಲ್ಲಿ, ಮೊದಲ `[[group]]`, `[[profile]]` ಅಥವಾ `[[folder]]` ಗಿಂತ ಮೇಲೆ, `relay = true` (ಅಥವಾ Linux ಮತ್ತು macOS ನಲ್ಲಿ [`auto_switch = true`](/features/next#auto-switch)) ಇದ್ದರೆ, ccam ಬದಲಿಗೆ ಇಂಟರ್‌ಆಕ್ಟಿವ್ ಸೆಷನ್‌ಗಳನ್ನು ಚೈಲ್ಡ್ ಪ್ರೊಸೆಸ್ ಆಗಿ ಆರಂಭಿಸಿ ಅವುಗಳ ಜೊತೆಯಲ್ಲೇ ರನ್ ಆಗುತ್ತಿರುತ್ತದೆ. ಇದರಿಂದ `/ccam:switch`, ಅಥವಾ ಬಳಕೆಯ ಮಿತಿಯಲ್ಲಿ `auto_switch`, ಸೆಷನ್‌ನ ಆಯ್ಕೆಗಳು, ಅನುಮತಿ ಮೋಡ್, effort ಮಟ್ಟ ಮತ್ತು ಏಜೆಂಟ್‌ನೊಂದಿಗೆ, ತಾನಾಗಿಯೇ ಸಂಭಾಷಣೆಯನ್ನು ಇನ್ನೊಂದು ಖಾತೆಯಲ್ಲಿ ಮುಂದುವರಿಸಬಲ್ಲದು; `/ccam:switch` ಸಂಭಾಷಣೆಯನ್ನು ಇನ್ನೊಂದು ಸಂಸ್ಥೆಯ ಖಾತೆಗೆ ಸ್ಥಳಾಂತರಿಸುವ ಮೊದಲು, ccam ನಿಮ್ಮನ್ನು ಕೇಳುತ್ತದೆ ([ವಿವರಗಳು](/features/next#relay)).
 
 ## ಆಯ್ಕೆಗಳು
 

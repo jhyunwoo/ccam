@@ -1,10 +1,10 @@
 ---
 title: Claude Code शुरू करना
 description: ccam <name|number>, ccam run या डैशबोर्ड से किसी भी अकाउंट से Claude Code शुरू करें; आर्ग्युमेंट बिना बदलाव claude को जाते हैं, --dry-run कमांड दिखाता है।
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` Claude Code को `work` अकाउंट से शुरू करता है, और नाम के बाद का सब कुछ बिना बदलाव के `claude` को जाता है। इसे वहाँ इस्तेमाल करें जहाँ आप `claude` टाइप करते: टर्मिनल में, किसी स्क्रिप्ट में, या pipe से आए input के साथ।
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 जब shell में `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` या `ANTHROPIC_AUTH_TOKEN` सेट हो, तो Claude Code अकाउंट के अपने लॉगिन के बजाय वह key या token इस्तेमाल कर सकता है, इसलिए ccam शुरू करने से पहले standard error पर आपको चेतावनी देता है (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`)। यह केवल variables पढ़ता है; [API key अकाउंट](/features/api) इसके बजाय उन्हें हटा देता है।
 
-डिफ़ॉल्ट रूप से ccam ख़ुद को Claude Code से बदल देता है, इसलिए और कुछ चलता नहीं रहता। `config.toml` में सबसे ऊपर, पहले `[[group]]`, `[[profile]]` या `[[folder]]` से ऊपर, `relay = true` (या Linux और macOS पर [`auto_switch = true`](/features/next#auto-switch)) होने पर, ccam इसके बजाय interactive sessions को child process के रूप में शुरू करता है और उनके साथ-साथ चलता रहता है। इससे `/ccam:switch`, या उपयोग सीमा पर `auto_switch`, अपने-आप बातचीत को दूसरे अकाउंट पर जारी रख सकता है, session के विकल्पों, permission mode और effort level के साथ ([विवरण](/features/next#relay))।
+डिफ़ॉल्ट रूप से ccam ख़ुद को Claude Code से बदल देता है, इसलिए और कुछ चलता नहीं रहता। `config.toml` में सबसे ऊपर, पहले `[[group]]`, `[[profile]]` या `[[folder]]` से ऊपर, `relay = true` (या Linux और macOS पर [`auto_switch = true`](/features/next#auto-switch)) होने पर, ccam इसके बजाय interactive sessions को child process के रूप में शुरू करता है और उनके साथ-साथ चलता रहता है। इससे `/ccam:switch`, या उपयोग सीमा पर `auto_switch`, अपने-आप बातचीत को दूसरे अकाउंट पर जारी रख सकता है, session के विकल्पों, permission mode, effort level और agent के साथ; `/ccam:switch` बातचीत को किसी दूसरे संगठन के अकाउंट पर ले जाए, उससे पहले ccam आपसे पूछता है ([विवरण](/features/next#relay))।
 
 ## विकल्प
 

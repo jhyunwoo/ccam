@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "ccam",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Use several Claude Code accounts from inside Claude Code with ccam: see each account's usage, get a notification and continue on another account at a usage limit (/ccam:switch, or by itself with auto_switch), give parallel workers an account with room, and find out why a skill or MCP server is missing.",
   "author": {
     "name": "jhyunwoo",

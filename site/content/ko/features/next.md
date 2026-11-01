@@ -1,10 +1,10 @@
 ---
 title: 다음 계정으로 전환
 description: ccam next는 다른 계정으로 Claude Code를 엽니다. --auto는 여유가 가장 많은 계정을 고르고, --continue는 대화를 넘겨받으며, --fallback은 -p 작업을 재실행합니다.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 8
 translation: machine
-sourceHash: "4862fcef8882"
+sourceHash: "79300c521748"
 ---
 
 `ccam next`는 계정 이름을 지정하지 않아도 다른 계정으로 Claude Code를 엽니다. 계정이 사용량 한도에 도달했을 때 쓰면 됩니다. 전환하는 방법은 네 가지입니다.
@@ -96,7 +96,7 @@ auto_max_usage = 80        # keep 20% of each account for interactive work
 auto_strategy = "expiring"
 ```
 
-**조직.** 자동으로 고를 때는 떠나는 계정과 같은 종류의 계정 안에서만 고릅니다. 같은 Team이나 Enterprise 조직의 시트끼리, 또는 개인 요금제(Pro, Max) 계정끼리 고르므로, 회사 계정의 작업이 개인 계정에서 이어지거나 그 반대가 되는 일이 없습니다. ccam은 각 계정의 조직을 로그인에서 알아냅니다(`ccam login`이 기록하며, 이전 로그인은 `.claude.json`에서 읽습니다). 조직을 알 수 없는 계정은 어느 계정과도 짝지을 수 있습니다. 같은 Claude 계정으로 로그인한 두 폴더는 한도를 함께 쓰므로, 한쪽이 다른 쪽을 이어받는 일은 없습니다. `--cross-org`나 `config.toml`의 `cross_org = true`를 쓰면 조직 규칙이 풀립니다.
+**조직.** 자동으로 고를 때는 떠나는 계정과 같은 종류의 계정 안에서만 고릅니다. 같은 Team이나 Enterprise 조직의 시트끼리, 또는 개인 요금제(Pro, Max) 계정끼리 고르므로, 회사 계정의 작업이 개인 계정에서 이어지거나 그 반대가 되는 일이 없습니다. ccam은 각 계정의 조직을 로그인에서 알아냅니다(`ccam login`이 기록하며, 이전 로그인은 `.claude.json`에서 읽습니다). 조직을 알 수 없는 계정은 어느 계정과도 짝지을 수 있습니다. 같은 Claude 계정으로 로그인한 두 폴더는 한도를 함께 쓰므로, 한쪽이 다른 쪽을 이어받는 일은 없습니다. `--cross-org`나 `config.toml`의 `cross_org = true`를 쓰면 조직 규칙이 풀리지만, [`/ccam:switch`](#inside-claude-code) 뒤에 다른 조직으로 옮기는 것은 그래도 사용자가 yes라고 답할 때까지 기다립니다.
 
 고를 수 있는 계정이 없으면 ccam은 종료 코드 75(`EX_TEMPFAIL`)로 끝나므로, 스크립트는 "나중에 다시 시도"와 실패를 구별할 수 있습니다. `--wait`를 주면 대신, 가득 찬 계정 중 막고 있는 구간이 가장 먼저 초기화될 때까지(엔드포인트에 새 구간이 나타나는 초기화 시각 30초 뒤) 기다리며 `ccam: no account has room; waiting until 15:10`을 출력하고, 다시 고릅니다. 초기화 시각을 알려 주는 계정이 없으면 10분 뒤에 다시 확인합니다. 기다리는 시간이 끝날 때까지 여유가 생기지 않으면 75로 종료합니다.
 
@@ -108,6 +108,7 @@ auto_strategy = "expiring"
 2. 대화가 속한 계정이 전환해 떠나는 계정이 되고, 새 계정은 위와 같은 방식으로 같은 조직 안에서 고릅니다. 여러 계정이 그 대화 내역을 공유하면, `.claude.json`에 그 대화를 마지막으로 실행했다고 적힌(`lastSessionId`) 계정의 것으로, 없으면 마지막으로 사용한 계정의 것으로 봅니다.
 3. 새 계정이 그 대화 내역을 공유하면(같은 그룹 폴더) ccam은 `claude --resume <session id>`로 바로 그 대화를 시작합니다(`--continue`로는 그 폴더에서 가장 최근의 대화가 열립니다).
 4. 그렇지 않으면 `claude --resume <the conversation's file> --fork-session`으로 시작합니다. Claude Code가 대화 전체를 새 세션 ID로 새 계정 자체의 대화 내역에 복사하며, 원본은 그대로 남습니다. 그 뒤로는 새 계정의 `--continue`가 이 대화를 찾습니다.
+5. `--` 뒤에 `--agent`를 주지 않으면, ccam은 대화가 쓰는 에이전트도 넘겨줍니다. 폴더의 `.claude/settings.local.json`이나 `.claude/settings.json`, 또는 계정의 `settings.json`에 있는 `agent` 설정이며, 없으면 대화의 마지막 `agent-setting` 줄이 가리키는 에이전트입니다. Claude Code는 대화를 복사할 때(4단계) 에이전트를 되살리지 않으므로, 그대로 두면 기본 에이전트로 모든 도구를 쓰며 대화를 이어 가게 됩니다. 새 계정이 이전 계정의 에이전트, 플러그인, 설정을 공유하지 않으면(그룹을 통해 같은 `agents` 폴더와 `plugins` 폴더, `settings.json`을 쓰지 않으면), ccam은 이동에 관한 줄 뒤에 다음 줄을 덧붙입니다: `work does not share personal's agents, plugins and settings, so it may not have agent "reviewer" or may define it differently: the conversation may go on without that agent's tool limits`.
 
 ccam은 대화의 크기를 알려 줍니다. 새 계정은 첫 응답에서 대화 전체를 다시 읽기 때문입니다. 프롬프트 캐시는 조직 사이에 절대 공유되지 않고 개인 요금제는 각각 별도의 조직이므로, 두 계정이 서로 다른 조직에 속하면 ccam이 `prompt caches are not shared between organizations, so the first reply reads it all again`을 덧붙입니다. 이전 계정은 로그인했지만 새 계정은 로그인하지 않은 MCP 서버가 있으면 ccam이 이를 알려 줍니다: `work is not signed in to MCP servers that personal is signed in to: linear (sign in with /mcp there; sign-ins are not shared)`. 그룹에서 `history`를 공유하면 복사할 필요가 없어 대화가 하나로 유지되고, `/rewind`가 코드를 되돌릴 때 쓰는 체크포인트(`file-history/`)도 함께 공유됩니다.
 
@@ -153,15 +154,17 @@ Claude Code는 멘션을 `"`에서 끝내고 `#`에서 자르므로, 요약 경�
   Claude Code가 거부된 요청을 대화에 기록했으면, 훅은 가득 찬 구간도 초기화될 때까지 기록합니다([한도 기록](/features/usage#the-limit-record)). 단, 관리자가 언제든 풀 수 있는 조직의 차단은 기록하지 않습니다. 서버의 짧은 요청 제한이나 API 키의 속도 제한은 사용량 한도가 아니므로 건드리지 않으며, 하위 에이전트가 멈춘 경우와 아무도 지켜보지 않는 세션(`-p` 실행과 백그라운드 세션)도 마찬가지입니다.
 
   Claude Code 2.1.234 이상은 세션 안에서 기다렸다가 5시간 구간이 초기화되면 스스로 이어 가기도 합니다. 알림은 그 대신 전환할 수 있는 선택지를 주며, [`auto_switch`](#auto-switch)를 켜 두면(Linux와 macOS) 다른 계정에 여유가 있을 때 ccam이 대신 전환합니다. 이어받을 수 있는 다른 계정이 없으면, 곧 같은 Team이나 Enterprise 조직에 속한 다른 계정이 없거나 다른 개인 요금제가 없으면(`cross_org`를 켜면 다른 어떤 Claude 계정이든 이어받을 수 있습니다), 알림은 대신 `You have no other personal plans, so ccam cannot move this conversation.` 또는 `You have no other accounts in Acme, so ccam cannot move this conversation.`로 끝납니다.
-- `/ccam:switch [account]`는 대화를 기록해 두고, 요청을 보내기 전에 턴을 끝냅니다. `/exit`를 입력한 뒤 `ccam next --continue`를 실행하면, 지정한 계정(또는 다음 계정)에서 대화를 이어 갑니다. 아직 대화가 없는 세션에서는 이어 갈 것이 없다고 알려 줍니다.
+- `/ccam:switch [account]`는 대화를 기록해 두고, 요청을 보내기 전에 턴을 끝냅니다. `/exit`를 입력한 뒤 `ccam next --continue`를 실행하면, 지정한 계정(또는 다음 계정)에서 대화를 이어 갑니다. 아직 대화가 없는 세션에서는 이어 갈 것이 없다고 알려 줍니다. 이 명령은 사용자가 직접 입력할 때만 실행됩니다. 플러그인 0.3.2부터 Claude는 `/ccam:switch`를 실행할 수 없으며, Claude가 예약한 작업(CronCreate, ScheduleWakeup, `.claude/scheduled_tasks.json`)은 이 명령을 일반 텍스트로 Claude에게 넘깁니다.
+
+  지정한 계정이 대화의 조직 밖에 있으면(다른 Team이나 Enterprise 조직의 시트, 시트에서 개인 요금제로 옮기거나 그 반대인 경우, 또는 어느 한쪽이 API 키 계정인 경우) `cross_org` 설정과 관계없이 `ccam next --continue`가 먼저 묻습니다: `ccam: /ccam:switch named home, a personal plan, but this conversation is on work, a Claude Team seat in Acme. Move it to home? [y/N]`. 계정을 지정하지 않았을 때 ccam이 직접 고른 계정(`cross_org = true`이면 다른 조직에서도 고를 수 있습니다)으로 옮기기 전에도 똑같이 묻습니다: `ccam: the account picked for /ccam:switch is home, a personal plan, …`. `y`나 `yes`라고 답해야만 옮깁니다. Linux와 macOS에서는 질문 전에 입력한 키를 먼저 버립니다. 다른 답을 하거나 물어볼 터미널이 없으면 대화와 메모는 그대로 남습니다: ``the conversation stays on work, a Claude Team seat in Acme: it moves to home, a personal plan, only when you answer yes on a terminal. `ccam next --continue` asks again, and `ccam work --resume <session id>` continues it as work``(ccam이 직접 고른 경우에는 `ccam next --continue`가 다시 고릅니다). 자동으로 고를 때와 마찬가지로, 조직을 알 수 없는 계정은 어느 계정과도 짝지을 수 있습니다.
 
 메모는 세션마다 한 파일씩 `~/.local/state/ccam/handoff/<account>/<session>.json`에 남으므로, 한 계정의 두 세션이 서로의 메모를 덮어쓰지 않습니다. 메모는 12시간 동안 남아 있으며, 다음 세션이 시작되려 할 때 한 번만 쓰입니다. 실행에 실패하면 메모는 다음 시도를 위해 그대로 남습니다. 메모는 세션이 시작된 폴더에 속하며, Claude Code의 셸에서 `cd`로 옮겨 가도 마찬가지입니다. `ccam rename`은 메모 안의 이름을 고쳐 씁니다. 메모에 적힌 계정이 그 사이에 삭제되었으면 ccam은 그 사실을 알리고 평소처럼 고릅니다.
 
 ### 릴레이
 
-`config.toml`의 맨 위에 `relay = true`를 설정하면 ccam은 자신을 Claude Code로 대체하지 않고 대화형 세션과 함께 계속 실행되며, `/ccam:switch` 뒤에 그 세션의 대화를 스스로 이어 갑니다(다른 세션이 남긴 메모는 처리하지 않습니다). 훅이 Claude Code를 끝내면 ccam이 그 세션의 메모로 `ccam next --continue`를 실행합니다. 계정을 지정하지 않으면 대화의 모델까지 따져 여유가 가장 많은 계정을 고릅니다. Windows에서는 훅이 Claude Code를 끝낼 수 없으니 `/exit`를 입력하세요. 그러면 ccam이 이어 갑니다. 세션마다 기다리는 ccam 프로세스가 하나씩 생기므로 기본값은 꺼짐입니다.
+`config.toml`의 맨 위에 `relay = true`를 설정하면 ccam은 자신을 Claude Code로 대체하지 않고 대화형 세션과 함께 계속 실행되며, `/ccam:switch` 뒤에 그 세션의 대화를 스스로 이어 갑니다(다른 세션이 남긴 메모는 처리하지 않습니다). 훅이 Claude Code를 끝내면 ccam이 그 세션의 메모로 `ccam next --continue`를 실행합니다. 계정을 지정하지 않으면 대화의 모델까지 따져 여유가 가장 많은 계정을 고르며, `cross_org = true` 때문에 그 계정이 다른 조직의 계정이 되면 대화를 그리로 옮기기 전에 위의 질문을 합니다. Windows에서는 훅이 Claude Code를 끝낼 수 없으니 `/exit`를 입력하세요. 그러면 ccam이 이어 갑니다. 대화의 조직 밖에 있는 계정일 때도 훅은 Claude Code를 끝내지 않고 `ccam: type /exit; ccam then asks whether to continue this conversation on home, a personal plan (work is a Claude Team seat in Acme).`라고 알리며, `/exit`를 입력하면 ccam이 위의 질문을 합니다. 세션마다 기다리는 ccam 프로세스가 하나씩 생기므로 기본값은 꺼짐입니다.
 
-이어 받은 세션은 대화를 재개해도 복원되지 않는 것을 유지합니다. `--add-dir`, `--mcp-config`, 도구 목록, `--settings`, `--plugin-dir`, 시스템 프롬프트 옵션 같은 옵션과 대화의 권한 모드, 세션의 추론 수준입니다. `--model`, `--name`, `--agent`는 Claude Code가 대화에서 직접 복원합니다. 그 밖의 것(`--worktree`, `--debug`, `--remote-control`, ccam이 모르는 옵션)은 `ccam: not carried over: …`로 알려 줍니다. 전환할 때는 대화 내역 공유에 관한 질문을 절대 하지 않으며, 전환하는 동안 입력한 내용은 버려집니다.
+이어 받은 세션은 대화를 재개해도 복원되지 않는 것을 유지합니다. `--add-dir`, `--mcp-config`, 도구 목록, `--settings`, `--plugin-dir`, 시스템 프롬프트 옵션 같은 옵션과 대화의 권한 모드, 세션의 추론 수준, 대화가 쓰는 에이전트([`--continue`](#continue) 참고)입니다. `--model`과 `--name`은 Claude Code가 대화에서 직접 복원합니다. 그 밖의 것(`--worktree`, `--debug`, `--remote-control`, ccam이 모르는 옵션)은 `ccam: not carried over: …`로 알려 줍니다. 전환할 때는 대화 내역 공유에 관한 질문을 절대 하지 않으며, 전환하는 동안 입력한 내용은 버려집니다. 전환이 하는 질문은 다른 조직의 계정으로 옮기기 전의 질문 하나뿐입니다.
 
 릴레이는 Claude Code가 `/ccam:switch`가 요청한 방식으로 끝났을 때만 이어 갑니다. 먼저 `/exit`를 입력했거나, 끝나는 동안 Ctrl+C를 눌렀거나, ccam이 행업이나 다른 시그널을 받았거나, 터미널이 사라졌을 때는 이어 가지 않습니다. 이때 메모는 남아 있으므로, 나중에 `ccam next --continue`로 대화를 이어 갈 수 있습니다. 이전 버전의 ccam 릴레이로 시작한 세션이나 아무도 지켜보지 않는 세션(`-p` 실행과 백그라운드 세션)은 훅이 끝내지 않고, 대신 `/exit` 메시지를 보여 줍니다. `claude remote-control`은 릴레이 없이 실행됩니다.
 
@@ -196,16 +199,19 @@ ccam은 다음 조건을 모두 만족할 때만 세션을 옮깁니다:
    - ccam이 아는 요금제임
    - ccam 자체의 사용량 조회로 보이는 한에서 사용 크레딧이 꺼져 있음
    - Claude Code에서 이 폴더를 신뢰한 적이 있음
+   - 대화가 에이전트로 실행되면(`agent` 설정이나 대화가 에이전트를 가리키면) 떠나는 계정의 에이전트를 공유함: `agents` 폴더와 `plugins` 폴더, `settings.json`이 각각 (그룹을 통해) 똑같은 것이거나 양쪽에 모두 없어야 함
 
-   마지막 두 조건 때문에 여유 있는 계정이 모두 빠지면 알림이 그 계정을 밝힙니다: `side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.` 또는 `side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.` [한도 기록](/features/usage#the-limit-record)이 있는 구간은 가득 찬 것으로 치며, 최근 2분 안에 다른 세션이 옮겨 간 계정은 다른 계정들보다 뒤로 밀립니다. 선택은 약 6초 안에 끝나야 하며, 사용량 조회가 그보다 오래 걸리면 세션은 그대로 남습니다. `usage_source = "claude"`이면 `auto_switch`는 저장된 수치만으로 판단하며, ccam은 Claude Code의 조회나 상태 표시줄로는 사용 크레딧이 켜져 있는지 알 수 없으므로 꺼져 있다고 가정합니다.
+   마지막 세 조건 때문에 여유 있는 계정이 모두 빠지면 알림이 그 계정을 밝힙니다: `side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.`, `side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.` 또는 `This conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so auto_switch did not move it there.` [한도 기록](/features/usage#the-limit-record)이 있는 구간은 가득 찬 것으로 치며, 최근 2분 안에 다른 세션이 옮겨 간 계정은 다른 계정들보다 뒤로 밀립니다. 선택은 약 6초 안에 끝나야 하며, 사용량 조회가 그보다 오래 걸리면 세션은 그대로 남습니다. `usage_source = "claude"`이면 `auto_switch`는 저장된 수치만으로 판단하며, ccam은 Claude Code의 조회나 상태 표시줄로는 사용 크레딧이 켜져 있는지 알 수 없으므로 꺼져 있다고 가정합니다.
 
-그러면 훅이 Claude Code를 끝내고, 함께 실행 중이던 ccam이 데스크톱 알림을 지원하는 터미널에서 `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` 같은 알림을 띄웁니다. 그리고 위 출력 예의 첫 줄을 출력하고, 고른 계정으로 그 세션에 대해 `ccam next --continue`를 실행합니다. 이 명령이 출력 예의 나머지 두 줄을 출력하고, [릴레이](#relay)처럼 세션의 옵션, 권한 모드, 추론 수준을 유지한 채 Claude Code를 시작합니다. 새 세션의 첫 메시지는 다음 고정 문구이며, ccam이 사용자 대신 보내는 것은 이것뿐입니다(`/ccam:switch` 뒤의 이동은 아무것도 보내지 않습니다):
+그러면 훅이 Claude Code를 끝내고, 함께 실행 중이던 ccam이 데스크톱 알림을 지원하는 터미널에서 `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` 같은 알림을 띄웁니다. 그리고 위 출력 예의 첫 줄을 출력하고, 고른 계정으로 그 세션에 대해 `ccam next --continue`를 실행합니다. 이 명령이 출력 예의 나머지 두 줄을 출력하고, [릴레이](#relay)처럼 세션의 옵션, 권한 모드, 추론 수준, 에이전트를 유지한 채 Claude Code를 시작합니다. 새 세션의 첫 메시지는 다음 고정 문구이며, ccam이 사용자 대신 보내는 것은 이것뿐입니다(`/ccam:switch` 뒤의 이동은 아무것도 보내지 않습니다):
 
 ```text
 Your usage limit was reached and ccam moved this conversation to another account. Continue the task you were working on when the limit was reached; do not repeat work that is already complete.
 ```
 
 그 계정도 한도에 도달하면 거기서도 같은 일이 일어납니다. 한도 기록 덕분에 이 사슬은 초기화 전의 계정으로 되돌아가지 않으므로, 모든 계정이 가득 차면 세션은 마지막 계정에 남습니다.
+
+훅은 대화가 에이전트로 실행된다는 것을 `agent` 설정에서, 또는 Claude Code가 때때로, 그리고 세션이 끝날 때 대화에 기록하는, 에이전트를 가리키는 줄에서 알아냅니다. 지금까지 세션의 `--agent`만 에이전트를 지정했고 고른 계정이 에이전트를 공유하지 않으면, `ccam next --continue`는 아무것도 시작하지 않고 메모를 남겨 두며, 두 번째 데스크톱 알림이 그렇다고 알려 줍니다: ``ccam: this conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so ccam did not move it there. Its note stays: `ccam next --continue` continues it later, and `ccam personal --resume <session id>` continues it as personal after the reset``.
 
 여유 있는 다른 계정이 없으면 아무것도 옮기지 않습니다. Claude Code가 평소처럼 한도를 처리하며(세션 안에서 기다리거나 선택지를 보여 줌), 알림은 어느 계정이 가장 먼저 여유가 생기는지 알려 줍니다. 예: `ccam: personal hit its 5-hour limit (resets 3:29am). None of your other personal plans has room now; side frees up first, at 12:30am. Claude Code waits for personal here; /ccam:switch side after 12:30am moves it sooner.` 시트라면 `None of your other accounts in Acme has room now`라고 알립니다. 이미 시작된 이동을 멈추려면 Claude Code가 닫히는 동안 Ctrl+C를 누르세요: ``ccam: switch cancelled. Run `ccam next --continue` later to continue the conversation.``
 

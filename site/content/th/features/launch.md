@@ -1,10 +1,10 @@
 ---
 title: การเริ่ม Claude Code
 description: เริ่ม Claude Code ในชื่อบัญชีใดก็ได้ด้วย ccam <name|number>, ccam run หรือแดชบอร์ด อาร์กิวเมนต์ส่งต่อให้ claude ตามเดิม และ --dry-run แสดงคำสั่ง
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` เริ่ม Claude Code ในชื่อบัญชี `work` และทุกอย่างหลังชื่อบัญชีจะส่งต่อให้ `claude` โดยไม่เปลี่ยนแปลง ใช้ได้ทุกที่ที่คุณจะพิมพ์ `claude`: ในเทอร์มินัล ในสคริปต์ หรือเมื่อส่งอินพุตเข้ามาทางไปป์
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 เมื่อ shell ตั้งค่า `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` หรือ `ANTHROPIC_AUTH_TOKEN` ไว้ Claude Code อาจใช้คีย์หรือโทเค็นนั้นแทนการเข้าสู่ระบบของบัญชีเอง ccam จึงเตือนคุณทางข้อผิดพลาดมาตรฐานก่อนเริ่ม (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`) ccam เพียงอ่านตัวแปรเหล่านี้ ส่วน[บัญชี API key](/features/api)จะล้างตัวแปรเหล่านี้แทน
 
-โดยค่าเริ่มต้น ccam จะแทนที่ตัวเองด้วย Claude Code จึงไม่มีอะไรอื่นทำงานค้างอยู่ เมื่อตั้ง `relay = true` (หรือ [`auto_switch = true`](/features/next#auto-switch) บน Linux และ macOS) ที่ด้านบนสุดของ `config.toml` เหนือ `[[group]]`, `[[profile]]` หรือ `[[folder]]` ตัวแรก ccam จะเริ่มเซสชันแบบโต้ตอบเป็นโปรเซสลูกแทน และทำงานอยู่ควบคู่กับเซสชันเหล่านั้น ทำให้ `/ccam:switch` หรือ `auto_switch` เมื่อถึงขีดจำกัดการใช้งาน สนทนาต่อในอีกบัญชีหนึ่งได้เอง พร้อมตัวเลือกของเซสชัน โหมดสิทธิ์ และระดับ effort ([รายละเอียด](/features/next#relay))
+โดยค่าเริ่มต้น ccam จะแทนที่ตัวเองด้วย Claude Code จึงไม่มีอะไรอื่นทำงานค้างอยู่ เมื่อตั้ง `relay = true` (หรือ [`auto_switch = true`](/features/next#auto-switch) บน Linux และ macOS) ที่ด้านบนสุดของ `config.toml` เหนือ `[[group]]`, `[[profile]]` หรือ `[[folder]]` ตัวแรก ccam จะเริ่มเซสชันแบบโต้ตอบเป็นโปรเซสลูกแทน และทำงานอยู่ควบคู่กับเซสชันเหล่านั้น ทำให้ `/ccam:switch` หรือ `auto_switch` เมื่อถึงขีดจำกัดการใช้งาน สนทนาต่อในอีกบัญชีหนึ่งได้เอง พร้อมตัวเลือกของเซสชัน โหมดสิทธิ์ ระดับ effort และเอเจนต์ โดยก่อนที่ `/ccam:switch` จะย้ายการสนทนาไปยังบัญชีขององค์กรอื่น ccam จะถามคุณก่อน ([รายละเอียด](/features/next#relay))
 
 ## ตัวเลือก
 

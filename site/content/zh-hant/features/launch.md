@@ -1,10 +1,10 @@
 ---
 title: 啟動 Claude Code
 description: 用 ccam <name|number>、ccam run 或儀表板以任一帳號啟動 Claude Code；參數原封不動地傳給 claude，--dry-run 會顯示要執行的指令。
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` 會以 `work` 帳號啟動 Claude Code，名稱後面的所有內容都原封不動地傳給 `claude`。凡是你會輸入 `claude` 的地方都可以使用它：在終端機中、在腳本中，或搭配管線輸入。
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 當 Shell 設定了 `CLAUDE_CODE_OAUTH_TOKEN`、`ANTHROPIC_API_KEY` 或 `ANTHROPIC_AUTH_TOKEN` 時，Claude Code 可能會使用那個金鑰或權杖，而不是帳號自己的登入，所以 ccam 會在啟動前於標準錯誤輸出中警告你（`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`）。它只會讀取這些變數；[API 金鑰帳號](/features/api)則會清除它們。
 
-預設情況下，ccam 會以 Claude Code 取代自己，所以不會有其他東西繼續執行。在 `config.toml` 的最上方、第一個 `[[group]]`、`[[profile]]` 或 `[[folder]]` 之前設定 `relay = true`（或在 Linux 和 macOS 上設定 [`auto_switch = true`](/features/next#auto-switch)）時，ccam 則會以子行程啟動互動式工作階段，並在它旁邊持續執行。這讓 `/ccam:switch`，或達到用量上限時的 `auto_switch`，能自行在另一個帳號接續對話，並沿用工作階段的選項、權限模式和推理強度（[詳細說明](/features/next#relay)）。
+預設情況下，ccam 會以 Claude Code 取代自己，所以不會有其他東西繼續執行。在 `config.toml` 的最上方、第一個 `[[group]]`、`[[profile]]` 或 `[[folder]]` 之前設定 `relay = true`（或在 Linux 和 macOS 上設定 [`auto_switch = true`](/features/next#auto-switch)）時，ccam 則會以子行程啟動互動式工作階段，並在它旁邊持續執行。這讓 `/ccam:switch`，或達到用量上限時的 `auto_switch`，能自行在另一個帳號接續對話，並沿用工作階段的選項、權限模式、推理強度和代理；在 `/ccam:switch` 把對話移到另一個組織的帳號之前，ccam 會先詢問你（[詳細說明](/features/next#relay)）。
 
 ## 選項
 

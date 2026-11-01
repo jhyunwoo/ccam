@@ -1,10 +1,10 @@
 ---
 title: Claude Code kullanım limitine ulaştığında ne yapmalı
 description: Sıfırlanmayı bekleyin ya da aynı konuşmaya hemen başka bir Claude Code hesabında devam edin. 5 saatlik ve haftalık limitlerin işleyişi, adım adım.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 3
 translation: machine
-sourceHash: 96b6429c0102
+sourceHash: 760a36724feb
 ---
 
 Bir hesap kullanım limitine (çoğu zaman rate limit olarak da anılır) ulaştığında iki seçeneğiniz vardır: limitin sıfırlanmasını beklemek ya da aynı konuşmaya şimdi sahip olduğunuz başka bir hesapta devam etmek. ccam ile ikincisi tek bir komut sürer: `ccam next --auto --continue`.
@@ -64,7 +64,7 @@ Claude Code'da [ccam eklentisi](/docs/install#claude-code-plugin) varken limitin
 Yalnızca siz açarsanız.
 
 - Varsayılan olarak siz çalışırken ccam çalışmaz: Claude Code'u başlatır ve kendi yerini ona bırakır; böylece ne zaman geçiş yapacağınıza siz karar verirsiniz. `ccam next --auto`, 5 saatlik kullanımı en düşük olan hesabı seçer, %100'de olan ya da oturum açılmamış hesapları atlar ve tek bir Team veya Enterprise kuruluşunun içinde ya da kişisel planlar arasında kalır.
-- `config.toml` içinde `relay = true` olduğunda ccam bunun yerine oturumun yanında çalışmaya devam eder; böylece `/ccam:switch`, oturumun seçeneklerini, izin modunu ve efor düzeyini koruyarak konuşmaya kendiliğinden devam eder.
+- `config.toml` içinde `relay = true` olduğunda ccam bunun yerine oturumun yanında çalışmaya devam eder; böylece `/ccam:switch`, oturumun seçeneklerini, izin modunu, efor düzeyini ve ajanını koruyarak konuşmaya kendiliğinden devam eder; konuşmayı başka bir kuruluşun hesabına taşımadan önce ccam size sorar.
 - `auto_switch = true` olduğunda (Linux ve macOS; deneysel) geçişi ccam de kendisi yapar: Claude Code oturumu limitinde durdurduğunda ve aynı türden başka bir hesabın payı kaldığında ccam oturumu sonlandırır ve konuşmaya orada devam eder ([koşullar ve maliyetler](/features/next#auto-switch)).
 
 Bazı diğer araçlar bunun yerine çalışan bir oturumun girişini değiştirir; farkı [ccam ve diğer hesap değiştirme araçları](/compare/account-switchers) sayfası açıklar.

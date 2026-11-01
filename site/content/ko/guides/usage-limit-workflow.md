@@ -1,10 +1,10 @@
 ---
 title: Claude Code 사용량 한도에 도달했을 때 할 일
 description: 한도가 초기화될 때까지 기다리거나 다른 Claude Code 계정에서 같은 대화를 바로 이어 가는 방법입니다. 5시간 한도와 주간 한도도 설명합니다.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 3
 translation: machine
-sourceHash: "96b6429c0102"
+sourceHash: "760a36724feb"
 ---
 
 계정이 사용량 한도(흔히 rate limit이라고 부릅니다)에 도달하면 선택지는 두 가지입니다. 한도가 초기화될 때까지 기다리거나, 가지고 있는 다른 계정에서 같은 대화를 지금 이어 가는 것입니다. ccam에서는 두 번째 방법이 명령 하나 `ccam next --auto --continue`로 끝납니다.
@@ -64,7 +64,7 @@ Claude Code에 [ccam 플러그인](/docs/install#claude-code-plugin)을 설치�
 직접 켰을 때만 그렇습니다.
 
 - 기본적으로는 작업하는 동안 ccam이 실행되고 있지 않습니다. ccam은 Claude Code를 시작하면서 자기 자신을 Claude Code로 대체하므로 언제 전환할지는 사용자가 정합니다. `ccam next --auto`는 5시간 사용량이 가장 낮은 계정을 고르고, 100%에 도달했거나 로그인하지 않은 계정은 건너뛰며, 한 Team이나 Enterprise 조직 안에서만, 또는 개인 요금제끼리만 고릅니다.
-- `config.toml`에 `relay = true`를 설정하면 ccam이 대신 세션과 함께 계속 실행되므로, `/ccam:switch`가 세션의 옵션, 권한 모드, 추론 수준을 유지한 채 스스로 대화를 이어 갑니다.
+- `config.toml`에 `relay = true`를 설정하면 ccam이 대신 세션과 함께 계속 실행되므로, `/ccam:switch`가 세션의 옵션, 권한 모드, 추론 수준, 에이전트를 유지한 채 스스로 대화를 이어 갑니다. 대화를 다른 조직의 계정으로 옮기기 전에는 ccam이 먼저 묻습니다.
 - `auto_switch = true`(Linux와 macOS 전용, 실험적 기능)를 설정하면 ccam이 전환도 직접 합니다. Claude Code가 세션을 한도에서 멈추고 같은 종류의 다른 계정에 여유가 있으면, ccam이 세션을 끝내고 그 계정에서 대화를 이어 갑니다([조건과 비용](/features/next#auto-switch)).
 
 다른 도구 중에는 실행 중인 세션의 로그인을 바꿔 끼우는 것도 있습니다. 그 차이는 [ccam과 다른 계정 전환 도구](/compare/account-switchers)에서 설명합니다.

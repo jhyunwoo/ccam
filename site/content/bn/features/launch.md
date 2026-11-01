@@ -1,10 +1,10 @@
 ---
 title: "Claude Code চালু করা"
 description: "ccam <name|number>, ccam run বা ড্যাশবোর্ড দিয়ে যেকোনো অ্যাকাউন্টে Claude Code চালু করুন; আর্গুমেন্ট অপরিবর্তিত claude-এ যায়, --dry-run কমান্ডটি দেখায়।"
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: cf9ef66530cd
+sourceHash: 11df08608a1e
 ---
 
 `ccam work` `work` অ্যাকাউন্ট হিসেবে Claude Code চালু করে, আর নামের পরের সবকিছু অপরিবর্তিত অবস্থায় `claude`-এ যায়। যেখানে আপনি `claude` টাইপ করতেন সেখানেই এটি ব্যবহার করুন: টার্মিনালে, স্ক্রিপ্টে, বা পাইপ করা ইনপুটসহ।
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 শেলে `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` বা `ANTHROPIC_AUTH_TOKEN` সেট থাকলে Claude Code অ্যাকাউন্টের নিজস্ব লগইনের বদলে সেই key বা টোকেন ব্যবহার করতে পারে, তাই চালু করার আগে ccam স্ট্যান্ডার্ড এররে আপনাকে সতর্ক করে (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`)। এটি শুধু ভেরিয়েবলগুলো পড়ে; একটি [API key অ্যাকাউন্ট](/features/api) এর বদলে সেগুলো মুছে দেয়।
 
-ডিফল্টভাবে ccam নিজের জায়গায় Claude Code বসিয়ে দেয়, তাই আর কিছুই চলতে থাকে না। `config.toml`-এর একেবারে ওপরে, প্রথম `[[group]]`, `[[profile]]` বা `[[folder]]`-এর আগে, `relay = true` (বা Linux ও macOS-এ [`auto_switch = true`](/features/next#auto-switch)) থাকলে ccam এর বদলে ইন্টারঅ্যাকটিভ সেশনগুলো চাইল্ড প্রসেস হিসেবে চালু করে এবং তাদের পাশাপাশি চলতে থাকে। এতে `/ccam:switch`, বা ব্যবহারের সীমায় `auto_switch`, নিজে থেকেই কথোপকথনটি অন্য অ্যাকাউন্টে চালিয়ে যেতে পারে, সেশনের অপশন, permission mode ও effort level-সহ ([বিস্তারিত](/features/next#relay))।
+ডিফল্টভাবে ccam নিজের জায়গায় Claude Code বসিয়ে দেয়, তাই আর কিছুই চলতে থাকে না। `config.toml`-এর একেবারে ওপরে, প্রথম `[[group]]`, `[[profile]]` বা `[[folder]]`-এর আগে, `relay = true` (বা Linux ও macOS-এ [`auto_switch = true`](/features/next#auto-switch)) থাকলে ccam এর বদলে ইন্টারঅ্যাকটিভ সেশনগুলো চাইল্ড প্রসেস হিসেবে চালু করে এবং তাদের পাশাপাশি চলতে থাকে। এতে `/ccam:switch`, বা ব্যবহারের সীমায় `auto_switch`, নিজে থেকেই কথোপকথনটি অন্য অ্যাকাউন্টে চালিয়ে যেতে পারে, সেশনের অপশন, permission mode, effort level ও এজেন্ট-সহ; `/ccam:switch` কথোপকথনটি অন্য প্রতিষ্ঠানের কোনো অ্যাকাউন্টে সরানোর আগে ccam আপনাকে জিজ্ঞেস করে ([বিস্তারিত](/features/next#relay))।
 
 ## অপশন
 

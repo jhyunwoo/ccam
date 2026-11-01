@@ -3,6 +3,7 @@ package e2e
 import (
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 
@@ -43,5 +44,23 @@ func TestPluginSaysHowToCarryOn(t *testing.T) {
 	}
 	if hooks := read(filepath.Join("hooks", "hooks.json")); !strings.Contains(hooks, "auto_switch") {
 		t.Fatalf("hooks.json:\n%s", hooks)
+	}
+}
+
+// Only the person moves a conversation to another account. Claude Code
+// expands a slash command in the prompt of a job the model scheduled
+// (CronCreate, ScheduleWakeup) or of a durable one in
+// .claude/scheduled_tasks.json like a typed one, and runs the switch hook
+// for it; with disable-model-invocation it does not expand /ccam:switch for
+// the model, and the prompt reaches the model as plain text.
+func TestSwitchIsThePersonsCommand(t *testing.T) {
+	data, err := os.ReadFile(filepath.Join(repoRoot(), "plugins", "ccam", "commands", "switch.md"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	lines := strings.Split(strings.ReplaceAll(string(data), "\r\n", "\n"), "\n")
+	end := slices.Index(lines[1:], "---")
+	if lines[0] != "---" || end < 0 || !slices.Contains(lines[1:1+end], "disable-model-invocation: true") {
+		t.Fatalf("switch.md's frontmatter lets the model invoke it:\n%s", data)
 	}
 }

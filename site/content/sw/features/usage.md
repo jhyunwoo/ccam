@@ -1,10 +1,10 @@
 ---
 title: Vikomo vya matumizi
 description: ccam usage huonyesha vikomo vya saa 5 na vya wiki vya kila akaunti kwa pamoja, na ccam statusline huweka jina la akaunti na matumizi yake katika Claude Code.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: machine
-sourceHash: "997107786d4c"
+sourceHash: "54b296f7da35"
 ---
 
 `ccam usage` huonyesha, kwa kila akaunti, kiasi kilichotumika cha kila kikomo: kikomo cha saa 5, kikomo cha wiki na kikomo cha wiki cha kila model (kama Fable). Kila kikomo hupata upau na muda hadi kianze upya. Itumie kabla ya kuanza kazi ndefu, au Claude Code inapokuambia kikomo kiko karibu, ili kuona ni akaunti ipi bado ina nafasi. `ccam statusline` ni amri ya mstari wa hali (status line) kwa Claude Code: huonyesha jina la akaunti na matumizi ndani ya Claude Code na huhifadhi namba kwa ajili ya `ccam usage`. Kwa tokeni na gharama zinazokadiriwa zilizo nyuma ya matumizi hayo, `ccam ccusage` huendesha [ccusage](https://ccusage.com) kwenye mazungumzo ya kila akaunti ([tazama hapa chini](#tokens-and-costs-ccam-ccusage)).
@@ -97,13 +97,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-ccam husoma chaguo zake yenyewe kwanza: `-a` (`--account`) hupokea majina au namba za akaunti, zikitenganishwa kwa koma au kwa kurudia chaguo hilo, na `--dry-run` huchapisha amri badala ya kuiendesha. Kuanzia hoja ya kwanza isiyo chaguo la ccam, kila kitu huenda kwa ccusage bila kubadilishwa; `ccam ccusage -- --help` huonyesha msaada wa ccusage yenyewe. ccam huendesha `ccusage` ikiwa imesakinishwa, vinginevyo `bun x ccusage`, na hilo likishindikana `npx ccusage@latest`; hizo mbili za mwisho huipakua kutoka npm. Isipopatikana yoyote kati ya hizo, hukuambia usakinishe Node.js, Bun au ccusage. Kwenye Linux na macOS ccusage huchukua nafasi ya ccam; kwenye Windows ccam huisubiri na hutoka kwa exit code yake. Ndani ya WSL, ccam huruka `ccusage`, `bun` au `npx` iliyo kwenye diski ya Windows, kwa sababu ingeendeshwa kama programu ya Windows bila folda za akaunti.
+ccam husoma chaguo zake yenyewe kwanza: `-a` (`--account`) hupokea majina au namba za akaunti, zikitenganishwa kwa koma au kwa kurudia chaguo hilo, na `--dry-run` huchapisha amri badala ya kuiendesha. Kuanzia hoja ya kwanza isiyo chaguo la ccam, kila kitu huenda kwa ccusage kama ulivyokiandika, isipokuwa `--config` kwa `bun x` na `npx` (hapa chini); `ccam ccusage -- --help` huonyesha msaada wa ccusage yenyewe. ccam huendesha `ccusage` ikiwa imesakinishwa, vinginevyo `bun x ccusage`, na hilo likishindikana `npx ccusage@latest`; hizo mbili za mwisho huipakua kutoka npm. Zote mbili huanza katika folda ya ccam yenyewe (`~/.local/state/ccam/ccusage`), si katika folda uliyomo, kwa hiyo mradi ulio humo hauwezi kuchagua kile zinachoendesha kwa `node_modules/.bin` yake, `bin` katika `package.json` yake au registry katika `.npmrc` yake; `ccam --dry-run ccusage` huonyesha `cd` ya kuingia kwenye folda hiyo. Isipopatikana yoyote kati ya hizo, hukuambia usakinishe Node.js, Bun au ccusage. Kwenye Linux na macOS ccusage huchukua nafasi ya ccam; kwenye Windows ccam huisubiri na hutoka kwa exit code yake. Ndani ya WSL, ccam huruka `ccusage`, `bun` au `npx` iliyo kwenye diski ya Windows, kwa sababu ingeendeshwa kama programu ya Windows bila folda za akaunti.
 
 - Ripoti hujumuisha akaunti ambazo folda zake zina mazungumzo (folda ya `projects`). Mazungumzo ambayo akaunti kadhaa hushiriki kupitia kikundi huhesabiwa mara moja tu.
 - Kwa `-a`, akaunti inayoshiriki historia yake kupitia kikundi huleta mazungumzo ya kikundi kizima, na ccam husema ni ya nani: `ccam: work shares its conversation history with personal, so the report counts their conversations too`.
 - `blocks` huonyesha vipindi vya saa 5, na kila akaunti ina vyake, kwa hiyo taja akaunti moja tu kwa ajili yake, kama hapo juu.
 - ccusage pia huripoti zana nyingine za kuandika msimbo inazozipata, kama Codex, isipokuwa utaje moja: `ccam ccusage claude daily` ni Claude Code peke yake.
-- Wakati ccam inaiendesha, ccusage husoma mipangilio yake (`ccusage.json`) kutoka `./.ccusage` na folda za akaunti tu. `--config` hutaja faili nyingine: `ccam ccusage daily --config ~/.config/claude/ccusage.json`.
+- Wakati ccam inaiendesha, ccusage husoma mipangilio yake (`ccusage.json`) kutoka `./.ccusage` na folda za akaunti tu. `--config` hutaja faili nyingine: `ccam ccusage daily --config ~/.config/claude/ccusage.json`. Kwa kuwa `bun x` na `npx` huanza katika folda ya ccam yenyewe, ccam huzipa `./.ccusage/ccusage.json` kwa `--config` faili hiyo inapokuwepo na hujataja nyingine, na hutoa `--config` yenye njia isiyo kamili (relative) kama njia kamili. Kisha ccusage husoma njia nyingine zisizo kamili, kama `--pi-path`, kutoka kwenye folda ya ccam, kwa hiyo zitaje kwa njia kamili.
 - ccusage ingesoma folda ambayo njia yake ina koma kana kwamba ni folda mbili, kwa hiyo ccam huikataa na hutaja akaunti husika; iache akaunti hiyo nje kwa `-a`.
 - `ccusage` ni amri ya ccam, kwa hiyo akaunti iitwayo ccusage huanzishwa kwa `ccam run ccusage`; `ccam doctor` husema hivyo.
 

@@ -38,8 +38,9 @@ func LaunchWith(p paths.Paths, cfg *config.Config, sel string, args []string, dr
 }
 
 // Unattended marks a launch nobody started by hand: the relay's hop, which
-// carries ccam's own conversation on. It asks nothing, and what was typed
-// while the conversation moved is dropped rather than sent to Claude Code.
+// carries ccam's own conversation on. It asks nothing but ConfirmMove's
+// question, and what was typed while the conversation moved is dropped
+// rather than sent to Claude Code.
 var Unattended bool
 
 // LaunchThen is LaunchWith that calls ready (unless nil or dry) once
@@ -317,6 +318,11 @@ func askTTY(question string) bool {
 	if !attended() {
 		return true
 	}
+	return ask(question)
+}
+
+// ask puts question on the terminal and reads the answer: true for y or yes.
+func ask(question string) bool {
 	fmt.Fprintf(os.Stderr, "%s [y/N] ", question)
 	// A terminal in line mode returns one line per read (at most 4096
 	// bytes), so a long answer does not spill into claude's input.
@@ -324,6 +330,22 @@ func askTTY(question string) bool {
 	n, _ := os.Stdin.Read(buf[:])
 	ans := strings.ToLower(strings.TrimSpace(string(buf[:n])))
 	return ans == "y" || ans == "yes"
+}
+
+// ConfirmMove asks the person whether to move a conversation to an account
+// outside its organization pool, which a /ccam:switch fired by a job the
+// model scheduled may have named. It asks in the relay's hop too, Unattended
+// or not, and only a y or yes it reads moves the conversation: without a
+// terminal ccam may ask on, the answer is no. On Linux and macOS, keys typed
+// before the question (into Claude Code, or while it ended) are dropped
+// first, so they cannot answer it. Windows has no such flush, but there the
+// relay carries a conversation on only after the person's own /exit.
+func ConfirmMove(question string) bool {
+	if !attended() {
+		return false
+	}
+	discardInput(os.Stdin)
+	return ask(question)
 }
 
 func applyMCP(p paths.Paths, cfg *config.Config, pl *Plan, dry bool) error {

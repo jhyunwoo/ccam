@@ -1,10 +1,10 @@
 ---
 title: Was tun, wenn Claude Code sein Nutzungslimit erreicht
 description: Auf den Reset warten oder dasselbe Gespräch sofort in einem anderen Claude Code-Konto fortsetzen. So funktionieren das 5-Stunden- und das Wochenlimit.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 3
 translation: machine
-sourceHash: "96b6429c0102"
+sourceHash: "760a36724feb"
 ---
 
 Wenn ein Konto sein Nutzungslimit erreicht (oft Rate Limit genannt), hast du zwei Möglichkeiten: warten, bis das Limit zurückgesetzt wird, oder dasselbe Gespräch sofort in einem anderen Konto fortsetzen, das dir gehört. Mit ccam braucht das Zweite nur einen Befehl, `ccam next --auto --continue`.
@@ -64,7 +64,7 @@ Mit dem [ccam-Plugin](/docs/install#claude-code-plugin) in Claude Code zeigt ein
 Nur wenn du es einschaltest.
 
 - Standardmäßig läuft ccam nicht, während du arbeitest: Es startet Claude Code und ersetzt sich selbst durch diesen Prozess, also entscheidest du, wann gewechselt wird. `ccam next --auto` wählt das Konto mit der geringsten 5-Stunden-Nutzung, überspringt Konten, die bei 100 % stehen oder nicht angemeldet sind, und bleibt innerhalb einer Team- oder Enterprise-Organisation oder unter privaten Tarifen.
-- Mit `relay = true` in `config.toml` läuft ccam stattdessen neben der Sitzung weiter, sodass `/ccam:switch` das Gespräch von selbst fortsetzt und dabei die Optionen, den Berechtigungsmodus und die Effort-Stufe der Sitzung beibehält.
+- Mit `relay = true` in `config.toml` läuft ccam stattdessen neben der Sitzung weiter, sodass `/ccam:switch` das Gespräch von selbst fortsetzt und dabei die Optionen, den Berechtigungsmodus, die Effort-Stufe und den Agenten der Sitzung beibehält; bevor ccam das Gespräch in ein Konto einer anderen Organisation verschiebt, fragt es dich.
 - Mit `auto_switch = true` (Linux und macOS; experimentell) nimmt ccam den Wechsel auch selbst vor: Wenn Claude Code die Sitzung an ihrem Limit stoppt und ein anderes Konto derselben Art freies Kontingent hat, beendet ccam die Sitzung und setzt das Gespräch dort fort ([Bedingungen und Kosten](/features/next#auto-switch)).
 
 Manche anderen Tools tauschen stattdessen die Anmeldung einer laufenden Sitzung aus; [ccam und andere Tools zum Kontowechsel](/compare/account-switchers) erklärt den Unterschied.

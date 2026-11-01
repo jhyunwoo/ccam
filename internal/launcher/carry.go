@@ -17,10 +17,13 @@ const (
 // and, when not, whether it says so; and how many values follow it.
 func carried(flag string) (keep, quiet bool, n int) {
 	switch flag {
-	// Resuming does not restore these, so they go on to the next session.
+	// Resuming does not restore these, so they go on to the next session;
+	// --agent among them, which an interactive --resume <file>
+	// --fork-session (the hop's resume without shared history) does not
+	// bring back (Claude Code 2.1.314).
 	case "--add-dir", "--mcp-config", "--allowedTools", "--allowed-tools", "--disallowedTools", "--disallowed-tools", "--tools", "--betas":
 		return true, false, values
-	case "--permission-mode", "--effort", "--agents", "--append-system-prompt", "--append-system-prompt-file", "--system-prompt",
+	case "--permission-mode", "--effort", "--agent", "--agents", "--append-system-prompt", "--append-system-prompt-file", "--system-prompt",
 		"--system-prompt-file", "--system-prompt-snapshot", "--settings", "--setting-sources", "--plugin-dir", "--plugin-url",
 		"--fallback-model", "--autocompact":
 		return true, false, oneValue
@@ -29,12 +32,12 @@ func carried(flag string) (keep, quiet bool, n int) {
 		"--ax-screen-reader", "--exclude-dynamic-system-prompt-sections":
 		return true, false, noValue
 	// They pick the conversation, which the hop does itself, or resuming
-	// brings them back (model, name, agent).
+	// brings them back (model, name).
 	case "-c", "--continue", "--fork-session":
 		return false, true, noValue
 	case "-r", "--resume", "--from-pr", "--teleport":
 		return false, true, optValue
-	case "--session-id", "--model", "-n", "--name", "--agent":
+	case "--session-id", "--model", "-n", "--name":
 		return false, true, oneValue
 	// What a session cannot do again on its way to another account.
 	case "-w", "--worktree", "-d", "--debug", "--remote-control", "--rc":
@@ -49,11 +52,11 @@ func isFlag(a string) bool { return len(a) > 1 && a[0] == '-' }
 
 // CarryArgs picks the claude args a session started with that a hop passes
 // on to the conversation's next session: those resuming does not restore
-// (directories, MCP servers, tools, permission and system prompt flags,
-// settings, plugins …). It drops the prompt, "--" and everything after it,
-// what picks or restores the conversation (--resume, --model, --name …)
-// and the rest; dropped names the flags of the rest, which a person may
-// miss (--worktree, --debug, --remote-control, unknown ones).
+// (directories, MCP servers, tools, the agent, permission and system prompt
+// flags, settings, plugins …). It drops the prompt, "--" and everything
+// after it, what picks or restores the conversation (--resume, --model,
+// --name …) and the rest; dropped names the flags of the rest, which a
+// person may miss (--worktree, --debug, --remote-control, unknown ones).
 func CarryArgs(args []string) (out, dropped []string) {
 	for i := 0; i < len(args); i++ {
 		a := args[i]
@@ -151,6 +154,43 @@ func WithState(args []string, mode, effort string) (out, dropped []string) {
 		out = append(without(out, "--effort", true), "--effort", effort)
 	}
 	return out, dropped
+}
+
+// WithAgent adds --agent agent to claude args that name no agent: agent is
+// the one a session ran the conversation as without an --agent of its own
+// (the agent setting, or the conversation's agent, which resuming it by id
+// brings back), and an interactive --resume <file> --fork-session does not
+// bring it back (Claude Code 2.1.314). An --agent the args give stays:
+// Claude Code ran the session as that one, while the conversation's
+// agent-setting rows may still name the agent it ran as before. It goes
+// before a "--", after which everything is the prompt's. An empty agent
+// leaves args as they are.
+func WithAgent(args []string, agent string) []string {
+	if agent == "" || AgentArg(args) != "" {
+		return args
+	}
+	end := slices.Index(args, "--")
+	if end < 0 {
+		end = len(args)
+	}
+	return slices.Insert(slices.Clone(args), end, "--agent", agent)
+}
+
+// AgentArg is the agent claude args run as: the value of the last --agent
+// before "--", as Claude Code takes it; "" when they name none.
+func AgentArg(args []string) string {
+	agent := ""
+	for i, a := range args {
+		if a == "--" {
+			break
+		}
+		if v, ok := strings.CutPrefix(a, "--agent="); ok {
+			agent = v
+		} else if a == "--agent" && i+1 < len(args) {
+			agent = args[i+1]
+		}
+	}
+	return agent
 }
 
 // startedIn reports whether args give --permission-mode mode.

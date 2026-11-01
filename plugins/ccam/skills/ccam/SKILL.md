@@ -18,10 +18,10 @@ In the JSON, `limits.five_hour.percent` and `limits.weekly.percent` are 0-100, a
 
 ## When the current account reaches its limit
 
-You cannot move this session to another account yourself; the user can. Tell them to type `/ccam:switch` (or `/ccam:switch <account>`): it notes this conversation and ends the turn. With `relay = true` (or `auto_switch = true`, on Linux and macOS) in ccam's `config.toml`, ccam then ends this session and continues the conversation on the other account by itself (on Windows, once they type `/exit`), with the permission mode, effort level and options such as `--add-dir` it had. Otherwise they type `/exit` and run, in this folder:
+You cannot move this session to another account yourself, and Claude Code does not run `/ccam:switch` from a prompt you schedule; the user can. Tell them to type `/ccam:switch` (or `/ccam:switch <account>`): it notes this conversation and ends the turn. With `relay = true` (or `auto_switch = true`, on Linux and macOS) in ccam's `config.toml`, ccam then ends this session and continues the conversation on the other account by itself (on Windows, once they type `/exit`), with the permission mode, effort level, agent and options such as `--add-dir` it had. For an account they name in another organization than this session's, ccam does not end the session: they type `/exit`, and ccam asks them on the terminal before it moves the conversation. It asks the same before an account of another organization that it picks itself, which only `cross_org = true` allows. Otherwise they type `/exit` and run, in this folder:
 
 ```sh
-ccam next --continue          # as the account /ccam:switch named, else the next one
+ccam next --continue          # as the account /ccam:switch named, else the next one (asks first for another organization)
 ccam next --auto --continue   # or the account with the most room
 ```
 

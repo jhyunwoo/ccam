@@ -1,10 +1,10 @@
 ---
 title: Claude Code શરૂ કરવું
 description: ccam <name|number>, ccam run કે ડેશબોર્ડ વડે કોઈ પણ એકાઉન્ટ તરીકે Claude Code શરૂ કરો; આર્ગ્યુમેન્ટ્સ બદલાયા વગર claude ને જાય છે, --dry-run કમાન્ડ બતાવે છે.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: cf9ef66530cd
+sourceHash: 11df08608a1e
 ---
 
 `ccam work` Claude Code ને `work` એકાઉન્ટ તરીકે શરૂ કરે છે, અને નામ પછીનું બધું કોઈ ફેરફાર વગર `claude` ને જાય છે. જ્યાં તમે `claude` લખતા હો ત્યાં તેને વાપરો: ટર્મિનલમાં, સ્ક્રિપ્ટમાં, કે pipe થી input આપીને.
@@ -38,7 +38,7 @@ standard input અને output ટર્મિનલ હોય ત્યાર�
 
 જ્યારે શેલમાં `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` કે `ANTHROPIC_AUTH_TOKEN` સેટ હોય, ત્યારે Claude Code એકાઉન્ટના પોતાના લૉગિનને બદલે એ key કે token વાપરી શકે છે, તેથી ccam શરૂ કરતાં પહેલાં standard error પર તમને ચેતવે છે (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). તે ફક્ત variables વાંચે છે; [API key એકાઉન્ટ](/features/api) તેના બદલે તેમને સાફ કરે છે.
 
-ડિફૉલ્ટ રીતે, ccam પોતાની જગ્યા Claude Code ને આપી દે છે, તેથી બીજું કંઈ ચાલતું રહેતું નથી. `config.toml` માં સૌથી ઉપર, પહેલા `[[group]]`, `[[profile]]` કે `[[folder]]` ની ઉપર, `relay = true` (અથવા Linux અને macOS પર [`auto_switch = true`](/features/next#auto-switch)) સાથે, ccam તેના બદલે interactive સેશનને child process તરીકે શરૂ કરે છે અને તેમની સાથે ચાલતું રહે છે. આથી `/ccam:switch`, અથવા વપરાશ મર્યાદાએ `auto_switch`, વાતચીતને જાતે બીજા એકાઉન્ટ પર ચાલુ રાખી શકે છે, સેશનના ઓપ્શન, permission mode અને effort level સાથે ([વિગતો](/features/next#relay)).
+ડિફૉલ્ટ રીતે, ccam પોતાની જગ્યા Claude Code ને આપી દે છે, તેથી બીજું કંઈ ચાલતું રહેતું નથી. `config.toml` માં સૌથી ઉપર, પહેલા `[[group]]`, `[[profile]]` કે `[[folder]]` ની ઉપર, `relay = true` (અથવા Linux અને macOS પર [`auto_switch = true`](/features/next#auto-switch)) સાથે, ccam તેના બદલે interactive સેશનને child process તરીકે શરૂ કરે છે અને તેમની સાથે ચાલતું રહે છે. આથી `/ccam:switch`, અથવા વપરાશ મર્યાદાએ `auto_switch`, વાતચીતને જાતે બીજા એકાઉન્ટ પર ચાલુ રાખી શકે છે, સેશનના ઓપ્શન, permission mode, effort level અને agent સાથે; `/ccam:switch` વાતચીતને બીજી સંસ્થાના એકાઉન્ટ પર ખસેડે તે પહેલાં, ccam તમને પૂછે છે ([વિગતો](/features/next#relay)).
 
 ## ઓપ્શન
 

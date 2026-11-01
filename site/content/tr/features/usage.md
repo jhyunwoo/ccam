@@ -1,10 +1,10 @@
 ---
 title: Kullanım limitleri
 description: ccam usage tüm hesapların 5 saatlik ve haftalık limitlerini aynı anda gösterir, ccam statusline ise hesap adını ve kullanımı Claude Code içine yerleştirir.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: machine
-sourceHash: 997107786d4c
+sourceHash: 54b296f7da35
 ---
 
 `ccam usage`, her hesap için her limitin ne kadarının kullanıldığını gösterir: 5 saatlik limit, haftalık limit ve her modelin kendi haftalık limiti (Fable gibi). Her limit bir çubuk ve sıfırlanmasına kalan süreyi alır. Uzun bir işe başlamadan önce veya Claude Code bir limitin yaklaştığını söylediğinde, hangi hesapta pay kaldığını görmek için kullanın. `ccam statusline`, Claude Code için durum satırı komutudur: hesap adını ve kullanımı Claude Code içinde gösterir ve sayıları `ccam usage` için kaydeder. Kullanımın ardındaki tokenlar ve tahmini maliyetler için `ccam ccusage`, [ccusage](https://ccusage.com) aracını her hesabın konuşmaları üzerinde çalıştırır ([aşağıda](#tokens-and-costs-ccam-ccusage)).
@@ -97,13 +97,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-ccam önce kendi seçeneklerini okur: `-a` (`--account`) hesap adlarını veya numaralarını alır; bunları virgülle ayırarak ya da seçeneği tekrarlayarak verebilirsiniz. `--dry-run` ise komutu çalıştırmak yerine yazdırır. Bunlar dışındaki ilk argümandan itibaren her şey ccusage'a olduğu gibi gider; `ccam ccusage -- --help` ccusage'ın kendi yardımını gösterir. ccam kurulu bir `ccusage` varsa onu, yoksa `bun x ccusage` komutunu, o da yoksa `npx ccusage@latest` komutunu çalıştırır; son ikisi ccusage'ı npm'den indirir. Hiçbiri yoksa Node.js, Bun veya ccusage kurmanızı söyler. Linux ve macOS'ta ccusage, ccam'in yerini alır; Windows'ta ccam onu bekler ve onun çıkış koduyla çıkar. WSL'de ccam, bir Windows sürücüsündeki `ccusage`, `bun` veya `npx` programını atlar, çünkü o program hesap klasörleri olmadan bir Windows programı olarak çalışırdı.
+ccam önce kendi seçeneklerini okur: `-a` (`--account`) hesap adlarını veya numaralarını alır; bunları virgülle ayırarak ya da seçeneği tekrarlayarak verebilirsiniz. `--dry-run` ise komutu çalıştırmak yerine yazdırır. Bunlar dışındaki ilk argümandan itibaren her şey, `bun x` ve `npx` için `--config` dışında (aşağıya bakın), ccusage'a yazdığınız gibi gider; `ccam ccusage -- --help` ccusage'ın kendi yardımını gösterir. ccam kurulu bir `ccusage` varsa onu, yoksa `bun x ccusage` komutunu, o da yoksa `npx ccusage@latest` komutunu çalıştırır; son ikisi ccusage'ı npm'den indirir. Bu ikisi bulunduğunuz klasörde değil, ccam'in kendi klasöründe (`~/.local/state/ccam/ccusage`) başlar; böylece bulunduğunuz klasördeki bir proje, kendi `node_modules/.bin` klasörüyle, `package.json` dosyasındaki bir `bin` ile ya da `.npmrc` dosyasındaki bir kayıt deposuyla (registry) bunların ne çalıştıracağını seçemez; `ccam --dry-run ccusage`, o klasöre geçen `cd` komutunu gösterir. Hiçbiri yoksa Node.js, Bun veya ccusage kurmanızı söyler. Linux ve macOS'ta ccusage, ccam'in yerini alır; Windows'ta ccam onu bekler ve onun çıkış koduyla çıkar. WSL'de ccam, bir Windows sürücüsündeki `ccusage`, `bun` veya `npx` programını atlar, çünkü o program hesap klasörleri olmadan bir Windows programı olarak çalışırdı.
 
 - Rapor, klasörlerinde konuşma (bir `projects` klasörü) bulunan hesapları kapsar. Hesapların bir grup üzerinden paylaştığı bir konuşma bir kez sayılır.
 - `-a` ile, geçmişini bir grup üzerinden paylaşan bir hesap tüm grubun konuşmalarını beraberinde getirir ve ccam bunların kimlere ait olduğunu söyler: `ccam: work shares its conversation history with personal, so the report counts their conversations too`.
 - `blocks` 5 saatlik pencereleri gösterir ve her hesabın kendi pencereleri vardır; bu yüzden bu rapor için yukarıdaki gibi tek bir hesap belirtin.
 - ccusage, siz birini belirtmedikçe bulduğu diğer kodlama araçlarını da (Codex gibi) raporlar: `ccam ccusage claude daily` yalnızca Claude Code'u kapsar.
-- ccam onu çalıştırırken ccusage, ayarlarını (`ccusage.json`) yalnızca `./.ccusage` konumundan ve hesap klasörlerinden okur. `--config` başka bir dosya belirtir: `ccam ccusage daily --config ~/.config/claude/ccusage.json`.
+- ccam onu çalıştırırken ccusage, ayarlarını (`ccusage.json`) yalnızca `./.ccusage` konumundan ve hesap klasörlerinden okur. `--config` başka bir dosya belirtir: `ccam ccusage daily --config ~/.config/claude/ccusage.json`. `bun x` ve `npx` ccam'in kendi klasöründe başladığı için, o dosya varsa ve siz bir dosya belirtmediyseniz ccam onlara `./.ccusage/ccusage.json` dosyasını `--config` ile verir ve göreli bir `--config` yolunu tam yol olarak verir. Bu durumda ccusage, `--pi-path` gibi diğer göreli yolları ccam'in klasöründen okur; bu yüzden onları tam yol olarak verin.
 - ccusage, yolunda virgül olan bir klasörü iki klasör olarak okurdu; bu yüzden ccam böyle bir klasörü reddeder ve hesabın adını verir. O hesabı `-a` ile dışarıda bırakın.
 - `ccusage` bir ccam komutu olduğundan ccusage adlı bir hesap `ccam run ccusage` ile başlatılır; `ccam doctor` da bunu söyler.
 

@@ -1,10 +1,10 @@
 ---
 title: Claude Code सुरू करणे
 description: ccam <name|number>, ccam run किंवा डॅशबोर्डने कोणत्याही खात्याने Claude Code सुरू करा; आर्ग्युमेंट्स न बदलता claude ला जातात, आणि --dry-run कमांड दाखवते.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: cf9ef66530cd
+sourceHash: 11df08608a1e
 ---
 
 `ccam work` `work` खात्याने Claude Code सुरू करते, आणि नावानंतरचे सर्व काही न बदलता `claude` ला जाते. जिथे तुम्ही `claude` टाइप केले असते तिथे ते वापरा: टर्मिनलमध्ये, script मध्ये, किंवा pipe ने input देऊन.
@@ -38,7 +38,7 @@ standard input आणि output टर्मिनल असताना आर�
 
 shell मध्ये `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` किंवा `ANTHROPIC_AUTH_TOKEN` सेट असेल, तर Claude Code खात्याच्या स्वतःच्या लॉगिनऐवजी ती key किंवा token वापरू शकते, म्हणून ccam सुरू होण्यापूर्वी standard error वर तुम्हाला इशारा देते (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). ते फक्त variables वाचते; [API key खाते](/features/api) त्याऐवजी ते काढून टाकते.
 
-डीफॉल्टनुसार ccam स्वतःची जागा Claude Code ला देते, त्यामुळे दुसरे काहीही चालू राहत नाही. `config.toml` च्या सुरुवातीला, पहिल्या `[[group]]`, `[[profile]]` किंवा `[[folder]]` च्या वर, `relay = true` (किंवा Linux आणि macOS वर [`auto_switch = true`](/features/next#auto-switch)) असेल, तर ccam त्याऐवजी interactive सत्रे child process म्हणून सुरू करते आणि त्यांच्यासोबत चालू राहते. त्यामुळे `/ccam:switch`, किंवा वापर मर्यादेवर `auto_switch`, सत्राचे पर्याय, permission mode आणि effort level यांसह संभाषण आपोआप दुसऱ्या खात्यावर पुढे चालू ठेवू शकते ([तपशील](/features/next#relay)).
+डीफॉल्टनुसार ccam स्वतःची जागा Claude Code ला देते, त्यामुळे दुसरे काहीही चालू राहत नाही. `config.toml` च्या सुरुवातीला, पहिल्या `[[group]]`, `[[profile]]` किंवा `[[folder]]` च्या वर, `relay = true` (किंवा Linux आणि macOS वर [`auto_switch = true`](/features/next#auto-switch)) असेल, तर ccam त्याऐवजी interactive सत्रे child process म्हणून सुरू करते आणि त्यांच्यासोबत चालू राहते. त्यामुळे `/ccam:switch`, किंवा वापर मर्यादेवर `auto_switch`, सत्राचे पर्याय, permission mode, effort level आणि agent यांसह संभाषण आपोआप दुसऱ्या खात्यावर पुढे चालू ठेवू शकते; `/ccam:switch` ते दुसऱ्या organization च्या खात्यावर हलवण्यापूर्वी ccam तुम्हाला विचारते ([तपशील](/features/next#relay)).
 
 ## पर्याय
 

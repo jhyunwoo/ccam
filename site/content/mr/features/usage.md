@@ -1,10 +1,10 @@
 ---
 title: वापर मर्यादा
 description: ccam usage प्रत्येक खात्याच्या 5 तासांच्या आणि साप्ताहिक मर्यादा एकाच वेळी दाखवते, आणि ccam statusline खात्याचे नाव आणि वापर Claude Code मध्ये दाखवते.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: machine
-sourceHash: "997107786d4c"
+sourceHash: "54b296f7da35"
 ---
 
 `ccam usage` प्रत्येक खात्यासाठी प्रत्येक मर्यादेपैकी किती वापरले ते दाखवते: 5 तासांची मर्यादा, साप्ताहिक मर्यादा आणि प्रत्येक मॉडेलची स्वतःची साप्ताहिक मर्यादा (उदा. Fable). प्रत्येक मर्यादेला एक bar आणि ती रीसेट होईपर्यंतचा वेळ मिळतो. कोणत्या खात्यात जागा उरली आहे ते पाहण्यासाठी, एखादे मोठे काम सुरू करण्यापूर्वी किंवा Claude Code मर्यादा जवळ आल्याचे सांगेल तेव्हा ते वापरा. `ccam statusline` ही Claude Code साठी स्टेटस लाइन कमांड आहे: ती Claude Code मध्ये खात्याचे नाव आणि वापर दाखवते आणि `ccam usage` साठी आकडे साठवते. वापरामागचे token आणि अंदाजे खर्च पाहण्यासाठी, `ccam ccusage` प्रत्येक खात्याच्या संभाषणांवर [ccusage](https://ccusage.com) चालवते ([खाली](#tokens-and-costs-ccam-ccusage)).
@@ -97,13 +97,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-ccam आधी स्वतःचे पर्याय वाचते: `-a` (`--account`) खात्यांची नावे किंवा क्रमांक घेतो, स्वल्पविरामाने वेगळे करून किंवा पर्याय अनेकदा देऊन, आणि `--dry-run` कमांड चालवण्याऐवजी ती छापतो. ccam चा पर्याय नसलेल्या पहिल्या आर्ग्युमेंटपासून पुढे सर्व काही ccusage ला जसेच्या तसे जाते; `ccam ccusage -- --help` ccusage ची स्वतःची मदत दाखवते. `ccusage` इन्स्टॉल असेल तर ccam ते चालवते, नाहीतर `bun x ccusage`, आणि तेही नसेल तर `npx ccusage@latest`; हे शेवटचे दोन ccusage npm वरून आणतात. यांपैकी काहीच उपलब्ध नसेल तेव्हा ते तुम्हाला Node.js, Bun किंवा ccusage इन्स्टॉल करायला सांगते. Linux आणि macOS वर ccusage, ccam ची जागा घेते; Windows वर ccam त्याची वाट पाहते आणि त्याच्याच exit code ने संपते. WSL मध्ये, Windows drive वरील `ccusage`, `bun` किंवा `npx` ccam वगळते, कारण ते खात्यांच्या फोल्डरशिवाय Windows प्रोग्राम म्हणून चालेल.
+ccam आधी स्वतःचे पर्याय वाचते: `-a` (`--account`) खात्यांची नावे किंवा क्रमांक घेतो, स्वल्पविरामाने वेगळे करून किंवा पर्याय अनेकदा देऊन, आणि `--dry-run` कमांड चालवण्याऐवजी ती छापतो. ccam चा पर्याय नसलेल्या पहिल्या आर्ग्युमेंटपासून पुढे सर्व काही तुम्ही टाइप केले तसेच ccusage ला जाते, फक्त `bun x` आणि `npx` साठी `--config` सोडून (खाली पहा); `ccam ccusage -- --help` ccusage ची स्वतःची मदत दाखवते. `ccusage` इन्स्टॉल असेल तर ccam ते चालवते, नाहीतर `bun x ccusage`, आणि तेही नसेल तर `npx ccusage@latest`; हे शेवटचे दोन ccusage npm वरून आणतात. ते ccam च्या स्वतःच्या फोल्डरमध्ये (`~/.local/state/ccam/ccusage`) सुरू होतात, तुम्ही असलेल्या फोल्डरमध्ये नाही, त्यामुळे तिथला प्रकल्प त्याच्या `node_modules/.bin`, त्याच्या `package.json` मधील `bin` किंवा त्याच्या `.npmrc` मधील registry ने ते काय चालवतात हे ठरवू शकत नाही; `ccam --dry-run ccusage` त्या फोल्डरमध्ये जाणारा `cd` दाखवते. यांपैकी काहीच उपलब्ध नसेल तेव्हा ते तुम्हाला Node.js, Bun किंवा ccusage इन्स्टॉल करायला सांगते. Linux आणि macOS वर ccusage, ccam ची जागा घेते; Windows वर ccam त्याची वाट पाहते आणि त्याच्याच exit code ने संपते. WSL मध्ये, Windows drive वरील `ccusage`, `bun` किंवा `npx` ccam वगळते, कारण ते खात्यांच्या फोल्डरशिवाय Windows प्रोग्राम म्हणून चालेल.
 
 - ज्या खात्यांच्या फोल्डरमध्ये संभाषणे आहेत (एक `projects` फोल्डर) ती खाती अहवालात येतात. खाती गटामार्फत शेअर करतात ते संभाषण एकदाच मोजले जाते.
 - `-a` सह, गटामार्फत आपला इतिहास शेअर करणारे खाते संपूर्ण गटाची संभाषणे घेऊन येते, आणि ती कोणाची आहेत ते ccam सांगते: `ccam: work shares its conversation history with personal, so the report counts their conversations too`.
 - `blocks` 5 तासांच्या windows दाखवते, आणि प्रत्येक खात्याच्या windows वेगळ्या असतात, त्यामुळे वरीलप्रमाणे त्यासाठी एकच खाते द्या.
 - तुम्ही एखादे tool नमूद केले नाही तर, ccusage त्याला सापडणाऱ्या इतर coding tools चाही (उदा. Codex) अहवाल देते: `ccam ccusage claude daily` म्हणजे फक्त Claude Code.
-- ccam ते चालवत असताना, ccusage आपल्या सेटिंग्ज (`ccusage.json`) फक्त `./.ccusage` आणि खात्यांच्या फोल्डरमधून वाचते. `--config` दुसरी फाइल देतो: `ccam ccusage daily --config ~/.config/claude/ccusage.json`.
+- ccam ते चालवत असताना, ccusage आपल्या सेटिंग्ज (`ccusage.json`) फक्त `./.ccusage` आणि खात्यांच्या फोल्डरमधून वाचते. `--config` दुसरी फाइल देतो: `ccam ccusage daily --config ~/.config/claude/ccusage.json`. `bun x` आणि `npx` ccam च्या स्वतःच्या फोल्डरमध्ये सुरू होत असल्याने, `./.ccusage/ccusage.json` असेल आणि तुम्ही कोणतीही फाइल दिली नसेल, तर ccam त्यांना ती `--config` सह देते, आणि relative `--config` पूर्ण पाथ म्हणून देते. मग ccusage इतर relative पाथ, जसे `--pi-path`, ccam च्या फोल्डरमधून वाचते, त्यामुळे ते पूर्ण द्या.
 - ज्या फोल्डरच्या पाथमध्ये स्वल्पविराम आहे तो ccusage दोन फोल्डर म्हणून वाचेल, त्यामुळे ccam तो नाकारते आणि त्या खात्याचे नाव सांगते; ते खाते `-a` ने वगळा.
 - `ccusage` ही ccam ची कमांड आहे, त्यामुळे ccusage नावाचे खाते `ccam run ccusage` ने सुरू होते; `ccam doctor` तसे सांगते.
 

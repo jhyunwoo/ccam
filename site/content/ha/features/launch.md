@@ -1,10 +1,10 @@
 ---
 title: Fara Claude Code
 description: Fara Claude Code a matsayin kowane asusu da ccam <name|number>, ccam run ko dashboard; arguments suna zuwa claude ba canji, --dry-run yana nuna umarnin.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: cf9ef66530cd
+sourceHash: 11df08608a1e
 ---
 
 `ccam work` yana fara Claude Code a matsayin asusun `work`, kuma duk abin da ke bayan sunan yana zuwa `claude` ba tare da canji ba. Yi amfani da shi duk inda za ka rubuta `claude`: a terminal, a rubutun (script), ko tare da shigarwa ta bututu (pipe).
@@ -38,7 +38,7 @@ Idan argument na farko ya fara da `-` kuma ba ɗaya daga cikin flags na ccam kan
 
 Idan harsashin (shell) yana da `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` ko `ANTHROPIC_AUTH_TOKEN` a saita, Claude Code na iya amfani da wannan key ko token maimakon shigar asusun kansa, don haka ccam yana gargaɗe ka a standard error kafin ya fara (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). Yana karanta variables ɗin ne kawai; [asusun API key](/features/api) yana share su maimakon haka.
 
-Ta tsohuwa, ccam yana maye gurbin kansa da Claude Code, don haka babu wani abu da ke ci gaba da gudana. Da `relay = true` (ko [`auto_switch = true`](/features/next#auto-switch) a Linux da macOS) a saman `config.toml`, kafin `[[group]]`, `[[profile]]` ko `[[folder]]` na farko, ccam yana fara zaman mu'amala a matsayin child process maimakon haka kuma yana ci gaba da aiki tare da su. Wannan yana ba `/ccam:switch`, ko `auto_switch` a iyakar amfani, damar ci gaba da tattaunawar a wani asusu da kansa, tare da zaɓuɓɓukan zaman, yanayin izini (permission mode) da matakin ƙoƙari (effort level) ([cikakken bayani](/features/next#relay)).
+Ta tsohuwa, ccam yana maye gurbin kansa da Claude Code, don haka babu wani abu da ke ci gaba da gudana. Da `relay = true` (ko [`auto_switch = true`](/features/next#auto-switch) a Linux da macOS) a saman `config.toml`, kafin `[[group]]`, `[[profile]]` ko `[[folder]]` na farko, ccam yana fara zaman mu'amala a matsayin child process maimakon haka kuma yana ci gaba da aiki tare da su. Wannan yana ba `/ccam:switch`, ko `auto_switch` a iyakar amfani, damar ci gaba da tattaunawar a wani asusu da kansa, tare da zaɓuɓɓukan zaman, yanayin izini (permission mode), matakin ƙoƙari (effort level) da agent; kafin `/ccam:switch` ya motsa ta zuwa asusun wata ƙungiya dabam, ccam yana tambayarka ([cikakken bayani](/features/next#relay)).
 
 ## Zaɓuɓɓuka
 

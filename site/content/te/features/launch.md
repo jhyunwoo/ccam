@@ -1,10 +1,10 @@
 ---
 title: Claude Code ను ప్రారంభించడం
 description: ccam <name|number>, ccam run లేదా డాష్‌బోర్డ్‌తో ఏ ఖాతాగానైనా Claude Code ప్రారంభించండి; ఆర్గ్యుమెంట్‌లు అలాగే claude కు వెళ్తాయి, --dry-run కమాండ్ చూపుతుంది.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` Claude Code ను `work` ఖాతాగా ప్రారంభిస్తుంది, పేరు తర్వాత ఉన్నదంతా మార్పు లేకుండా `claude` కు వెళ్తుంది. మీరు `claude` అని టైప్ చేసే ప్రతి చోటా దీన్ని ఉపయోగించండి: టెర్మినల్‌లో, స్క్రిప్ట్‌లో, లేదా పైప్ ద్వారా ఇన్‌పుట్ ఇచ్చి.
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 షెల్‌లో `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` లేదా `ANTHROPIC_AUTH_TOKEN` సెట్ అయి ఉంటే, Claude Code ఖాతా సొంత లాగిన్ బదులు ఆ కీని లేదా టోకెన్‌ను ఉపయోగించవచ్చు, కాబట్టి ప్రారంభించే ముందు ccam స్టాండర్డ్ ఎర్రర్‌పై మిమ్మల్ని హెచ్చరిస్తుంది (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). అది వేరియబుల్స్‌ను చదువుతుంది మాత్రమే; [API కీ ఖాతా](/features/api) బదులుగా వాటిని తొలగిస్తుంది.
 
-డిఫాల్ట్‌గా, ccam తన స్థానాన్ని Claude Code కు ఇస్తుంది, కాబట్టి ఇంకేదీ రన్ అవుతూ ఉండదు. `config.toml` పైభాగంలో, మొదటి `[[group]]`, `[[profile]]` లేదా `[[folder]]` కంటే పైన, `relay = true` (లేదా Linux, macOS లలో [`auto_switch = true`](/features/next#auto-switch)) తో, ccam బదులుగా ఇంటరాక్టివ్ సెషన్‌లను చైల్డ్ ప్రాసెస్‌గా ప్రారంభించి వాటితో పాటు రన్ అవుతూ ఉంటుంది. దాంతో `/ccam:switch`, లేదా వినియోగ పరిమితి వద్ద `auto_switch`, సెషన్ ఆప్షన్లు, permission mode, effort level తో సహా సంభాషణను తనంతట తానే మరో ఖాతాలో కొనసాగించగలదు ([వివరాలు](/features/next#relay)).
+డిఫాల్ట్‌గా, ccam తన స్థానాన్ని Claude Code కు ఇస్తుంది, కాబట్టి ఇంకేదీ రన్ అవుతూ ఉండదు. `config.toml` పైభాగంలో, మొదటి `[[group]]`, `[[profile]]` లేదా `[[folder]]` కంటే పైన, `relay = true` (లేదా Linux, macOS లలో [`auto_switch = true`](/features/next#auto-switch)) తో, ccam బదులుగా ఇంటరాక్టివ్ సెషన్‌లను చైల్డ్ ప్రాసెస్‌గా ప్రారంభించి వాటితో పాటు రన్ అవుతూ ఉంటుంది. దాంతో `/ccam:switch`, లేదా వినియోగ పరిమితి వద్ద `auto_switch`, సెషన్ ఆప్షన్లు, permission mode, effort level, agent తో సహా సంభాషణను తనంతట తానే మరో ఖాతాలో కొనసాగించగలదు; `/ccam:switch` సంభాషణను మరో సంస్థ ఖాతాకు తరలించే ముందు, ccam మిమ్మల్ని అడుగుతుంది ([వివరాలు](/features/next#relay)).
 
 ## ఆప్షన్లు
 

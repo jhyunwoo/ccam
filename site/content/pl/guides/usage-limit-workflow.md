@@ -1,10 +1,10 @@
 ---
 title: Co zrobić, gdy Claude Code osiągnie limit użycia
 description: Poczekaj na reset albo od razu kontynuuj tę samą rozmowę na innym koncie Claude Code. Jak działają limity 5-godzinne i tygodniowe, krok po kroku.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 3
 translation: machine
-sourceHash: "96b6429c0102"
+sourceHash: "760a36724feb"
 ---
 
 Gdy konto osiągnie limit użycia (często nazywany rate limitem), masz dwie możliwości: poczekać, aż limit się zresetuje, albo od razu kontynuować tę samą rozmowę na innym swoim koncie. Z ccam to drugie wymaga jednego polecenia, `ccam next --auto --continue`.
@@ -64,7 +64,7 @@ Z [pluginem ccam](/docs/install#claude-code-plugin) w Claude Code sesja zatrzyma
 Tylko jeśli to włączysz.
 
 - Domyślnie ccam nie działa w trakcie twojej pracy: uruchamia Claude Code i zastępuje się nim, więc to ty decydujesz, kiedy przełączyć. `ccam next --auto` wybiera konto z najniższym 5-godzinnym użyciem, pomija konta, które mają 100% albo nie są zalogowane, i pozostaje w obrębie jednej organizacji Team lub Enterprise albo wśród planów prywatnych.
-- Z `relay = true` w `config.toml` ccam zamiast tego działa dalej obok sesji, więc `/ccam:switch` sam kontynuuje rozmowę, zachowując opcje sesji, tryb uprawnień i poziom wysiłku.
+- Z `relay = true` w `config.toml` ccam zamiast tego działa dalej obok sesji, więc `/ccam:switch` sam kontynuuje rozmowę, zachowując opcje sesji, tryb uprawnień, poziom wysiłku i agenta; zanim przeniesie rozmowę na konto z innej organizacji, ccam cię o to pyta.
 - Z `auto_switch = true` (Linux i macOS; funkcja eksperymentalna) ccam także sam wykonuje przełączenie: gdy Claude Code zatrzyma sesję na jej limicie, a inne konto tego samego rodzaju ma jeszcze zapas, ccam kończy sesję i kontynuuje rozmowę na tamtym koncie ([warunki i koszty](/features/next#auto-switch)).
 
 Niektóre inne narzędzia zamiast tego podmieniają login działającej sesji; [ccam i inne narzędzia do przełączania kont](/compare/account-switchers) wyjaśnia różnicę.

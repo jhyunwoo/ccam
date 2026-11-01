@@ -1,10 +1,10 @@
 ---
 title: اجرای Claude Code
 description: Claude Code را با ccam <name|number>، ccam run یا داشبورد، با هر حسابی اجرا کنید؛ آرگومان‌ها بی‌تغییر به claude می‌رسند و --dry-run فرمان را نشان می‌دهد.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` اجرای Claude Code را با حساب `work` آغاز می‌کند و هر چه پس از نام بیاید بدون تغییر به `claude` می‌رسد. هر جا که `claude` را تایپ می‌کردید از آن استفاده کنید: در ترمینال، در یک اسکریپت یا با ورودی‌ای که از طریق pipe داده می‌شود.
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 وقتی در shell یکی از `CLAUDE_CODE_OAUTH_TOKEN`، `ANTHROPIC_API_KEY` یا `ANTHROPIC_AUTH_TOKEN` تنظیم شده باشد، Claude Code ممکن است به‌جای ورود خود حساب از آن کلید یا توکن استفاده کند، پس ccam پیش از شروع در خطای استاندارد به شما هشدار می‌دهد (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). فقط متغیرها را می‌خواند؛ یک [حساب کلید API](/features/api) به‌جای آن، آن‌ها را پاک می‌کند.
 
-به‌طور پیش‌فرض ccam خودش را با Claude Code جایگزین می‌کند، بنابراین هیچ چیز دیگری در حال اجرا نمی‌ماند. با `relay = true` (یا در Linux و macOS با [`auto_switch = true`](/features/next#auto-switch)) در بالای `config.toml`، بالای نخستین `[[group]]`، `[[profile]]` یا `[[folder]]`، ccam در عوض نشست‌های تعاملی را به‌عنوان فرایند فرزند اجرا می‌کند و در کنارشان در حال اجرا می‌ماند. این کار به `/ccam:switch`، یا `auto_switch` در سقف مصرف، امکان می‌دهد گفتگو را خودش روی حساب دیگری ادامه دهد، با گزینه‌ها، حالت مجوز و سطح تلاش همان نشست ([جزئیات](/features/next#relay)).
+به‌طور پیش‌فرض ccam خودش را با Claude Code جایگزین می‌کند، بنابراین هیچ چیز دیگری در حال اجرا نمی‌ماند. با `relay = true` (یا در Linux و macOS با [`auto_switch = true`](/features/next#auto-switch)) در بالای `config.toml`، بالای نخستین `[[group]]`، `[[profile]]` یا `[[folder]]`، ccam در عوض نشست‌های تعاملی را به‌عنوان فرایند فرزند اجرا می‌کند و در کنارشان در حال اجرا می‌ماند. این کار به `/ccam:switch`، یا `auto_switch` در سقف مصرف، امکان می‌دهد گفتگو را خودش روی حساب دیگری ادامه دهد، با گزینه‌ها، حالت مجوز، سطح تلاش و عامل همان نشست؛ پیش از آنکه `/ccam:switch` آن را به حسابی از سازمان دیگری جابه‌جا کند، ccam از شما می‌پرسد ([جزئیات](/features/next#relay)).
 
 ## گزینه‌ها
 

@@ -1,10 +1,10 @@
 ---
 title: 用量限制
 description: ccam usage 一次显示每个账号的 5 小时限额和每周限额，ccam statusline 在 Claude Code 中显示账号名和用量。
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: machine
-sourceHash: "997107786d4c"
+sourceHash: "54b296f7da35"
 ---
 
 `ccam usage` 显示每个账号的各项限额已用掉多少：5 小时限额、每周限额，以及各模型自己的每周限额（例如 Fable）。每项限额有一个用量条，并附上距离重置的时间。在开始一项长任务之前，或者当 Claude Code 提示你快到限额时，用它查看哪个账号还有余量。`ccam statusline` 是供 Claude Code 使用的状态栏命令：它在 Claude Code 中显示账号名和用量，并为 `ccam usage` 保存这些数字。如果想看用量背后的 token 数和估算费用，`ccam ccusage` 会对所有账号的对话运行 [ccusage](https://ccusage.com)（[见下文](#tokens-and-costs-ccam-ccusage)）。
@@ -97,13 +97,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-ccam 先读取自己的选项：`-a`（`--account`）接受账号名称或编号，可以用逗号分隔，也可以重复该选项；`--dry-run` 只打印命令而不运行它。从第一个不属于这些选项的参数开始，所有内容都原样传给 ccusage；`ccam ccusage -- --help` 显示 ccusage 自己的帮助。ccam 会运行已安装的 `ccusage`，没有时运行 `bun x ccusage`，再没有时运行 `npx ccusage@latest`；后两者会从 npm 获取 ccusage。三者都没有时，ccam 会提示你安装 Node.js、Bun 或 ccusage。在 Linux 和 macOS 上，ccusage 会取代 ccam；在 Windows 上，ccam 会等待它结束，并以它的退出码退出。在 WSL 中，ccam 会跳过 Windows 驱动器上的 `ccusage`、`bun` 或 `npx`，因为它们会作为 Windows 程序运行，拿不到账号文件夹。
+ccam 先读取自己的选项：`-a`（`--account`）接受账号名称或编号，可以用逗号分隔，也可以重复该选项；`--dry-run` 只打印命令而不运行它。从第一个不属于这些选项的参数开始，所有内容都按你输入的原样传给 ccusage，只有通过 `bun x` 和 `npx` 运行时的 `--config` 例外（见下文）；`ccam ccusage -- --help` 显示 ccusage 自己的帮助。ccam 会运行已安装的 `ccusage`，没有时运行 `bun x ccusage`，再没有时运行 `npx ccusage@latest`；后两者会从 npm 获取 ccusage。它们在 ccam 自己的文件夹（`~/.local/state/ccam/ccusage`）中启动，而不是在当前文件夹中，因此当前文件夹中的项目无法通过它的 `node_modules/.bin`、`package.json` 中的 `bin` 或 `.npmrc` 中的 registry 来决定它们运行什么；`ccam --dry-run ccusage` 会显示进入该文件夹的 `cd`。三者都没有时，ccam 会提示你安装 Node.js、Bun 或 ccusage。在 Linux 和 macOS 上，ccusage 会取代 ccam；在 Windows 上，ccam 会等待它结束，并以它的退出码退出。在 WSL 中，ccam 会跳过 Windows 驱动器上的 `ccusage`、`bun` 或 `npx`，因为它们会作为 Windows 程序运行，拿不到账号文件夹。
 
 - 报告涵盖文件夹中有对话（即有 `projects` 文件夹）的账号。多个账号通过组共享的对话只计算一次。
 - 使用 `-a` 时，通过组共享历史的账号会带上整个组的对话，ccam 会说明是哪些账号的对话：`ccam: work shares its conversation history with personal, so the report counts their conversations too`。
 - `blocks` 显示 5 小时窗口，而每个账号都有自己的窗口，所以查看这个报告时请像上面那样只指定一个账号。
 - ccusage 还会报告它找到的其他编程工具（例如 Codex），除非你指定其中一个：`ccam ccusage claude daily` 只统计 Claude Code。
-- 由 ccam 运行时，ccusage 只从 `./.ccusage` 和各账号文件夹读取它的设置（`ccusage.json`）。`--config` 可以指定另一个文件：`ccam ccusage daily --config ~/.config/claude/ccusage.json`。
+- 由 ccam 运行时，ccusage 只从 `./.ccusage` 和各账号文件夹读取它的设置（`ccusage.json`）。`--config` 可以指定另一个文件：`ccam ccusage daily --config ~/.config/claude/ccusage.json`。由于 `bun x` 和 `npx` 在 ccam 自己的文件夹中启动，当 `./.ccusage/ccusage.json` 存在而你没有指定文件时，ccam 会用 `--config` 把这个文件传给它们，并把相对路径的 `--config` 改为完整路径传入。这时 ccusage 会以 ccam 的文件夹为基准读取其他相对路径（例如 `--pi-path`），所以这些路径请写成完整路径。
 - ccusage 会把路径中含逗号的文件夹当成两个文件夹来读取，所以 ccam 会拒绝它并指出是哪个账号；请用 `-a` 把这个账号排除在外。
 - `ccusage` 是 ccam 的一个命令，所以名为 ccusage 的账号要用 `ccam run ccusage` 启动；`ccam doctor` 会提示这一点。
 

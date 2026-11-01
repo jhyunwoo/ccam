@@ -418,6 +418,50 @@ Read from `claude --help` of 2.1.308 (run with a scratch `HOME` and `CLAUDE_CONF
   account ran a conversation (`ranLast`); several accounts list the same id when the conversation moved on with
   `--resume`.
 
+## The agent on a resume (2.1.314)
+
+Read from the 2.1.314 binary and seen with the real 2.1.314 in the security audit's sandbox (an offline stub
+for the API), 2026-10-31 and 2026-11-01. ccam's hop carries the agent on (`launcher.CarryArgs`, `WithAgent`,
+`cli.conversationAgent`) and checks that the next account loads the same agents (`cli.sameAgents`) because of these.
+
+- An interactive `--resume <file> --fork-session` (the hop to an account without the shared history) does not bring
+  the agent back. A session that ran as an agent limited to Read, Grep and Glob was offered every tool (25) in the
+  copy, and Bash and Write ran without a question in bypassPermissions and acceptEdits. The agent's system prompt
+  was still sent; only the tools went back to the default agent's. A `-p` fork kept the agent's tools. With
+  `--agent` on the fork, the copy got the agent's tools and Bash was refused.
+- An `--agent` the account does not define gives no error on such a resume: the session runs with the default
+  agent's tools (seen for `--resume <file> --fork-session`; `--continue` and `--resume <id>` were not tried).
+- The conversation names the agent in `{"type":"agent-setting","agentSetting":"<name>","sessionId":…}` rows,
+  written with the session's other metadata (in the binary: every 32 KiB it writes, on a resume and as the session
+  ends). A short session already had two, and a resumed copy gained them. Their value is
+  `currentSessionAgentSetting`, which resuming a conversation by id sets from the conversation's own rows (`aq`),
+  while the session runs as the agent it started with (`--agent`, else the `agent` setting; `sTe`). So
+  `--resume <id> --agent X` runs with X's tools (in `-p`, still with the conversation's earlier system prompt) but
+  writes rows that name the earlier agent. `conversationAgent` therefore takes the session's own `--agent` and the
+  `agent` setting before the rows.
+
+## Scheduled prompts (2.1.314)
+
+Seen with the real 2.1.314 in the security audit's sandbox (offline, against a stub API), 2026-10-31 and
+2026-11-01. ccam's `/ccam:switch` has `disable-model-invocation: true` (plugin 0.3.2), and ccam asks on the terminal
+before a switch moves a conversation to another organization (`cli.confirmSwitch`), because of these.
+
+- The model schedules prompts without a permission dialog in the default permission mode: CronCreate (session jobs;
+  `permissionDecisionMs=1` in the debug log), ScheduleWakeup, and durable jobs in `.claude/scheduled_tasks.json`.
+  When one fires, a slash command in its prompt expands as if the person had typed it and runs the plugin's
+  `UserPromptExpansion` hook with the same input, so the hook cannot tell the two apart.
+- A command whose frontmatter has `disable-model-invocation: true` is not expanded when such a prompt fires: it
+  reaches the model as a plain-text `isMeta` user row, and no hook runs. A typed command still expands and runs it.
+- Session jobs come back in the copy `--resume <file> --fork-session` makes (`resume: resurrected 1 session cron
+  task(s)` in the debug log), so a job follows the conversation to the next account.
+- With a session job, `/exit` shows a "Background work is running" menu (Exit and stop tasks, Move to background and
+  exit, Stay) instead of exiting, even before the job first fires. Two Ctrl+D presses end Claude Code with exit 0.
+- A hook's `stopReason` (with `continue: false`) is written into the conversation as `Operation stopped by hook:
+  <reason>` and shown; typed prompts still go through afterwards.
+- The terminal is raw while Claude Code runs and back in line mode (icanon, echo, isig, icrnl) before its process
+  ends after `/exit`. A line typed while it was ending was read by Claude Code, not left for the next program (seen
+  once).
+
 ## Reading a conversation without a model (2.1.310)
 
 `ccam next --continue --brief` reads a conversation's rows to write a summary (`transcript.ReadDigest`). Read from

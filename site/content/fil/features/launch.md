@@ -1,10 +1,10 @@
 ---
 title: Pagsisimula ng Claude Code
 description: Patakbuhin ang Claude Code bilang anumang account sa ccam <name|number>, ccam run o dashboard; buo sa claude ang argument; ipinapakita ng --dry-run ang command.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: cf9ef66530cd
+sourceHash: 11df08608a1e
 ---
 
 Sinisimulan ng `ccam work` ang Claude Code bilang `work` account, at ipinapasa sa `claude` nang walang pagbabago ang lahat ng kasunod ng pangalan. Gamitin ito saanman mo ita-type ang `claude`: sa terminal, sa script, o kapag may input na ipina-pipe.
@@ -38,7 +38,7 @@ Binubuksan ng `ccam` na walang argument ang [dashboard](/features/dashboard) kap
 
 Kapag nakatakda sa shell ang `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` o `ANTHROPIC_AUTH_TOKEN`, maaaring gamitin ng Claude Code ang key o token na iyon sa halip na ang sariling login ng account, kaya binabalaan ka ng ccam sa standard error bago ito magsimula (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). Binabasa lang nito ang mga variable; binubura naman ang mga ito ng isang [API key account](/features/api).
 
-Bilang default, pinapalitan ng ccam ang sarili nito ng Claude Code, kaya walang ibang patuloy na tumatakbo. Kapag may `relay = true` (o [`auto_switch = true`](/features/next#auto-switch) sa Linux at macOS) sa itaas ng `config.toml`, bago ang unang `[[group]]`, `[[profile]]` o `[[folder]]`, sinisimulan na lang ng ccam ang mga interactive session bilang child process at patuloy itong tumatakbo kasabay nila. Dahil dito, kusang maipagpapatuloy ng `/ccam:switch`, o ng `auto_switch` sa usage limit, ang usapan sa ibang account, kasama ang mga option, permission mode at effort level ng session ([mga detalye](/features/next#relay)).
+Bilang default, pinapalitan ng ccam ang sarili nito ng Claude Code, kaya walang ibang patuloy na tumatakbo. Kapag may `relay = true` (o [`auto_switch = true`](/features/next#auto-switch) sa Linux at macOS) sa itaas ng `config.toml`, bago ang unang `[[group]]`, `[[profile]]` o `[[folder]]`, sinisimulan na lang ng ccam ang mga interactive session bilang child process at patuloy itong tumatakbo kasabay nila. Dahil dito, kusang maipagpapatuloy ng `/ccam:switch`, o ng `auto_switch` sa usage limit, ang usapan sa ibang account, kasama ang mga option, permission mode, effort level at agent ng session; bago ito ilipat ng `/ccam:switch` sa account ng ibang organisasyon, nagtatanong muna sa iyo ang ccam ([mga detalye](/features/next#relay)).
 
 ## Mga option
 

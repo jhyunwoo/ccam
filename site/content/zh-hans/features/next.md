@@ -1,10 +1,10 @@
 ---
 title: 切换到下一个账号
 description: ccam next 以另一个账号打开 Claude Code；--auto 选择余量最多的账号，--continue 把对话带到新账号，--fallback 重新运行 -p 任务。
-updated: 2026-10-26
+updated: 2026-11-01
 order: 8
 translation: machine
-sourceHash: "4862fcef8882"
+sourceHash: "79300c521748"
 ---
 
 `ccam next` 无需你指定账号名，就能以另一个账号打开 Claude Code。当某个账号达到用量限制时使用它。有四种切换方式：
@@ -96,7 +96,7 @@ auto_max_usage = 80        # keep 20% of each account for interactive work
 auto_strategy = "expiring"
 ```
 
-**组织。** 自动选择只会落在与你离开的账号同类的账号上：同一个 Team 或 Enterprise 组织中的席位，或者个人套餐（Pro、Max）之间，这样公司账号的工作不会在私人账号上继续，反之亦然。ccam 从每个账号的登录中得知其所属组织（`ccam login` 会记录它；较早的登录则从 `.claude.json` 读取）；ccam 无法判断组织的账号可以与任何账号匹配。登录到同一个 Claude 账号的两个文件夹共享同一份限制，所以它们永远不会互相接替。`--cross-org`，或 `config.toml` 中的 `cross_org = true`，会取消这条组织规则。
+**组织。** 自动选择只会落在与你离开的账号同类的账号上：同一个 Team 或 Enterprise 组织中的席位，或者个人套餐（Pro、Max）之间，这样公司账号的工作不会在私人账号上继续，反之亦然。ccam 从每个账号的登录中得知其所属组织（`ccam login` 会记录它；较早的登录则从 `.claude.json` 读取）；ccam 无法判断组织的账号可以与任何账号匹配。登录到同一个 Claude 账号的两个文件夹共享同一份限制，所以它们永远不会互相接替。`--cross-org`，或 `config.toml` 中的 `cross_org = true`，会取消这条组织规则，但在 [`/ccam:switch`](#inside-claude-code) 之后，移到另一个组织仍要等你回答 yes。
 
 当没有可选的账号时，ccam 以退出码 75（`EX_TEMPFAIL`）退出，这样脚本就能把"稍后再试"和失败区分开。使用 `--wait` 时，它会改为等待，直到第一个已满账号中造成阻塞的时间窗口重置（重置时间之后 30 秒，此时接口会显示新的时间窗口），打印 `ccam: no account has room; waiting until 15:10`，然后重新选择；如果没有账号说明何时重置，它会在 10 分钟后再查看。如果在等待结束前没有账号空出来，它以 75 退出。
 
@@ -108,6 +108,7 @@ auto_strategy = "expiring"
 2. 对话所属的账号就是你要切换离开的账号，新账号按上述规则在同一组织内选择。当有多个账号共享那份历史记录时，它属于 `.claude.json` 表明最后运行该对话的账号（`lastSessionId`），否则属于最近使用的账号。
 3. 如果新账号共享那份历史记录（同一个组文件夹），ccam 启动 `claude --resume <session id>`，也就是那次对话本身（`--continue` 会打开文件夹中最新的对话，不管是哪一次）。
 4. 否则它启动 `claude --resume <the conversation's file> --fork-session`：Claude Code 以新的会话 ID 把整个对话复制到新账号自己的历史记录中，原对话保持不变。此后新账号的 `--continue` 就能找到它。
+5. 除非你在 `--` 之后给出 `--agent`，ccam 还会传递对话所用的代理：文件夹的 `.claude/settings.local.json` 或 `.claude/settings.json`、或者账号的 `settings.json` 中的 `agent` 设置，没有时则是对话最后一条 `agent-setting` 行所指定的代理。Claude Code 在复制对话时（第 4 步）不会带回代理，而会以它的默认代理、带着所有工具继续对话。当新账号不共享旧账号的代理、插件和设置（即没有通过组共享相同的 `agents` 和 `plugins` 文件夹以及 `settings.json`）时，ccam 会在关于移动的那一行之后再加一行：`work does not share personal's agents, plugins and settings, so it may not have agent "reviewer" or may define it differently: the conversation may go on without that agent's tool limits`。
 
 ccam 会告诉你对话有多大：新账号在第一次回复时会重新读取全部内容。提示缓存从不在组织之间共享，而每个个人套餐都是一个独立的组织，所以当两个账号属于不同组织时，ccam 会加上 `prompt caches are not shared between organizations, so the first reply reads it all again`。当旧账号已登录某些 MCP 服务器、而新账号没有时，ccam 会列出它们：`work is not signed in to MCP servers that personal is signed in to: linear (sign in with /mcp there; sign-ins are not shared)`。在组中共享 `history` 可以避免复制，只保留一份对话，同时也共享 `/rewind` 用来恢复代码的检查点（`file-history/`）。
 
@@ -153,15 +154,17 @@ Claude Code 在 `"` 处结束一个提及，并在 `#` 处截断它，所以当�
   当 Claude Code 已把被拒绝的请求写入对话时，钩子还会把已满的时间窗口一直记录到其重置为止（[用量限制记录](/features/usage#the-limit-record)），但组织设置的停用除外，因为组织管理员随时可以解除它。服务器短暂的限流或 API 密钥的速率限制不属于用量限制，不会处理；子代理的停止以及无人值守的会话（`-p` 运行和后台会话）也不会处理。
 
   Claude Code 2.1.234 及更高版本还会在会话中等待，并在 5 小时时间窗口重置后自动继续；这条通知让你可以选择改为切换账号；开启 [`auto_switch`](#auto-switch)（Linux 和 macOS）后，当另一个账号还有余量时，ccam 会替你切换。当没有其他账号可以接替时，也就是没有其他账号属于同一个 Team 或 Enterprise 组织，或者没有其他个人套餐（开启 `cross_org` 时，任何其他 Claude 账号都可以接替），通知会改为以 `You have no other personal plans, so ccam cannot move this conversation.` 或 `You have no other accounts in Acme, so ccam cannot move this conversation.` 结尾。
-- `/ccam:switch [account]` 会记下这次对话，并在发出任何请求之前结束这一轮：输入 `/exit`，然后运行 `ccam next --continue`，在你指定的账号（或下一个账号）上继续这次对话。在还没有任何对话的会话中，它会说明没有可以继续的内容。
+- `/ccam:switch [account]` 会记下这次对话，并在发出任何请求之前结束这一轮：输入 `/exit`，然后运行 `ccam next --continue`，在你指定的账号（或下一个账号）上继续这次对话。在还没有任何对话的会话中，它会说明没有可以继续的内容。只有你自己输入才会运行它：从插件 0.3.2 起，Claude 无法运行 `/ccam:switch`，而 Claude 安排的任务（CronCreate、ScheduleWakeup 或 `.claude/scheduled_tasks.json`）会把它作为纯文本交给 Claude。
+
+  当你指定的账号不在对话所属的组织内（另一个 Team 或 Enterprise 组织的席位、从席位换到个人套餐或反过来，或任一方是 API 密钥账号）时，无论 `cross_org` 如何设置，`ccam next --continue` 都会先询问：`ccam: /ccam:switch named home, a personal plan, but this conversation is on work, a Claude Team seat in Acme. Move it to home? [y/N]`。你没有指定账号时，ccam 在移到它自己挑选的账号（`cross_org = true` 时可以来自另一个组织）之前也会同样询问：`ccam: the account picked for /ccam:switch is home, a personal plan, …`。只有 `y` 或 `yes` 才会移动；在 Linux 和 macOS 上，会先丢弃提问之前输入的按键。任何其他回答，或者没有可以提问的终端，都会让对话和记录保持原样：``the conversation stays on work, a Claude Team seat in Acme: it moves to home, a personal plan, only when you answer yes on a terminal. `ccam next --continue` asks again, and `ccam work --resume <session id>` continues it as work``（如果账号是 ccam 挑选的，`ccam next --continue` 会重新挑选）。与自动选择一样，ccam 无法判断组织的账号可以与任何账号匹配。
 
 这条记录保存在 `~/.local/state/ccam/handoff/<account>/<session>.json` 中，每个会话一个文件，因此同一账号的两个会话永远不会覆盖彼此的记录。它的有效期为 12 小时，只在下一个会话即将启动时使用一次；启动失败时它会保留下来，供下次尝试。它属于会话启动时所在的文件夹，即使之后在 Claude Code 的 shell 中执行了 `cd` 也是如此。`ccam rename` 会更新其中的名称；如果它指定的账号后来被删除，ccam 会说明这一点，并照常选择。
 
 ### 接力
 
-在 `config.toml` 的顶部设置 `relay = true` 时，ccam 会在交互式会话旁边持续运行，而不是用 Claude Code 替换自身；在 `/ccam:switch` 之后，它会自己继续那个会话的对话（不会处理其他会话留下的记录）：钩子结束 Claude Code，ccam 用那个会话的记录运行 `ccam next --continue`。没有指定账号时，它会选择剩余额度最多的账号，并计入对话所用的模型。在 Windows 上，钩子无法结束 Claude Code：输入 `/exit`，ccam 就会继续这个对话。代价是每个会话多一个等待中的 ccam 进程，所以默认关闭。
+在 `config.toml` 的顶部设置 `relay = true` 时，ccam 会在交互式会话旁边持续运行，而不是用 Claude Code 替换自身；在 `/ccam:switch` 之后，它会自己继续那个会话的对话（不会处理其他会话留下的记录）：钩子结束 Claude Code，ccam 用那个会话的记录运行 `ccam next --continue`。没有指定账号时，它会选择剩余额度最多的账号，并计入对话所用的模型；如果因为 `cross_org = true` 而选中了另一个组织的账号，它会在把对话移过去之前先问上面的问题。在 Windows 上，钩子无法结束 Claude Code：输入 `/exit`，ccam 就会继续这个对话。对于对话所属组织之外的账号，钩子也不会结束 Claude Code：它会显示 `ccam: type /exit; ccam then asks whether to continue this conversation on home, a personal plan (work is a Claude Team seat in Acme).`，等你输入 `/exit` 之后，ccam 会问上面的问题。代价是每个会话多一个等待中的 ccam 进程，所以默认关闭。
 
-接力的会话会保留恢复对话时不会还原的内容：`--add-dir`、`--mcp-config`、工具列表、`--settings`、`--plugin-dir` 和系统提示相关的选项，以及对话的权限模式和会话的推理强度。`--model`、`--name` 和 `--agent` 由 Claude Code 自己从对话中还原。其他内容（`--worktree`、`--debug`、`--remote-control`、ccam 不认识的选项）会在 `ccam: not carried over: …` 中列出。切换时从不询问共享历史的问题，切换过程中你输入的内容会被丢弃。
+接力的会话会保留恢复对话时不会还原的内容：`--add-dir`、`--mcp-config`、工具列表、`--settings`、`--plugin-dir` 和系统提示相关的选项，以及对话的权限模式、会话的推理强度和对话所用的代理（见 [`--continue`](#continue)）。`--model` 和 `--name` 由 Claude Code 自己从对话中还原。其他内容（`--worktree`、`--debug`、`--remote-control`、ccam 不认识的选项）会在 `ccam: not carried over: …` 中列出。切换时从不询问共享历史的问题，切换过程中你输入的内容会被丢弃；它唯一会问的，是移到另一个组织的账号之前的那个问题。
 
 只有当 Claude Code 按 `/ccam:switch` 的要求结束时，接力才会继续这个对话：如果你先输入了 `/exit`、在它结束时按了 Ctrl+C，或者 ccam 收到挂断或其他信号，或者终端已经不在了，都不会继续。此时记录会保留，之后可以用 `ccam next --continue` 继续这次对话。在旧版本 ccam 的接力下启动的会话，或者无人值守的会话（`-p` 运行和后台会话），不会被钩子结束，而是收到 `/exit` 的提示。`claude remote-control` 不使用接力。
 
@@ -195,17 +198,20 @@ ccam: personal hit its 5-hour limit; continuing this conversation as side
    - 不使用 API 密钥；
    - 有 ccam 知道的套餐；
    - 就 ccam 自己的用量查询所见，没有开启用量积分；
-   - 已在 Claude Code 中信任此文件夹。
+   - 已在 Claude Code 中信任此文件夹；
+   - 如果对话以某个代理运行（`agent` 设置或对话指定了代理），要共享你离开的账号的代理：它的 `agents` 和 `plugins` 文件夹以及 `settings.json` 必须各自（通过组）完全相同，或者两边都没有。
 
-   当最后这两条排除了所有还有余量的账号时，通知会指出它们：`side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.` 或 `side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.` 有[用量限制记录](/features/usage#the-limit-record)的时间窗口按已满计算，最近 2 分钟内有其他会话移入的账号排在其他账号之后。选择必须在大约 6 秒内完成；用量查询耗时更长时，会话保持不动。设置 `usage_source = "claude"` 时，`auto_switch` 只根据保存的数字做决定，而且 ccam 无法从 Claude Code 的查询或状态栏中得知用量积分是否开启，所以假定它们是关闭的。
+   当最后这三条排除了所有还有余量的账号时，通知会指出它们：`side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.`、`side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.` 或 `This conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so auto_switch did not move it there.` 有[用量限制记录](/features/usage#the-limit-record)的时间窗口按已满计算，最近 2 分钟内有其他会话移入的账号排在其他账号之后。选择必须在大约 6 秒内完成；用量查询耗时更长时，会话保持不动。设置 `usage_source = "claude"` 时，`auto_switch` 只根据保存的数字做决定，而且 ccam 无法从 Claude Code 的查询或状态栏中得知用量积分是否开启，所以假定它们是关闭的。
 
-然后钩子结束 Claude Code，在它旁边持续运行的 ccam 会在支持桌面通知的终端中显示一条通知，例如 `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` 它打印上面示例输出的第一行，并以选中的账号为该会话运行 `ccam next --continue`，后者打印输出中的另外两行，并像[接力](#relay)那样，以会话的选项、权限模式和推理强度启动 Claude Code。新会话的第一条消息是下面这段固定文本，这是 ccam 唯一代表你发送的内容（在 `/ccam:switch` 之后的移动不发送任何内容）：
+然后钩子结束 Claude Code，在它旁边持续运行的 ccam 会在支持桌面通知的终端中显示一条通知，例如 `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` 它打印上面示例输出的第一行，并以选中的账号为该会话运行 `ccam next --continue`，后者打印输出中的另外两行，并像[接力](#relay)那样，以会话的选项、权限模式、推理强度和代理启动 Claude Code。新会话的第一条消息是下面这段固定文本，这是 ccam 唯一代表你发送的内容（在 `/ccam:switch` 之后的移动不发送任何内容）：
 
 ```text
 Your usage limit was reached and ccam moved this conversation to another account. Continue the task you were working on when the limit was reached; do not repeat work that is already complete.
 ```
 
 如果那个账号也达到了限制，同样的事会在那里再发生一次。用量限制记录会阻止这条链在某个账号重置之前回到该账号，所以当每个账号都已用满时，会话会停在最后一个账号上。
+
+钩子通过 `agent` 设置，或者通过 Claude Code 不时以及在会话结束时写入对话、指明代理的那一行，得知对话以某个代理运行。如果到目前为止只有会话的 `--agent` 指明了代理，而选中的账号不共享这些代理，`ccam next --continue` 就不启动任何东西，并保留记录，第二条桌面通知会说明这一点：``ccam: this conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so ccam did not move it there. Its note stays: `ccam next --continue` continues it later, and `ccam personal --resume <session id>` continues it as personal after the reset``。
 
 当没有其他账号还有余量时，什么都不会移动：Claude Code 照常处理这次限制，在会话中等待或给出它的选项，通知会说明哪个账号最先恢复，例如 `ccam: personal hit its 5-hour limit (resets 3:29am). None of your other personal plans has room now; side frees up first, at 12:30am. Claude Code waits for personal here; /ccam:switch side after 12:30am moves it sooner.` 对于席位，它会说 `None of your other accounts in Acme has room now`。要停止一次已经开始的移动，请在 Claude Code 关闭时按 Ctrl+C：``ccam: switch cancelled. Run `ccam next --continue` later to continue the conversation.``
 

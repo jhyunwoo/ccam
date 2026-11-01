@@ -226,7 +226,9 @@ var endClaude = func(pid int) error {
 
 // hookSwitch notes the session for /ccam:switch and ends the turn before
 // any request is made. Under a relay of this ccam it also ends Claude Code,
-// and the relay carries the conversation on as the other account.
+// and the relay carries the conversation on as the other account; for an
+// account outside the session's organization pool, it waits for the
+// person's /exit and asks first.
 func hookSwitch(e *env, in hookInput, account string) error {
 	stop := func(msg string) error {
 		return hookOutput(e, map[string]any{"continue": false, "stopReason": msg})
@@ -242,6 +244,7 @@ func hookSwitch(e *env, in hookInput, account string) error {
 	if err != nil {
 		return stop("ccam: " + err.Error())
 	}
+	var to *config.Profile
 	if target != "" {
 		p, ok := cfg.Find(target)
 		if !ok {
@@ -250,6 +253,7 @@ func hookSwitch(e *env, in hookInput, account string) error {
 		if target = p.Name; target == account {
 			return stop("ccam: this session already runs as " + account + ".")
 		}
+		to = p
 	}
 	if !fsutil.Exists(in.Transcript) {
 		// Nothing written yet: there is no conversation to carry on.
@@ -262,6 +266,19 @@ func hookSwitch(e *env, in hookInput, account string) error {
 	// Without a target the relay goes on with `ccam next --continue --auto`.
 	who := cmp.Or(target, "the account with the most room")
 	carry := "ccam: type /exit; ccam then continues this conversation on " + who + "."
+	// A move out of the pool waits for the person's yes on the terminal
+	// (confirmSwitch), and this hook cannot tell a /ccam:switch the person
+	// typed from one that a job the model scheduled fired. So Claude Code is
+	// not ended for it (a recurring job would end the session at every run):
+	// the relay asks once the person types /exit.
+	away := false
+	if from, ok := cfg.Find(account); ok && to != nil {
+		org := newOrgs(e, cfg, false)
+		if away = apart(e, org, from, to); away {
+			carry = fmt.Sprintf("ccam: type /exit; ccam then asks whether to continue this conversation on %s, %s (%s is %s).",
+				to.Name, accountKind(e, org, to), account, accountKind(e, org, from))
+		}
+	}
 	save := func(msg string) error {
 		if err := handoff.Save(e.paths.State, t); err != nil {
 			return stop("ccam: " + err.Error())
@@ -290,8 +307,9 @@ func hookSwitch(e *env, in hookInput, account string) error {
 		return save(exit)
 	}
 	t.Relay, t.Child = os.Getenv("CCAM_RELAY"), child
-	if runtime.GOOS == "windows" {
-		// Claude Code cannot be ended from here: the relay carries on after /exit.
+	if runtime.GOOS == "windows" || away {
+		// Claude Code cannot be ended from here on Windows, nor is it for a
+		// move out of the pool: the relay carries on after /exit.
 		return save(carry)
 	}
 	t.Stopped = true

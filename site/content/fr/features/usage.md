@@ -1,10 +1,10 @@
 ---
 title: "Limites d'utilisation"
 description: "ccam usage affiche d'un coup les limites sur 5 heures et hebdomadaires de chaque compte, et ccam statusline met le compte et l'utilisation dans Claude Code."
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: machine
-sourceHash: "997107786d4c"
+sourceHash: "54b296f7da35"
 ---
 
 `ccam usage` indique, pour chaque compte, quelle part de chaque limite est utilisée : la limite sur 5 heures, la limite hebdomadaire et la limite hebdomadaire propre à chaque modèle (comme Fable). Chaque limite reçoit une barre et le temps restant avant sa réinitialisation. Utilisez-le avant de commencer une longue tâche, ou quand Claude Code vous signale qu'une limite approche, pour voir quel compte a encore de la marge. `ccam statusline` est la commande de ligne d'état pour Claude Code : elle affiche le nom du compte et l'utilisation dans Claude Code et enregistre les chiffres pour `ccam usage`. Pour les jetons et les coûts estimés derrière cette utilisation, `ccam ccusage` exécute [ccusage](https://ccusage.com) sur les conversations de tous les comptes ([voir plus bas](#tokens-and-costs-ccam-ccusage)).
@@ -97,13 +97,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-ccam lit d'abord ses propres options : `-a` (`--account`) prend des noms ou des numéros de compte, séparés par des virgules ou répétés, et `--dry-run` affiche la commande au lieu de l'exécuter. À partir du premier argument qui n'est pas une option de ccam, tout est transmis tel quel à ccusage ; `ccam ccusage -- --help` affiche l'aide de ccusage lui-même. ccam exécute `ccusage` s'il est installé, sinon `bun x ccusage`, et à défaut `npx ccusage@latest` ; ces deux derniers le récupèrent depuis npm. Si aucun n'est disponible, il vous indique d'installer Node.js, Bun ou ccusage. Sous Linux et macOS, ccusage prend la place de ccam ; sous Windows, ccam l'attend et se termine avec le code de sortie de ccusage. Sous WSL, ccam ignore un `ccusage`, `bun` ou `npx` situé sur un lecteur Windows, qui s'exécuterait comme un programme Windows sans les dossiers des comptes.
+ccam lit d'abord ses propres options : `-a` (`--account`) prend des noms ou des numéros de compte, séparés par des virgules ou répétés, et `--dry-run` affiche la commande au lieu de l'exécuter. À partir du premier argument qui n'est pas une option de ccam, tout est transmis à ccusage tel que vous l'avez tapé, sauf `--config` pour `bun x` et `npx` (voir plus bas) ; `ccam ccusage -- --help` affiche l'aide de ccusage lui-même. ccam exécute `ccusage` s'il est installé, sinon `bun x ccusage`, et à défaut `npx ccusage@latest` ; ces deux derniers le récupèrent depuis npm. Ils démarrent dans le dossier propre à ccam (`~/.local/state/ccam/ccusage`), et non dans le dossier où vous êtes, si bien qu'un projet qui s'y trouve ne peut pas choisir ce qu'ils exécutent avec son `node_modules/.bin`, un `bin` dans son `package.json` ou un registre dans son `.npmrc` ; `ccam --dry-run ccusage` affiche le `cd` vers ce dossier. Si aucun n'est disponible, il vous indique d'installer Node.js, Bun ou ccusage. Sous Linux et macOS, ccusage prend la place de ccam ; sous Windows, ccam l'attend et se termine avec le code de sortie de ccusage. Sous WSL, ccam ignore un `ccusage`, `bun` ou `npx` situé sur un lecteur Windows, qui s'exécuterait comme un programme Windows sans les dossiers des comptes.
 
 - Le rapport couvre les comptes dont le dossier contient des conversations (un dossier `projects`). Une conversation que des comptes partagent via un groupe n'est comptée qu'une fois.
 - Avec `-a`, un compte qui partage son historique via un groupe apporte les conversations de tout le groupe, et ccam indique à quels comptes elles appartiennent : `ccam: work shares its conversation history with personal, so the report counts their conversations too`.
 - `blocks` affiche des fenêtres de 5 heures, et chaque compte a les siennes : nommez donc un seul compte pour ce rapport, comme ci-dessus.
 - ccusage inclut aussi les autres outils de code qu'il trouve, comme Codex, sauf si vous en nommez un : `ccam ccusage claude daily` ne porte que sur Claude Code.
-- Quand ccam le lance, ccusage ne lit ses paramètres (`ccusage.json`) que dans `./.ccusage` et dans les dossiers des comptes. `--config` désigne un autre fichier : `ccam ccusage daily --config ~/.config/claude/ccusage.json`.
+- Quand ccam le lance, ccusage ne lit ses paramètres (`ccusage.json`) que dans `./.ccusage` et dans les dossiers des comptes. `--config` désigne un autre fichier : `ccam ccusage daily --config ~/.config/claude/ccusage.json`. Comme `bun x` et `npx` démarrent dans le dossier propre à ccam, ccam leur passe `./.ccusage/ccusage.json` avec `--config` quand ce fichier existe et que vous n'en désignez aucun, et transmet un `--config` relatif sous forme de chemin complet. ccusage lit alors les autres chemins relatifs, comme `--pi-path`, depuis le dossier de ccam : indiquez-les donc en entier.
 - ccusage lirait un dossier dont le chemin contient une virgule comme deux dossiers : ccam le refuse donc et nomme le compte ; laissez ce compte de côté avec `-a`.
 - `ccusage` est une commande de ccam : un compte nommé ccusage se lance donc avec `ccam run ccusage` ; `ccam doctor` le signale.
 

@@ -1,10 +1,10 @@
 ---
 title: Khởi động Claude Code
 description: "Chạy Claude Code bằng tài khoản bất kỳ với ccam <name|number>, ccam run hoặc bảng điều khiển; đối số được chuyển nguyên vẹn cho claude, --dry-run in ra lệnh."
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: cf9ef66530cd
+sourceHash: 11df08608a1e
 ---
 
 `ccam work` khởi động Claude Code bằng tài khoản `work`, và mọi thứ sau tên được chuyển cho `claude` mà không thay đổi. Hãy dùng nó ở bất cứ đâu bạn vẫn gõ `claude`: trong terminal, trong script, hoặc khi có đầu vào được pipe vào.
@@ -38,7 +38,7 @@ Khi đối số đầu tiên bắt đầu bằng `-` và không phải một c�
 
 Khi shell có đặt `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` hoặc `ANTHROPIC_AUTH_TOKEN`, Claude Code có thể dùng khóa hoặc token đó thay cho thông tin đăng nhập riêng của tài khoản, nên ccam cảnh báo bạn trên đầu ra lỗi chuẩn trước khi khởi động (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). Nó chỉ đọc các biến này; một [tài khoản API key](/features/api) thì xóa chúng đi.
 
-Theo mặc định, ccam tự thay thế mình bằng Claude Code, nên không có gì khác tiếp tục chạy. Với `relay = true` (hoặc [`auto_switch = true`](/features/next#auto-switch) trên Linux và macOS) ở đầu `config.toml`, phía trên `[[group]]`, `[[profile]]` hoặc `[[folder]]` đầu tiên, ccam thay vào đó khởi động các phiên tương tác như một tiến trình con và tiếp tục chạy song song với chúng. Nhờ vậy `/ccam:switch`, hoặc `auto_switch` khi chạm giới hạn sử dụng, có thể tự tiếp tục cuộc hội thoại trên một tài khoản khác, với các tùy chọn, chế độ quyền và mức effort của phiên ([chi tiết](/features/next#relay)).
+Theo mặc định, ccam tự thay thế mình bằng Claude Code, nên không có gì khác tiếp tục chạy. Với `relay = true` (hoặc [`auto_switch = true`](/features/next#auto-switch) trên Linux và macOS) ở đầu `config.toml`, phía trên `[[group]]`, `[[profile]]` hoặc `[[folder]]` đầu tiên, ccam thay vào đó khởi động các phiên tương tác như một tiến trình con và tiếp tục chạy song song với chúng. Nhờ vậy `/ccam:switch`, hoặc `auto_switch` khi chạm giới hạn sử dụng, có thể tự tiếp tục cuộc hội thoại trên một tài khoản khác, với các tùy chọn, chế độ quyền, mức effort và agent của phiên; trước khi `/ccam:switch` chuyển nó sang một tài khoản của tổ chức khác, ccam sẽ hỏi bạn ([chi tiết](/features/next#relay)).
 
 ## Tùy chọn
 

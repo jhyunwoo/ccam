@@ -1,10 +1,10 @@
 ---
 title: Menjalankan Claude Code
 description: Jalankan Claude Code sebagai akun apa pun via ccam <name|number>, ccam run, atau dasbor; argumen diteruskan utuh ke claude, --dry-run menampilkan perintah.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` menjalankan Claude Code sebagai akun `work`, dan semua yang ada setelah nama diteruskan ke `claude` tanpa diubah. Gunakan di mana pun Anda biasa mengetik `claude`: di terminal, di skrip, atau dengan input dari pipe.
@@ -38,7 +38,7 @@ Jika argumen pertama diawali `-` dan bukan salah satu flag milik ccam, ccam memi
 
 Jika shell memiliki `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY`, atau `ANTHROPIC_AUTH_TOKEN` yang ditetapkan, Claude Code mungkin memakai kunci atau token itu alih-alih login milik akun, sehingga ccam memperingatkan Anda di error standar sebelum menjalankannya (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). ccam hanya membaca variabel-variabel itu; [akun kunci API](/features/api) justru mengosongkannya.
 
-Secara default, ccam menggantikan dirinya dengan Claude Code, sehingga tidak ada hal lain yang tetap berjalan. Dengan `relay = true` (atau [`auto_switch = true`](/features/next#auto-switch) di Linux dan macOS) di bagian atas `config.toml`, di atas `[[group]]`, `[[profile]]`, atau `[[folder]]` pertama, ccam justru menjalankan sesi interaktif sebagai proses anak dan tetap berjalan di sampingnya. Hal itu memungkinkan `/ccam:switch`, atau `auto_switch` saat batas penggunaan tercapai, melanjutkan percakapan di akun lain dengan sendirinya, dengan opsi, mode izin, dan tingkat effort sesi tersebut ([detail](/features/next#relay)).
+Secara default, ccam menggantikan dirinya dengan Claude Code, sehingga tidak ada hal lain yang tetap berjalan. Dengan `relay = true` (atau [`auto_switch = true`](/features/next#auto-switch) di Linux dan macOS) di bagian atas `config.toml`, di atas `[[group]]`, `[[profile]]`, atau `[[folder]]` pertama, ccam justru menjalankan sesi interaktif sebagai proses anak dan tetap berjalan di sampingnya. Hal itu memungkinkan `/ccam:switch`, atau `auto_switch` saat batas penggunaan tercapai, melanjutkan percakapan di akun lain dengan sendirinya, dengan opsi, mode izin, tingkat effort, dan agen sesi tersebut; sebelum `/ccam:switch` memindahkannya ke akun organisasi lain, ccam bertanya kepada Anda ([detail](/features/next#relay)).
 
 ## Opsi
 
