@@ -1,10 +1,10 @@
 ---
 title: Claude Code की usage limit पूरी होने पर क्या करें
 description: रीसेट का इंतज़ार करें या वही बातचीत तुरंत दूसरे Claude Code अकाउंट पर जारी रखें। 5 घंटे और साप्ताहिक सीमा कैसे काम करती है, क़दम-दर-क़दम।
-updated: 2026-10-26
+updated: 2026-11-01
 order: 3
 translation: machine
-sourceHash: "96b6429c0102"
+sourceHash: "760a36724feb"
 ---
 
 जब किसी अकाउंट की उपयोग सीमा (जिसे अक्सर rate limit भी कहते हैं) पूरी हो जाती है, तो आपके पास दो रास्ते हैं: सीमा रीसेट होने तक इंतज़ार करें, या वही बातचीत अभी अपने किसी दूसरे अकाउंट पर जारी रखें। ccam के साथ दूसरा रास्ता बस एक कमांड है: `ccam next --auto --continue`।
@@ -64,7 +64,7 @@ Claude Code में [ccam plugin](/docs/install#claude-code-plugin) होन�
 केवल तभी जब आप इसे चालू करें।
 
 - डिफ़ॉल्ट रूप से, आपके काम करते समय ccam चल नहीं रहा होता: यह Claude Code को शुरू करता है और ख़ुद को उससे बदल देता है, इसलिए स्विच कब करना है, यह आप तय करते हैं। `ccam next --auto` सबसे कम 5 घंटे के उपयोग वाला अकाउंट चुनता है, उन अकाउंट्स को छोड़ देता है जो 100% पर हैं या लॉग इन नहीं हैं, और एक ही Team या Enterprise संगठन के भीतर, या personal प्लान के बीच, रहता है।
-- `config.toml` में `relay = true` होने पर ccam इसके बजाय session के साथ-साथ चलता रहता है, इसलिए `/ccam:switch` बातचीत को अपने-आप जारी रखता है, session के विकल्पों, permission mode और effort level को बनाए रखते हुए।
+- `config.toml` में `relay = true` होने पर ccam इसके बजाय session के साथ-साथ चलता रहता है, इसलिए `/ccam:switch` बातचीत को अपने-आप जारी रखता है, session के विकल्पों, permission mode, effort level और agent को बनाए रखते हुए; बातचीत को किसी दूसरे संगठन के अकाउंट पर ले जाने से पहले ccam आपसे पूछता है।
 - `auto_switch = true` होने पर (Linux और macOS; प्रायोगिक), ccam स्विच ख़ुद भी करता है: जब Claude Code session को उसकी सीमा पर रोकता है और उसी तरह के किसी दूसरे अकाउंट में गुंजाइश होती है, तो ccam session बंद करता है और बातचीत वहाँ जारी रखता है ([शर्तें और क़ीमत](/features/next#auto-switch))।
 
 कुछ दूसरे टूल इसकी बजाय चल रहे session का लॉगिन बदलते हैं; [ccam और दूसरे account switchers](/compare/account-switchers) इसका अंतर समझाता है।

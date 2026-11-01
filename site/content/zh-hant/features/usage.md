@@ -1,10 +1,10 @@
 ---
 title: 用量限制
 description: ccam usage 一次顯示每個帳號的 5 小時和每週限制，ccam statusline 則在 Claude Code 中顯示帳號名稱和用量。
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: machine
-sourceHash: "997107786d4c"
+sourceHash: "54b296f7da35"
 ---
 
 `ccam usage` 會顯示每個帳號在各項限制中已使用了多少：5 小時限制、每週限制，以及各模型自己的每週限制（例如 Fable）。每項限制都有一個長條，並附上距離重設的時間。在開始一項長時間的工作之前，或 Claude Code 告訴你快要達到限制時，可以用它查看哪個帳號還有剩餘額度。`ccam statusline` 是 Claude Code 的狀態列指令：它會在 Claude Code 中顯示帳號名稱和用量，並為 `ccam usage` 儲存這些數字。若想查看用量背後的 token 數和預估費用，`ccam ccusage` 會對每個帳號的對話執行 [ccusage](https://ccusage.com)（[見下文](#tokens-and-costs-ccam-ccusage)）。
@@ -97,13 +97,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-ccam 會先讀取自己的選項：`-a`（`--account`）接受帳號名稱或編號，可以用逗號分隔，也可以重複指定這個選項；`--dry-run` 只會印出指令而不執行。從第一個不屬於這些選項的參數開始，所有內容都會原封不動地傳給 ccusage；`ccam ccusage -- --help` 會顯示 ccusage 本身的說明。如果已安裝 `ccusage`，ccam 會執行它，否則執行 `bun x ccusage`，再不行就執行 `npx ccusage@latest`；後兩者會從 npm 下載 ccusage。三者都無法使用時，ccam 會請你安裝 Node.js、Bun 或 ccusage。在 Linux 和 macOS 上，ccusage 會取代 ccam；在 Windows 上，ccam 會等待它結束，並以它的結束代碼結束。在 WSL 中，ccam 會略過 Windows 磁碟機上的 `ccusage`、`bun` 或 `npx`，因為它們會以 Windows 程式執行，拿不到帳號資料夾。
+ccam 會先讀取自己的選項：`-a`（`--account`）接受帳號名稱或編號，可以用逗號分隔，也可以重複指定這個選項；`--dry-run` 只會印出指令而不執行。從第一個不屬於這些選項的參數開始，所有內容都會照你輸入的樣子傳給 ccusage，只有透過 `bun x` 和 `npx` 執行時的 `--config` 例外（見下文）；`ccam ccusage -- --help` 會顯示 ccusage 本身的說明。如果已安裝 `ccusage`，ccam 會執行它，否則執行 `bun x ccusage`，再不行就執行 `npx ccusage@latest`；後兩者會從 npm 下載 ccusage。它們會在 ccam 自己的資料夾（`~/.local/state/ccam/ccusage`）中啟動，而不是在目前的資料夾，因此目前資料夾中的專案無法透過它的 `node_modules/.bin`、`package.json` 中的 `bin` 或 `.npmrc` 中的 registry 決定它們要執行什麼；`ccam --dry-run ccusage` 會顯示進入該資料夾的 `cd`。三者都無法使用時，ccam 會請你安裝 Node.js、Bun 或 ccusage。在 Linux 和 macOS 上，ccusage 會取代 ccam；在 Windows 上，ccam 會等待它結束，並以它的結束代碼結束。在 WSL 中，ccam 會略過 Windows 磁碟機上的 `ccusage`、`bun` 或 `npx`，因為它們會以 Windows 程式執行，拿不到帳號資料夾。
 
 - 報告涵蓋資料夾中有對話（也就是有 `projects` 資料夾）的帳號。多個帳號透過群組共用的對話只會計算一次。
 - 使用 `-a` 時，透過群組共用對話記錄的帳號會帶入整個群組的對話，ccam 也會說明是哪些帳號的對話：`ccam: work shares its conversation history with personal, so the report counts their conversations too`。
 - `blocks` 會顯示 5 小時區間，而每個帳號都有自己的區間，所以查看這份報告時請像上面那樣只指定一個帳號。
 - ccusage 也會回報它找到的其他程式設計工具（例如 Codex），除非你指定其中一個：`ccam ccusage claude daily` 只會統計 Claude Code。
-- 由 ccam 執行時，ccusage 只會從 `./.ccusage` 和各帳號資料夾讀取它的設定（`ccusage.json`）。`--config` 可以指定另一個檔案：`ccam ccusage daily --config ~/.config/claude/ccusage.json`。
+- 由 ccam 執行時，ccusage 只會從 `./.ccusage` 和各帳號資料夾讀取它的設定（`ccusage.json`）。`--config` 可以指定另一個檔案：`ccam ccusage daily --config ~/.config/claude/ccusage.json`。由於 `bun x` 和 `npx` 會在 ccam 自己的資料夾中啟動，當 `./.ccusage/ccusage.json` 存在而你沒有指定檔案時，ccam 會用 `--config` 把這個檔案傳給它們，並把相對路徑的 `--config` 改成完整路徑再傳入。這時 ccusage 會以 ccam 的資料夾為基準讀取其他相對路徑（例如 `--pi-path`），所以這些路徑請寫成完整路徑。
 - ccusage 會把路徑中含有逗號的資料夾當成兩個資料夾來讀取，所以 ccam 會拒絕它並指出是哪個帳號；請用 `-a` 把這個帳號排除在外。
 - `ccusage` 是 ccam 的指令，所以名為 ccusage 的帳號要用 `ccam run ccusage` 啟動；`ccam doctor` 會提醒這一點。
 

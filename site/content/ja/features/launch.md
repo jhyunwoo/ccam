@@ -1,10 +1,10 @@
 ---
 title: Claude Codeの起動
 description: ccam <name|number>、ccam run、ダッシュボードで任意のアカウントのClaude Codeを起動します。引数はそのままclaudeに渡り、--dry-runで実行内容を確認できます。
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: cf9ef66530cd
+sourceHash: 11df08608a1e
 ---
 
 `ccam work`は、`work`アカウントとしてClaude Codeを起動し、名前より後のものはすべてそのまま`claude`に渡します。ターミナル、スクリプト、パイプで入力を渡す場合など、`claude`と入力するあらゆる場所で使えます。
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 シェルに`CLAUDE_CODE_OAUTH_TOKEN`、`ANTHROPIC_API_KEY`、`ANTHROPIC_AUTH_TOKEN`が設定されていると、Claude Codeはアカウント自身のログインではなくそのキーやトークンを使うことがあるため、ccamは起動前に標準エラー出力で警告します（`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`）。ccamは変数を読むだけです。[APIキーのアカウント](/features/api)では、代わりにこれらの変数を消去します。
 
-デフォルトでは、ccamは自身をClaude Codeに置き換えるので、ほかに動き続けるものはありません。`config.toml`の先頭（最初の`[[group]]`、`[[profile]]`、`[[folder]]`より上）で`relay = true`（またはLinuxとmacOSでは[`auto_switch = true`](/features/next#auto-switch)）を設定すると、ccamは代わりに対話型のセッションを子プロセスとして起動し、それと並んで動き続けます。これにより、`/ccam:switch`や、使用量の上限での`auto_switch`が、セッションのオプション、権限モード、effortレベルとともに、別のアカウントで会話を自動で続けられます（[詳細](/features/next#relay)）。
+デフォルトでは、ccamは自身をClaude Codeに置き換えるので、ほかに動き続けるものはありません。`config.toml`の先頭（最初の`[[group]]`、`[[profile]]`、`[[folder]]`より上）で`relay = true`（またはLinuxとmacOSでは[`auto_switch = true`](/features/next#auto-switch)）を設定すると、ccamは代わりに対話型のセッションを子プロセスとして起動し、それと並んで動き続けます。これにより、`/ccam:switch`や、使用量の上限での`auto_switch`が、セッションのオプション、権限モード、effortレベル、エージェントとともに、別のアカウントで会話を自動で続けられます。`/ccam:switch`が会話を別の組織のアカウントへ移す前には、ccamがあなたに確認します（[詳細](/features/next#relay)）。
 
 ## オプション
 

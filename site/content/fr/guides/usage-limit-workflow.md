@@ -1,10 +1,10 @@
 ---
 title: "Que faire quand Claude Code atteint sa limite"
 description: "Attendez la réinitialisation ou poursuivez la même conversation sur un autre compte Claude Code. Les limites sur 5 heures et hebdomadaires, étape par étape."
-updated: 2026-10-26
+updated: 2026-11-01
 order: 3
 translation: machine
-sourceHash: 96b6429c0102
+sourceHash: 760a36724feb
 ---
 
 Quand un compte atteint sa limite d'utilisation (souvent appelée « rate limit »), vous avez deux options : attendre que la limite se réinitialise, ou poursuivre dès maintenant la même conversation sur un autre compte qui vous appartient. Avec ccam, la seconde ne demande qu'une commande, `ccam next --auto --continue`.
@@ -64,7 +64,7 @@ Avec le [plugin ccam](/docs/install#claude-code-plugin) dans Claude Code, une se
 Seulement si vous l'activez.
 
 - Par défaut, ccam ne tourne pas pendant que vous travaillez : il lance Claude Code et se remplace par lui, si bien que c'est vous qui décidez quand changer. `ccam next --auto` choisit le compte dont l'utilisation sur 5 heures est la plus faible, ignore les comptes à 100 % ou non connectés, et reste au sein d'une même organisation Team ou Enterprise, ou parmi les offres personnelles.
-- Avec `relay = true` dans `config.toml`, ccam continue plutôt de tourner à côté de la session, si bien que `/ccam:switch` poursuit la conversation de lui-même, en conservant les options, le mode de permission et le niveau d'effort de la session.
+- Avec `relay = true` dans `config.toml`, ccam continue plutôt de tourner à côté de la session, si bien que `/ccam:switch` poursuit la conversation de lui-même, en conservant les options, le mode de permission, le niveau d'effort et l'agent de la session ; avant de déplacer la conversation vers un compte d'une autre organisation, ccam vous le demande.
 - Avec `auto_switch = true` (Linux et macOS ; expérimental), ccam effectue aussi le changement lui-même : quand Claude Code arrête la session à sa limite et qu'un autre compte du même type a de la marge, ccam met fin à la session et poursuit la conversation sur ce compte ([conditions et coûts](/features/next#auto-switch)).
 
 Certains autres outils échangent plutôt la connexion d'une session en cours ; [ccam et les autres sélecteurs de compte](/compare/account-switchers) explique la différence.

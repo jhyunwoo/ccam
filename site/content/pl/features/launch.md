@@ -1,10 +1,10 @@
 ---
 title: Uruchamianie Claude Code
 description: Uruchom Claude Code na dowolnym koncie przez ccam <name|number>, ccam run lub panel; argumenty idą do claude bez zmian, --dry-run pokazuje polecenie.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` uruchamia Claude Code jako konto `work`, a wszystko po nazwie trafia do `claude` bez zmian. Używaj go wszędzie tam, gdzie wpisałbyś `claude`: w terminalu, w skrypcie albo z wejściem przekazanym potokiem.
@@ -38,7 +38,7 @@ Gdy pierwszy argument zaczyna się od `-` i nie jest żadną z własnych opcji c
 
 Gdy w powłoce ustawiono `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` lub `ANTHROPIC_AUTH_TOKEN`, Claude Code może użyć tego klucza lub tokena zamiast własnego loginu konta, więc ccam ostrzega o tym na standardowym wyjściu błędów przed startem (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). Tylko odczytuje te zmienne; [konto z kluczem API](/features/api) zamiast tego je czyści.
 
-Domyślnie ccam zastępuje się procesem Claude Code, więc nic innego nie działa dalej. Z `relay = true` (albo, na Linux i macOS, z [`auto_switch = true`](/features/next#auto-switch)) na górze `config.toml`, nad pierwszym `[[group]]`, `[[profile]]` lub `[[folder]]`, ccam zamiast tego uruchamia sesje interaktywne jako proces potomny i działa dalej obok nich. Dzięki temu `/ccam:switch` albo `auto_switch` na limicie użycia może samo kontynuować rozmowę na innym koncie, z opcjami sesji, trybem uprawnień i poziomem wysiłku ([szczegóły](/features/next#relay)).
+Domyślnie ccam zastępuje się procesem Claude Code, więc nic innego nie działa dalej. Z `relay = true` (albo, na Linux i macOS, z [`auto_switch = true`](/features/next#auto-switch)) na górze `config.toml`, nad pierwszym `[[group]]`, `[[profile]]` lub `[[folder]]`, ccam zamiast tego uruchamia sesje interaktywne jako proces potomny i działa dalej obok nich. Dzięki temu `/ccam:switch` albo `auto_switch` na limicie użycia może samo kontynuować rozmowę na innym koncie, z opcjami sesji, trybem uprawnień, poziomem wysiłku i agentem; zanim `/ccam:switch` przeniesie ją na konto z innej organizacji, ccam cię o to pyta ([szczegóły](/features/next#relay)).
 
 ## Opcje
 

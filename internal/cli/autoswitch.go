@@ -110,22 +110,28 @@ type target struct {
 	freeAt    time.Time       // and when
 	untrusted []string        // accounts with room that never trusted the folder
 	credits   []string        // accounts with room and usage credits on (D4)
+	agent     string          // the agent the conversation runs as; "" for none
+	// Accounts with room that do not load the agents of the account at its
+	// limit the same way (sameAgents): they may lack agent, or define it
+	// otherwise.
+	otherAgents []string
 }
 
 // autoTarget chooses the account to carry on a conversation of folder that
 // stopped at a usage limit of from (plan 4.3, D7 b): another account of
 // from's pool, whatever cross_org says, logged in to another Claude account
 // of a known plan, no API account, that trusts folder (mcp.SessionTrusts),
-// has no usage credits on (D4) and a login Claude Code can renew; chosen by
-// p, the accounts picked within recentPick last (spread). Usage is looked
-// up live, or taken as saved with usage_source = "claude": a hook starts no
-// Claude Code. The choice is given up when ctx ends; macOS Keychain reads
-// do not follow ctx, hence the goroutine.
-func autoTarget(ctx context.Context, e *env, cfg *config.Config, from *config.Profile, folder string, p usage.Policy) (target, error) {
+// has no usage credits on (D4), a login Claude Code can renew and, when
+// the conversation runs as agent (not ""), loads from's agents the same
+// way (sameAgents); chosen by p, the accounts picked within recentPick last
+// (spread). Usage is looked up live, or taken as saved with usage_source =
+// "claude": a hook starts no Claude Code. The choice is given up when ctx
+// ends; macOS Keychain reads do not follow ctx, hence the goroutine.
+func autoTarget(ctx context.Context, e *env, cfg *config.Config, from *config.Profile, folder, agent string, p usage.Policy) (target, error) {
 	org := newOrgs(e, cfg, false)
 	org.cross = false // cross_org never applies to auto_switch (D7)
 	var profs []*config.Profile
-	untrusted := map[string]bool{}
+	untrusted, otherAgents := map[string]bool{}, map[string]bool{}
 	for i := range cfg.Profiles {
 		c := &cfg.Profiles[i]
 		if c.Name == from.Name || c.API != nil || !org.fits(from, c) {
@@ -137,6 +143,12 @@ func autoTarget(ctx context.Context, e *env, cfg *config.Config, from *config.Pr
 		if !mcp.SessionTrusts(profile.Dir(e.paths, c), folder) {
 			untrusted[c.Name] = true
 		}
+		// Resuming there, Claude Code would go on without the agent's tool
+		// limits if c lacks the agent, or with c's own definition of it,
+		// and nobody is there to see it.
+		if agent != "" && !sameAgents(profile.Dir(e.paths, from), profile.Dir(e.paths, c)) {
+			otherAgents[c.Name] = true
+		}
 		profs = append(profs, c)
 	}
 	opt := usage.Options{}
@@ -146,7 +158,7 @@ func autoTarget(ctx context.Context, e *env, cfg *config.Config, from *config.Pr
 	f, now := e.fetcher(), clock()
 	done := make(chan target, 1)
 	go func() {
-		var tg target
+		tg := target{agent: agent}
 		var ok []*usage.Report
 		for _, r := range reportsWith(ctx, e, f, cfg, profs, opt) {
 			room := p.Choose([]*usage.Report{r}, now) != nil
@@ -158,6 +170,10 @@ func autoTarget(ctx context.Context, e *env, cfg *config.Config, from *config.Pr
 			case untrusted[r.Name]:
 				if room {
 					tg.untrusted = append(tg.untrusted, r.Name)
+				}
+			case otherAgents[r.Name]:
+				if room {
+					tg.otherAgents = append(tg.otherAgents, r.Name)
 				}
 			default:
 				ok = append(ok, r)
@@ -218,10 +234,10 @@ func poolName(id *config.Identity) string {
 }
 
 // note is the notification when tg has no account: the accounts with room
-// that never trusted the folder or have usage credits on, or that nobody
-// has room now and who frees up first; "" when nothing is known of the others
-// (the usual notification). from, logged in as id, hit its limit, which
-// resets at reset.
+// that never trusted the folder, have usage credits on or do not load the
+// agents of from the same way, or that nobody has room now and who frees up
+// first; "" when nothing is known of the others (the usual notification).
+// from, logged in as id, hit its limit, which resets at reset.
 func (tg target) note(hit, from string, id *config.Identity, reset, now time.Time) string {
 	if n := len(tg.untrusted); n > 0 {
 		verb, as := "has", tg.untrusted[0]
@@ -236,6 +252,14 @@ func (tg target) note(hit, from string, id *config.Identity, reset, now time.Tim
 			verb = "have room but their"
 		}
 		return hit + ". " + andList(tg.credits) + " " + verb + " usage credits are on, so auto_switch did not move the conversation there; /ccam:switch " + tg.credits[0] + " moves it."
+	}
+	if n := len(tg.otherAgents); n > 0 {
+		verb := "does"
+		if n > 1 {
+			verb = "do"
+		}
+		return hit + ". This conversation runs as agent " + strconv.Quote(tg.agent) + ", and " + andList(tg.otherAgents) + " " + verb + " not share " + from +
+			"'s agents, plugins and settings, so auto_switch did not move it there."
 	}
 	if !tg.full {
 		return ""
@@ -315,7 +339,7 @@ func autoSwitch(e *env, in hookInput, t handoff.Ticket, lim transcript.Limit, st
 	}
 	ctx, cancel := context.WithDeadline(context.Background(), start.Add(autoDeadline))
 	defer cancel()
-	tg, err := autoTarget(ctx, e, cfg, from, t.Cwd, p)
+	tg, err := autoTarget(ctx, e, cfg, from, t.Cwd, conversationAgent(profile.Dir(e.paths, from), t.Cwd, in.Transcript), p)
 	switch {
 	case err != nil:
 		return false, "" // too slow (a lookup or the Keychain hangs)

@@ -1,7 +1,7 @@
 ---
 title: Usage limits
 description: ccam usage shows the 5-hour and weekly limits of every account at once, and ccam statusline puts the account name and usage in Claude Code.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: source
 ---
@@ -96,13 +96,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-ccam reads its own options first: `-a` (`--account`) takes account names or numbers, comma-separated or repeated, and `--dry-run` prints the command instead of running it. From the first other argument on, everything goes to ccusage unchanged; `ccam ccusage -- --help` shows ccusage's own help. ccam runs `ccusage` if it is installed, otherwise `bun x ccusage`, and failing that `npx ccusage@latest`; the last two fetch it from npm. When none of them is available, it tells you to install Node.js, Bun or ccusage. On Linux and macOS ccusage takes ccam's place; on Windows ccam waits for it and ends with its exit code. Under WSL, ccam skips a `ccusage`, `bun` or `npx` on a Windows drive, which would run as a Windows program without the account folders.
+ccam reads its own options first: `-a` (`--account`) takes account names or numbers, comma-separated or repeated, and `--dry-run` prints the command instead of running it. From the first other argument on, everything goes to ccusage as you typed it, except `--config` for `bun x` and `npx` (below); `ccam ccusage -- --help` shows ccusage's own help. ccam runs `ccusage` if it is installed, otherwise `bun x ccusage`, and failing that `npx ccusage@latest`; the last two fetch it from npm. They start in ccam's own folder (`~/.local/state/ccam/ccusage`), not in the folder you are in, so a project there cannot choose what they run with its `node_modules/.bin`, a `bin` in its `package.json` or a registry in its `.npmrc`; `ccam --dry-run ccusage` shows the `cd` into that folder. When none of them is available, it tells you to install Node.js, Bun or ccusage. On Linux and macOS ccusage takes ccam's place; on Windows ccam waits for it and ends with its exit code. Under WSL, ccam skips a `ccusage`, `bun` or `npx` on a Windows drive, which would run as a Windows program without the account folders.
 
 - The report covers the accounts whose folders have conversations (a `projects` folder). A conversation that accounts share through a group counts once.
 - With `-a`, an account that shares its history through a group brings the whole group's conversations, and ccam says whose: `ccam: work shares its conversation history with personal, so the report counts their conversations too`.
 - `blocks` shows 5-hour windows, and each account has its own, so name one account for it, as above.
 - ccusage also reports the other coding tools it finds, such as Codex, unless you name one: `ccam ccusage claude daily` is Claude Code alone.
-- While ccam runs it, ccusage reads its settings (`ccusage.json`) only from `./.ccusage` and the account folders. `--config` names another file: `ccam ccusage daily --config ~/.config/claude/ccusage.json`.
+- While ccam runs it, ccusage reads its settings (`ccusage.json`) only from `./.ccusage` and the account folders. `--config` names another file: `ccam ccusage daily --config ~/.config/claude/ccusage.json`. As `bun x` and `npx` start in ccam's own folder, ccam passes them `./.ccusage/ccusage.json` with `--config` when that file exists and you name none, and gives a relative `--config` as a full path. ccusage then reads other relative paths, such as `--pi-path`, from ccam's folder, so give those in full.
 - ccusage would read a folder whose path has a comma as two folders, so ccam refuses it and names the account; leave that account out with `-a`.
 - `ccusage` is a ccam command, so an account named ccusage starts with `ccam run ccusage`; `ccam doctor` says so.
 

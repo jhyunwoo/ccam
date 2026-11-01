@@ -1,10 +1,10 @@
 ---
 title: Qué hacer cuando Claude Code llega al límite de uso
 description: Espera al reinicio o continúa al instante la misma conversación en otra cuenta de Claude Code. Cómo funcionan los límites de 5 horas y semanal, paso a paso.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 3
 translation: machine
-sourceHash: "96b6429c0102"
+sourceHash: "760a36724feb"
 ---
 
 Cuando una cuenta llega a su límite de uso (a menudo llamado rate limit), tienes dos opciones: esperar a que el límite se reinicie o continuar ahora la misma conversación en otra cuenta tuya. Con ccam, lo segundo es un solo comando, `ccam next --auto --continue`.
@@ -64,7 +64,7 @@ Con el [plugin de ccam](/docs/install#claude-code-plugin) en Claude Code, una se
 Solo si lo activas.
 
 - Por defecto, ccam no se está ejecutando mientras trabajas: inicia Claude Code y se reemplaza a sí mismo por él, así que tú decides cuándo cambiar. `ccam next --auto` elige la cuenta con el menor uso de 5 horas, omite las cuentas que están al 100% o sin sesión iniciada, y se queda dentro de una misma organización de Team o Enterprise, o entre planes personales.
-- Con `relay = true` en `config.toml`, ccam sigue ejecutándose en cambio junto a la sesión, así que `/ccam:switch` continúa la conversación por sí solo, conservando las opciones, el modo de permisos y el nivel de esfuerzo de la sesión.
+- Con `relay = true` en `config.toml`, ccam sigue ejecutándose en cambio junto a la sesión, así que `/ccam:switch` continúa la conversación por sí solo, conservando las opciones, el modo de permisos, el nivel de esfuerzo y el agente de la sesión; antes de mover la conversación a una cuenta de otra organización, ccam te pregunta.
 - Con `auto_switch = true` (Linux y macOS; experimental), ccam también hace el cambio por sí mismo: cuando Claude Code detiene la sesión en su límite y otra cuenta del mismo tipo tiene margen, ccam termina la sesión y continúa la conversación allí ([condiciones y costes](/features/next#auto-switch)).
 
 Otras herramientas cambian el inicio de sesión de una sesión en curso; [ccam y otros selectores de cuentas](/compare/account-switchers) explica la diferencia.

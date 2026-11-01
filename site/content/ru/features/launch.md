@@ -1,10 +1,10 @@
 ---
 title: Запуск Claude Code
 description: Запускайте Claude Code от имени любого аккаунта через ccam <name|number>, ccam run или панель; аргументы идут в claude как есть, --dry-run выводит команду.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` запускает Claude Code от имени аккаунта `work`, а всё, что идёт после имени, передаётся в `claude` без изменений. Используйте его везде, где вы набрали бы `claude`: в терминале, в скрипте или с вводом через конвейер.
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 Если в оболочке заданы `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` или `ANTHROPIC_AUTH_TOKEN`, Claude Code может использовать этот ключ или токен вместо собственного входа аккаунта, поэтому ccam предупреждает вас об этом в стандартном потоке ошибок перед запуском (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). Он только читает эти переменные; [аккаунт с ключом API](/features/api) вместо этого их очищает.
 
-По умолчанию ccam заменяет себя на Claude Code, поэтому больше ничего не продолжает работать. С `relay = true` (или, в Linux и macOS, с [`auto_switch = true`](/features/next#auto-switch)) в начале `config.toml`, над первым `[[group]]`, `[[profile]]` или `[[folder]]`, ccam вместо этого запускает интерактивные сессии как дочерний процесс и продолжает работать рядом с ними. Это позволяет `/ccam:switch` или `auto_switch` на лимите использования самому продолжить разговор в другом аккаунте вместе с параметрами сессии, режимом разрешений и уровнем усилий ([подробнее](/features/next#relay)).
+По умолчанию ccam заменяет себя на Claude Code, поэтому больше ничего не продолжает работать. С `relay = true` (или, в Linux и macOS, с [`auto_switch = true`](/features/next#auto-switch)) в начале `config.toml`, над первым `[[group]]`, `[[profile]]` или `[[folder]]`, ccam вместо этого запускает интерактивные сессии как дочерний процесс и продолжает работать рядом с ними. Это позволяет `/ccam:switch` или `auto_switch` на лимите использования самому продолжить разговор в другом аккаунте вместе с параметрами сессии, режимом разрешений, уровнем усилий и агентом; прежде чем `/ccam:switch` перенесёт его в аккаунт другой организации, ccam спрашивает вас ([подробнее](/features/next#relay)).
 
 ## Параметры
 

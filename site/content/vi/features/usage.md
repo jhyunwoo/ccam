@@ -1,10 +1,10 @@
 ---
 title: Giới hạn sử dụng
 description: "ccam usage hiển thị giới hạn 5 giờ và hàng tuần của mọi tài khoản cùng lúc, và ccam statusline đưa tên tài khoản cùng mức sử dụng vào Claude Code."
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: machine
-sourceHash: 997107786d4c
+sourceHash: 54b296f7da35
 ---
 
 `ccam usage` cho biết, với mọi tài khoản, mỗi giới hạn đã được dùng bao nhiêu: giới hạn 5 giờ, giới hạn hàng tuần và giới hạn hàng tuần riêng của từng mô hình (như Fable). Mỗi giới hạn có một thanh và thời gian đến lần đặt lại. Hãy dùng nó trước khi bắt đầu một tác vụ dài, hoặc khi Claude Code báo rằng sắp chạm giới hạn, để xem tài khoản nào còn hạn mức. `ccam statusline` là lệnh dòng trạng thái cho Claude Code: nó hiển thị tên tài khoản và mức sử dụng bên trong Claude Code và lưu các con số cho `ccam usage`. Để xem số token và chi phí ước tính đằng sau mức sử dụng đó, `ccam ccusage` chạy [ccusage](https://ccusage.com) trên các cuộc hội thoại của mọi tài khoản ([bên dưới](#tokens-and-costs-ccam-ccusage)).
@@ -97,13 +97,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-ccam đọc các tùy chọn của chính nó trước: `-a` (`--account`) nhận tên hoặc số của tài khoản, phân tách bằng dấu phẩy hoặc lặp lại tùy chọn, và `--dry-run` in ra lệnh thay vì chạy nó. Kể từ đối số đầu tiên không thuộc các tùy chọn này, mọi thứ được chuyển nguyên vẹn cho ccusage; `ccam ccusage -- --help` hiển thị trợ giúp riêng của ccusage. ccam chạy `ccusage` đã cài đặt, nếu không có thì `bun x ccusage`, nếu vẫn không có thì `npx ccusage@latest`; hai cách sau tải ccusage từ npm. Khi không có cách nào, ccam bảo bạn cài Node.js, Bun hoặc ccusage. Trên Linux và macOS, ccusage thế chỗ ccam; trên Windows, ccam chờ nó và thoát với mã thoát của nó. Bên trong WSL, ccam bỏ qua `ccusage`, `bun` hoặc `npx` nằm trên ổ đĩa Windows, vì chúng sẽ chạy như một chương trình Windows mà không có các thư mục tài khoản.
+ccam đọc các tùy chọn của chính nó trước: `-a` (`--account`) nhận tên hoặc số của tài khoản, phân tách bằng dấu phẩy hoặc lặp lại tùy chọn, và `--dry-run` in ra lệnh thay vì chạy nó. Kể từ đối số đầu tiên không thuộc các tùy chọn này, mọi thứ được chuyển cho ccusage đúng như bạn gõ, trừ `--config` khi chạy bằng `bun x` và `npx` (xem bên dưới); `ccam ccusage -- --help` hiển thị trợ giúp riêng của ccusage. ccam chạy `ccusage` đã cài đặt, nếu không có thì `bun x ccusage`, nếu vẫn không có thì `npx ccusage@latest`; hai cách sau tải ccusage từ npm. Hai cách này khởi động trong thư mục riêng của ccam (`~/.local/state/ccam/ccusage`), không phải trong thư mục bạn đang dùng, nên một dự án ở đó không thể chọn thứ chúng chạy bằng `node_modules/.bin` của nó, một `bin` trong `package.json` của nó hay một registry trong `.npmrc` của nó; `ccam --dry-run ccusage` hiển thị lệnh `cd` vào thư mục của ccam. Khi không có cách nào, ccam bảo bạn cài Node.js, Bun hoặc ccusage. Trên Linux và macOS, ccusage thế chỗ ccam; trên Windows, ccam chờ nó và thoát với mã thoát của nó. Bên trong WSL, ccam bỏ qua `ccusage`, `bun` hoặc `npx` nằm trên ổ đĩa Windows, vì chúng sẽ chạy như một chương trình Windows mà không có các thư mục tài khoản.
 
 - Báo cáo bao gồm các tài khoản có hội thoại trong thư mục của mình (một thư mục `projects`). Một cuộc hội thoại mà các tài khoản dùng chung qua nhóm chỉ được tính một lần.
 - Với `-a`, một tài khoản dùng chung lịch sử qua nhóm sẽ kéo theo hội thoại của cả nhóm, và ccam cho biết đó là hội thoại của những ai: `ccam: work shares its conversation history with personal, so the report counts their conversations too`.
 - `blocks` hiển thị các khoảng 5 giờ, và mỗi tài khoản có khoảng riêng, nên hãy chỉ định một tài khoản cho báo cáo này, như ở trên.
 - ccusage còn báo cáo các công cụ lập trình khác mà nó tìm thấy, như Codex, trừ khi bạn chỉ định một công cụ: `ccam ccusage claude daily` chỉ gồm Claude Code.
-- Khi được ccam chạy, ccusage chỉ đọc cài đặt của nó (`ccusage.json`) từ `./.ccusage` và các thư mục tài khoản. `--config` chỉ định một tệp khác: `ccam ccusage daily --config ~/.config/claude/ccusage.json`.
+- Khi được ccam chạy, ccusage chỉ đọc cài đặt của nó (`ccusage.json`) từ `./.ccusage` và các thư mục tài khoản. `--config` chỉ định một tệp khác: `ccam ccusage daily --config ~/.config/claude/ccusage.json`. Vì `bun x` và `npx` khởi động trong thư mục riêng của ccam, ccam truyền `./.ccusage/ccusage.json` cho chúng bằng `--config` khi tệp đó tồn tại và bạn không chỉ định tệp nào, và chuyển một `--config` tương đối thành đường dẫn đầy đủ. Khi đó ccusage đọc các đường dẫn tương đối khác, chẳng hạn `--pi-path`, từ thư mục của ccam, nên hãy ghi chúng bằng đường dẫn đầy đủ.
 - ccusage sẽ đọc một thư mục có dấu phẩy trong đường dẫn thành hai thư mục, nên ccam từ chối thư mục đó và nêu tên tài khoản; hãy loại tài khoản đó ra bằng `-a`.
 - `ccusage` là một lệnh của ccam, nên tài khoản tên ccusage được khởi động bằng `ccam run ccusage`; `ccam doctor` có nhắc điều này.
 

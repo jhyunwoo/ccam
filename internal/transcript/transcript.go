@@ -160,7 +160,7 @@ func message(l []byte) (time.Time, bool) {
 func ID(path string) string { return strings.TrimSuffix(filepath.Base(path), ".jsonl") }
 
 // tailSize is how much of the end of a conversation is read for its last
-// reply, limit and permission mode, which are all near the end.
+// reply, limit, permission mode and agent, which are all near the end.
 const tailSize = 1 << 20
 
 // synthetic is the model Claude Code names on messages it makes itself,
@@ -405,6 +405,31 @@ func RemoteControl(path string) bool {
 		}
 	}
 	return false
+}
+
+// Agent is the agent the newest agent-setting row near the end of the
+// conversation at path names; "" when there is none. Claude Code (2.1.314)
+// writes these rows with the session's metadata (after every 32 KiB of the
+// conversation, and as the session ends) for the agent the session started
+// as (--agent or the agent setting), or, once it resumed the conversation
+// by id, for the conversation's own agent: also when --agent or the agent
+// setting runs the session as another.
+func Agent(path string) string {
+	lines := tail(path)
+	for i := len(lines) - 1; i >= 0; i-- {
+		l := lines[i]
+		if !bytes.Contains(l, []byte(`"agent-setting"`)) {
+			continue
+		}
+		var e struct {
+			Type  string `json:"type"`
+			Agent string `json:"agentSetting"`
+		}
+		if json.Unmarshal(l, &e) == nil && e.Type == "agent-setting" {
+			return e.Agent
+		}
+	}
+	return ""
 }
 
 // prompt reports whether l is a prompt a person sent (entry.prompt).

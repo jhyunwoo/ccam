@@ -1,10 +1,10 @@
 ---
 title: Batas penggunaan
 description: ccam usage menampilkan batas 5 jam dan mingguan semua akun sekaligus, dan ccam statusline menampilkan nama akun dan penggunaannya di Claude Code.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: machine
-sourceHash: "997107786d4c"
+sourceHash: "54b296f7da35"
 ---
 
 `ccam usage` menampilkan, untuk setiap akun, seberapa banyak setiap batas yang sudah digunakan: batas 5 jam, batas mingguan, dan batas mingguan khusus setiap model (seperti Fable). Setiap batas mendapat satu bilah beserta waktu hingga direset. Gunakan sebelum memulai tugas panjang, atau saat Claude Code memberi tahu bahwa batas sudah dekat, untuk melihat akun mana yang masih punya ruang. `ccam statusline` adalah perintah status line untuk Claude Code: perintah ini menampilkan nama akun dan penggunaan di dalam Claude Code serta menyimpan angkanya untuk `ccam usage`. Untuk token dan perkiraan biaya di balik penggunaan itu, `ccam ccusage` menjalankan [ccusage](https://ccusage.com) atas percakapan semua akun ([lihat di bawah](#tokens-and-costs-ccam-ccusage)).
@@ -97,13 +97,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-ccam membaca opsinya sendiri terlebih dahulu: `-a` (`--account`) menerima nama atau nomor akun, dipisahkan koma atau dengan mengulang opsinya, dan `--dry-run` menampilkan perintahnya alih-alih menjalankannya. Mulai dari argumen pertama yang bukan opsi ccam, semuanya diteruskan ke ccusage tanpa diubah; `ccam ccusage -- --help` menampilkan bantuan ccusage sendiri. ccam menjalankan `ccusage` jika sudah terinstal, jika tidak `bun x ccusage`, dan jika itu pun gagal `npx ccusage@latest`; dua yang terakhir mengunduhnya dari npm. Jika tidak ada satu pun yang tersedia, ccam meminta Anda menginstal Node.js, Bun, atau ccusage. Di Linux dan macOS, ccusage menggantikan ccam; di Windows, ccam menunggunya dan keluar dengan kode keluar ccusage. Di WSL, ccam melewati `ccusage`, `bun`, atau `npx` yang berada di drive Windows, karena program itu akan berjalan sebagai program Windows tanpa folder akun.
+ccam membaca opsinya sendiri terlebih dahulu: `-a` (`--account`) menerima nama atau nomor akun, dipisahkan koma atau dengan mengulang opsinya, dan `--dry-run` menampilkan perintahnya alih-alih menjalankannya. Mulai dari argumen pertama yang bukan opsi ccam, semuanya diteruskan ke ccusage persis seperti yang Anda ketik, kecuali `--config` untuk `bun x` dan `npx` (lihat di bawah); `ccam ccusage -- --help` menampilkan bantuan ccusage sendiri. ccam menjalankan `ccusage` jika sudah terinstal, jika tidak `bun x ccusage`, dan jika itu pun gagal `npx ccusage@latest`; dua yang terakhir mengunduhnya dari npm. Keduanya dimulai di folder milik ccam sendiri (`~/.local/state/ccam/ccusage`), bukan di folder yang sedang Anda pakai, sehingga proyek di folder itu tidak dapat menentukan apa yang dijalankan keduanya lewat `node_modules/.bin` miliknya, `bin` di `package.json` miliknya, atau registri di `.npmrc` miliknya; `ccam --dry-run ccusage` menampilkan `cd` ke folder ccam tersebut. Jika tidak ada satu pun yang tersedia, ccam meminta Anda menginstal Node.js, Bun, atau ccusage. Di Linux dan macOS, ccusage menggantikan ccam; di Windows, ccam menunggunya dan keluar dengan kode keluar ccusage. Di WSL, ccam melewati `ccusage`, `bun`, atau `npx` yang berada di drive Windows, karena program itu akan berjalan sebagai program Windows tanpa folder akun.
 
 - Laporan mencakup akun-akun yang foldernya berisi percakapan (folder `projects`). Percakapan yang dibagikan antarakun melalui sebuah grup hanya dihitung sekali.
 - Dengan `-a`, akun yang berbagi riwayatnya melalui grup membawa serta percakapan seluruh grup, dan ccam menyebutkan milik akun mana saja percakapan itu: `ccam: work shares its conversation history with personal, so the report counts their conversations too`.
 - `blocks` menampilkan jendela 5 jam, dan setiap akun punya jendelanya sendiri, jadi sebutkan satu akun saja untuk laporan itu, seperti contoh di atas.
 - ccusage juga melaporkan alat coding lain yang ditemukannya, seperti Codex, kecuali Anda menyebut salah satunya: `ccam ccusage claude daily` hanya mencakup Claude Code.
-- Saat dijalankan oleh ccam, ccusage hanya membaca pengaturannya (`ccusage.json`) dari `./.ccusage` dan folder akun. `--config` menunjuk file lain: `ccam ccusage daily --config ~/.config/claude/ccusage.json`.
+- Saat dijalankan oleh ccam, ccusage hanya membaca pengaturannya (`ccusage.json`) dari `./.ccusage` dan folder akun. `--config` menunjuk file lain: `ccam ccusage daily --config ~/.config/claude/ccusage.json`. Karena `bun x` dan `npx` dimulai di folder milik ccam sendiri, ccam meneruskan `./.ccusage/ccusage.json` kepada keduanya dengan `--config` jika file itu ada dan Anda tidak menunjuk file apa pun, dan memberikan `--config` yang relatif sebagai path lengkap. Dalam hal ini, ccusage membaca path relatif lain, seperti `--pi-path`, dari folder ccam, jadi tuliskan path tersebut secara lengkap.
 - ccusage akan membaca folder yang path-nya mengandung koma sebagai dua folder, jadi ccam menolaknya dan menyebutkan akunnya; pakai `-a` agar akun itu tidak disertakan.
 - `ccusage` adalah perintah ccam, jadi akun bernama ccusage dijalankan dengan `ccam run ccusage`; `ccam doctor` memberitahukan hal ini.
 

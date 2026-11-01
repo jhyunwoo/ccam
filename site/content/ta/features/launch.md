@@ -1,10 +1,10 @@
 ---
 title: Claude Code-ஐத் தொடங்குதல்
 description: ccam <name|number>, ccam run அல்லது டாஷ்போர்டு மூலம் எந்தக் கணக்காகவும் Claude Code-ஐத் தொடங்குங்கள்; arguments மாறாமல் claude-க்குச் செல்லும்.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: cf9ef66530cd
+sourceHash: 11df08608a1e
 ---
 
 `ccam work` Claude Code-ஐ `work` கணக்காகத் தொடங்குகிறது, பெயருக்குப் பின் உள்ள அனைத்தும் மாற்றமின்றி `claude`-க்குச் செல்லும். நீங்கள் `claude` என்று தட்டச்சு செய்யும் எந்த இடத்திலும் இதைப் பயன்படுத்துங்கள்: டெர்மினலில், script-இல், அல்லது pipe மூலம் உள்ளீடு கொடுக்கும்போது.
@@ -38,7 +38,7 @@ standard input-உம் output-உம் டெர்மினலாக இர�
 
 shell-இல் `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` அல்லது `ANTHROPIC_AUTH_TOKEN` அமைக்கப்பட்டிருந்தால், Claude Code கணக்கின் சொந்த உள்நுழைவுக்குப் பதிலாக அந்த key அல்லது token-ஐப் பயன்படுத்தக்கூடும், அதனால் தொடங்கும் முன் ccam standard error-இல் உங்களை எச்சரிக்கிறது (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). அது variables-ஐப் படிக்க மட்டுமே செய்கிறது; ஒரு [API key கணக்கு](/features/api) அதற்குப் பதிலாக அவற்றை நீக்குகிறது.
 
-இயல்பாக, ccam தன் இடத்தில் Claude Code-ஐ இயக்குகிறது, அதனால் வேறு எதுவும் தொடர்ந்து இயங்குவதில்லை. `config.toml`-இன் மேற்பகுதியில், முதல் `[[group]]`, `[[profile]]` அல்லது `[[folder]]`-க்கு மேலே, `relay = true` (அல்லது Linux, macOS-இல் [`auto_switch = true`](/features/next#auto-switch)) இருந்தால், ccam அதற்குப் பதிலாக interactive அமர்வுகளை ஒரு child process ஆகத் தொடங்கி, அவற்றுடன் சேர்ந்து இயங்கிக்கொண்டிருக்கும். அதனால் `/ccam:switch`, அல்லது பயன்பாட்டு வரம்பில் `auto_switch`, அமர்வின் options, permission mode, effort level ஆகியவற்றுடன் உரையாடலை வேறொரு கணக்கில் தானாகவே தொடர முடியும் ([விவரங்கள்](/features/next#relay)).
+இயல்பாக, ccam தன் இடத்தில் Claude Code-ஐ இயக்குகிறது, அதனால் வேறு எதுவும் தொடர்ந்து இயங்குவதில்லை. `config.toml`-இன் மேற்பகுதியில், முதல் `[[group]]`, `[[profile]]` அல்லது `[[folder]]`-க்கு மேலே, `relay = true` (அல்லது Linux, macOS-இல் [`auto_switch = true`](/features/next#auto-switch)) இருந்தால், ccam அதற்குப் பதிலாக interactive அமர்வுகளை ஒரு child process ஆகத் தொடங்கி, அவற்றுடன் சேர்ந்து இயங்கிக்கொண்டிருக்கும். அதனால் `/ccam:switch`, அல்லது பயன்பாட்டு வரம்பில் `auto_switch`, அமர்வின் options, permission mode, effort level, agent ஆகியவற்றுடன் உரையாடலை வேறொரு கணக்கில் தானாகவே தொடர முடியும்; `/ccam:switch` உரையாடலை வேறொரு நிறுவனத்தின் கணக்குக்கு நகர்த்தும் முன், ccam உங்களிடம் கேட்கிறது ([விவரங்கள்](/features/next#relay)).
 
 ## Options
 

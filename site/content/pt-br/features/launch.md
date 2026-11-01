@@ -1,10 +1,10 @@
 ---
 title: Iniciar o Claude Code
 description: Inicie o Claude Code com qualquer conta via ccam <name|number>, ccam run ou o painel; os argumentos chegam intactos ao claude e --dry-run mostra o comando.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` inicia o Claude Code com a conta `work`, e tudo o que vem depois do nome vai para o `claude` sem alterações. Use-o onde você digitaria `claude`: em um terminal, em um script ou com uma entrada enviada por pipe.
@@ -38,7 +38,7 @@ Quando o primeiro argumento começa com `-` e não é uma das opções do própr
 
 Quando o shell tem `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` ou `ANTHROPIC_AUTH_TOKEN` definida, o Claude Code pode usar essa chave ou esse token em vez do login da própria conta, então o ccam avisa você na saída de erro padrão antes de iniciar (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). Ele só lê as variáveis; uma [conta de chave de API](/features/api) as limpa.
 
-Por padrão, o ccam se substitui pelo Claude Code, então nada mais continua rodando. Com `relay = true` (ou [`auto_switch = true`](/features/next#auto-switch) no Linux e no macOS) no início do `config.toml`, acima do primeiro `[[group]]`, `[[profile]]` ou `[[folder]]`, o ccam, em vez disso, inicia as sessões interativas como processo filho e continua rodando ao lado delas. Isso permite que o `/ccam:switch`, ou o `auto_switch` em um limite de uso, continue a conversa em outra conta sozinho, com as opções, o modo de permissão e o nível de esforço da sessão ([detalhes](/features/next#relay)).
+Por padrão, o ccam se substitui pelo Claude Code, então nada mais continua rodando. Com `relay = true` (ou [`auto_switch = true`](/features/next#auto-switch) no Linux e no macOS) no início do `config.toml`, acima do primeiro `[[group]]`, `[[profile]]` ou `[[folder]]`, o ccam, em vez disso, inicia as sessões interativas como processo filho e continua rodando ao lado delas. Isso permite que o `/ccam:switch`, ou o `auto_switch` em um limite de uso, continue a conversa em outra conta sozinho, com as opções, o modo de permissão, o nível de esforço e o agente da sessão; antes que o `/ccam:switch` a mova para uma conta de outra organização, o ccam pergunta a você ([detalhes](/features/next#relay)).
 
 ## Opções
 

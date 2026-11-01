@@ -1,10 +1,10 @@
 ---
 title: Iyakokin amfani
 description: ccam usage yana nuna iyakokin awa 5 da na mako na kowane asusu a lokaci ɗaya, kuma ccam statusline yana saka sunan asusun da amfaninsa a Claude Code.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: machine
-sourceHash: 997107786d4c
+sourceHash: 54b296f7da35
 ---
 
 `ccam usage` yana nuna, ga kowane asusu, nawa aka yi amfani da shi daga kowace iyaka: iyakar awa 5, iyakar mako da iyakar mako ta kowane model (kamar Fable). Kowace iyaka tana samun sanda da lokacin da ya rage kafin ta sake saitawa. Yi amfani da shi kafin ka fara dogon aiki, ko idan Claude Code ya gaya maka iyaka ta kusa, don ganin asusun da ke da sauran sarari. `ccam statusline` shi ne umarnin layin matsayi (status line) na Claude Code: yana nuna sunan asusun da amfaninsa a cikin Claude Code kuma yana ajiye lambobin don `ccam usage`. Don token da ƙiyasin kuɗin da ke bayan amfanin, `ccam ccusage` yana gudanar da [ccusage](https://ccusage.com) a kan tattaunawar kowane asusu ([a ƙasa](#tokens-and-costs-ccam-ccusage)).
@@ -98,13 +98,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-ccam yana fara karanta zaɓuɓɓukansa: `-a` (`--account`) yana karɓar sunaye ko lambobin asusu, a raba su da waƙafi ko a maimaita zaɓin, kuma `--dry-run` yana buga umarnin maimakon gudanar da shi. Daga argument na farko da ba zaɓin ccam ba, komai yana zuwa ga ccusage ba tare da canji ba; `ccam ccusage -- --help` yana nuna taimakon ccusage kansa. ccam yana gudanar da `ccusage` idan an girka shi, in ba haka ba `bun x ccusage`, in kuma hakan bai yiwu ba `npx ccusage@latest`; waɗannan biyun na ƙarshe suna sauke shi daga npm. Idan babu ko ɗaya daga cikinsu, yana gaya maka ka girka Node.js, Bun ko ccusage. A Linux da macOS ccusage yana maye gurbin ccam; a Windows ccam yana jiran sa kuma yana fita da exit code na ccusage. A cikin WSL, ccam yana tsallake `ccusage`, `bun` ko `npx` da ke kan faifan Windows, domin zai gudana a matsayin shirin Windows ba tare da foldojin asusan ba.
+ccam yana fara karanta zaɓuɓɓukansa: `-a` (`--account`) yana karɓar sunaye ko lambobin asusu, a raba su da waƙafi ko a maimaita zaɓin, kuma `--dry-run` yana buga umarnin maimakon gudanar da shi. Daga argument na farko da ba zaɓin ccam ba, komai yana zuwa ga ccusage yadda ka rubuta shi, sai dai `--config` ga `bun x` da `npx` (a ƙasa); `ccam ccusage -- --help` yana nuna taimakon ccusage kansa. ccam yana gudanar da `ccusage` idan an girka shi, in ba haka ba `bun x ccusage`, in kuma hakan bai yiwu ba `npx ccusage@latest`; waɗannan biyun na ƙarshe suna sauke shi daga npm. Suna farawa a foldar ccam kansa (`~/.local/state/ccam/ccusage`), ba a foldar da kake ciki ba, don haka wani project da ke can ba zai iya zaɓar abin da suke gudanarwa ta `node_modules/.bin` nasa, `bin` a cikin `package.json` nasa ko registry a cikin `.npmrc` nasa ba; `ccam --dry-run ccusage` yana nuna `cd` zuwa cikin wannan foldar. Idan babu ko ɗaya daga cikinsu, yana gaya maka ka girka Node.js, Bun ko ccusage. A Linux da macOS ccusage yana maye gurbin ccam; a Windows ccam yana jiran sa kuma yana fita da exit code na ccusage. A cikin WSL, ccam yana tsallake `ccusage`, `bun` ko `npx` da ke kan faifan Windows, domin zai gudana a matsayin shirin Windows ba tare da foldojin asusan ba.
 
 - Rahoton yana ƙunshe da asusan da foldojinsu ke da tattaunawa (foldar `projects`). Tattaunawar da asusai ke raba ta wani rukuni ana ƙirga ta sau ɗaya kawai.
 - Da `-a`, asusun da ke raba tarihinsa ta wani rukuni yana kawo tattaunawar rukunin gaba ɗaya, kuma ccam yana faɗin na waɗanne asusai ne: `ccam: work shares its conversation history with personal, so the report counts their conversations too`.
 - `blocks` yana nuna tagogin awa 5, kuma kowane asusu yana da nasa, don haka ka ambaci asusu ɗaya kawai a gare shi, kamar yadda yake a sama.
 - ccusage yana kuma ba da rahoton sauran kayan aikin coding da ya samu, kamar Codex, sai dai idan ka ambaci ɗaya: `ccam ccusage claude daily` na Claude Code ne kawai.
-- Yayin da ccam ke gudanar da shi, ccusage yana karanta saitunansa (`ccusage.json`) daga `./.ccusage` da foldojin asusan kawai. `--config` yana ambaton wani fayil dabam: `ccam ccusage daily --config ~/.config/claude/ccusage.json`.
+- Yayin da ccam ke gudanar da shi, ccusage yana karanta saitunansa (`ccusage.json`) daga `./.ccusage` da foldojin asusan kawai. `--config` yana ambaton wani fayil dabam: `ccam ccusage daily --config ~/.config/claude/ccusage.json`. Tun da `bun x` da `npx` suna farawa a foldar ccam kansa, ccam yana ba su `./.ccusage/ccusage.json` da `--config` idan wannan fayil yana nan kuma ba ka ambaci ko ɗaya ba, kuma yana ba da `--config` mai dangantaka (relative) a matsayin cikakkiyar hanya. Sannan ccusage yana karanta sauran hanyoyi masu dangantaka, kamar `--pi-path`, daga foldar ccam, don haka ka ba da su cikakku.
 - ccusage zai karanta foldar da hanyarta ke da waƙafi a matsayin foldoji biyu, don haka ccam yana ƙin ta kuma yana ambaton asusun; yi amfani da `-a` don barin wannan asusun a waje.
 - `ccusage` umarnin ccam ne, don haka asusun da sunansa ccusage yana farawa da `ccam run ccusage`; `ccam doctor` yana faɗin haka.
 

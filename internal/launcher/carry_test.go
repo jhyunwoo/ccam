@@ -24,7 +24,10 @@ func TestCarryArgs(t *testing.T) {
 		// "--" ends the flags: what follows is a prompt.
 		{"--ide -- --add-dir /x", "--ide", ""},
 		// What picks the conversation goes quietly; what cannot be done again does not.
-		{"-c --resume abc --fork-session --session-id 1234 -n name --agent rev --from-pr 12 --teleport", "", ""},
+		// The agent goes on: an interactive --resume <file> --fork-session does
+		// not bring it back (Claude Code 2.1.314).
+		{"-c --resume abc --fork-session --session-id 1234 -n name --agent rev --from-pr 12 --teleport", "--agent rev", ""},
+		{"--agent=rev --model opus", "--agent=rev", ""},
 		{"--plugin-url https://example.com/p.zip --plugin-dir ./p", "--plugin-url https://example.com/p.zip --plugin-dir ./p", ""},
 		{"--resume --verbose", "--verbose", ""},
 		{"-w feature --tmux --debug api,hooks --debug-file /tmp/d.log --bg --remote-control phone", "", "-w --tmux --debug --debug-file --bg --remote-control"},
@@ -75,6 +78,51 @@ func TestWithState(t *testing.T) {
 		}
 		if strings.Join(in, " ") != c.in {
 			t.Errorf("%q: the args given changed to %q", c.in, in)
+		}
+	}
+}
+
+// The agent a session ran as by another way than its arguments (the agent
+// setting, or the conversation's own) goes on when they name none. An
+// --agent they give stays: Claude Code ran the session as it, also when
+// the conversation's rows still name the agent it ran as before.
+func TestWithAgent(t *testing.T) {
+	split := func(s string) []string { return strings.Fields(s) }
+	for _, c := range []struct{ in, agent, out string }{
+		{"--add-dir /tmp", "", "--add-dir /tmp"},
+		{"--agent rev --add-dir /tmp", "", "--agent rev --add-dir /tmp"},
+		{"--add-dir /tmp", "rev", "--add-dir /tmp --agent rev"},
+		{"--agent rev --add-dir /tmp", "writer", "--agent rev --add-dir /tmp"},
+		{"--agent=a --verbose --agent b", "c", "--agent=a --verbose --agent b"},
+		// --agents defines agents; it names none to run as.
+		{`--agents {"x":{}} --verbose`, "x", `--agents {"x":{}} --verbose --agent x`},
+		// After "--" every argument is the prompt's, an --agent too.
+		{"--verbose -- -x --agent b", "rev", "--verbose --agent rev -- -x --agent b"},
+	} {
+		in := split(c.in)
+		if out := WithAgent(in, c.agent); strings.Join(out, " ") != c.out {
+			t.Errorf("%q %q: %q, want %q", c.in, c.agent, out, c.out)
+		}
+		if strings.Join(in, " ") != c.in {
+			t.Errorf("%q: the args given changed to %q", c.in, in)
+		}
+	}
+}
+
+// The agent claude args run as: the value of the last --agent before "--".
+func TestAgentArg(t *testing.T) {
+	for in, want := range map[string]string{
+		"":                             "",
+		"--resume s1 --verbose":        "",
+		"--resume s1 --agent reviewer": "reviewer",
+		"--agent=a --add-dir /tmp":     "a",
+		"--agent a --agent=b":          "b",
+		`--agents {"x":{}} go`:         "",
+		"--agent":                      "",
+		"go -- --agent x":              "",
+	} {
+		if got := AgentArg(strings.Fields(in)); got != want {
+			t.Errorf("%q: %q, want %q", in, got, want)
 		}
 	}
 }

@@ -1,10 +1,10 @@
 ---
 title: Avviare Claude Code
 description: Avvia Claude Code con qualsiasi account usando ccam <name|number>, ccam run o la dashboard; gli argomenti passano invariati e --dry-run mostra il comando.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: cf9ef66530cd
+sourceHash: 11df08608a1e
 ---
 
 `ccam work` avvia Claude Code con l'account `work`, e tutto ciò che segue il nome arriva a `claude` invariato. Usalo ovunque scriveresti `claude`: in un terminale, in uno script o con un input passato tramite pipe.
@@ -38,7 +38,7 @@ Quando il primo argomento inizia con `-` e non è una delle opzioni di ccam, cca
 
 Quando nella shell è impostata `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` o `ANTHROPIC_AUTH_TOKEN`, Claude Code potrebbe usare quella chiave o quel token invece del login dell'account, quindi ccam ti avvisa sullo standard error prima dell'avvio (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). Si limita a leggere le variabili; un [account con chiave API](/features/api) invece le rimuove.
 
-Per impostazione predefinita, ccam si sostituisce con Claude Code, quindi non resta in esecuzione nient'altro. Con `relay = true` (oppure [`auto_switch = true`](/features/next#auto-switch) su Linux e macOS) in cima a `config.toml`, sopra il primo `[[group]]`, `[[profile]]` o `[[folder]]`, ccam avvia invece le sessioni interattive come processo figlio e resta in esecuzione accanto a esse. Questo permette a `/ccam:switch`, o ad `auto_switch` al raggiungimento di un limite di utilizzo, di continuare da solo la conversazione su un altro account, con le opzioni, la modalità dei permessi e il livello di effort della sessione ([dettagli](/features/next#relay)).
+Per impostazione predefinita, ccam si sostituisce con Claude Code, quindi non resta in esecuzione nient'altro. Con `relay = true` (oppure [`auto_switch = true`](/features/next#auto-switch) su Linux e macOS) in cima a `config.toml`, sopra il primo `[[group]]`, `[[profile]]` o `[[folder]]`, ccam avvia invece le sessioni interattive come processo figlio e resta in esecuzione accanto a esse. Questo permette a `/ccam:switch`, o ad `auto_switch` al raggiungimento di un limite di utilizzo, di continuare da solo la conversazione su un altro account, con le opzioni, la modalità dei permessi, il livello di effort e l'agente della sessione; prima che `/ccam:switch` la sposti su un account di un'altra organizzazione, ccam te lo chiede ([dettagli](/features/next#relay)).
 
 ## Opzioni
 

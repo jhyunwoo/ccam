@@ -4,11 +4,13 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"slices"
 	"strings"
 	"testing"
 
 	"github.com/jhyunwoo/ccam/internal/config"
 	"github.com/jhyunwoo/ccam/internal/fsutil"
+	"github.com/jhyunwoo/ccam/internal/launcher"
 	"github.com/jhyunwoo/ccam/internal/paths"
 )
 
@@ -276,6 +278,126 @@ func TestCcusageRunner(t *testing.T) {
 	fakeRunners(t)
 	if out, errOut, code := c.run("", "--dry-run", "ccusage", "daily"); code == 0 || !strings.Contains(errOut, "install Node.js or Bun, or ccusage itself") {
 		t.Fatalf("%d %q %q", code, out, errOut)
+	}
+}
+
+// bun x and npx start in ccam's own folder, so the settings ccusage would
+// read in the working folder, and a --config relative to it, are named by
+// their full path. A --config without a value, and what follows --, are
+// left for ccusage.
+func TestCcusageConfigArgs(t *testing.T) {
+	t.Chdir(t.TempDir())
+	here, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	mine, team := filepath.Join(here, "my.json"), filepath.Join(here, "team", "c.json")
+	check := func(args, want []string) {
+		t.Helper()
+		in := slices.Clone(args)
+		if got, err := ccusageConfigArgs(args); err != nil || !slices.Equal(got, want) || !slices.Equal(args, in) {
+			t.Errorf("%q: got %q (%v), want %q", in, got, err, want)
+		}
+	}
+	// No settings here: only a relative --config changes.
+	check(nil, nil)
+	check([]string{"daily", "--json"}, []string{"daily", "--json"})
+	check([]string{"daily", "--config", "my.json"}, []string{"daily", "--config", mine})
+	check([]string{"--config=my.json", "daily"}, []string{"--config=" + mine, "daily"})
+	check([]string{"daily", "--config", team, "--config=" + team}, []string{"daily", "--config", team, "--config=" + team})
+	check([]string{"daily", "--config"}, []string{"daily", "--config"})
+	check([]string{"daily", "--config="}, []string{"daily", "--config="})
+	check([]string{"daily", "--config", "--json"}, []string{"daily", "--config", "--json"})
+	check([]string{"daily", "--config", "--", "my.json"}, []string{"daily", "--config", "--", "my.json"})
+	check([]string{"daily", "--", "--config", "my.json"}, []string{"daily", "--", "--config", "my.json"})
+
+	settings := filepath.Join(here, ".ccusage", "ccusage.json")
+	os.MkdirAll(filepath.Dir(settings), 0o700)
+	if err := os.WriteFile(settings, []byte("{}\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	check(nil, []string{"--config", settings})
+	check([]string{"daily", "--json"}, []string{"daily", "--json", "--config", settings})
+	check([]string{"daily", "--", "--config", "my.json"}, []string{"daily", "--config", settings, "--", "--config", "my.json"})
+	// A --config, even one without a value, is the person's choice.
+	check([]string{"daily", "--config", "my.json"}, []string{"daily", "--config", mine})
+	check([]string{"daily", "--config=" + team}, []string{"daily", "--config=" + team})
+	check([]string{"daily", "--config"}, []string{"daily", "--config"})
+}
+
+// In a folder reached through a link, the .. of a relative --config leads
+// out of the folder the link names, as the system takes it, not back to the
+// link's own folder.
+func TestCcusageConfigArgsThroughALink(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Windows takes .. by name")
+	}
+	t.Chdir(t.TempDir())
+	here, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(here, "real", "deep"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	os.WriteFile(filepath.Join(here, "real", "x.json"), []byte("on disk"), 0o600)
+	os.WriteFile(filepath.Join(here, "x.json"), []byte("by name"), 0o600)
+	if err := os.Symlink(filepath.Join(here, "real", "deep"), filepath.Join(here, "link")); err != nil {
+		t.Fatal(err)
+	}
+	t.Chdir(filepath.Join(here, "link"))
+	got, err := ccusageConfigArgs([]string{"--config", "../x.json"})
+	if err != nil || len(got) != 2 || !filepath.IsAbs(got[1]) {
+		t.Fatalf("%q %v", got, err)
+	}
+	if data, err := os.ReadFile(got[1]); err != nil || string(data) != "on disk" {
+		t.Errorf("--config ../x.json in the linked folder became %s, which holds %q (%v)", got[1], data, err)
+	}
+}
+
+// The dry run shows bun x and npx starting in ccam's own folder, and the
+// full path they get for the settings in the working folder, and makes no
+// folder for them; an installed ccusage starts in the working folder with
+// the arguments as typed.
+func TestCcusageDryRunNamesTheSettingsHere(t *testing.T) {
+	c := newTestCLI(t, nil)
+	c.withConversations("work")
+	t.Chdir(t.TempDir())
+	here, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	settings := filepath.Join(here, ".ccusage", "ccusage.json")
+	os.MkdirAll(filepath.Dir(settings), 0o700)
+	if err := os.WriteFile(settings, []byte("{}\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	dir := filepath.Join(c.p.State, "ccusage")
+	startsThere := func(out string) bool {
+		if runtime.GOOS == "windows" {
+			return strings.Contains(out, " -WorkingDirectory "+launcher.PSString(dir)+" ")
+		}
+		return strings.HasPrefix(out, "(cd "+launcher.ShellQuote(dir)+" && ")
+	}
+	for _, tc := range []struct {
+		have []string
+		args string
+	}{
+		{[]string{"bun", "npx"}, "x ccusage daily --config " + settings},
+		{[]string{"npx"}, "ccusage@latest daily --config " + settings},
+	} {
+		fakeRunners(t, tc.have...)
+		if out, errOut, code := c.run("", "--dry-run", "ccusage", "daily"); code != 0 || !strings.Contains(out, tc.args) || !startsThere(out) {
+			t.Errorf("%q: %d %q %q", tc.have, code, out, errOut)
+		}
+	}
+	if _, err := os.Stat(dir); err == nil {
+		t.Error("the dry run made ccam's folder for the runners")
+	}
+	fakeRunners(t, "ccusage", "npx")
+	if out, errOut, code := c.run("", "--dry-run", "ccusage", "daily"); code != 0 || !strings.Contains(out, "daily") || strings.Contains(out, "--config") ||
+		strings.Contains(out, dir) {
+		t.Errorf("%d %q %q", code, out, errOut)
 	}
 }
 

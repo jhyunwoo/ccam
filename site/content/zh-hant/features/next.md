@@ -1,10 +1,10 @@
 ---
 title: 切換到下一個帳號
 description: ccam next 會以另一個帳號開啟 Claude Code；--auto 選擇剩餘額度最多的帳號，--continue 把對話帶過去，--fallback 會重新執行 -p 工作。
-updated: 2026-10-26
+updated: 2026-11-01
 order: 8
 translation: machine
-sourceHash: "4862fcef8882"
+sourceHash: "79300c521748"
 ---
 
 `ccam next` 不需要你指定名稱，就能以另一個帳號開啟 Claude Code。當某個帳號達到用量限制時使用它。切換的方式有四種：
@@ -96,7 +96,7 @@ auto_max_usage = 80        # keep 20% of each account for interactive work
 auto_strategy = "expiring"
 ```
 
-**組織。** 自動選擇只會在和你要離開的帳號同類的帳號之間進行：同一個 Team 或 Enterprise 組織中的席位，或者個人方案（Pro、Max），所以公司帳號的工作不會在私人帳號上繼續，反之亦然。ccam 從每個帳號的登入得知它的組織（`ccam login` 會記錄；較舊的登入則從 `.claude.json` 讀取）；ccam 無法判斷其組織的帳號可以和任何帳號搭配。登入同一個 Claude 帳號的兩個資料夾共用它的用量上限，所以其中一個絕不會接替另一個。`--cross-org`，或在 `config.toml` 中設定 `cross_org = true`，會解除組織規則。
+**組織。** 自動選擇只會在和你要離開的帳號同類的帳號之間進行：同一個 Team 或 Enterprise 組織中的席位，或者個人方案（Pro、Max），所以公司帳號的工作不會在私人帳號上繼續，反之亦然。ccam 從每個帳號的登入得知它的組織（`ccam login` 會記錄；較舊的登入則從 `.claude.json` 讀取）；ccam 無法判斷其組織的帳號可以和任何帳號搭配。登入同一個 Claude 帳號的兩個資料夾共用它的用量上限，所以其中一個絕不會接替另一個。`--cross-org`，或在 `config.toml` 中設定 `cross_org = true`，會解除組織規則，但在 [`/ccam:switch`](#inside-claude-code) 之後，移到另一個組織仍要等你回答 yes。
 
 無法選出帳號時，ccam 會以代碼 75（`EX_TEMPFAIL`）結束，讓指令碼能分辨「稍後再試」和失敗。加上 `--wait` 時，它會改為等到第一個已滿帳號的阻擋區間重設（重設時間後 30 秒，屆時端點會顯示新的區間），印出 `ccam: no account has room; waiting until 15:10`，然後再選擇一次；沒有任何帳號說明何時重設時，它會在 10 分鐘後再查看。如果等待結束前都沒有帳號空出來，它會以 75 結束。
 
@@ -108,6 +108,7 @@ auto_strategy = "expiring"
 2. 它所屬的帳號就是你要切換離開的帳號，新帳號則依上述方式在同一個組織內選出。當多個帳號共用那份對話記錄時，它屬於 `.claude.json` 表示最後執行過該對話的帳號（`lastSessionId`），否則屬於最近使用的帳號。
 3. 如果新帳號共用那份對話記錄（同一個群組資料夾），ccam 會啟動 `claude --resume <session id>`，也就是那段對話本身（`--continue` 則會開啟資料夾中最新的那段對話，不論是哪一段）。
 4. 否則它會啟動 `claude --resume <the conversation's file> --fork-session`：Claude Code 會以新的工作階段 ID，把整段對話複製到新帳號自己的對話記錄中，原本的對話維持不變。之後新帳號的 `--continue` 就找得到它。
+5. 除非你在 `--` 之後指定 `--agent`，否則 ccam 也會傳遞對話所用的代理：資料夾的 `.claude/settings.local.json` 或 `.claude/settings.json`、或帳號的 `settings.json` 中的 `agent` 設定，沒有時則是對話最後一筆 `agent-setting` 資料列指定的代理。Claude Code 在複製對話時（第 4 步）不會帶回代理，而會以它的預設代理、帶著所有工具繼續對話。當新帳號沒有共用舊帳號的代理、外掛和設定（也就是沒有透過群組使用相同的 `agents` 和 `plugins` 資料夾以及 `settings.json`）時，ccam 會在關於移動的那一行之後再加一行：`work does not share personal's agents, plugins and settings, so it may not have agent "reviewer" or may define it differently: the conversation may go on without that agent's tool limits`。
 
 ccam 會告訴你這段對話有多大：新帳號在第一次回覆時會重新讀取全部內容。提示快取絕不會在組織之間共用，而每個個人方案都是一個獨立的組織，所以當兩個帳號屬於不同的組織時，ccam 會加上 `prompt caches are not shared between organizations, so the first reply reads it all again`。當舊帳號已登入、新帳號尚未登入某些 MCP 伺服器時，ccam 會列出它們：`work is not signed in to MCP servers that personal is signed in to: linear (sign in with /mcp there; sign-ins are not shared)`。在群組中共用 `history` 可以避免複製、維持同一個對話，也會共用 `/rewind` 用來還原程式碼的檢查點（`file-history/`）。
 
@@ -153,15 +154,17 @@ Claude Code 的提及會在 `"` 處結束、在 `#` 處截斷，所以摘要的�
   當 Claude Code 已把被拒絕的請求寫入對話時，hook 也會把已滿的區間記錄到它重設為止（[上限記錄](/features/usage#the-limit-record)），但組織設定的停用除外，因為管理員隨時可以解除它。短暫的伺服器節流或 API 金鑰的速率限制不是用量上限，不會處理；子代理的停止，以及無人看管的工作階段（`-p` 執行和背景工作階段）也一樣。
 
   Claude Code 2.1.234 及更新版本也會在工作階段中等待，並在 5 小時區間重設後自行繼續；通知讓你可以選擇改為切換帳號；而開啟 [`auto_switch`](#auto-switch)（Linux 和 macOS）時，若另一個帳號還有餘裕，ccam 會替你切換。當沒有其他帳號可以接手時，也就是沒有其他帳號屬於同一個 Team 或 Enterprise 組織，或沒有其他個人方案時（開啟 `cross_org` 時，任何其他 Claude 帳號都可以），通知的結尾會改為 `You have no other personal plans, so ccam cannot move this conversation.` 或 `You have no other accounts in Acme, so ccam cannot move this conversation.`
-- `/ccam:switch [account]` 會記下這段對話，並在發出任何請求之前結束這一輪：輸入 `/exit`，接著執行 `ccam next --continue`，就會在你指定的帳號（或下一個帳號）接續它。在還沒有任何對話的工作階段中，它會說明沒有可以接續的內容。
+- `/ccam:switch [account]` 會記下這段對話，並在發出任何請求之前結束這一輪：輸入 `/exit`，接著執行 `ccam next --continue`，就會在你指定的帳號（或下一個帳號）接續它。在還沒有任何對話的工作階段中，它會說明沒有可以接續的內容。只有你親自輸入才會執行它：從外掛 0.3.2 起，Claude 無法執行 `/ccam:switch`，而 Claude 排定的工作（CronCreate、ScheduleWakeup 或 `.claude/scheduled_tasks.json`）會把它當成純文字交給 Claude。
+
+  當你指定的帳號不在對話所屬的組織內（另一個 Team 或 Enterprise 組織的席位、從席位換到個人方案或反過來，或任一方是 API 金鑰帳號）時，不論 `cross_org` 怎麼設定，`ccam next --continue` 都會先詢問：`ccam: /ccam:switch named home, a personal plan, but this conversation is on work, a Claude Team seat in Acme. Move it to home? [y/N]`。你沒有指定帳號時，ccam 在移到它自己挑選的帳號（`cross_org = true` 時可以來自另一個組織）之前也會同樣詢問：`ccam: the account picked for /ccam:switch is home, a personal plan, …`。只有 `y` 或 `yes` 才會移動；在 Linux 和 macOS 上，會先捨棄提問之前輸入的按鍵。任何其他回答，或沒有可以詢問的終端機，都會讓對話和記錄留在原處：``the conversation stays on work, a Claude Team seat in Acme: it moves to home, a personal plan, only when you answer yes on a terminal. `ccam next --continue` asks again, and `ccam work --resume <session id>` continues it as work``（如果帳號是 ccam 挑選的，`ccam next --continue` 會重新挑選）。和自動選擇一樣，ccam 無法判斷其組織的帳號可以和任何帳號搭配。
 
 記錄存放在 `~/.local/state/ccam/handoff/<account>/<session>.json`，每個工作階段一個檔案，所以同一個帳號的兩個工作階段絕不會覆寫彼此的記錄。它保留 12 小時，而且只會在下一個工作階段即將啟動時使用一次；啟動失敗時會保留下來，供下次嘗試。它屬於工作階段啟動時所在的資料夾，即使之後在 Claude Code 的 shell 中執行了 `cd` 也一樣。`ccam rename` 會更新其中的名稱；如果它指名的帳號後來被移除，ccam 會告知這件事，並照常選擇。
 
 ### 接力
 
-在 `config.toml` 的最上方設定 `relay = true` 時，ccam 會在互動式工作階段旁持續執行，而不是以 Claude Code 取代自己，並在 `/ccam:switch` 之後自行接續那個工作階段的對話（其他工作階段留下的記錄不會被處理）：hook 會結束 Claude Code，ccam 再以該工作階段的記錄執行 `ccam next --continue`。沒有指定帳號時，它會選擇剩餘額度最多的帳號，並把對話所用的模型計算在內。在 Windows 上，hook 無法結束 Claude Code：請輸入 `/exit`，ccam 就會接續下去。這樣每個工作階段都要多一個等待中的 ccam 行程，所以預設為關閉。
+在 `config.toml` 的最上方設定 `relay = true` 時，ccam 會在互動式工作階段旁持續執行，而不是以 Claude Code 取代自己，並在 `/ccam:switch` 之後自行接續那個工作階段的對話（其他工作階段留下的記錄不會被處理）：hook 會結束 Claude Code，ccam 再以該工作階段的記錄執行 `ccam next --continue`。沒有指定帳號時，它會選擇剩餘額度最多的帳號，並把對話所用的模型計算在內；如果因為 `cross_org = true` 而選中了另一個組織的帳號，它會在把對話移過去之前先問上面的問題。在 Windows 上，hook 無法結束 Claude Code：請輸入 `/exit`，ccam 就會接續下去。對於對話所屬組織之外的帳號，hook 也不會結束 Claude Code：它會顯示 `ccam: type /exit; ccam then asks whether to continue this conversation on home, a personal plan (work is a Claude Team seat in Acme).`，等你輸入 `/exit` 之後，ccam 會問上面的問題。這樣每個工作階段都要多一個等待中的 ccam 行程，所以預設為關閉。
 
-接力的工作階段會保留繼續對話時不會還原的內容：`--add-dir`、`--mcp-config`、工具清單、`--settings`、`--plugin-dir` 和系統提示詞選項等選項，對話的權限模式，以及工作階段的推理強度。`--model`、`--name` 和 `--agent` 則由 Claude Code 自己從對話中還原。其他任何內容（`--worktree`、`--debug`、`--remote-control`、ccam 不認得的選項）都會列在 `ccam: not carried over: …` 中。切換時絕不會詢問共用對話記錄的問題，而在切換期間輸入的內容會被捨棄。
+接力的工作階段會保留繼續對話時不會還原的內容：`--add-dir`、`--mcp-config`、工具清單、`--settings`、`--plugin-dir` 和系統提示詞選項等選項，對話的權限模式、工作階段的推理強度，以及對話所用的代理（見 [`--continue`](#continue)）。`--model` 和 `--name` 則由 Claude Code 自己從對話中還原。其他任何內容（`--worktree`、`--debug`、`--remote-control`、ccam 不認得的選項）都會列在 `ccam: not carried over: …` 中。切換時絕不會詢問共用對話記錄的問題，而在切換期間輸入的內容會被捨棄；它唯一會問的，是移到另一個組織的帳號之前的那個問題。
 
 只有當 Claude Code 依 `/ccam:switch` 的要求結束時，接力才會接續對話：如果你先輸入了 `/exit`、在它結束時按了 Ctrl+C，或 ccam 收到掛斷或其他訊號，或終端機已經不在了，都不會接續。此時記錄會保留下來，之後可以用 `ccam next --continue` 接續對話。在較舊版本 ccam 的接力下啟動的工作階段，或無人看管的工作階段（`-p` 執行和背景工作階段），不會被 hook 結束，而是會收到 `/exit` 的訊息。`claude remote-control` 不使用接力執行。
 
@@ -195,17 +198,20 @@ ccam: personal hit its 5-hour limit; continuing this conversation as side
    - 沒有使用 API 金鑰；
    - 有 ccam 知道的方案；
    - 就 ccam 自己的用量查詢所見，沒有開啟用量點數；
-   - 已在 Claude Code 中信任這個資料夾。
+   - 已在 Claude Code 中信任這個資料夾；
+   - 如果對話以某個代理執行（`agent` 設定或對話指定了代理），要共用你離開的帳號的代理：它的 `agents` 和 `plugins` 資料夾以及 `settings.json` 都必須各自（透過群組）完全相同，或兩邊都沒有。
 
-   當最後這兩項排除了所有還有餘裕的帳號時，通知會指出它們：`side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.` 或 `side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.` 有[上限記錄](/features/usage#the-limit-record)的區間算作已滿，而過去 2 分鐘內已有其他工作階段移入的帳號會排在其他帳號之後。選擇必須在約 6 秒內完成；用量查詢花的時間更長時，工作階段會留在原處。設定 `usage_source = "claude"` 時，`auto_switch` 只依已儲存的數字決定，而且 ccam 無法從 Claude Code 的查詢或狀態列得知用量點數是否開啟，所以會假設它們是關閉的。
+   當最後這三項排除了所有還有餘裕的帳號時，通知會指出它們：`side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.`、`side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.` 或 `This conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so auto_switch did not move it there.` 有[上限記錄](/features/usage#the-limit-record)的區間算作已滿，而過去 2 分鐘內已有其他工作階段移入的帳號會排在其他帳號之後。選擇必須在約 6 秒內完成；用量查詢花的時間更長時，工作階段會留在原處。設定 `usage_source = "claude"` 時，`auto_switch` 只依已儲存的數字決定，而且 ccam 無法從 Claude Code 的查詢或狀態列得知用量點數是否開啟，所以會假設它們是關閉的。
 
-接著 hook 會結束 Claude Code，而在旁邊持續執行的 ccam 會在支援的終端機中顯示桌面通知，例如 `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` 它會印出上方範例輸出中的第一行，並以選中的帳號為該工作階段執行 `ccam next --continue`，由後者印出另外兩行，再沿用工作階段的選項、權限模式和推理強度啟動 Claude Code，就像[接力](#relay)一樣。新工作階段的第一則訊息是以下固定文字，這也是 ccam 唯一代替你送出的內容（在 `/ccam:switch` 之後的移動不會送出任何內容）：
+接著 hook 會結束 Claude Code，而在旁邊持續執行的 ccam 會在支援的終端機中顯示桌面通知，例如 `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` 它會印出上方範例輸出中的第一行，並以選中的帳號為該工作階段執行 `ccam next --continue`，由後者印出另外兩行，再沿用工作階段的選項、權限模式、推理強度和代理啟動 Claude Code，就像[接力](#relay)一樣。新工作階段的第一則訊息是以下固定文字，這也是 ccam 唯一代替你送出的內容（在 `/ccam:switch` 之後的移動不會送出任何內容）：
 
 ```text
 Your usage limit was reached and ccam moved this conversation to another account. Continue the task you were working on when the limit was reached; do not repeat work that is already complete.
 ```
 
 如果那個帳號也達到上限，同樣的事會在那裡再發生一次。上限記錄會防止這條鏈在重設之前回到先前的帳號，所以當所有帳號都已用滿時，工作階段會留在最後一個帳號。
+
+hook 會從 `agent` 設定，或從 Claude Code 不時以及在工作階段結束時寫入對話、指明代理的那一筆資料列，得知對話以某個代理執行。如果到目前為止只有工作階段的 `--agent` 指明了代理，而選中的帳號沒有共用這些代理，`ccam next --continue` 就不會啟動任何東西，並保留記錄，第二則桌面通知會說明這件事：``ccam: this conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so ccam did not move it there. Its note stays: `ccam next --continue` continues it later, and `ccam personal --resume <session id>` continues it as personal after the reset``。
 
 沒有其他帳號還有餘裕時，什麼都不會移動：Claude Code 會照常處理上限，在工作階段中等待或提供它的選項，通知則會說明哪個帳號最先恢復，例如 `ccam: personal hit its 5-hour limit (resets 3:29am). None of your other personal plans has room now; side frees up first, at 12:30am. Claude Code waits for personal here; /ccam:switch side after 12:30am moves it sooner.` 如果是席位，則會顯示 `None of your other accounts in Acme has room now`。若要停止已經開始的移動，請在 Claude Code 關閉時按 Ctrl+C：``ccam: switch cancelled. Run `ccam next --continue` later to continue the conversation.``
 

@@ -1,10 +1,10 @@
 ---
 title: تشغيل Claude Code
 description: شغّل Claude Code بأي حساب باستخدام ccam <name|number> أو ccam run أو لوحة التحكم؛ تُمرَّر الوسائط إلى claude دون تغيير، ويعرض --dry-run الأمر.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 يشغّل `ccam work` برنامج Claude Code بالحساب `work`، وكل ما يأتي بعد الاسم يُمرَّر إلى `claude` دون تغيير. استخدمه في أي مكان كنت ستكتب فيه `claude`: في الطرفية، أو في سكربت، أو مع إدخال يصل عبر أنبوب.
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 عندما يكون `CLAUDE_CODE_OAUTH_TOKEN` أو `ANTHROPIC_API_KEY` أو `ANTHROPIC_AUTH_TOKEN` معيّنًا في الصدفة، قد يستخدم Claude Code ذلك المفتاح أو الرمز بدلًا من تسجيل دخول الحساب نفسه، لذلك يحذّرك ccam في الخطأ القياسي قبل أن يبدأ (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). وهو يقرأ المتغيرات فقط؛ أما [حساب مفتاح API](/features/api) فيمسحها بدلًا من ذلك.
 
-افتراضيًا، يستبدل ccam نفسه بـ Claude Code، فلا يبقى شيء آخر قيد التشغيل. ومع `relay = true` (أو [`auto_switch = true`](/features/next#auto-switch) على Linux وmacOS) في أعلى `config.toml`، فوق أول `[[group]]` أو `[[profile]]` أو `[[folder]]`، يشغّل ccam بدلًا من ذلك الجلسات التفاعلية بوصفها عمليات فرعية ويبقى قيد التشغيل بجانبها. وهذا يتيح لـ `/ccam:switch`، أو لـ `auto_switch` عند حد الاستخدام، متابعة المحادثة على حساب آخر بنفسه، مع خيارات الجلسة ووضع الأذونات ومستوى الجهد ([التفاصيل](/features/next#relay)).
+افتراضيًا، يستبدل ccam نفسه بـ Claude Code، فلا يبقى شيء آخر قيد التشغيل. ومع `relay = true` (أو [`auto_switch = true`](/features/next#auto-switch) على Linux وmacOS) في أعلى `config.toml`، فوق أول `[[group]]` أو `[[profile]]` أو `[[folder]]`، يشغّل ccam بدلًا من ذلك الجلسات التفاعلية بوصفها عمليات فرعية ويبقى قيد التشغيل بجانبها. وهذا يتيح لـ `/ccam:switch`، أو لـ `auto_switch` عند حد الاستخدام، متابعة المحادثة على حساب آخر بنفسه، مع خيارات الجلسة ووضع الأذونات ومستوى الجهد والوكيل؛ وقبل أن ينقلها `/ccam:switch` إلى حساب من مؤسسة أخرى، يسألك ccam ([التفاصيل](/features/next#relay)).
 
 ## الخيارات
 

@@ -1,10 +1,10 @@
 ---
 title: Claude Code 시작하기
 description: ccam <name|number>, ccam run, 대시보드로 원하는 계정의 Claude Code를 시작합니다. 인자는 그대로 claude에 전달되며, --dry-run은 실행할 명령을 보여 줍니다.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work`는 `work` 계정으로 Claude Code를 시작하며, 이름 뒤의 모든 것은 그대로 `claude`에 전달됩니다. 터미널, 스크립트, 파이프로 입력을 넘길 때 등 `claude`를 입력하던 곳이면 어디서나 쓸 수 있습니다.
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 셸에 `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY`, `ANTHROPIC_AUTH_TOKEN` 중 하나가 설정되어 있으면 Claude Code가 계정 자체의 로그인 대신 그 키나 토큰을 쓸 수 있으므로, ccam은 시작하기 전에 표준 오류로 경고합니다(`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). ccam은 변수를 읽기만 하며, [API 키 계정](/features/api)은 대신 이 변수들을 지웁니다.
 
-기본적으로 ccam은 자신을 Claude Code로 대체하므로, 계속 실행되는 것은 아무것도 없습니다. `config.toml`의 맨 위, 첫 `[[group]]`, `[[profile]]`, `[[folder]]`보다 위에 `relay = true`(또는 Linux와 macOS에서 [`auto_switch = true`](/features/next#auto-switch))를 설정하면, ccam은 대신 대화형 세션을 자식 프로세스로 시작하고 세션과 함께 계속 실행됩니다. 그래서 `/ccam:switch`나 사용량 한도에서의 `auto_switch`가 세션의 옵션, 권한 모드, 추론 수준을 유지한 채 다른 계정에서 스스로 대화를 이어 갈 수 있습니다([자세히](/features/next#relay)).
+기본적으로 ccam은 자신을 Claude Code로 대체하므로, 계속 실행되는 것은 아무것도 없습니다. `config.toml`의 맨 위, 첫 `[[group]]`, `[[profile]]`, `[[folder]]`보다 위에 `relay = true`(또는 Linux와 macOS에서 [`auto_switch = true`](/features/next#auto-switch))를 설정하면, ccam은 대신 대화형 세션을 자식 프로세스로 시작하고 세션과 함께 계속 실행됩니다. 그래서 `/ccam:switch`나 사용량 한도에서의 `auto_switch`가 세션의 옵션, 권한 모드, 추론 수준, 에이전트를 유지한 채 다른 계정에서 스스로 대화를 이어 갈 수 있으며, `/ccam:switch`가 대화를 다른 조직의 계정으로 옮기기 전에는 ccam이 먼저 묻습니다([자세히](/features/next#relay)).
 
 ## 옵션
 

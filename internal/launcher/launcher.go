@@ -38,6 +38,10 @@ type Plan struct {
 	// UserArgs are the claude args as the user gave them (one leading "--"
 	// dropped), without the ones ccam adds such as --mcp-config.
 	UserArgs []string
+	// WorkDir is the folder a program other than claude starts in when it
+	// is not the working one, as ccusage's bun x and npx do. Only the dry
+	// run reads it: their caller changes to the folder itself.
+	WorkDir string
 
 	sessions []string // session folders this process is registered in
 	keyVar   string   // dry run of an API account: the key variable, not set,
@@ -168,7 +172,8 @@ func buildEnv(environ []string, dir, name string, defaultStore bool) []string {
 
 // DryRun prints what would be executed, as a line for sh, or for
 // PowerShell on Windows: the variables a launch sets or clears, then the
-// command. The key of an API account is shown by its source, never read.
+// command, started in WorkDir if the plan has one. The key of an API
+// account is shown by its source, never read.
 // It fails, as the launch would, where claude could not be started so.
 func (pl *Plan) DryRun(w io.Writer) error { return pl.dryRun(w, os.Environ()) }
 
@@ -209,6 +214,9 @@ func (pl *Plan) dryRun(w io.Writer, environ []string) error {
 		if line != "" {
 			start += " -ArgumentList " + PSString(line)
 		}
+		if pl.WorkDir != "" {
+			start += " -WorkingDirectory " + PSString(pl.WorkDir)
+		}
 		fmt.Fprintln(w, "& { $saved = @{}; foreach ($k in "+strings.Join(names, ",")+") { $saved[$k] = [Environment]::GetEnvironmentVariable($k) }; "+
 			strings.Join(parts, " ")+" try { $p = "+start+" -NoNewWindow -Wait -PassThru; $global:LASTEXITCODE = $p.ExitCode } "+
 			"finally { foreach ($k in $saved.Keys) { [Environment]::SetEnvironmentVariable($k, $saved[$k]) } } }")
@@ -239,7 +247,13 @@ func (pl *Plan) dryRun(w io.Writer, environ []string) error {
 	for _, a := range pl.Argv[1:] {
 		parts = append(parts, ShellQuote(a))
 	}
-	fmt.Fprintln(w, strings.Join(parts, " "))
+	line := strings.Join(parts, " ")
+	if pl.WorkDir != "" {
+		// A subshell, so that the shell the line is pasted into stays where
+		// it is.
+		line = "(cd " + ShellQuote(pl.WorkDir) + " && " + line + ")"
+	}
+	fmt.Fprintln(w, line)
 	return nil
 }
 

@@ -90,7 +90,7 @@ SSH로 접속한 원격 서버에서 로그인할 때는 내 컴퓨터의 브라
 | `ccam pick [--json] [--model m] [--wait]` | 스크립트용으로 여유가 가장 많은 계정 이름 출력. 함께 시작한 작업자는 서로 다른 계정, 없으면 종료 코드 75 |
 | `ccam ext [이름] [--json]` | 계정마다 로드되는 스킬·명령·플러그인·MCP 서버·훅과 그 출처, 문제 |
 | `ccam usage [--watch] [--json] [-v]` | 사용량 (줄임 `ccam u`) |
-| `ccam ccusage [-a 이름[,이름…]] [ccusage 인자]` | 모든 계정(또는 `-a`로 고른 계정)의 대화로 [ccusage](https://ccusage.com)의 토큰·비용 보고서. 그룹으로 대화 기록을 공유하는 계정은 그 그룹의 대화가 모두 들어감. ccusage 인자는 그대로 전달되고, 도구를 지정하지 않으면 찾은 다른 코딩 도구(Codex 등)도 함께 셈: `ccam ccusage claude daily`. `blocks`는 5시간 구간이 계정마다 따로라 계정 하나를 지정: `ccam ccusage -a work blocks --active`. 설치된 ccusage, 없으면 `bun x ccusage`, 그다음 `npx ccusage@latest`로 실행 |
+| `ccam ccusage [-a 이름[,이름…]] [ccusage 인자]` | 모든 계정(또는 `-a`로 고른 계정)의 대화로 [ccusage](https://ccusage.com)의 토큰·비용 보고서. 그룹으로 대화 기록을 공유하는 계정은 그 그룹의 대화가 모두 들어감. ccusage 인자는 그대로 전달되고, 도구를 지정하지 않으면 찾은 다른 코딩 도구(Codex 등)도 함께 셈: `ccam ccusage claude daily`. `blocks`는 5시간 구간이 계정마다 따로라 계정 하나를 지정: `ccam ccusage -a work blocks --active`. 설치된 ccusage, 없으면 `bun x ccusage`, 그다음 `npx ccusage@latest`로 실행. 뒤의 둘은 ccam 자신의 폴더에서 시작하므로 지금 폴더가 실행할 프로그램을 고를 수 없고, `./.ccusage/ccusage.json`이나 상대 경로 `--config`는 전체 경로로 넘김 |
 | `ccam group [add\|set\|join\|leave\|show\|rename\|remove]` | 그룹: 계정 여럿이 공유할 것. 바꿀 때는 계획을 보여 주고 확인 후 실행 |
 | `ccam share <이름>` | 계정이 무엇을 어느 그룹으로 공유하는지 보기 |
 | `ccam mcp add\|add-json\|list\|remove\|import` | 공유 MCP 서버 |

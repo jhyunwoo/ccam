@@ -1,10 +1,10 @@
 ---
 title: حدود الاستخدام
 description: يعرض ccam usage حدّي الخمس ساعات والأسبوع لكل الحسابات دفعة واحدة، ويضع ccam statusline اسم الحساب واستخدامه داخل Claude Code.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: machine
-sourceHash: "997107786d4c"
+sourceHash: "54b296f7da35"
 ---
 
 يعرض `ccam usage`، لكل حساب، مقدار ما استُخدم من كل حد: حد الخمس ساعات، والحد الأسبوعي، والحد الأسبوعي الخاص بكل نموذج (مثل Fable). ولكل حد شريط والوقت المتبقي حتى إعادة ضبطه. استخدمه قبل أن تبدأ مهمة طويلة، أو عندما يخبرك Claude Code أن حدًا ما يقترب، لترى أي حساب لا تزال لديه سعة. و`ccam statusline` هو أمر سطر الحالة في Claude Code: يعرض اسم الحساب واستخدامه داخل Claude Code ويحفظ الأرقام لـ `ccam usage`. ولمعرفة الرموز (tokens) والتكاليف التقديرية التي وراء هذا الاستخدام، يشغّل `ccam ccusage` أداة [ccusage](https://ccusage.com) على محادثات كل الحسابات ([أدناه](#tokens-and-costs-ccam-ccusage)).
@@ -97,13 +97,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-يقرأ ccam خياراته هو أولًا: يأخذ `-a` (`--account`) أسماء الحسابات أو أرقامها، مفصولة بفواصل أو بتكرار الخيار، ويطبع `--dry-run` الأمر بدلًا من تشغيله. وبدءًا من أول وسيط ليس من خياراته، يذهب كل شيء إلى ccusage دون تغيير؛ ويعرض `ccam ccusage -- --help` نص المساعدة الخاص بـ ccusage. ويشغّل ccam الأمر `ccusage` إذا كان مثبّتًا، وإلا `bun x ccusage`، فإن تعذّر ذلك `npx ccusage@latest`؛ وهذان الأخيران يجلبانه من npm. وعندما لا يتوفر أي منها، يطلب منك تثبيت Node.js أو Bun أو ccusage. على Linux وmacOS يحل ccusage محل ccam؛ أما على Windows فينتظره ccam ثم ينتهي برمز خروج ccusage. وتحت WSL، يتخطى ccam أي `ccusage` أو `bun` أو `npx` موجود على محرك أقراص Windows، لأنه سيعمل كبرنامج Windows دون مجلدات الحسابات.
+يقرأ ccam خياراته هو أولًا: يأخذ `-a` (`--account`) أسماء الحسابات أو أرقامها، مفصولة بفواصل أو بتكرار الخيار، ويطبع `--dry-run` الأمر بدلًا من تشغيله. وبدءًا من أول وسيط ليس من خياراته، يذهب كل شيء إلى ccusage كما كتبته، باستثناء `--config` مع `bun x` و`npx` (أدناه)؛ ويعرض `ccam ccusage -- --help` نص المساعدة الخاص بـ ccusage. ويشغّل ccam الأمر `ccusage` إذا كان مثبّتًا، وإلا `bun x ccusage`، فإن تعذّر ذلك `npx ccusage@latest`؛ وهذان الأخيران يجلبانه من npm. ويبدأ تشغيلهما في مجلد ccam نفسه (`~/.local/state/ccam/ccusage`)، لا في المجلد الذي أنت فيه، فلا يستطيع مشروعٌ موجود فيه أن يحدد ما يشغّلانه عبر `node_modules/.bin` الخاص به أو `bin` في `package.json` الخاص به أو سجل حزم (registry) في `.npmrc` الخاص به؛ ويعرض `ccam --dry-run ccusage` الأمر `cd` إلى ذلك المجلد. وعندما لا يتوفر أي منها، يطلب منك تثبيت Node.js أو Bun أو ccusage. على Linux وmacOS يحل ccusage محل ccam؛ أما على Windows فينتظره ccam ثم ينتهي برمز خروج ccusage. وتحت WSL، يتخطى ccam أي `ccusage` أو `bun` أو `npx` موجود على محرك أقراص Windows، لأنه سيعمل كبرنامج Windows دون مجلدات الحسابات.
 
 - يغطي التقرير الحسابات التي في مجلداتها محادثات (مجلد `projects`). والمحادثة التي تتشاركها حسابات عبر مجموعة تُحتسب مرة واحدة.
 - مع `-a`، إذا كان الحساب يتشارك سجل محادثاته عبر مجموعة، فإنه يجلب معه محادثات المجموعة كلها، ويذكر ccam لمن هي: `ccam: work shares its conversation history with personal, so the report counts their conversations too`.
 - يعرض `blocks` نوافذ الخمس ساعات، ولكل حساب نوافذه الخاصة، لذا حدّد له حسابًا واحدًا، كما في المثال أعلاه.
 - يشمل تقرير ccusage أيضًا أدوات البرمجة الأخرى التي يجدها، مثل Codex، ما لم تحدد واحدة منها: فالأمر `ccam ccusage claude daily` يعرض Claude Code وحده.
-- ما دام ccam يشغّله، لا يقرأ ccusage إعداداته (`ccusage.json`) إلا من `./.ccusage` ومن مجلدات الحسابات. ويحدد `--config` ملفًا آخر: `ccam ccusage daily --config ~/.config/claude/ccusage.json`.
+- ما دام ccam يشغّله، لا يقرأ ccusage إعداداته (`ccusage.json`) إلا من `./.ccusage` ومن مجلدات الحسابات. ويحدد `--config` ملفًا آخر: `ccam ccusage daily --config ~/.config/claude/ccusage.json`. ولأن `bun x` و`npx` يبدأ تشغيلهما في مجلد ccam نفسه، يمرّر لهما ccam الملف `./.ccusage/ccusage.json` مع `--config` عندما يكون ذلك الملف موجودًا ولا تحدد أنت ملفًا، ويمرّر `--config` النسبي بوصفه مسارًا كاملًا. وعندها يقرأ ccusage المسارات النسبية الأخرى، مثل `--pi-path`، من مجلد ccam، لذا اكتبها كاملة.
 - كان ccusage سيقرأ المجلد الذي يحتوي مساره على فاصلة كأنه مجلدان، لذا يرفضه ccam ويذكر اسم الحساب؛ فاستبعد ذلك الحساب باستخدام `-a`.
 - بما أن `ccusage` أمر من أوامر ccam، يُشغَّل الحساب المسمّى ccusage بالأمر `ccam run ccusage`؛ ويذكر `ccam doctor` ذلك.
 

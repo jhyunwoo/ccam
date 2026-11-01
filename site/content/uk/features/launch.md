@@ -1,10 +1,10 @@
 ---
 title: Запуск Claude Code
 description: Запускайте Claude Code з будь-якого облікового запису через ccam <name|number>, ccam run або панель ccam; аргументи йдуть у claude як є, --dry-run дає команду.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` запускає Claude Code від імені облікового запису `work`, і все, що йде після назви, передається в `claude` без змін. Використовуйте його всюди, де ви ввели б `claude`: у терміналі, у скрипті або з введенням через конвеєр.
@@ -38,7 +38,7 @@ ccam --fallback work -p "fix the tests"   # run again as another account at the 
 
 Коли в оболонці задано `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` або `ANTHROPIC_AUTH_TOKEN`, Claude Code може використати цей ключ або токен замість власного входу облікового запису, тож ccam попереджає вас про це в стандартному потоці помилок перед запуском (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). Він лише читає ці змінні; [обліковий запис із ключем API](/features/api) натомість їх очищає.
 
-Типово ccam замінює себе на Claude Code, тож більше нічого не працює. З `relay = true` (або [`auto_switch = true`](/features/next#auto-switch) на Linux і macOS) угорі `config.toml`, над першим `[[group]]`, `[[profile]]` або `[[folder]]`, ccam натомість запускає інтерактивні сеанси як дочірні процеси й працює далі поруч із ними. Завдяки цьому `/ccam:switch` або `auto_switch` на ліміті використання може сам продовжити розмову в іншому обліковому записі з параметрами сеансу, режимом дозволів і рівнем зусиль ([докладніше](/features/next#relay)).
+Типово ccam замінює себе на Claude Code, тож більше нічого не працює. З `relay = true` (або [`auto_switch = true`](/features/next#auto-switch) на Linux і macOS) угорі `config.toml`, над першим `[[group]]`, `[[profile]]` або `[[folder]]`, ccam натомість запускає інтерактивні сеанси як дочірні процеси й працює далі поруч із ними. Завдяки цьому `/ccam:switch` або `auto_switch` на ліміті використання може сам продовжити розмову в іншому обліковому записі з параметрами сеансу, режимом дозволів, рівнем зусиль і агентом; перш ніж `/ccam:switch` перенесе її в обліковий запис іншої організації, ccam запитує вас ([докладніше](/features/next#relay)).
 
 ## Параметри
 

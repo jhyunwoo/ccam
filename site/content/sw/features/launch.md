@@ -1,10 +1,10 @@
 ---
 title: Kuanzisha Claude Code
 description: Anzisha Claude Code kama akaunti yoyote kwa ccam <name|number>, ccam run au dashibodi; hoja hupita kwa claude bila kubadilishwa, na --dry-run huonyesha amri.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: "cf9ef66530cd"
+sourceHash: "11df08608a1e"
 ---
 
 `ccam work` huanzisha Claude Code kama akaunti ya `work`, na kila kitu kinachokuja baada ya jina huenda kwa `claude` bila kubadilishwa. Itumie popote ambapo ungecharaza `claude`: kwenye terminal, katika script, au ingizo likipitishwa kwa pipe.
@@ -38,7 +38,7 @@ Hoja ya kwanza inapoanza na `-` na si mojawapo ya chaguo za ccam yenyewe, ccam h
 
 Shell ikiwa na `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` au `ANTHROPIC_AUTH_TOKEN` iliyowekwa, Claude Code inaweza kutumia key au tokeni hiyo badala ya taarifa za kuingia za akaunti yenyewe, kwa hiyo ccam hukuonya kwenye standard error kabla ya kuanza (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). Husoma vigezo hivyo tu; [akaunti ya API key](/features/api) huvifuta badala yake.
 
-Kwa chaguo-msingi, ccam hujibadilisha na Claude Code, kwa hiyo hakuna kitu kingine kinachoendelea kuendeshwa. Kwa `relay = true` (au [`auto_switch = true`](/features/next#auto-switch) kwenye Linux na macOS) juu kabisa ya `config.toml`, kabla ya `[[group]]`, `[[profile]]` au `[[folder]]` ya kwanza, ccam badala yake huanzisha vipindi shirikishi kama mchakato mtoto na huendelea kuendeshwa kando yake. Hilo huiwezesha `/ccam:switch`, au `auto_switch` kwenye kikomo cha matumizi, kuendeleza mazungumzo kwenye akaunti nyingine yenyewe, pamoja na chaguo za kipindi, hali ya ruhusa na kiwango cha juhudi (effort) ([maelezo](/features/next#relay)).
+Kwa chaguo-msingi, ccam hujibadilisha na Claude Code, kwa hiyo hakuna kitu kingine kinachoendelea kuendeshwa. Kwa `relay = true` (au [`auto_switch = true`](/features/next#auto-switch) kwenye Linux na macOS) juu kabisa ya `config.toml`, kabla ya `[[group]]`, `[[profile]]` au `[[folder]]` ya kwanza, ccam badala yake huanzisha vipindi shirikishi kama mchakato mtoto na huendelea kuendeshwa kando yake. Hilo huiwezesha `/ccam:switch`, au `auto_switch` kwenye kikomo cha matumizi, kuendeleza mazungumzo kwenye akaunti nyingine yenyewe, pamoja na chaguo za kipindi, hali ya ruhusa, kiwango cha juhudi (effort) na agent; kabla `/ccam:switch` haijayahamisha kwenye akaunti ya shirika jingine, ccam hukuuliza ([maelezo](/features/next#relay)).
 
 ## Chaguo
 

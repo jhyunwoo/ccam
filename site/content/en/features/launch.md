@@ -1,7 +1,7 @@
 ---
 title: Launching Claude Code
 description: Start Claude Code as any account with ccam <name|number>, ccam run or the dashboard; arguments go to claude unchanged, and --dry-run shows the command.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: source
 ---
@@ -37,7 +37,7 @@ When the first argument starts with `-` and is not one of ccam's own flags, ccam
 
 When the shell has `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` or `ANTHROPIC_AUTH_TOKEN` set, Claude Code may use that key or token instead of the account's own login, so ccam warns you on standard error before it starts (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). It only reads the variables; an [API key account](/features/api) clears them instead.
 
-By default, ccam replaces itself with Claude Code, so nothing else keeps running. With `relay = true` (or [`auto_switch = true`](/features/next#auto-switch) on Linux and macOS) at the top of `config.toml`, above the first `[[group]]`, `[[profile]]` or `[[folder]]`, ccam instead starts interactive sessions as a child process and keeps running alongside them. That lets `/ccam:switch`, or `auto_switch` at a usage limit, continue the conversation on another account by itself, with the session's options, permission mode and effort level ([details](/features/next#relay)).
+By default, ccam replaces itself with Claude Code, so nothing else keeps running. With `relay = true` (or [`auto_switch = true`](/features/next#auto-switch) on Linux and macOS) at the top of `config.toml`, above the first `[[group]]`, `[[profile]]` or `[[folder]]`, ccam instead starts interactive sessions as a child process and keeps running alongside them. That lets `/ccam:switch`, or `auto_switch` at a usage limit, continue the conversation on another account by itself, with the session's options, permission mode, effort level and agent; before `/ccam:switch` moves it to an account of another organization, ccam asks you ([details](/features/next#relay)).
 
 ## Options
 

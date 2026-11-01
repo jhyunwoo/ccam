@@ -1,10 +1,10 @@
 ---
 title: Claude Code'u başlatma
 description: Claude Code'u herhangi bir hesapla ccam <name|number>, ccam run veya kontrol paneliyle başlatın; argümanlar claude'a aynen gider, --dry-run komutu gösterir.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 1
 translation: machine
-sourceHash: cf9ef66530cd
+sourceHash: 11df08608a1e
 ---
 
 `ccam work`, Claude Code'u `work` hesabıyla başlatır ve addan sonraki her şey `claude` komutuna değiştirilmeden iletilir. `claude` yazacağınız her yerde kullanın: terminalde, bir betikte veya girdiyi boruyla aktararak.
@@ -38,7 +38,7 @@ Argümansız `ccam`, standart girdi ve çıktı bir terminal olduğunda [kontrol
 
 Kabukta `CLAUDE_CODE_OAUTH_TOKEN`, `ANTHROPIC_API_KEY` veya `ANTHROPIC_AUTH_TOKEN` ayarlıysa Claude Code, hesabın kendi girişi yerine o anahtarı ya da token'ı kullanabilir; bu yüzden ccam başlamadan önce standart hatada sizi uyarır (`ccam: $ANTHROPIC_API_KEY is set, so Claude Code may use that key instead of work's login…`). Değişkenleri yalnızca okur; bir [API anahtarlı hesap](/features/api) ise onları temizler.
 
-Varsayılan olarak ccam kendini Claude Code ile değiştirir, böylece başka hiçbir şey çalışmaya devam etmez. `config.toml` dosyasının en üstünde, ilk `[[group]]`, `[[profile]]` veya `[[folder]]` satırının üstünde `relay = true` (ya da Linux ve macOS'ta [`auto_switch = true`](/features/next#auto-switch)) olduğunda ccam bunun yerine etkileşimli oturumları bir alt süreç olarak başlatır ve yanlarında çalışmaya devam eder. Bu sayede `/ccam:switch` ya da kullanım limitinde `auto_switch`, konuşmaya oturumun seçenekleri, izin modu ve efor düzeyiyle başka bir hesapta kendiliğinden devam edebilir ([ayrıntılar](/features/next#relay)).
+Varsayılan olarak ccam kendini Claude Code ile değiştirir, böylece başka hiçbir şey çalışmaya devam etmez. `config.toml` dosyasının en üstünde, ilk `[[group]]`, `[[profile]]` veya `[[folder]]` satırının üstünde `relay = true` (ya da Linux ve macOS'ta [`auto_switch = true`](/features/next#auto-switch)) olduğunda ccam bunun yerine etkileşimli oturumları bir alt süreç olarak başlatır ve yanlarında çalışmaya devam eder. Bu sayede `/ccam:switch` ya da kullanım limitinde `auto_switch`, konuşmaya oturumun seçenekleri, izin modu, efor düzeyi ve ajanıyla başka bir hesapta kendiliğinden devam edebilir; `/ccam:switch` konuşmayı başka bir kuruluşun hesabına taşımadan önce ccam size sorar ([ayrıntılar](/features/next#relay)).
 
 ## Seçenekler
 

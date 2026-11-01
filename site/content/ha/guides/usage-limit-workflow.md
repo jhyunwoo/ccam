@@ -1,10 +1,10 @@
 ---
 title: Claude Code ya kai iyakar amfani? Ga abin da za ka yi
 description: Jira iyakar ta sake farawa, ko ka ci gaba da tattaunawar a wani asusun Claude Code nan take. Yadda iyakar awa 5 da ta mako ke aiki, mataki-mataki.
-updated: 2026-10-26
+updated: 2026-11-01
 order: 3
 translation: machine
-sourceHash: 96b6429c0102
+sourceHash: 760a36724feb
 ---
 
 Idan wani asusu ya kai iyakar amfaninsa (wanda ake yawan kira rate limit), kana da zaɓi biyu: jira har iyakar ta sake farawa, ko ka ci gaba da wannan tattaunawar yanzu a wani asusun da ka mallaka. Da ccam, zaɓi na biyu yana ɗaukar umarni ɗaya, `ccam next --auto --continue`.
@@ -65,7 +65,7 @@ Da [plugin ɗin ccam](/docs/install#claude-code-plugin) a Claude Code, zaman da 
 Sai idan ka kunna shi.
 
 - Ta tsohuwa, ccam ba ya aiki yayin da kake aiki: yana fara Claude Code kuma ya maye gurbin kansa da shi, don haka kai ne kake yanke shawarar lokacin sauyawa. `ccam next --auto` yana zaɓar asusun da amfaninsa na awa 5 ya fi ƙasa, yana tsallake asusan da suka kai 100% ko waɗanda ba a shiga ba, kuma yana zama a cikin ƙungiyar (organization) Team ko Enterprise ɗaya, ko a cikin tsare-tsaren kai.
-- Da `relay = true` a `config.toml`, ccam yana ci gaba da aiki tare da zaman maimakon haka, don haka `/ccam:switch` yana ci gaba da tattaunawar da kansa, yana riƙe zaɓuɓɓukan zaman, yanayin izini (permission mode) da matakin ƙoƙari (effort level).
+- Da `relay = true` a `config.toml`, ccam yana ci gaba da aiki tare da zaman maimakon haka, don haka `/ccam:switch` yana ci gaba da tattaunawar da kansa, yana riƙe zaɓuɓɓukan zaman, yanayin izini (permission mode), matakin ƙoƙari (effort level) da agent; kafin ya motsa tattaunawar zuwa asusun wata ƙungiya dabam, ccam yana tambayarka.
 - Da `auto_switch = true` (Linux da macOS; na gwaji), ccam yana kuma yin sauyawar da kansa: idan Claude Code ya dakatar da zaman a iyakarsa kuma wani asusu iri ɗaya yana da sarari, ccam yana kawo ƙarshen zaman kuma yana ci gaba da tattaunawar a can ([sharuɗɗa da farashi](/features/next#auto-switch)).
 
 Wasu kayan aikin kuma suna musanya bayanan shiga na zaman da ke gudana maimakon haka; [ccam da sauran masu sauya asusu](/compare/account-switchers) yana bayyana bambancin.

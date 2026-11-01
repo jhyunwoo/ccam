@@ -1,10 +1,10 @@
 ---
 title: Claude Code 達到用量限制時該怎麼辦
 description: 等待額度重置，或立即在另一個 Claude Code 帳號接續同一個對話。逐步說明 5 小時限制和每週限制如何運作。
-updated: 2026-10-26
+updated: 2026-11-01
 order: 3
 translation: machine
-sourceHash: "96b6429c0102"
+sourceHash: "760a36724feb"
 ---
 
 當一個帳號達到用量限制（常被稱為 rate limit）時，你有兩個選擇：等到限制重置，或現在就在你擁有的另一個帳號接續同一個對話。使用 ccam 時，第二種做法只需要一個指令：`ccam next --auto --continue`。
@@ -64,7 +64,7 @@ Claude Code 會以 `work` 帳號啟動，並開啟目前資料夾中最近的對
 只有在你開啟這項功能時才會。
 
 - 預設情況下，你工作時 ccam 並沒有在執行：它啟動 Claude Code 後就用 Claude Code 取代自己，所以何時切換由你決定。`ccam next --auto` 會選出 5 小時用量最低的帳號，略過用量已達 100% 或未登入的帳號，並且只在同一個 Team 或 Enterprise 組織內、或在個人方案之間選擇。
-- 在 `config.toml` 中設定 `relay = true` 時，ccam 會改為在工作階段旁持續執行，讓 `/ccam:switch` 能自行接續對話，並沿用工作階段的選項、權限模式和推理強度。
+- 在 `config.toml` 中設定 `relay = true` 時，ccam 會改為在工作階段旁持續執行，讓 `/ccam:switch` 能自行接續對話，並沿用工作階段的選項、權限模式、推理強度和代理；在把對話移到另一個組織的帳號之前，ccam 會先詢問你。
 - 設定 `auto_switch = true` 時（Linux 和 macOS；實驗性功能），ccam 也會自行完成切換：當 Claude Code 因上限而停止工作階段，而另一個同類帳號還有餘裕時，ccam 會結束這個工作階段，並在那個帳號接續對話（[條件和代價](/features/next#auto-switch)）。
 
 另一些工具則是替換執行中工作階段的登入資訊；[ccam 與其他帳號切換工具](/compare/account-switchers)說明了兩者的差異。

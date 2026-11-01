@@ -1,10 +1,10 @@
 ---
 title: 使用量の上限
 description: ccam usageはすべてのアカウントの5時間と週間の上限を一度に表示し、ccam statuslineはClaude Codeにアカウント名と使用量を表示します。
-updated: 2026-10-26
+updated: 2026-11-01
 order: 7
 translation: machine
-sourceHash: 997107786d4c
+sourceHash: 54b296f7da35
 ---
 
 `ccam usage`は、すべてのアカウントについて、各上限をどれだけ使ったかを表示します。対象は5時間の上限、週間の上限、モデルごとの週間上限（Fableなど）です。上限ごとに、バーとリセットまでの時間が表示されます。長い作業を始める前や、Claude Codeが上限に近いことを知らせたときに使い、どのアカウントに余裕が残っているかを確認します。`ccam statusline`はClaude Code用のステータスラインのコマンドです。Claude Codeの中にアカウント名と使用量を表示し、その数値を`ccam usage`のために保存します。使用量のもとになるトークンと推定コストについては、`ccam ccusage`がすべてのアカウントの会話に対して[ccusage](https://ccusage.com)を実行します（[後述](#tokens-and-costs-ccam-ccusage)）。
@@ -97,13 +97,13 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 ccam ccusage -a work,side weekly       # these accounts, and any that share their history
 ```
 
-ccamはまず自身のオプションを読みます。`-a`（`--account`）はアカウント名または番号を受け取り、カンマ区切りでも、オプションを繰り返しても指定できます。`--dry-run`はコマンドを実行せずに表示します。ccamのオプションでない最初の引数から後は、すべてそのままccusageに渡ります。`ccam ccusage -- --help`ならccusage自身のヘルプを表示します。ccamは、`ccusage`がインストールされていればそれを、なければ`bun x ccusage`を、それもなければ`npx ccusage@latest`を実行します。後の2つはccusageをnpmから取得します。どれも使えない場合は、Node.js、Bun、ccusageのいずれかをインストールするよう伝えます。LinuxとmacOSではccamが自身をccusageに置き換え、Windowsではccamがccusageの終了を待ってその終了コードで終了します。WSLでは、Windowsのドライブ上にある`ccusage`、`bun`、`npx`は使わずに飛ばします。それらはアカウントのフォルダーのないWindowsのプログラムとして動いてしまうためです。
+ccamはまず自身のオプションを読みます。`-a`（`--account`）はアカウント名または番号を受け取り、カンマ区切りでも、オプションを繰り返しても指定できます。`--dry-run`はコマンドを実行せずに表示します。ccamのオプションでない最初の引数から後は、`bun x`と`npx`での`--config`を除き（後述）、すべて入力したとおりにccusageに渡ります。`ccam ccusage -- --help`ならccusage自身のヘルプを表示します。ccamは、`ccusage`がインストールされていればそれを、なければ`bun x ccusage`を、それもなければ`npx ccusage@latest`を実行します。後の2つはccusageをnpmから取得します。この2つは今いるフォルダーではなくccam自身のフォルダー（`~/.local/state/ccam/ccusage`）で起動します。そのため、今いるフォルダーのプロジェクトが、その`node_modules/.bin`、`package.json`の`bin`、`.npmrc`のレジストリによって、実行されるものを選ぶことはできません。`ccam --dry-run ccusage`では、そのフォルダーへの`cd`が表示されます。どれも使えない場合は、Node.js、Bun、ccusageのいずれかをインストールするよう伝えます。LinuxとmacOSではccamが自身をccusageに置き換え、Windowsではccamがccusageの終了を待ってその終了コードで終了します。WSLでは、Windowsのドライブ上にある`ccusage`、`bun`、`npx`は使わずに飛ばします。それらはアカウントのフォルダーのないWindowsのプログラムとして動いてしまうためです。
 
 - レポートの対象は、フォルダーに会話がある（`projects`フォルダーがある）アカウントです。複数のアカウントがグループを通じて共有している会話は、1回だけ数えます。
 - `-a`を使うと、グループを通じて履歴を共有しているアカウントからはグループ全体の会話が入り、ccamはそれが誰の会話かを伝えます: `ccam: work shares its conversation history with personal, so the report counts their conversations too`
 - `blocks`は5時間の枠を表示します。この枠はアカウントごとに別々なので、上の例のようにアカウントを1つだけ指定します。
 - ccusageは、ツールを1つ指定しない限り、見つけたほかのコーディングツール（Codexなど）も報告します。`ccam ccusage claude daily`ならClaude Codeだけです。
-- ccamから実行したとき、ccusageは設定（`ccusage.json`）を`./.ccusage`とアカウントのフォルダーからだけ読みます。別のファイルは`--config`で指定します: `ccam ccusage daily --config ~/.config/claude/ccusage.json`
+- ccamから実行したとき、ccusageは設定（`ccusage.json`）を`./.ccusage`とアカウントのフォルダーからだけ読みます。別のファイルは`--config`で指定します: `ccam ccusage daily --config ~/.config/claude/ccusage.json`。`bun x`と`npx`はccam自身のフォルダーで起動するため、`./.ccusage/ccusage.json`があり、ファイルを指定していないときは、ccamがそれを`--config`で渡し、相対パスの`--config`はフルパスにして渡します。このときccusageは`--pi-path`などほかの相対パスをccamのフォルダーから読むので、それらはフルパスで指定してください。
 - ccusageはパスにカンマを含むフォルダーを2つのフォルダーとして読んでしまうため、ccamはそのフォルダーを拒否し、アカウント名を示します。そのアカウントは`-a`で外してください。
 - `ccusage`はccamのコマンドなので、ccusageという名前のアカウントは`ccam run ccusage`で起動します。`ccam doctor`もそのことを伝えます。
 
