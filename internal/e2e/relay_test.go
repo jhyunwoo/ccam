@@ -62,7 +62,9 @@ func (h *harness) notes(account string) []string {
 	entries, _ := os.ReadDir(filepath.Join(h.home, "state", "handoff", account))
 	var names []string
 	for _, e := range entries {
-		names = append(names, e.Name())
+		if !strings.HasSuffix(e.Name(), ".lock") { // the stop-failure hook's lock for subagents
+			names = append(names, e.Name())
+		}
 	}
 	return names
 }

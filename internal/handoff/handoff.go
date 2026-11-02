@@ -50,6 +50,9 @@ type Ticket struct {
 	Chosen string `json:"chosen,omitempty"`
 	// Why says why Chosen was chosen (its usage), for the relay's message.
 	Why string `json:"why,omitempty"`
+	// Subagent is the agent_id of the subagent whose loop stopped at the
+	// limit; "" for the main thread's.
+	Subagent string `json:"subagent,omitempty"`
 
 	file string // where the note was read from
 }
@@ -94,7 +97,8 @@ func Save(state string, t Ticket) error {
 	now := time.Now()
 	entries, _ := os.ReadDir(Dir(state, t.Account))
 	for _, e := range entries {
-		if info, err := e.Info(); err == nil && strings.HasSuffix(e.Name(), ".json") && now.Sub(info.ModTime()) > MaxAge {
+		// The hook's locks (.lock) beside the notes go with them.
+		if info, err := e.Info(); err == nil && (strings.HasSuffix(e.Name(), ".json") || strings.HasSuffix(e.Name(), ".lock")) && now.Sub(info.ModTime()) > MaxAge {
 			os.Remove(filepath.Join(Dir(state, t.Account), e.Name()))
 		}
 	}

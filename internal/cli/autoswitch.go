@@ -347,8 +347,13 @@ func autoSwitch(e *env, in hookInput, t handoff.Ticket, lim transcript.Limit, st
 		return false, tg.note(hit, t.Account, f.plan, lim.ResetsAt, now)
 	}
 	// Not once the person has moved on, nor once the process is not the one
-	// looked at (it ended, or its pid is another's now).
-	if transcript.PromptedAfter(in.Transcript, lim.At) {
+	// looked at (it ended, or its pid is another's now). A subagent's limit
+	// is not in the session's conversation, only the prompts are.
+	prompted := transcript.PromptedAfter
+	if in.AgentID != "" {
+		prompted = transcript.PromptedSince
+	}
+	if prompted(in.Transcript, lim.At) {
 		return false, ""
 	}
 	if c, ok := launcher.RelayChild(claude, relay); !ok || c != child {
@@ -379,6 +384,16 @@ func autoSwitch(e *env, in hookInput, t handoff.Ticket, lim transcript.Limit, st
 		return false, ""
 	}
 	return true, ""
+}
+
+// subagentHolds reports whether a subagent's limit at window holds up the
+// main conversation, whose last reply came from model: a window of the
+// whole account does, the week of a model (seven_day_opus,
+// seven_day_sonnet) only when the conversation runs on that model, and
+// otherwise goes on as it is.
+func subagentHolds(window, model string) bool {
+	family, ok := strings.CutPrefix(window, "seven_day_")
+	return !ok || strings.Contains(model, family)
 }
 
 // moving reports whether the note t says that this session's Claude Code

@@ -193,6 +193,18 @@ func TestNextHopFollowsItsNote(t *testing.T) {
 		!strings.Contains(out, "--resume "+resolved+" --fork-session "+prompt+" --add-dir /tmp --permission-mode plan") {
 		t.Fatalf("%d %s\n%s", code, errOut, out)
 	}
+	// After a subagent's limit, the prompt says what stopped with it.
+	note.Subagent = "a1"
+	handoff.Save(c.p.State, note)
+	prompt = launcher.ShellQuote(handoff.SubagentPrompt)
+	if runtime.GOOS == "windows" {
+		prompt = `"` + handoff.SubagentPrompt + `"`
+	}
+	if out, errOut, code = c.run("", "--dry-run", "next", "--continue", "--note", path); code != 0 || !strings.Contains(out, "--fork-session "+prompt) {
+		t.Fatalf("a subagent's limit: %d %s\n%s", code, errOut, out)
+	}
+	note.Subagent = ""
+	handoff.Save(c.p.State, note)
 	// By hand, Chosen is not followed: the next account, or by usage
 	// without the one the limit stopped. Nor is a prompt sent.
 	if out, errOut, _ := c.run("", "--dry-run", "next", "--continue"); !strings.Contains(errOut, "→ personal → work") || strings.Contains(out, "moved this conversation") {

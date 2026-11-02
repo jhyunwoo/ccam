@@ -10,6 +10,11 @@ import (
 // /ccam:switch, nor for `ccam next --continue` by hand).
 const ContinuePrompt = "Your usage limit was reached and ccam moved this conversation to another account. Continue the task you were working on when the limit was reached; do not repeat work that is already complete."
 
+// SubagentPrompt is ContinuePrompt after a subagent's limit: the session
+// ended while subagents, workflows or background commands ran, and the
+// results they were to bring never came.
+const SubagentPrompt = "A subagent hit your usage limit and ccam moved this conversation to another account. The subagents, workflows and background commands that were running then have stopped, and their results may be missing: run again what the task still needs, then continue it; do not repeat work that is already complete."
+
 // WindowLabel names a window of Claude Code's limit row for messages:
 // 5-hour, weekly, Opus, Sonnet or Fable; "" for another.
 func WindowLabel(window string) string {

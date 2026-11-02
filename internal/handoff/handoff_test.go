@@ -111,12 +111,19 @@ func TestNotesPerSession(t *testing.T) {
 			t.Errorf("loaded %s", p)
 		}
 	}
-	// Notes past MaxAge go when the account saves another.
+	// Notes past MaxAge go when the account saves another, and so do the
+	// stop-failure hook's locks beside them.
 	old := now.Add(-13 * time.Hour)
+	lock := filepath.Join(Dir(state, "a"), "s2.lock")
+	os.WriteFile(lock, nil, 0o600)
 	os.Chtimes(Path(state, "a", "s2"), old, old)
+	os.Chtimes(lock, old, old)
 	Save(state, Ticket{Account: "a", SessionID: "s3", At: now})
 	if _, err := os.Stat(Path(state, "a", "s2")); err == nil {
 		t.Fatal("an old note stays")
+	}
+	if _, err := os.Stat(lock); err == nil {
+		t.Fatal("an old lock stays")
 	}
 }
 

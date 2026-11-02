@@ -796,3 +796,110 @@ func TestHookSkipsWhenClaudeGone(t *testing.T) {
 		t.Fatalf("%q %v %+v", out, calls, n)
 	}
 }
+
+// A subagent's limit holds up the main conversation when it is a window of
+// the whole account, or the week of the model that conversation runs on.
+func TestSubagentHolds(t *testing.T) {
+	for _, c := range []struct {
+		window, model string
+		holds         bool
+	}{
+		{"five_hour", "claude-sonnet-5-5", true},
+		{"seven_day", "", true},
+		{"seven_day_opus", "claude-opus-5-5", true},
+		{"seven_day_opus", "claude-sonnet-5-5", false},
+		{"seven_day_sonnet", "claude-sonnet-5-5", true},
+		{"seven_day_sonnet", "claude-opus-5-5", false},
+		{"seven_day_opus", "", false}, // no reply to tell by
+	} {
+		if got := subagentHolds(c.window, c.model); got != c.holds {
+			t.Errorf("%s, %q: %v", c.window, c.model, got)
+		}
+	}
+}
+
+// A subagent that stops at a usage limit under a relay with auto_switch on:
+// the hook moves the session as for the main thread's limit, and the note
+// says a subagent stopped, for the relay's first prompt.
+func TestAutoSwitchHookSubagent(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("auto_switch is ignored on Windows")
+	}
+	hookEnv(t)
+	c := newTestCLI(t, map[string]int{"personal": 90, "work": 40, "side": 10})
+	var calls []terminated
+	old := launcher.Terminate
+	launcher.Terminate = func(claude, relay, child int, start string) error {
+		calls = append(calls, terminated{claude, relay, child, start})
+		return nil
+	}
+	t.Cleanup(func() { launcher.Terminate = old })
+	pid, start := claudeChild(t)
+	t.Setenv("CCAM_PROFILE", "personal")
+	t.Setenv("CCAM_RELAY", "2:"+strconv.Itoa(os.Getpid()))
+	t.Setenv("CLAUDE_PID", strconv.Itoa(pid))
+	cwd, _ := os.Getwd()
+	cwd, _ = filepath.EvalSymlinks(cwd) // as Claude Code records the folders trusted
+	conv := filepath.Join(transcript.ProjectDir(c.p.ProfileDir("personal"), cwd), "s1.jsonl")
+	reset := time.Now().Add(3 * time.Hour).Truncate(time.Second)
+	fixture := "You've hit your session limit · resets 3:30am (Asia/Seoul)"
+	// fresh sets the scene as TestAutoSwitchHook's does, with the limit in
+	// subagent a1's conversation, and returns the message Claude Code gives.
+	fresh := func(msg string, edits ...string) string {
+		t.Helper()
+		calls = nil
+		for _, d := range []string{"handoff", "picks", "usage"} {
+			os.RemoveAll(filepath.Join(c.p.State, d))
+		}
+		cfg := c.cfg()
+		cfg.AutoSwitch, cfg.Profiles[0].Login = true, nil
+		if err := cfg.Save(c.p.ConfigFile()); err != nil {
+			t.Fatal(err)
+		}
+		logInTrusting(t, c.p.ProfileDir("personal"), "u1", "p1", "claude_max", cwd)
+		logInTrusting(t, c.p.ProfileDir("work"), "u2", "w1", "claude_max", cwd)
+		logInTrusting(t, c.p.ProfileDir("side"), "u3", "s1", "claude_pro", cwd)
+		subagentConversation(t, conv, "a1", time.Now().Add(-time.Second), reset, append([]string{fixture, msg}, edits...)...)
+		return msg
+	}
+	hook := func(msg string) string {
+		t.Helper()
+		out, errOut, code := c.run(`{"agent_id":"a1","agent_type":"general-purpose",`+hookJSON(t, map[string]string{"error": "rate_limit",
+			"last_assistant_message": msg, "session_id": "s1", "transcript_path": conv, "cwd": cwd})[1:], "hook", "stop-failure")
+		if code != 0 {
+			t.Fatalf("%d %s", code, errOut)
+		}
+		return out
+	}
+	note := func() *handoff.Ticket {
+		t.Helper()
+		n, ok := handoff.LoadFile(c.p.State, handoff.Path(c.p.State, "personal", "s1"))
+		if !ok {
+			t.Fatal("no note")
+		}
+		return n
+	}
+
+	if out := hook(fresh(fixture)); out != "" || !slices.Equal(calls, []terminated{{pid, os.Getpid(), pid, start}}) {
+		t.Fatalf("%q %v", out, calls)
+	}
+	if n := note(); n.Chosen != "side" || !n.Stopped || n.Subagent != "a1" || n.Transcript != conv || n.Window != "five_hour" {
+		t.Fatalf("%+v", n)
+	}
+
+	// The Opus week holds up a subagent on Opus, not the conversation on
+	// Sonnet: it is left to go on.
+	opus := fresh("You've hit your Opus limit · resets 3:30am (Asia/Seoul)", `"rateLimitType":"five_hour"`, `"rateLimitType":"seven_day_opus"`)
+	data, _ := os.ReadFile(conv)
+	os.WriteFile(conv, []byte(strings.ReplaceAll(string(data), "claude-opus-5-5", "claude-sonnet-5-5")), 0o600)
+	if out := hook(opus); !strings.Contains(out, "personal hit its Opus limit") || len(calls) != 0 || note().Stopped {
+		t.Fatalf("Opus week, Sonnet conversation: %q %v", out, calls)
+	}
+
+	// The person sent a prompt after the subagent stopped: the session stays.
+	msg := fresh(fixture)
+	appendRows(t, conv, `{"type":"user","timestamp":`+strconv.Quote(time.Now().UTC().Format(time.RFC3339Nano))+`,"message":{"role":"user","content":"(go on)"},"origin":{"kind":"human"}}`)
+	if out := hook(msg); !strings.Contains(out, "`ccam next --continue`") || len(calls) != 0 || note().Stopped {
+		t.Fatalf("prompted after the limit: %q %v", out, calls)
+	}
+}

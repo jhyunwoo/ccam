@@ -1,10 +1,10 @@
 ---
 title: การสลับไปยังบัญชีถัดไป
 description: "ccam next เปิด Claude Code ด้วยบัญชีอื่น --auto เลือกบัญชีที่เหลือโควตามากที่สุด --continue พาการสนทนาไปต่อ และ --fallback รันงาน -p ซ้ำ"
-updated: 2026-11-01
+updated: 2026-11-03
 order: 8
 translation: machine
-sourceHash: "79300c521748"
+sourceHash: "89e8dea9c55d"
 ---
 
 `ccam next` เปิด Claude Code ด้วยบัญชีอื่นโดยที่คุณไม่ต้องระบุชื่อ ใช้เมื่อบัญชีถึงขีดจำกัดการใช้งาน การสลับทำได้สี่วิธี:
@@ -151,7 +151,7 @@ Claude Code จะจบการกล่าวถึงไฟล์ที่ `
 
   hook รู้จักทุกข้อความที่ Claude Code นับว่าเป็นขีดจำกัดการใช้งาน: ขีดจำกัด 5 ชั่วโมง รายสัปดาห์ แบบทั่วไป และของโมเดล (`You've hit your session limit`, `You've hit your limit`, `You've reached your …` สำหรับโควตาของโมเดล) เครดิตการใช้งานและขีดจำกัดการใช้จ่าย และองค์กรที่หยุดบัญชีไว้
 
-  เมื่อ Claude Code เขียนคำขอที่ถูกปฏิเสธลงในการสนทนาแล้ว hook จะบันทึกช่วงที่เต็มไว้จนกว่าจะรีเซ็ตด้วย ([บันทึกขีดจำกัด](/features/usage#the-limit-record)) ยกเว้นการหยุดที่องค์กรตั้งไว้ ซึ่งผู้ดูแลยกเลิกได้ทุกเมื่อ การจำกัดความเร็วสั้น ๆ ของเซิร์ฟเวอร์หรือ rate limit ของ API key ไม่ใช่ขีดจำกัดการใช้งานและจะไม่ถูกแตะต้อง เช่นเดียวกับการหยุดของ subagent และเซสชันที่ไม่มีคนดูแล (การรัน `-p` และเซสชันเบื้องหลัง)
+  เมื่อ Claude Code เขียนคำขอที่ถูกปฏิเสธลงในการสนทนาแล้ว hook จะบันทึกช่วงที่เต็มไว้จนกว่าจะรีเซ็ตด้วย ([บันทึกขีดจำกัด](/features/usage#the-limit-record)) ยกเว้นการหยุดที่องค์กรตั้งไว้ ซึ่งผู้ดูแลยกเลิกได้ทุกเมื่อ การจำกัดความเร็วสั้น ๆ ของเซิร์ฟเวอร์หรือ rate limit ของ API key ไม่ใช่ขีดจำกัดการใช้งานและจะไม่ถูกแตะต้อง เช่นเดียวกับเซสชันที่ไม่มีคนดูแล (การรัน `-p` และเซสชันเบื้องหลัง) ส่วน subagent หรือเอเจนต์ของ workflow ที่หยุดเพราะถึงขีดจำกัดการใช้งานจะนับเป็นการหยุดของเซสชันนั้น แม้ในขณะที่การสนทนาหลักเพียงรอเอเจนต์นั้นอยู่ก็ตาม: Claude Code จะเขียนคำขอที่ถูกปฏิเสธนั้นลงในไฟล์ของเอเจนต์นั้นเองในโฟลเดอร์ `subagents` ของเซสชัน และ hook จะอ่านจากที่นั่น เมื่อหลายเอเจนต์หยุดพร้อมกัน เซสชันจะได้รับบันทึกเดียวและการแจ้งเตือนเดียว
 
   Claude Code 2.1.234 ขึ้นไปยังรออยู่ในเซสชันและทำต่อเองหลังช่วง 5 ชั่วโมงรีเซ็ตด้วย การแจ้งเตือนจึงให้คุณเลือกสลับบัญชีแทนได้ และเมื่อเปิด [`auto_switch`](#auto-switch) ไว้ (Linux และ macOS) ccam จะสลับให้คุณเมื่อมีอีกบัญชีหนึ่งที่ยังมีโควตาเหลือ เมื่อไม่มีบัญชีอื่นใดรับช่วงต่อได้ เพราะไม่มีบัญชีอื่นที่อยู่ในองค์กร Team หรือ Enterprise เดียวกัน หรือไม่มีบัญชีใดเป็นแพ็กเกจส่วนตัวอีกแพ็กเกจหนึ่ง (เมื่อเปิด `cross_org` บัญชี Claude อื่นใดก็รับช่วงต่อได้) การแจ้งเตือนจะลงท้ายด้วย `You have no other personal plans, so ccam cannot move this conversation.` หรือ `You have no other accounts in Acme, so ccam cannot move this conversation.` แทน
 - `/ccam:switch [account]` จะจดการสนทนาไว้และจบเทิร์นก่อนที่จะมีคำขอใด ๆ: พิมพ์ `/exit` จากนั้นรัน `ccam next --continue` เพื่อสนทนาต่อในบัญชีที่คุณระบุ (หรือในบัญชีถัดไป) ในเซสชันที่ยังไม่มีการสนทนา คำสั่งนี้จะแจ้งว่าไม่มีอะไรให้สนทนาต่อ มีเพียงสิ่งที่คุณพิมพ์เองเท่านั้นที่รันคำสั่งนี้ได้: ตั้งแต่ปลั๊กอิน 0.3.2 Claude รัน `/ccam:switch` ไม่ได้ และงานที่ Claude ตั้งเวลาไว้ (CronCreate, ScheduleWakeup หรือ `.claude/scheduled_tasks.json`) จะส่งคำสั่งนี้ให้ Claude เป็นข้อความธรรมดา
@@ -187,7 +187,7 @@ ccam จะย้ายเซสชันก็ต่อเมื่อเงื
 
 1. ccam เป็นผู้เริ่มเซสชันในเทอร์มินัลและทำงานอยู่ควบคู่กับเซสชัน `auto_switch` จะเปิด[การส่งต่อ](#relay)ด้วย ข้อนี้จึงเป็นจริงสำหรับเซสชันแบบโต้ตอบที่คุณเริ่มหลังตั้งค่านี้ เซสชันที่เริ่มก่อนหน้านั้น หรือเริ่มภายใต้ ccam รุ่นเก่า จะได้รับการแจ้งเตือนที่ลงท้ายด้วย ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` เซสชันที่ไม่มีคนดูแล (การรัน `-p` และเซสชันเบื้องหลัง) `claude remote-control` และ Claude Code ที่เริ่มโดยไม่ผ่าน ccam จะไม่ถูกย้ายเด็ดขาด
 2. บัญชีเปิดใช้[ปลั๊กอิน ccam](/docs/install#claude-code-plugin) และใช้ Claude Code 2.1.214 ขึ้นไป ซึ่งส่ง ID ของโปรเซสตัวเองให้ hook (`CLAUDE_PID`)
-3. Claude Code เขียนคำขอที่ถูกปฏิเสธลงในการสนทนา พร้อมเวลาที่จะรีเซ็ต สำหรับขีดจำกัด 5 ชั่วโมง รายสัปดาห์ Opus หรือ Sonnet ของบัญชีนั้น ขีดจำกัดการใช้จ่าย เครดิตการใช้งานที่หมด การหยุดที่องค์กรตั้งไว้ โควตาของ Fable (`You've reached your Fable limit.`) การจำกัดความเร็วของเซิร์ฟเวอร์ rate limit ของ API key และการหยุดของ subagent จะไม่ทำให้เซสชันถูกย้ายเด็ดขาด
+3. Claude Code เขียนคำขอที่ถูกปฏิเสธลงในการสนทนา พร้อมเวลาที่จะรีเซ็ต สำหรับขีดจำกัด 5 ชั่วโมง รายสัปดาห์ Opus หรือ Sonnet ของบัญชีนั้น ขีดจำกัดการใช้จ่าย เครดิตการใช้งานที่หมด การหยุดที่องค์กรตั้งไว้ โควตาของ Fable (`You've reached your Fable limit.`) การจำกัดความเร็วของเซิร์ฟเวอร์และ rate limit ของ API key จะไม่ทำให้เซสชันถูกย้ายเด็ดขาด ขีดจำกัดของ subagent หรือเอเจนต์ของ workflow นับด้วย แม้ในขณะที่การสนทนาหลักเพียงรอเอเจนต์นั้นอยู่ก็ตาม หากเป็นขีดจำกัด Opus หรือ Sonnet รายสัปดาห์ เซสชันจะถูกย้ายก็ต่อเมื่อตัวการสนทนาเองทำงานบนโมเดลนั้น
 4. ccam รู้แพ็กเกจของบัญชี จาก `.claude.json` ของบัญชีหรือจากสิ่งที่ `ccam login` บันทึกไว้ หากไม่รู้ การแจ้งเตือนจะลงท้ายด้วย `ccam does not know personal's plan, so auto_switch leaves this session.`
 5. เซสชันไม่ได้เชื่อมต่อกับ Remote Control เพราะเมื่อเป็นอีกบัญชีหนึ่ง เซสชันจะไม่เชื่อมต่อกลับไปยังแอปที่คุณใช้ควบคุม เซสชันจึงอยู่ที่เดิม และการแจ้งเตือนจะบอกไว้
 6. ขีดจำกัดจะรีเซ็ตในอีกมากกว่า 15 นาทีนับจากตอนนี้ หากต้องรอน้อยกว่านั้น ccam จะปล่อยเซสชันไว้ให้ Claude Code: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`
@@ -203,10 +203,16 @@ ccam จะย้ายเซสชันก็ต่อเมื่อเงื
 
    เมื่อสามเงื่อนไขสุดท้ายนี้ตัดบัญชีที่ยังมีโควตาเหลือออกทั้งหมด การแจ้งเตือนจะระบุชื่อบัญชีเหล่านั้น: `side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.`, `side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.` หรือ `This conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so auto_switch did not move it there.` ช่วงที่มี[บันทึกขีดจำกัด](/features/usage#the-limit-record)จะนับว่าเต็ม และบัญชีที่เซสชันอื่นเพิ่งย้ายไปภายใน 2 นาทีที่ผ่านมาจะอยู่หลังบัญชีอื่น ๆ การเลือกต้องเสร็จภายในประมาณ 6 วินาที หากการสอบถามการใช้งานใช้เวลานานกว่านั้น เซสชันจะอยู่ที่เดิม เมื่อตั้ง `usage_source = "claude"` `auto_switch` จะตัดสินใจจากตัวเลขที่บันทึกไว้เท่านั้น และ ccam บอกไม่ได้จากการสอบถามของ Claude Code หรือจากแถบสถานะว่าเครดิตการใช้งานเปิดอยู่หรือไม่ จึงถือว่าปิดอยู่
 
-จากนั้น hook จะจบ Claude Code และ ccam ซึ่งทำงานอยู่ควบคู่กันจะแสดงการแจ้งเตือนบนเดสก์ท็อปในเทอร์มินัลที่รองรับ เช่น `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` ccam จะพิมพ์บรรทัดแรกของตัวอย่างเอาต์พุตด้านบน แล้วรัน `ccam next --continue` สำหรับเซสชันนั้นในชื่อบัญชีที่เลือก ซึ่งจะพิมพ์อีกสองบรรทัดของตัวอย่างและเริ่ม Claude Code พร้อมตัวเลือกของเซสชัน โหมดสิทธิ์ ระดับ effort และเอเจนต์ แบบเดียวกับที่[การส่งต่อ](#relay)ทำ ข้อความแรกของเซสชันใหม่คือข้อความตายตัวนี้ ซึ่งเป็นสิ่งเดียวที่ ccam ส่งแทนคุณ (การย้ายหลัง `/ccam:switch` ไม่ส่งอะไรเลย):
+จากนั้น hook จะจบ Claude Code และ ccam ซึ่งทำงานอยู่ควบคู่กันจะแสดงการแจ้งเตือนบนเดสก์ท็อปในเทอร์มินัลที่รองรับ เช่น `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` ccam จะพิมพ์บรรทัดแรกของตัวอย่างเอาต์พุตด้านบน แล้วรัน `ccam next --continue` สำหรับเซสชันนั้นในชื่อบัญชีที่เลือก ซึ่งจะพิมพ์อีกสองบรรทัดของตัวอย่างและเริ่ม Claude Code พร้อมตัวเลือกของเซสชัน โหมดสิทธิ์ ระดับ effort และเอเจนต์ แบบเดียวกับที่[การส่งต่อ](#relay)ทำ ข้อความแรกของเซสชันใหม่คือข้อความตายตัว ซึ่งเป็นสิ่งเดียวที่ ccam ส่งแทนคุณ (การย้ายหลัง `/ccam:switch` ไม่ส่งอะไรเลย):
 
 ```text
 Your usage limit was reached and ccam moved this conversation to another account. Continue the task you were working on when the limit was reached; do not repeat work that is already complete.
+```
+
+หลังจาก subagent ถึงขีดจำกัด ข้อความจะเป็นข้อความนี้แทน เพราะ subagent, workflow และคำสั่งเบื้องหลังได้หยุดไปพร้อมกับเซสชันเดิมแล้ว:
+
+```text
+A subagent hit your usage limit and ccam moved this conversation to another account. The subagents, workflows and background commands that were running then have stopped, and their results may be missing: run again what the task still needs, then continue it; do not repeat work that is already complete.
 ```
 
 หากบัญชีนั้นถึงขีดจำกัดด้วย ก็จะเกิดแบบเดียวกันที่บัญชีนั้น บันทึกขีดจำกัดจะป้องกันไม่ให้การย้ายต่อกันเป็นทอด ๆ ย้อนกลับไปยังบัญชีก่อนที่บัญชีนั้นจะรีเซ็ต ดังนั้นเมื่อทุกบัญชีเต็ม เซสชันจะอยู่ที่บัญชีสุดท้าย
@@ -221,7 +227,7 @@ hook รู้ว่าการสนทนาทำงานในฐานะ
 
 **ข้อกำหนดของ Anthropic** สำหรับที่นั่งของ Team และ Enterprise นั้น `auto_switch` จะย้ายงานของคุณไปยังอีกที่นั่งหนึ่งขององค์กรเดียวกัน ศูนย์ช่วยเหลือของ Anthropic ระบุว่า "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (แต่ละที่นั่งในแพ็กเกจ Team จะกำหนดให้กับบุคคลที่ระบุชื่อเพียงคนเดียว และมีเพียงบุคคลนั้นที่ใช้ได้) และ "Users can't route their work through another user's account to use that user's remaining usage" (ผู้ใช้ไม่สามารถส่งงานของตนผ่านบัญชีของผู้ใช้คนอื่นเพื่อใช้ปริมาณการใช้งานที่เหลืออยู่ของผู้ใช้คนนั้นได้) ([แพ็กเกจ Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129) ส่วน [แพ็กเกจ Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0) ก็เช่นเดียวกัน)
 
-สำหรับแพ็กเกจส่วนตัว (Pro, Max) ข้อกำหนดของ Anthropic ไม่ได้ระบุว่าบัญชีของคุณเองรับช่วงต่อจากกันโดยอัตโนมัติเมื่อถึงขีดจำกัดได้หรือไม่ [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) ห้ามการเข้าถึงบริการ "through automated or non-human means, whether through a bot, script, or otherwise" (ด้วยวิธีอัตโนมัติหรือไม่ใช่มนุษย์ ไม่ว่าจะผ่านบอต สคริปต์ หรือวิธีอื่น) เว้นแต่ Anthropic จะอนุญาตไว้อย่างชัดแจ้ง และการย้ายแต่ละครั้งจะส่งข้อความตายตัวข้างต้นแทนคุณ ส่วน [Usage Policy](https://www.anthropic.com/legal/aup) ที่จะมีผลในวันที่ 12 พฤศจิกายน 2026 ระบุ "Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products" (จงใจหลบเลี่ยงหรือแทรกแซงความสามารถ ข้อจำกัด หรือมาตรการป้องกันที่กำหนดไว้ในผลิตภัณฑ์ของเรา) ไว้ในสิ่งที่ห้ามทำ
+สำหรับแพ็กเกจส่วนตัว (Pro, Max) ข้อกำหนดของ Anthropic ไม่ได้ระบุว่าบัญชีของคุณเองรับช่วงต่อจากกันโดยอัตโนมัติเมื่อถึงขีดจำกัดได้หรือไม่ [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) ห้ามการเข้าถึงบริการ "through automated or non-human means, whether through a bot, script, or otherwise" (ด้วยวิธีอัตโนมัติหรือไม่ใช่มนุษย์ ไม่ว่าจะผ่านบอต สคริปต์ หรือวิธีอื่น) เว้นแต่ Anthropic จะอนุญาตไว้อย่างชัดแจ้ง และการย้ายแต่ละครั้งจะส่งข้อความตายตัวข้อความใดข้อความหนึ่งข้างต้นแทนคุณ ส่วน [Usage Policy](https://www.anthropic.com/legal/aup) ที่จะมีผลในวันที่ 12 พฤศจิกายน 2026 ระบุ "Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products" (จงใจหลบเลี่ยงหรือแทรกแซงความสามารถ ข้อจำกัด หรือมาตรการป้องกันที่กำหนดไว้ในผลิตภัณฑ์ของเรา) ไว้ในสิ่งที่ห้ามทำ
 
 ccam ไม่ได้อ้างว่า `auto_switch` เป็นไปตามข้อกำหนดเหล่านี้ การเปิดใช้เป็นการตัดสินใจของคุณ และความเสี่ยงก็เป็นของคุณเช่นกัน: Anthropic อาจระงับบัญชี หรือการเข้าถึงขององค์กร Team หรือ Enterprise เมื่อเห็นว่ามีการละเมิดข้อกำหนด
 

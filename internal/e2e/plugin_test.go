@@ -39,7 +39,8 @@ func TestPluginSaysHowToCarryOn(t *testing.T) {
 	// fixed first message; the skill says what it means, and the hooks'
 	// description names it. A long conversation goes on more cheaply from
 	// ccam's summary.
-	if !strings.Contains(skill, "auto_switch") || !strings.Contains(skill, handoff.ContinuePrompt) || !strings.Contains(skill, "ccam next --continue --brief") {
+	if !strings.Contains(skill, "auto_switch") || !strings.Contains(skill, handoff.ContinuePrompt) || !strings.Contains(skill, handoff.SubagentPrompt) ||
+		!strings.Contains(skill, "ccam next --continue --brief") {
 		t.Fatalf("SKILL.md does not explain auto_switch and --brief:\n%s", skill)
 	}
 	if hooks := read(filepath.Join("hooks", "hooks.json")); !strings.Contains(hooks, "auto_switch") {

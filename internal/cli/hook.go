@@ -3,6 +3,7 @@ package cli
 import (
 	"cmp"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -19,6 +20,7 @@ import (
 	"github.com/jhyunwoo/ccam/internal/fsutil"
 	"github.com/jhyunwoo/ccam/internal/handoff"
 	"github.com/jhyunwoo/ccam/internal/launcher"
+	"github.com/jhyunwoo/ccam/internal/lock"
 	"github.com/jhyunwoo/ccam/internal/transcript"
 	"github.com/jhyunwoo/ccam/internal/usage"
 )
@@ -53,7 +55,8 @@ func hookCmd(e *env) *cobra.Command {
 			"                notification, so `ccam next --continue` can continue it\n" +
 			"  switch        /ccam:switch [account]: note the conversation and end the turn\n\n" +
 			"In a session that ccam did not start, stop-failure does nothing and switch says why it cannot move it.\n" +
-			"stop-failure also does nothing for a subagent or an unattended session (-p, background).\n\n" +
+			"A subagent that stops at a usage limit counts as its session's stop. stop-failure does nothing for an\n" +
+			"unattended session (-p, background).\n\n" +
 			"With auto_switch = true in config.toml (Linux, macOS), stop-failure also ends Claude Code when another\n" +
 			"account like this one has room (a seat of the same Team or Enterprise organization, or another personal\n" +
 			"plan), and the ccam process running alongside the session continues the conversation there.",
@@ -99,25 +102,47 @@ var limitPoll = 1500 * time.Millisecond
 // Claude Code when another account has room (autoSwitch), and the relay
 // carries the conversation on. A short server throttle or an API key's
 // rate limit stops a turn the same way, but is not a usage limit, and is
-// left alone; so are a subagent's loop, which the main thread reports too,
-// and sessions nobody sits at (-p, background).
+// left alone; so are sessions nobody sits at (-p, background).
+//
+// A subagent's loop (agent_id) that stops at a limit counts as the
+// session's: the main thread may sit waiting for it, and never make the
+// request that would stop it too. Its limit is in its own conversation
+// (transcript.SubagentPath). Subagents side by side stop one after another,
+// or at once: one hook at a time handles them, and the person gets one
+// notification for a limit.
 func hookStopFailure(e *env, in hookInput, account string) error {
-	if in.AgentID != "" {
-		return nil
-	}
 	if account == "" || in.Error != "rate_limit" || unattended() {
 		return nil
 	}
 	start := time.Now()
+	notePath := handoff.Path(e.paths.State, account, in.SessionID)
+	read, path := transcript.LastLimit, in.Transcript
+	var prev *handoff.Ticket // the note before a subagent's stop
+	if in.AgentID != "" {
+		l, err := lock.TryFlock(strings.TrimSuffix(notePath, ".json") + ".lock")
+		if errors.Is(err, lock.ErrBusy) {
+			return nil // another subagent's stop is being handled
+		}
+		if err == nil {
+			defer l.Unlock()
+		}
+		if cur, ok := handoff.LoadFile(e.paths.State, notePath); ok {
+			if moving(cur) {
+				return nil // Claude Code is ending
+			}
+			prev = cur
+		}
+		read, path = transcript.SubagentLimit, transcript.SubagentPath(in.Transcript, in.AgentID)
+	}
 	var lim transcript.Limit
 	ticket := func(kind string) handoff.Ticket {
 		return handoff.Ticket{Account: account, SessionID: in.SessionID, Transcript: in.Transcript,
 			Cwd: in.folder(), At: time.Now(), Reason: handoff.Limit, Limit: kind, Effort: cmp.Or(in.Effort.Level, os.Getenv("CLAUDE_EFFORT")),
-			Window: lim.Window, ResetsAt: lim.ResetsAt, LimitAt: lim.At}
+			Window: lim.Window, ResetsAt: lim.ResetsAt, LimitAt: lim.At, Subagent: in.AgentID}
 	}
 	note := func(kind string) error {
 		// The note of a move under way stays: the relay follows it.
-		if cur, ok := handoff.LoadFile(e.paths.State, handoff.Path(e.paths.State, account, in.SessionID)); ok && moving(cur) {
+		if cur, ok := handoff.LoadFile(e.paths.State, notePath); ok && moving(cur) {
 			return nil
 		}
 		return handoff.Save(e.paths.State, ticket(kind))
@@ -130,7 +155,7 @@ func hookStopFailure(e *env, in hookInput, account string) error {
 			return err
 		}
 	}
-	lim, row := waitLimit(in.Transcript, start, in.LastMessage)
+	lim, row := waitLimit(read, path, start, in.LastMessage)
 	switch {
 	case row:
 		// Again, now with the window and when it resets.
@@ -160,7 +185,7 @@ func hookStopFailure(e *env, in hookInput, account string) error {
 	if none := noTakeover(e, account); none != "" {
 		// That command would refuse, and auto_switch has nowhere to go.
 		msg = hit + ". " + none
-	} else if recorded {
+	} else if recorded && (in.AgentID == "" || subagentHolds(lim.Window, transcript.Model(in.Transcript))) {
 		// auto_switch leaves only an account recorded as full: no session
 		// comes back to it before the reset.
 		moved, say := autoSwitch(e, in, ticket(kind), lim, start, hit)
@@ -168,6 +193,9 @@ func hookStopFailure(e *env, in hookInput, account string) error {
 			return nil // Claude Code is ending: nothing written now would reach the screen
 		}
 		msg = cmp.Or(say, msg)
+	}
+	if prev != nil && row && prev.Reason == handoff.Limit && prev.Window == lim.Window && prev.ResetsAt.Equal(lim.ResetsAt) {
+		return nil // an earlier stop at this limit said it
 	}
 	// Claude Code shows nothing else a StopFailure hook prints.
 	return hookOutput(e, map[string]any{"terminalSequence": handoff.Notification(msg)})
@@ -196,17 +224,18 @@ func unattended() bool {
 	return os.Getenv("CLAUDE_CODE_SESSION_ATTENDED") == "0" || strings.HasPrefix(os.Getenv("CLAUDE_CODE_ENTRYPOINT"), "sdk-")
 }
 
-// waitLimit reads the usage limit Claude Code wrote into the conversation
-// at path for the request it refused with msg, giving it limitPoll to show
-// up. A limit with another message is an earlier one, perhaps another
-// account's in a shared history, not this stop's.
-func waitLimit(path string, start time.Time, msg string) (transcript.Limit, bool) {
+// waitLimit reads with read (transcript.LastLimit, or SubagentLimit) the
+// usage limit Claude Code wrote into the conversation at path for the
+// request it refused with msg, giving it limitPoll to show up. A limit with
+// another message is an earlier one, perhaps another account's in a shared
+// history, not this stop's.
+func waitLimit(read func(string, time.Time) (transcript.Limit, bool), path string, start time.Time, msg string) (transcript.Limit, bool) {
 	if path == "" {
 		return transcript.Limit{}, false
 	}
 	for {
 		// The row is made before the hook starts and written soon after.
-		l, ok := transcript.LastLimit(path, start.Add(-time.Minute))
+		l, ok := read(path, start.Add(-time.Minute))
 		if ok && (msg == "" || strings.TrimSpace(l.Text) == strings.TrimSpace(msg)) {
 			return l, true
 		}

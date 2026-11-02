@@ -1,10 +1,10 @@
 ---
 title: 切换到下一个账号
 description: ccam next 以另一个账号打开 Claude Code；--auto 选择余量最多的账号，--continue 把对话带到新账号，--fallback 重新运行 -p 任务。
-updated: 2026-11-01
+updated: 2026-11-03
 order: 8
 translation: machine
-sourceHash: "79300c521748"
+sourceHash: "89e8dea9c55d"
 ---
 
 `ccam next` 无需你指定账号名，就能以另一个账号打开 Claude Code。当某个账号达到用量限制时使用它。有四种切换方式：
@@ -151,7 +151,7 @@ Claude Code 在 `"` 处结束一个提及，并在 `#` 处截断它，所以当�
 
   它认识 Claude Code 视为用量限制的每一条消息：5 小时限制、每周限制、普通限制和模型限制（`You've hit your session limit`、`You've hit your limit`，以及表示模型额度的 `You've reached your …`），用量积分和支出限制，以及组织停用了该账号。
 
-  当 Claude Code 已把被拒绝的请求写入对话时，钩子还会把已满的时间窗口一直记录到其重置为止（[用量限制记录](/features/usage#the-limit-record)），但组织设置的停用除外，因为组织管理员随时可以解除它。服务器短暂的限流或 API 密钥的速率限制不属于用量限制，不会处理；子代理的停止以及无人值守的会话（`-p` 运行和后台会话）也不会处理。
+  当 Claude Code 已把被拒绝的请求写入对话时，钩子还会把已满的时间窗口一直记录到其重置为止（[用量限制记录](/features/usage#the-limit-record)），但组织设置的停用除外，因为组织管理员随时可以解除它。服务器短暂的限流或 API 密钥的速率限制不属于用量限制，不会处理；无人值守的会话（`-p` 运行和后台会话）也不会处理。子代理或工作流代理因用量限制而停止时，算作其所在会话的停止，即使主对话只是在等待它：Claude Code 会把那条被拒绝的请求写入会话的 `subagents` 文件夹中该代理自己的文件，钩子就从那里读取。多个代理同时停止时，该会话只会得到一条记录和一条通知。
 
   Claude Code 2.1.234 及更高版本还会在会话中等待，并在 5 小时时间窗口重置后自动继续；这条通知让你可以选择改为切换账号；开启 [`auto_switch`](#auto-switch)（Linux 和 macOS）后，当另一个账号还有余量时，ccam 会替你切换。当没有其他账号可以接替时，也就是没有其他账号属于同一个 Team 或 Enterprise 组织，或者没有其他个人套餐（开启 `cross_org` 时，任何其他 Claude 账号都可以接替），通知会改为以 `You have no other personal plans, so ccam cannot move this conversation.` 或 `You have no other accounts in Acme, so ccam cannot move this conversation.` 结尾。
 - `/ccam:switch [account]` 会记下这次对话，并在发出任何请求之前结束这一轮：输入 `/exit`，然后运行 `ccam next --continue`，在你指定的账号（或下一个账号）上继续这次对话。在还没有任何对话的会话中，它会说明没有可以继续的内容。只有你自己输入才会运行它：从插件 0.3.2 起，Claude 无法运行 `/ccam:switch`，而 Claude 安排的任务（CronCreate、ScheduleWakeup 或 `.claude/scheduled_tasks.json`）会把它作为纯文本交给 Claude。
@@ -187,7 +187,7 @@ ccam: personal hit its 5-hour limit; continuing this conversation as side
 
 1. 会话由 ccam 在终端中启动，并且 ccam 在它旁边持续运行。`auto_switch` 会开启[接力](#relay)，所以对设置之后启动的交互式会话来说这一条成立。在此之前启动的会话，或在旧版 ccam 下启动的会话，会收到一条以 ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` 结尾的通知。无人值守的会话（`-p` 运行和后台会话）、`claude remote-control` 以及不通过 ccam 启动的 Claude Code 永远不会被移动。
 2. 该账号已开启 [ccam 插件](/docs/install#claude-code-plugin)，并运行 Claude Code 2.1.214 或更高版本，这些版本会把自己的进程 ID 传给钩子（`CLAUDE_PID`）。
-3. Claude Code 已把被拒绝的请求连同重置时间写入对话，且针对的是该账号的 5 小时、每周、Opus 或 Sonnet 限制。支出限制、用量积分耗尽、组织设置的停用、Fable 额度（`You've reached your Fable limit.`）、服务器限流、API 密钥的速率限制以及子代理的停止，都永远不会让会话移动。
+3. Claude Code 已把被拒绝的请求连同重置时间写入对话，且针对的是该账号的 5 小时、每周、Opus 或 Sonnet 限制。支出限制、用量积分耗尽、组织设置的停用、Fable 额度（`You've reached your Fable limit.`）、服务器限流以及 API 密钥的速率限制，都永远不会让会话移动。子代理或工作流代理的限制也算在内，即使主对话只是在等待它；如果那是每周的 Opus 或 Sonnet 限制，只有当对话本身使用该模型运行时，会话才会移动。
 4. ccam 知道该账号的套餐，来自它的 `.claude.json` 或 `ccam login` 记录的信息。否则通知会以 `ccam does not know personal's plan, so auto_switch leaves this session.` 结尾。
 5. 会话没有连接到 Remote Control。换成另一个账号后，它不会重新连接到你用来操控它的应用，所以会话保持不动，通知会说明这一点。
 6. 限制在 15 分钟以后才重置。等待时间更短时，ccam 会把会话留给 Claude Code：`ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`
@@ -203,10 +203,16 @@ ccam: personal hit its 5-hour limit; continuing this conversation as side
 
    当最后这三条排除了所有还有余量的账号时，通知会指出它们：`side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.`、`side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.` 或 `This conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so auto_switch did not move it there.` 有[用量限制记录](/features/usage#the-limit-record)的时间窗口按已满计算，最近 2 分钟内有其他会话移入的账号排在其他账号之后。选择必须在大约 6 秒内完成；用量查询耗时更长时，会话保持不动。设置 `usage_source = "claude"` 时，`auto_switch` 只根据保存的数字做决定，而且 ccam 无法从 Claude Code 的查询或状态栏中得知用量积分是否开启，所以假定它们是关闭的。
 
-然后钩子结束 Claude Code，在它旁边持续运行的 ccam 会在支持桌面通知的终端中显示一条通知，例如 `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` 它打印上面示例输出的第一行，并以选中的账号为该会话运行 `ccam next --continue`，后者打印输出中的另外两行，并像[接力](#relay)那样，以会话的选项、权限模式、推理强度和代理启动 Claude Code。新会话的第一条消息是下面这段固定文本，这是 ccam 唯一代表你发送的内容（在 `/ccam:switch` 之后的移动不发送任何内容）：
+然后钩子结束 Claude Code，在它旁边持续运行的 ccam 会在支持桌面通知的终端中显示一条通知，例如 `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` 它打印上面示例输出的第一行，并以选中的账号为该会话运行 `ccam next --continue`，后者打印输出中的另外两行，并像[接力](#relay)那样，以会话的选项、权限模式、推理强度和代理启动 Claude Code。新会话的第一条消息是一段固定文本，这是 ccam 唯一代表你发送的内容（在 `/ccam:switch` 之后的移动不发送任何内容）：
 
 ```text
 Your usage limit was reached and ccam moved this conversation to another account. Continue the task you were working on when the limit was reached; do not repeat work that is already complete.
+```
+
+在子代理达到限制之后，则是下面这段，因为子代理、工作流和后台命令已随旧会话一起停止：
+
+```text
+A subagent hit your usage limit and ccam moved this conversation to another account. The subagents, workflows and background commands that were running then have stopped, and their results may be missing: run again what the task still needs, then continue it; do not repeat work that is already complete.
 ```
 
 如果那个账号也达到了限制，同样的事会在那里再发生一次。用量限制记录会阻止这条链在某个账号重置之前回到该账号，所以当每个账号都已用满时，会话会停在最后一个账号上。
@@ -221,7 +227,7 @@ Your usage limit was reached and ccam moved this conversation to another account
 
 **Anthropic 的条款。** 在 Team 和 Enterprise 席位上，`auto_switch` 会把你的工作移到同一组织的另一个席位。Anthropic 帮助中心关于 [Team 套餐](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)的说明写道："Each seat on a Team plan is assigned to one named individual, and only that person may use it"（Team 套餐的每个席位都分配给一位指定的个人，只有此人可以使用），以及 "Users can't route their work through another user's account to use that user's remaining usage"（用户不能通过另一位用户的账号完成自己的工作，以使用该用户剩余的用量）；关于 [Enterprise 套餐](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)的说明也是如此。
 
-对于个人套餐（Pro、Max），Anthropic 的条款没有说明你自己的多个账号能否在达到限制时自动相互接替。[消费者条款](https://www.anthropic.com/legal/consumer-terms)（Consumer Terms）禁止 "through automated or non-human means, whether through a bot, script, or otherwise"（通过自动化或非人工的方式，无论是通过机器人、脚本还是其他方式）访问服务，除非 Anthropic 明确允许，而一次移动会代表你发送上面那段固定消息。2026 年 11 月 12 日生效的[使用政策](https://www.anthropic.com/legal/aup)（Usage Policy）把 "Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products"（故意绕过或干扰我们产品中设定的功能、限制或防护措施）列为禁止事项之一。
+对于个人套餐（Pro、Max），Anthropic 的条款没有说明你自己的多个账号能否在达到限制时自动相互接替。[消费者条款](https://www.anthropic.com/legal/consumer-terms)（Consumer Terms）禁止 "through automated or non-human means, whether through a bot, script, or otherwise"（通过自动化或非人工的方式，无论是通过机器人、脚本还是其他方式）访问服务，除非 Anthropic 明确允许，而一次移动会代表你发送上面其中一段固定消息。2026 年 11 月 12 日生效的[使用政策](https://www.anthropic.com/legal/aup)（Usage Policy）把 "Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products"（故意绕过或干扰我们产品中设定的功能、限制或防护措施）列为禁止事项之一。
 
 ccam 不声称 `auto_switch` 符合这些条款。是否开启由你自己决定，风险也由你承担：当 Anthropic 认为条款被违反时，它可能暂停一个账号，或暂停一个 Team 或 Enterprise 组织的访问权限。
 

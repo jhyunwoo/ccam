@@ -33,7 +33,9 @@ const hookGrace = time.Second
 // FAKE_MODE writes the permission mode first, FAKE_BRIDGE a Remote Control
 // connection ("off": turned off again after it), FAKE_EFFORT is the
 // session's effort level, and with FAKE_LIMIT_AFTER the limit comes once
-// that file is there.
+// that file is there. With FAKE_AGENT_ID the limit stops that subagent's
+// loop instead: its row goes into the subagent's own conversation, and the
+// hook gets its agent_id.
 func stopFailure() {
 	if v := os.Getenv("FAKE_HOOK"); v != "stop-failure" {
 		fmt.Fprintf(os.Stderr, "fakeclaude: FAKE_HOOK=%s: only stop-failure is played\n", v)
@@ -68,20 +70,28 @@ func stopFailure() {
 			rows = append(rows, fmt.Sprintf(`{"type":"bridge-session","sessionId":%s,"bridgeSessionId":"","lastSequenceNum":0}`, js(session)))
 		}
 	}
+	agent := os.Getenv("FAKE_AGENT_ID")
 	now := time.Now()
-	rows = append(rows, fmt.Sprintf(`{"parentUuid":null,"isSidechain":false,"type":"assistant","uuid":"limit-synthetic","timestamp":%s,`+
+	limitRow := fmt.Sprintf(`{"parentUuid":null,"isSidechain":%t,"type":"assistant","uuid":"limit-synthetic","timestamp":%s,`+
 		`"message":{"model":"<synthetic>","role":"assistant","type":"message","content":[{"type":"text","text":%s}]},"apiError":"usage_limit_reached",`+
 		`"apiErrorParams":{"rate_limit_info":{"status":"rejected","resetsAt":%d,"rateLimitType":"five_hour","overageStatus":"rejected",`+
 		`"overageDisabledReason":"out_of_credits","isUsingOverage":false}},"error":"rate_limit","isApiErrorMessage":true,"apiErrorStatus":429,"sessionId":%s}`,
-		js(now.UTC().Format(time.RFC3339Nano)), js(text), now.Add(after).Unix(), js(session)))
-	f, err := os.OpenFile(conv, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o600)
-	must(err)
-	fmt.Fprintln(f, strings.Join(rows, "\n"))
-	f.Close()
+		agent != "", js(now.UTC().Format(time.RFC3339Nano)), js(text), now.Add(after).Unix(), js(session))
+	if agent == "" {
+		rows = append(rows, limitRow)
+	}
+	appendRows(conv, rows)
+	if agent != "" {
+		// Claude Code 2.1.316 keeps a subagent's conversation below its session's.
+		appendRows(filepath.Join(strings.TrimSuffix(conv, ".jsonl"), "subagents", "agent-"+agent+".jsonl"), []string{limitRow})
+	}
 
 	cwd, _ := os.Getwd()
 	in := map[string]any{"session_id": session, "transcript_path": conv, "cwd": cwd, "hook_event_name": "StopFailure",
 		"error": "rate_limit", "last_assistant_message": text}
+	if agent != "" {
+		in["agent_id"], in["agent_type"] = agent, "general-purpose"
+	}
 	effort := os.Getenv("FAKE_EFFORT")
 	if effort != "" {
 		in["effort"] = map[string]string{"level": effort}
@@ -107,6 +117,18 @@ func stopFailure() {
 		fmt.Println(answer.TerminalSequence)
 	}
 	time.Sleep(hookGrace)
+}
+
+// appendRows adds rows, if any, to the conversation at path.
+func appendRows(path string, rows []string) {
+	if len(rows) == 0 {
+		return
+	}
+	must(os.MkdirAll(filepath.Dir(path), 0o700))
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o600)
+	must(err)
+	fmt.Fprintln(f, strings.Join(rows, "\n"))
+	f.Close()
 }
 
 // js is s as a JSON string.
