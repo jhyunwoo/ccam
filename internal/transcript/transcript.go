@@ -233,7 +233,10 @@ func Model(path string) string {
 
 // replyModel reads the model of a main-thread reply row; messages Claude
 // Code made itself do not count.
-func replyModel(l []byte) (string, bool) {
+func replyModel(l []byte) (string, bool) { return rowModel(l, false) }
+
+// rowModel is replyModel for the rows whose isSidechain is side.
+func rowModel(l []byte, side bool) (string, bool) {
 	if !bytes.Contains(l, []byte(`"model"`)) || !bytes.Contains(l, []byte(`"assistant"`)) {
 		return "", false
 	}
@@ -244,7 +247,7 @@ func replyModel(l []byte) (string, bool) {
 			Model string `json:"model"`
 		} `json:"message"`
 	}
-	if json.Unmarshal(l, &e) != nil || e.Type != "assistant" || e.Sidechain || e.Message.Model == "" || e.Message.Model == synthetic {
+	if json.Unmarshal(l, &e) != nil || e.Type != "assistant" || e.Sidechain != side || e.Message.Model == "" || e.Message.Model == synthetic {
 		return "", false
 	}
 	return e.Message.Model, true
@@ -271,7 +274,17 @@ type Limit struct {
 // (isSidechain) and other API errors, such as a model that requires usage
 // credits, do not count, and neither does a limit a person's prompt came
 // after: that prompt began a turn of its own.
-func LastLimit(path string, since time.Time) (Limit, bool) {
+func LastLimit(path string, since time.Time) (Limit, bool) { return lastLimit(path, since, false) }
+
+// SubagentLimit is LastLimit for the conversation of a subagent at path
+// (SubagentPath), whose rows are all isSidechain: Claude Code writes a
+// subagent's refusal there, not into its session's conversation. Model is
+// the subagent's.
+func SubagentLimit(path string, since time.Time) (Limit, bool) { return lastLimit(path, since, true) }
+
+// lastLimit reads the limit of LastLimit from the rows whose isSidechain is
+// side.
+func lastLimit(path string, since time.Time, side bool) (Limit, bool) {
 	lines := tail(path)
 	for i := len(lines) - 1; i >= 0; i-- {
 		l := lines[i]
@@ -301,7 +314,7 @@ func LastLimit(path string, since time.Time) (Limit, bool) {
 				} `json:"content"`
 			} `json:"message"`
 		}
-		if json.Unmarshal(l, &row) != nil || row.Type != "assistant" || row.Sidechain || !row.APIError ||
+		if json.Unmarshal(l, &row) != nil || row.Type != "assistant" || row.Sidechain != side || !row.APIError ||
 			row.Kind != "usage_limit_reached" || row.Params.Info == nil || row.Params.Info.Status != "rejected" {
 			continue
 		}
@@ -320,7 +333,7 @@ func LastLimit(path string, since time.Time) (Limit, bool) {
 			lim.ResetsAt = time.Unix(int64(s), 0)
 		}
 		for j := i - 1; j >= 0; j-- {
-			if m, ok := replyModel(lines[j]); ok {
+			if m, ok := rowModel(lines[j], side); ok {
 				lim.Model = m
 				break
 			}
@@ -381,6 +394,25 @@ func PromptedAfter(path string, at time.Time) bool {
 		}
 	}
 	return true
+}
+
+// PromptedSince reports whether a person sent a prompt in the conversation
+// at path after the time at: for a limit that is not in that conversation
+// (a subagent's, SubagentLimit), so PromptedAfter cannot find it there.
+// Only the end of the conversation is read.
+func PromptedSince(path string, at time.Time) bool {
+	lines := tail(path)
+	for i := len(lines) - 1; i >= 0; i-- {
+		if !prompt(lines[i]) {
+			continue
+		}
+		var row struct {
+			At time.Time `json:"timestamp"`
+		}
+		// The newest prompt says it: those before it are older.
+		return json.Unmarshal(lines[i], &row) == nil && row.At.After(at)
+	}
+	return false
 }
 
 // RemoteControl reports whether the conversation at path was connected to

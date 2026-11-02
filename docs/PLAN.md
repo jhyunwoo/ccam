@@ -851,3 +851,17 @@ clausona(larcane97/clausona v0.12.0-beta) 조사에서 나온 단점을 보완�
   - Claude Code 2.1.314에서 본 것은 docs/claude-layout.md의 "The agent on a resume"와 "Scheduled prompts" 절에 적었습니다.
 - 앞 절의 해당 문장(569·571·615·616·617·729·799·800·803행)은 고치지 않고 이 절이 대신합니다.
 - 문서: README 두 개의 ccusage 줄, 플러그인 SKILL.md(에이전트, 다른 조직이면 /exit 뒤 질문, ccam이 고른 다른 조직 계정도 질문, 예약한 프롬프트로는 돌지 않음), 사이트 features/usage·next·launch와 guides/usage-limit-workflow(30개 언어), docs/claude-layout.md의 2.1.314 절 둘.
+
+## 2026-11-02: subagent의 한도도 auto_switch
+
+- 소유자 요청: 서브에이전트가 한도에 걸려 작업이 멈춘 때도 감지해 다음 계정으로 옮겨 이어 가기. 607행("훅은 `agent_id`가 있으면 아무것도 읽지 않고 끝납니다")과 `hookStopFailure`의 "a subagent's loop, which the main thread reports too"는 틀린 가정이었습니다. c1의 한 세션(b72baec6, Claude Code 2.1.314-2.1.316) 기록에서 백그라운드 에이전트와 워크플로 에이전트의 한도 행이 수십 개 있었지만, 그 근처(10-30 06:3x·20:5x, 10-31 02:5x, 11-01 12:2x 등)에 본 스레드의 한도 행은 없었습니다. 본 스레드는 에이전트를 기다리며 요청하지 않으므로 StopFailure도 없고, 세션은 사람이 돌아올 때까지 멈춰 있었습니다.
+- Claude Code 2.1.316 바이너리: subagent의 StopFailure 입력은 `agent_id`·`agent_type`가 있지만 `transcript_path`는 본 세션 파일입니다(`agent_transcript_path`는 SubagentStop에만). 한도 행(`isSidechain: true`, `agentId`)은 `<세션 id>/subagents/agent-<id>.jsonl`, 워크플로 에이전트는 `<세션 id>/subagents/workflows/<run>/agent-<id>.jsonl`에만 씁니다. 같은 세션의 subagent들은 1초 안에 몇 개씩 함께 걸립니다(12:22:29.49와 .57 등). docs/claude-layout.md의 StopFailure 절에 적었습니다.
+- 바꾼 것:
+  - transcript: `SubagentPath`(바로 아래를 먼저 보고 없으면 subagents/ 아래를 찾음, id는 `[A-Za-z0-9_-]`만), `SubagentLimit`(LastLimit과 같은 판단을 isSidechain 행에, 모델도 subagent의 것), `PromptedSince`(한도 행이 본 대화에 없으므로 사람 프롬프트의 timestamp로 판단).
+  - `hookStopFailure`: `agent_id`면 세션 메모 옆의 `<세션 id>.lock`을 `TryFlock`하고, 다른 훅이 잡고 있으면 그 훅에 맡기고 끝납니다. 메모가 이미 이동 중(`moving`)이면 끝납니다. 나머지는 본 스레드와 같습니다(메시지로 먼저 메모, subagent 파일의 행으로 기록, `noTakeover`, auto_switch). 메모에는 `subagent`(agent_id)를 남깁니다. 앞 메모가 같은 창·같은 reset의 한도면 알림을 다시 띄우지 않지만 auto_switch는 다시 시도합니다. `handoff.Save`는 12시간 지난 `.lock`도 지웁니다.
+  - 소유자 결정: 본 스레드가 작업 중이어도 바로 옮깁니다(진행 중인 도구 실행은 끊김). 같은 계정이라 본 스레드도 다음 요청에서 거절되기 때문입니다. 예외로 모델별 주간 한도(`seven_day_opus`·`seven_day_sonnet`)는 본 대화의 마지막 답 모델이 그 계열일 때만 옮깁니다(`subagentHolds`). 그 밖에는 기록과 알림만 남기고 본 대화는 계속됩니다.
+  - autoSwitch: subagent의 한도는 `PromptedAfter` 대신 `PromptedSince`로 사람이 이어 갔는지 봅니다.
+  - relay hop의 첫 메시지: 메모에 `subagent`가 있으면 `handoff.SubagentPrompt`("A subagent hit your usage limit … The subagents, workflows and background commands that were running then have stopped, and their results may be missing: run again what the task still needs, then continue it; …"). 옮긴 세션에서는 백그라운드 작업이 모두 사라졌는데, 그대로면 모델이 오지 않을 알림을 기다릴 수 있기 때문입니다.
+  - `ccam hook --help`의 "stop-failure also does nothing for a subagent" 문장, 플러그인 SKILL.md(새 첫 메시지, 플러그인 0.3.3), 사이트 features/next(30개 언어: 훅 절, auto_switch 조건 3, 두 번째 첫 메시지, 약관 문단의 "one of the fixed messages").
+- 테스트: transcript `TestSubagentPath`·`TestSubagentLimit`·`TestPromptedSince`, cli `TestLimitHookSubagent`(기록·메모·한 번만 알림·잠금·본 스레드 행을 읽지 않음)·`TestAutoSwitchHookSubagent`(이동, Sonnet 대화의 Opus 주간, 한도 뒤 프롬프트)·`TestSubagentHolds`·`TestNextHopFollowsItsNote`(SubagentPrompt), handoff 오래된 `.lock` 정리, e2e `TestAutoSwitchSubagent`(fake claude의 `FAKE_AGENT_ID`: 한도 행을 subagent 파일에 쓰고 훅에 agent_id를 넘김). 742행이 "`FAKE_AGENT_ID`는 만들지 않았습니다"라고 한 것은 이 항목으로 바뀝니다.
+- 남김: 실제 Claude Code에서 워크플로 에이전트의 StopFailure에 `agent_id`가 오는지는 바이너리의 입력 구성(훅 문맥의 `agentId`를 `agent_id`로 넣음)과 기록의 파일 이름으로만 확인했습니다(manual-qa Q1에서 함께 확인).

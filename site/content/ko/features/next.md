@@ -1,10 +1,10 @@
 ---
 title: 다음 계정으로 전환
 description: ccam next는 다른 계정으로 Claude Code를 엽니다. --auto는 여유가 가장 많은 계정을 고르고, --continue는 대화를 넘겨받으며, --fallback은 -p 작업을 재실행합니다.
-updated: 2026-11-01
+updated: 2026-11-03
 order: 8
 translation: machine
-sourceHash: "79300c521748"
+sourceHash: "89e8dea9c55d"
 ---
 
 `ccam next`는 계정 이름을 지정하지 않아도 다른 계정으로 Claude Code를 엽니다. 계정이 사용량 한도에 도달했을 때 쓰면 됩니다. 전환하는 방법은 네 가지입니다.
@@ -151,7 +151,7 @@ Claude Code는 멘션을 `"`에서 끝내고 `#`에서 자르므로, 요약 경�
 
   훅은 Claude Code가 사용량 한도로 치는 모든 메시지를 압니다. 5시간, 주간, 일반, 모델 한도(`You've hit your session limit`, `You've hit your limit`, 모델 할당량의 `You've reached your …`), 사용 크레딧과 지출 한도, 그리고 조직이 계정을 막은 경우입니다.
 
-  Claude Code가 거부된 요청을 대화에 기록했으면, 훅은 가득 찬 구간도 초기화될 때까지 기록합니다([한도 기록](/features/usage#the-limit-record)). 단, 관리자가 언제든 풀 수 있는 조직의 차단은 기록하지 않습니다. 서버의 짧은 요청 제한이나 API 키의 속도 제한은 사용량 한도가 아니므로 건드리지 않으며, 하위 에이전트가 멈춘 경우와 아무도 지켜보지 않는 세션(`-p` 실행과 백그라운드 세션)도 마찬가지입니다.
+  Claude Code가 거부된 요청을 대화에 기록했으면, 훅은 가득 찬 구간도 초기화될 때까지 기록합니다([한도 기록](/features/usage#the-limit-record)). 단, 관리자가 언제든 풀 수 있는 조직의 차단은 기록하지 않습니다. 서버의 짧은 요청 제한이나 API 키의 속도 제한은 사용량 한도가 아니므로 건드리지 않으며, 아무도 지켜보지 않는 세션(`-p` 실행과 백그라운드 세션)도 마찬가지입니다. 하위 에이전트나 워크플로 에이전트가 사용량 한도에서 멈추면, 메인 대화가 그 에이전트를 기다리기만 하는 중이어도 그 세션이 멈춘 것으로 봅니다. Claude Code는 그 거부된 요청을 세션의 `subagents` 폴더에 있는 에이전트 자신의 파일에 기록하고, 훅은 거기서 읽습니다. 여러 에이전트가 한꺼번에 멈춰도 세션에는 메모와 알림이 하나씩만 생깁니다.
 
   Claude Code 2.1.234 이상은 세션 안에서 기다렸다가 5시간 구간이 초기화되면 스스로 이어 가기도 합니다. 알림은 그 대신 전환할 수 있는 선택지를 주며, [`auto_switch`](#auto-switch)를 켜 두면(Linux와 macOS) 다른 계정에 여유가 있을 때 ccam이 대신 전환합니다. 이어받을 수 있는 다른 계정이 없으면, 곧 같은 Team이나 Enterprise 조직에 속한 다른 계정이 없거나 다른 개인 요금제가 없으면(`cross_org`를 켜면 다른 어떤 Claude 계정이든 이어받을 수 있습니다), 알림은 대신 `You have no other personal plans, so ccam cannot move this conversation.` 또는 `You have no other accounts in Acme, so ccam cannot move this conversation.`로 끝납니다.
 - `/ccam:switch [account]`는 대화를 기록해 두고, 요청을 보내기 전에 턴을 끝냅니다. `/exit`를 입력한 뒤 `ccam next --continue`를 실행하면, 지정한 계정(또는 다음 계정)에서 대화를 이어 갑니다. 아직 대화가 없는 세션에서는 이어 갈 것이 없다고 알려 줍니다. 이 명령은 사용자가 직접 입력할 때만 실행됩니다. 플러그인 0.3.2부터 Claude는 `/ccam:switch`를 실행할 수 없으며, Claude가 예약한 작업(CronCreate, ScheduleWakeup, `.claude/scheduled_tasks.json`)은 이 명령을 일반 텍스트로 Claude에게 넘깁니다.
@@ -187,7 +187,7 @@ ccam은 다음 조건을 모두 만족할 때만 세션을 옮깁니다:
 
 1. ccam이 터미널에서 시작했고 ccam이 함께 계속 실행 중인 세션입니다. `auto_switch`는 [릴레이](#relay)를 켜므로, 설정한 뒤에 시작한 대화형 세션은 이 조건을 만족합니다. 그 전에 시작했거나 이전 ccam으로 시작한 세션에는 ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.``로 끝나는 알림이 갑니다. 아무도 지켜보지 않는 세션(`-p` 실행과 백그라운드 세션), `claude remote-control`, ccam 없이 시작한 Claude Code는 절대 옮기지 않습니다.
 2. 그 계정에 [ccam 플러그인](/docs/install#claude-code-plugin)이 켜져 있고, 훅에 자기 프로세스 ID(`CLAUDE_PID`)를 넘겨주는 Claude Code 2.1.214 이상을 씁니다.
-3. Claude Code가 그 계정의 5시간, 주간, Opus 또는 Sonnet 한도에 대해 거부된 요청을 초기화 시각과 함께 대화에 기록했습니다. 지출 한도, 사용 크레딧 소진, 조직의 차단, Fable 할당량(`You've reached your Fable limit.`), 서버의 요청 제한, API 키의 속도 제한, 하위 에이전트가 멈춘 경우는 절대 세션을 옮기지 않습니다.
+3. Claude Code가 그 계정의 5시간, 주간, Opus 또는 Sonnet 한도에 대해 거부된 요청을 초기화 시각과 함께 대화에 기록했습니다. 지출 한도, 사용 크레딧 소진, 조직의 차단, Fable 할당량(`You've reached your Fable limit.`), 서버의 요청 제한, API 키의 속도 제한은 절대 세션을 옮기지 않습니다. 하위 에이전트나 워크플로 에이전트의 한도는 메인 대화가 그 에이전트를 기다리기만 하는 중이어도 여기에 포함되며, 그 한도가 주간 Opus 또는 Sonnet 한도이면 대화 자체가 그 모델로 실행될 때만 세션을 옮깁니다.
 4. ccam이 계정의 요금제를 압니다. 계정의 `.claude.json`이나 `ccam login`이 기록한 내용에서 알아냅니다. 모르면 알림이 `ccam does not know personal's plan, so auto_switch leaves this session.`으로 끝납니다.
 5. 세션이 Remote Control에 연결되어 있지 않습니다. 다른 계정으로 옮기면 세션을 조작하던 앱에 다시 연결되지 않으므로 세션은 그대로 남고, 알림이 그렇다고 알려 줍니다.
 6. 한도가 지금부터 15분보다 뒤에 초기화됩니다. 그보다 짧게 기다리면 되는 경우 ccam은 세션을 Claude Code에 맡깁니다: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`
@@ -203,10 +203,16 @@ ccam은 다음 조건을 모두 만족할 때만 세션을 옮깁니다:
 
    마지막 세 조건 때문에 여유 있는 계정이 모두 빠지면 알림이 그 계정을 밝힙니다: `side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.`, `side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.` 또는 `This conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so auto_switch did not move it there.` [한도 기록](/features/usage#the-limit-record)이 있는 구간은 가득 찬 것으로 치며, 최근 2분 안에 다른 세션이 옮겨 간 계정은 다른 계정들보다 뒤로 밀립니다. 선택은 약 6초 안에 끝나야 하며, 사용량 조회가 그보다 오래 걸리면 세션은 그대로 남습니다. `usage_source = "claude"`이면 `auto_switch`는 저장된 수치만으로 판단하며, ccam은 Claude Code의 조회나 상태 표시줄로는 사용 크레딧이 켜져 있는지 알 수 없으므로 꺼져 있다고 가정합니다.
 
-그러면 훅이 Claude Code를 끝내고, 함께 실행 중이던 ccam이 데스크톱 알림을 지원하는 터미널에서 `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` 같은 알림을 띄웁니다. 그리고 위 출력 예의 첫 줄을 출력하고, 고른 계정으로 그 세션에 대해 `ccam next --continue`를 실행합니다. 이 명령이 출력 예의 나머지 두 줄을 출력하고, [릴레이](#relay)처럼 세션의 옵션, 권한 모드, 추론 수준, 에이전트를 유지한 채 Claude Code를 시작합니다. 새 세션의 첫 메시지는 다음 고정 문구이며, ccam이 사용자 대신 보내는 것은 이것뿐입니다(`/ccam:switch` 뒤의 이동은 아무것도 보내지 않습니다):
+그러면 훅이 Claude Code를 끝내고, 함께 실행 중이던 ccam이 데스크톱 알림을 지원하는 터미널에서 `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` 같은 알림을 띄웁니다. 그리고 위 출력 예의 첫 줄을 출력하고, 고른 계정으로 그 세션에 대해 `ccam next --continue`를 실행합니다. 이 명령이 출력 예의 나머지 두 줄을 출력하고, [릴레이](#relay)처럼 세션의 옵션, 권한 모드, 추론 수준, 에이전트를 유지한 채 Claude Code를 시작합니다. 새 세션의 첫 메시지는 고정 문구이며, ccam이 사용자 대신 보내는 것은 이것뿐입니다(`/ccam:switch` 뒤의 이동은 아무것도 보내지 않습니다):
 
 ```text
 Your usage limit was reached and ccam moved this conversation to another account. Continue the task you were working on when the limit was reached; do not repeat work that is already complete.
+```
+
+하위 에이전트가 한도에 걸렸을 때는 하위 에이전트, 워크플로, 백그라운드 명령이 이전 세션과 함께 멈췄으므로 다음 문구를 보냅니다:
+
+```text
+A subagent hit your usage limit and ccam moved this conversation to another account. The subagents, workflows and background commands that were running then have stopped, and their results may be missing: run again what the task still needs, then continue it; do not repeat work that is already complete.
 ```
 
 그 계정도 한도에 도달하면 거기서도 같은 일이 일어납니다. 한도 기록 덕분에 이 사슬은 초기화 전의 계정으로 되돌아가지 않으므로, 모든 계정이 가득 차면 세션은 마지막 계정에 남습니다.
@@ -221,7 +227,7 @@ Your usage limit was reached and ccam moved this conversation to another account
 
 **Anthropic의 약관.** Team·Enterprise 시트에서 `auto_switch`는 사용자의 작업을 같은 조직의 다른 시트로 옮깁니다. Anthropic 고객센터는 "Each seat on a Team plan is assigned to one named individual, and only that person may use it"(팀 플랜의 각 시트는 한 명의 지정된 개인에게 할당되며, 그 사람만 사용할 수 있습니다), "Users can't route their work through another user's account to use that user's remaining usage"(사용자는 다른 사용자의 계정을 통해 작업을 라우팅하여 해당 사용자의 남은 사용량을 사용할 수 없습니다)라고 안내합니다([Team 요금제](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129), [Enterprise 요금제](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)도 마찬가지).
 
-개인 요금제(Pro, Max)에 대해서는, 사용자 자신의 계정끼리 한도에서 자동으로 이어받아도 되는지 Anthropic의 약관이 정하고 있지 않습니다. [Consumer Terms](https://www.anthropic.com/legal/consumer-terms)는 Anthropic이 명시적으로 허용하지 않는 한 "through automated or non-human means, whether through a bot, script, or otherwise"(봇, 스크립트 등 자동화된 수단이나 사람이 아닌 수단으로) 서비스에 접근하는 것을 금지하며, 이동할 때 ccam은 위의 고정 메시지를 사용자 대신 보냅니다. 2026년 11월 12일부터 시행되는 [Usage Policy](https://www.anthropic.com/legal/aup)는 금지 사항 가운데 하나로 "Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products"(제품에 마련된 기능, 제한, 안전장치를 의도적으로 우회하거나 방해하는 것)를 듭니다.
+개인 요금제(Pro, Max)에 대해서는, 사용자 자신의 계정끼리 한도에서 자동으로 이어받아도 되는지 Anthropic의 약관이 정하고 있지 않습니다. [Consumer Terms](https://www.anthropic.com/legal/consumer-terms)는 Anthropic이 명시적으로 허용하지 않는 한 "through automated or non-human means, whether through a bot, script, or otherwise"(봇, 스크립트 등 자동화된 수단이나 사람이 아닌 수단으로) 서비스에 접근하는 것을 금지하며, 이동할 때 ccam은 위의 고정 메시지 중 하나를 사용자 대신 보냅니다. 2026년 11월 12일부터 시행되는 [Usage Policy](https://www.anthropic.com/legal/aup)는 금지 사항 가운데 하나로 "Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products"(제품에 마련된 기능, 제한, 안전장치를 의도적으로 우회하거나 방해하는 것)를 듭니다.
 
 ccam은 `auto_switch`가 이 약관들을 지킨다고 주장하지 않습니다. 켤지는 사용자가 판단할 일이며, 그 위험도 사용자가 집니다. Anthropic은 약관이 위반되었다고 판단하면 계정을, 또는 Team이나 Enterprise 조직의 접근을 정지할 수 있습니다.
 

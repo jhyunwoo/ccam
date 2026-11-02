@@ -203,6 +203,22 @@ func TestAutoSwitchCarriesOn(t *testing.T) {
 	}
 }
 
+// A subagent that stops at a usage limit stops the session's work too: the
+// main thread may only wait for it. auto_switch carries the conversation on
+// as for the main thread's limit, with a prompt that says what stopped.
+func TestAutoSwitchSubagent(t *testing.T) {
+	h, project := autoHarness(t)
+	conv := h.conversation("personal", project, "s1")
+	h.usageNow(map[string]int{"personal": 5, "work": 12})
+	shown := h.onTerminal(project, ccamBin+" personal", "", h.limitEnv("personal", conv, "FAKE_AGENT_ID=a1")...)
+	if args, want := h.hopped(shown, "personal", "work"), []string{"--resume", conv, "--fork-session", handoff.SubagentPrompt}; !slices.Equal(args, want) {
+		t.Fatalf("work's claude got %q, want %q", args, want)
+	}
+	if !h.limited("personal") || len(h.notes("personal")) != 0 {
+		t.Fatalf("limit recorded: %v, notes %q", h.limited("personal"), h.notes("personal"))
+	}
+}
+
 // Seats of one Team organization stand in for each other, as in next
 // --auto (D7 b): a seat at its limit moves on to another seat with room.
 func TestAutoSwitchSameTeamOrg(t *testing.T) {

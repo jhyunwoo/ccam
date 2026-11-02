@@ -1,10 +1,10 @@
 ---
 title: التبديل إلى الحساب التالي
 description: يفتح ccam next برنامج Claude Code بحساب آخر؛ ويختار --auto الأوسع هامشًا، وينقل --continue المحادثة إليه، ويعيد --fallback تشغيل مهام -p.
-updated: 2026-11-01
+updated: 2026-11-03
 order: 8
 translation: machine
-sourceHash: "79300c521748"
+sourceHash: "89e8dea9c55d"
 ---
 
 يفتح `ccam next` برنامج Claude Code بحساب آخر دون أن تحدد اسمه. استخدمه عندما يبلغ حساب ما حد الاستخدام. هناك أربع طرق للتبديل:
@@ -151,7 +151,7 @@ $ ccam next --auto --continue --brief
 
   وهو يعرف كل رسالة يعدّها Claude Code حد استخدام: حدود الخمس ساعات والأسبوع والحد العادي وحدود النماذج (`You've hit your session limit` و`You've hit your limit` و`You've reached your …` لحصة نموذج)، وأرصدة الاستخدام وحدود الإنفاق، ومؤسسة أوقفت الحساب.
 
-  وعندما يكون Claude Code قد كتب الطلب المرفوض في المحادثة، يسجّل الخطاف أيضًا النافذة الممتلئة حتى إعادة ضبطها ([سجل الحد](/features/usage#the-limit-record))، إلا في حالة إيقاف تفرضه مؤسسة، إذ يستطيع مسؤولوها رفعه في أي وقت. أما التقييد القصير من الخادم أو حد المعدّل لمفتاح API فليس حد استخدام، ويُترك كما هو، وكذلك توقف وكيل فرعي والجلسات غير المراقَبة (تشغيلات `-p` والجلسات الخلفية).
+  وعندما يكون Claude Code قد كتب الطلب المرفوض في المحادثة، يسجّل الخطاف أيضًا النافذة الممتلئة حتى إعادة ضبطها ([سجل الحد](/features/usage#the-limit-record))، إلا في حالة إيقاف تفرضه مؤسسة، إذ يستطيع مسؤولوها رفعه في أي وقت. أما التقييد القصير من الخادم أو حد المعدّل لمفتاح API فليس حد استخدام، ويُترك كما هو، وكذلك الجلسات غير المراقَبة (تشغيلات `-p` والجلسات الخلفية). وإذا توقف وكيل فرعي أو وكيل سير عمل عند حد استخدام، عُدّ ذلك توقفًا لجلسته، حتى لو كانت المحادثة الرئيسية تنتظره فحسب: إذ يكتب Claude Code ذلك الطلب المرفوض في ملف الوكيل الخاص به داخل مجلد `subagents` التابع للجلسة، ويقرؤه الخطاف من هناك. وعندما يتوقف عدة وكلاء في الوقت نفسه، تحصل الجلسة على ملاحظة واحدة وإشعار واحد.
 
   وينتظر Claude Code 2.1.234 وما بعده أيضًا في الجلسة ويتابع بنفسه بعد إعادة ضبط نافذة الخمس ساعات؛ ويمنحك الإشعار خيار التبديل بدلًا من ذلك، ومع تشغيل [`auto_switch`](#auto-switch) (على Linux وmacOS) يبدّل ccam نيابةً عنك عندما يكون لدى حساب آخر متسع. وعندما لا يجوز لأي حساب آخر أن يتولى المحادثة، لأنه لا حساب آخر ينتمي إلى مؤسسة Team أو Enterprise نفسها، أو لا يوجد حساب آخر بخطة شخصية (ومع تشغيل `cross_org` يجوز ذلك لأي حساب Claude آخر)، ينتهي الإشعار بدلًا من ذلك بـ `You have no other personal plans, so ccam cannot move this conversation.` أو `You have no other accounts in Acme, so ccam cannot move this conversation.`
 - يدوّن `/ccam:switch [account]` المحادثة وينهي الدور قبل إرسال أي طلب: اكتب `/exit`، ثم شغّل `ccam next --continue` لمتابعتها على الحساب الذي حددته (أو على الحساب التالي). وفي جلسة لا محادثة فيها بعد، يقول إنه لا يوجد ما يُتابَع. ولا يشغّله إلا ما تكتبه أنت: بدءًا من الإصدار 0.3.2 من المكوّن الإضافي، لا يستطيع Claude تشغيل `/ccam:switch`، والمهمة التي يجدولها Claude (CronCreate أو ScheduleWakeup أو `.claude/scheduled_tasks.json`) تمرّره إلى Claude نصًا عاديًا.
@@ -187,7 +187,7 @@ ccam: personal hit its 5-hour limit; continuing this conversation as side
 
 1. شغّلها ccam في طرفية ويبقى قيد التشغيل بجانبها. يشغّل `auto_switch` [الترحيل](#relay)، لذا يتحقق هذا في الجلسات التفاعلية التي تبدؤها بعد ضبطه. والجلسة التي بدأت قبل ذلك، أو تحت ccam أقدم، تتلقى إشعارًا ينتهي بـ ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` ولا تُنقل أبدًا الجلسات غير المراقَبة (تشغيلات `-p` والجلسات الخلفية)، ولا `claude remote-control`، ولا Claude Code الذي بدأ دون ccam.
 2. الحساب مفعَّل فيه [المكوّن الإضافي لـ ccam](/docs/install#claude-code-plugin) ويشغّل Claude Code 2.1.214 أو أحدث، الذي يمرّر معرّف عمليته إلى الخطاف (`CLAUDE_PID`).
-3. كتب Claude Code الطلب المرفوض في المحادثة، مع وقت إعادة الضبط، لحد الخمس ساعات أو الحد الأسبوعي أو حد Opus أو Sonnet لذلك الحساب. أما حد الإنفاق، ونفاد أرصدة الاستخدام، والإيقاف الذي تفرضه مؤسسة، وحصة Fable (`You've reached your Fable limit.`)، وتقييد الخادم، وحد المعدّل لمفتاح API، وتوقف وكيل فرعي، فلا تنقل الجلسة أبدًا.
+3. كتب Claude Code الطلب المرفوض في المحادثة، مع وقت إعادة الضبط، لحد الخمس ساعات أو الحد الأسبوعي أو حد Opus أو Sonnet لذلك الحساب. أما حد الإنفاق، ونفاد أرصدة الاستخدام، والإيقاف الذي تفرضه مؤسسة، وحصة Fable (`You've reached your Fable limit.`)، وتقييد الخادم، وحد المعدّل لمفتاح API، فلا تنقل الجلسة أبدًا. أما حد وكيل فرعي أو وكيل سير عمل فيُحتسب، حتى لو كانت المحادثة الرئيسية تنتظره فحسب؛ وإذا كان حدًا أسبوعيًا لـ Opus أو Sonnet، فلا تنتقل الجلسة إلا إذا كانت المحادثة نفسها تعمل بذلك النموذج.
 4. يعرف ccam خطة الحساب، من `.claude.json` الخاص به أو مما سجّله `ccam login`. وإلا ينتهي الإشعار بـ `ccam does not know personal's plan, so auto_switch leaves this session.`
 5. الجلسة غير متصلة بـ Remote Control. فبحساب آخر لن تعيد الاتصال بالتطبيق الذي تقودها منه، لذا تبقى، ويقول الإشعار ذلك.
 6. يُعاد ضبط الحد بعد أكثر من 15 دقيقة من الآن. وفي الانتظار الأقصر يترك ccam الجلسة لـ Claude Code: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`
@@ -203,10 +203,16 @@ ccam: personal hit its 5-hour limit; continuing this conversation as side
 
    وعندما تستبعد هذه الشروط الثلاثة الأخيرة كل حساب لديه متسع، يسمّيها الإشعار: `side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.`، أو `side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.`، أو `This conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so auto_switch did not move it there.` والنافذة التي لها [سجل حد](/features/usage#the-limit-record) تُحتسب ممتلئة، والحساب الذي نُقلت إليه جلسة أخرى خلال آخر دقيقتين يأتي بعد الحسابات الأخرى. ويجب أن يتم الاختيار خلال 6 ثوانٍ تقريبًا؛ وعندما تستغرق استعلامات الاستخدام وقتًا أطول، تبقى الجلسة. ومع `usage_source = "claude"`، يقرر `auto_switch` من الأرقام المحفوظة وحدها، ولا يستطيع ccam أن يعرف من استعلام Claude Code أو من سطر الحالة هل أرصدة الاستخدام مفعّلة، لذا يفترض أنها متوقفة.
 
-عندها يُنهي الخطاف Claude Code، ويعرض ccam، الذي يعمل بجانبه، إشعارًا على سطح المكتب في الطرفيات التي تدعمه، مثل `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` ثم يطبع السطر الأول من المخرجات في المثال أعلاه ويشغّل `ccam next --continue` لتلك الجلسة بالحساب المختار، الذي يطبع سطريه الآخرين ويشغّل Claude Code مع خيارات الجلسة ووضع الأذونات ومستوى الجهد والوكيل، كما يفعل [الترحيل](#relay). والرسالة الأولى في الجلسة الجديدة هي هذا النص الثابت، وهو الشيء الوحيد الذي يرسله ccam نيابةً عنك (والنقل بعد `/ccam:switch` لا يرسل شيئًا):
+عندها يُنهي الخطاف Claude Code، ويعرض ccam، الذي يعمل بجانبه، إشعارًا على سطح المكتب في الطرفيات التي تدعمه، مثل `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` ثم يطبع السطر الأول من المخرجات في المثال أعلاه ويشغّل `ccam next --continue` لتلك الجلسة بالحساب المختار، الذي يطبع سطريه الآخرين ويشغّل Claude Code مع خيارات الجلسة ووضع الأذونات ومستوى الجهد والوكيل، كما يفعل [الترحيل](#relay). والرسالة الأولى في الجلسة الجديدة هي نص ثابت، وهو الشيء الوحيد الذي يرسله ccam نيابةً عنك (والنقل بعد `/ccam:switch` لا يرسل شيئًا):
 
 ```text
 Your usage limit was reached and ccam moved this conversation to another account. Continue the task you were working on when the limit was reached; do not repeat work that is already complete.
+```
+
+وبعد أن يبلغ وكيل فرعي حد الاستخدام تكون الرسالة هذه، لأن الوكلاء الفرعيين وسير العمل والأوامر الخلفية توقفت مع الجلسة القديمة:
+
+```text
+A subagent hit your usage limit and ccam moved this conversation to another account. The subagents, workflows and background commands that were running then have stopped, and their results may be missing: run again what the task still needs, then continue it; do not repeat work that is already complete.
 ```
 
 وإذا بلغ ذلك الحساب حده أيضًا، يحدث الشيء نفسه هناك. وتمنع سجلات الحد السلسلة من العودة إلى حساب قبل إعادة ضبطه، لذا عندما تمتلئ كل الحسابات تبقى الجلسة على آخرها.
@@ -221,7 +227,7 @@ Your usage limit was reached and ccam moved this conversation to another account
 
 **شروط Anthropic.** في مقاعد Team وEnterprise، ينقل `auto_switch` عملك إلى مقعد آخر في المؤسسة نفسها. يقول مركز المساعدة لدى Anthropic: "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (يُخصَّص كل مقعد في خطة Team لشخص واحد محدد بالاسم، ولا يجوز أن يستخدمه إلا ذلك الشخص) و"Users can't route their work through another user's account to use that user's remaining usage" (لا يجوز للمستخدمين تمرير عملهم عبر حساب مستخدم آخر للاستفادة من الاستخدام المتبقي لذلك المستخدم) ([خطط Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)؛ وبالمثل في [خطط Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)).
 
-أما في الخطط الشخصية (Pro وMax)، فلا تقول شروط Anthropic هل يجوز لحساباتك أن يتولى بعضها عن بعض تلقائيًا عند بلوغ الحد. وتمنع [شروط المستهلك](https://www.anthropic.com/legal/consumer-terms) الوصول إلى الخدمات "through automated or non-human means, whether through a bot, script, or otherwise" (عبر وسائل آلية أو غير بشرية، سواء عبر روبوت أو سكربت أو غير ذلك) ما لم تسمح Anthropic بذلك صراحةً، والنقل يرسل الرسالة الثابتة أعلاه نيابةً عنك. وتُدرج [سياسة الاستخدام](https://www.anthropic.com/legal/aup) التي تدخل حيز التنفيذ في 12 نوفمبر 2026 عبارة "Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products" (تجاوز القدرات أو القيود أو الضوابط المضمّنة في منتجاتنا أو التدخل فيها عمدًا) ضمن الأمور التي تحظرها.
+أما في الخطط الشخصية (Pro وMax)، فلا تقول شروط Anthropic هل يجوز لحساباتك أن يتولى بعضها عن بعض تلقائيًا عند بلوغ الحد. وتمنع [شروط المستهلك](https://www.anthropic.com/legal/consumer-terms) الوصول إلى الخدمات "through automated or non-human means, whether through a bot, script, or otherwise" (عبر وسائل آلية أو غير بشرية، سواء عبر روبوت أو سكربت أو غير ذلك) ما لم تسمح Anthropic بذلك صراحةً، والنقل يرسل إحدى الرسائل الثابتة أعلاه نيابةً عنك. وتُدرج [سياسة الاستخدام](https://www.anthropic.com/legal/aup) التي تدخل حيز التنفيذ في 12 نوفمبر 2026 عبارة "Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products" (تجاوز القدرات أو القيود أو الضوابط المضمّنة في منتجاتنا أو التدخل فيها عمدًا) ضمن الأمور التي تحظرها.
 
 ولا يدّعي ccam أن `auto_switch` يتوافق مع هذه الشروط. وتشغيله قرارك أنت، وكذلك المخاطرة: فقد تعلّق Anthropic حسابًا، أو وصول مؤسسة Team أو Enterprise، عندما ترى أن الشروط انتُهكت.
 

@@ -1,10 +1,10 @@
 ---
 title: આગલા એકાઉન્ટ પર સ્વિચ કરવું
 description: ccam next બીજા એકાઉન્ટ તરીકે Claude Code ખોલે છે; --auto સૌથી વધુ જગ્યાવાળું લે છે, --continue વાતચીત આગળ લઈ જાય છે, --fallback -p jobs ફરી ચલાવે છે.
-updated: 2026-11-01
+updated: 2026-11-03
 order: 8
 translation: machine
-sourceHash: 79300c521748
+sourceHash: 89e8dea9c55d
 ---
 
 `ccam next` તમે નામ આપ્યા વગર Claude Code ને બીજા એકાઉન્ટ તરીકે ખોલે છે. જ્યારે કોઈ એકાઉન્ટ તેની વપરાશ મર્યાદાએ પહોંચે ત્યારે તેને વાપરો. સ્વિચ કરવાની ચાર રીતો છે:
@@ -151,7 +151,7 @@ Claude Code ઉલ્લેખને `"` પર પૂરો કરે છે �
 
   Claude Code જે દરેક સંદેશને વપરાશ મર્યાદા ગણે છે તે તે ઓળખે છે: 5 કલાકની, સાપ્તાહિક, સાદી અને મૉડલની મર્યાદાઓ (`You've hit your session limit`, `You've hit your limit`, મૉડલના ભાગ માટે `You've reached your …`), usage credits અને spend limits, અને એકાઉન્ટને અટકાવનારી સંસ્થા.
 
-  જ્યારે Claude Code એ નકારેલી request વાતચીતમાં લખી હોય, ત્યારે hook ભરાયેલી વિન્ડોની પણ તેના રીસેટ સુધી નોંધ કરે છે ([મર્યાદા રેકોર્ડ](/features/usage#the-limit-record)), સંસ્થાએ લગાવેલા અટકાવ સિવાય, કારણ કે તેના admins તે ગમે ત્યારે હટાવી શકે છે. સર્વરનું ટૂંકું throttling કે API key ની rate limit વપરાશ મર્યાદા નથી, અને તેને એમ જ છોડી દેવાય છે, અને subagent નું અટકવું તથા કોઈ સામે બેઠું ન હોય તેવાં સેશન (`-p` runs અને બૅકગ્રાઉન્ડ સેશન) પણ.
+  જ્યારે Claude Code એ નકારેલી request વાતચીતમાં લખી હોય, ત્યારે hook ભરાયેલી વિન્ડોની પણ તેના રીસેટ સુધી નોંધ કરે છે ([મર્યાદા રેકોર્ડ](/features/usage#the-limit-record)), સંસ્થાએ લગાવેલા અટકાવ સિવાય, કારણ કે તેના admins તે ગમે ત્યારે હટાવી શકે છે. સર્વરનું ટૂંકું throttling કે API key ની rate limit વપરાશ મર્યાદા નથી, અને તેને એમ જ છોડી દેવાય છે, અને કોઈ સામે બેઠું ન હોય તેવાં સેશન (`-p` runs અને બૅકગ્રાઉન્ડ સેશન) પણ. વપરાશ મર્યાદાએ અટકેલા subagent કે વર્કફ્લો agent નું અટકવું તેના સેશનનું જ અટકવું ગણાય છે, ભલે મુખ્ય વાતચીત ફક્ત તેની રાહ જોતી હોય: Claude Code તે નકારેલી request સેશનના `subagents` ફોલ્ડરમાં તે agent ની પોતાની ફાઇલમાં લખે છે, અને hook તેને ત્યાંથી જ વાંચે છે. જ્યારે ઘણા agents એકસાથે અટકે, ત્યારે સેશનને એક જ નોંધ અને એક જ સૂચના મળે છે.
 
   Claude Code 2.1.234 અને પછીનાં વર્ઝન સેશનમાં રાહ પણ જુએ છે અને 5 કલાકના રીસેટ પછી જાતે ચાલુ રાખે છે; સૂચના તમને તેના બદલે સ્વિચ કરવાનો વિકલ્પ આપે છે, અને [`auto_switch`](#auto-switch) ચાલુ હોય ત્યારે (Linux અને macOS), બીજા એકાઉન્ટમાં જગ્યા હોય તો ccam તમારા માટે સ્વિચ કરે છે. જ્યારે બીજું કોઈ એકાઉન્ટ કામ સંભાળી ન શકે, કારણ કે બીજું કોઈ એકાઉન્ટ એ જ Team કે Enterprise સંસ્થાનું નથી, કે બીજું કોઈ અંગત પ્લાન નથી (`cross_org` ચાલુ હોય ત્યારે, બીજું કોઈ પણ Claude એકાઉન્ટ સંભાળી શકે), ત્યારે સૂચના તેના બદલે `You have no other personal plans, so ccam cannot move this conversation.` કે `You have no other accounts in Acme, so ccam cannot move this conversation.` થી પૂરી થાય છે.
 - `/ccam:switch [account]` વાતચીતની નોંધ કરે છે અને કોઈ request થાય તે પહેલાં turn પૂરો કરે છે: `/exit` લખો, પછી તેને તમે નામ આપેલા એકાઉન્ટ પર (કે આગલા એકાઉન્ટ પર) ચાલુ રાખવા `ccam next --continue` ચલાવો. જે સેશનમાં હજી કોઈ વાતચીત ન હોય, તેમાં તે જણાવે છે કે ચાલુ રાખવા જેવું કંઈ નથી. ફક્ત તમે જે લખો તે જ તેને ચલાવે છે: plugin 0.3.2 થી Claude `/ccam:switch` ચલાવી શકતું નથી, અને Claude એ શેડ્યૂલ કરેલું કામ (CronCreate, ScheduleWakeup કે `.claude/scheduled_tasks.json`) તેને Claude ને સાદા લખાણ તરીકે આપે છે.
@@ -187,7 +187,7 @@ ccam સેશન ત્યારે જ ખસેડે છે જ્યાર�
 
 1. ccam એ તેને ટર્મિનલમાં શરૂ કર્યું હોય અને તેની સાથે ચાલતું રહેતું હોય. `auto_switch` [relay](#relay) ચાલુ કરે છે, તેથી તે સેટ કર્યા પછી તમે શરૂ કરો તે interactive સેશન માટે આ સાચું છે. પહેલાં શરૂ થયેલા, કે જૂના ccam હેઠળ શરૂ થયેલા, સેશનને એવી સૂચના મળે છે જે ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` થી પૂરી થાય છે. કોઈ સામે બેઠું ન હોય તેવાં સેશન (`-p` runs અને બૅકગ્રાઉન્ડ સેશન), `claude remote-control` અને ccam વગર શરૂ થયેલું Claude Code ક્યારેય ખસેડાતાં નથી.
 2. એકાઉન્ટમાં [ccam plugin](/docs/install#claude-code-plugin) ચાલુ હોય અને તે Claude Code 2.1.214 કે પછીનું ચલાવતું હોય, જે hook ને તેની process ID આપે છે (`CLAUDE_PID`).
-3. Claude Code એ એ એકાઉન્ટની 5 કલાકની, સાપ્તાહિક, Opus કે Sonnet મર્યાદા માટે, રીસેટના સમય સાથે, નકારેલી request વાતચીતમાં લખી હોય. spend limit, usage credits ખૂટી જવી, સંસ્થાએ લગાવેલો અટકાવ, Fable નો ભાગ (`You've reached your Fable limit.`), સર્વરનું throttling, API key ની rate limit અને subagent નું અટકવું ક્યારેય સેશન ખસેડતાં નથી.
+3. Claude Code એ એ એકાઉન્ટની 5 કલાકની, સાપ્તાહિક, Opus કે Sonnet મર્યાદા માટે, રીસેટના સમય સાથે, નકારેલી request વાતચીતમાં લખી હોય. spend limit, usage credits ખૂટી જવી, સંસ્થાએ લગાવેલો અટકાવ, Fable નો ભાગ (`You've reached your Fable limit.`), સર્વરનું throttling અને API key ની rate limit ક્યારેય સેશન ખસેડતાં નથી. subagent કે વર્કફ્લો agent ની મર્યાદા ગણાય છે, ભલે મુખ્ય વાતચીત ફક્ત તેની રાહ જોતી હોય; તે Opus કે Sonnet ની સાપ્તાહિક મર્યાદા હોય, તો વાતચીત પોતે એ જ મૉડલ પર ચાલતી હોય ત્યારે જ સેશન ખસે છે.
 4. ccam એકાઉન્ટનો પ્લાન જાણતું હોય, તેની `.claude.json` પરથી કે `ccam login` એ નોંધ્યું હોય તે પરથી. નહીં તો સૂચના `ccam does not know personal's plan, so auto_switch leaves this session.` થી પૂરી થાય છે.
 5. સેશન Remote Control સાથે જોડાયેલું ન હોય. બીજા એકાઉન્ટ તરીકે તે જે app થી તમે તેને ચલાવો છો તેની સાથે ફરી જોડાય નહીં, તેથી તે રહે છે, અને સૂચના તે જણાવે છે.
 6. મર્યાદા હમણાંથી 15 મિનિટથી વધુ સમય પછી રીસેટ થતી હોય. ઓછી રાહ માટે ccam સેશન Claude Code પર છોડે છે: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`
@@ -203,10 +203,16 @@ ccam સેશન ત્યારે જ ખસેડે છે જ્યાર�
 
    જ્યારે આ છેલ્લી ત્રણ શરતો જગ્યા ધરાવતું દરેક એકાઉન્ટ બાકાત કરે, ત્યારે સૂચના તેમનાં નામ આપે છે: `side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.`, `side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.` કે `This conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so auto_switch did not move it there.` [મર્યાદા રેકોર્ડ](/features/usage#the-limit-record) વાળી વિન્ડો ભરાયેલી ગણાય છે, અને છેલ્લી 2 મિનિટમાં બીજું સેશન જે એકાઉન્ટમાં ગયું હોય તે બીજાં પછી આવે છે. પસંદગી લગભગ 6 સેકન્ડમાં થવી જોઈએ; વપરાશ lookup તેનાથી વધુ સમય લે, ત્યારે સેશન રહે છે. `usage_source = "claude"` સાથે, `auto_switch` ફક્ત સેવ કરેલા આંકડા પરથી નક્કી કરે છે, અને usage credits ચાલુ છે કે નહીં તે ccam Claude Code ના lookup કે સ્ટેટસ લાઇન પરથી કહી શકતું નથી, તેથી તે ધારે છે કે તે બંધ છે.
 
-પછી hook Claude Code બંધ કરે છે, અને તેની સાથે ચાલતું ccam, તેને ટેકો આપતાં ટર્મિનલમાં desktop સૂચના બતાવે છે, જેમ કે `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` તે ઉપરના ઉદાહરણ output ની પહેલી લાઇન છાપે છે અને એ સેશન માટે પસંદ કરેલા એકાઉન્ટ તરીકે `ccam next --continue` ચલાવે છે, જે તેની બાકીની બે લાઇન છાપે છે અને [relay](#relay) ની જેમ સેશનના ઓપ્શન, permission mode, effort level અને agent સાથે Claude Code શરૂ કરે છે. નવા સેશનનો પહેલો સંદેશ આ નક્કી કરેલું લખાણ છે, ccam તમારા વતી મોકલે તે એકમાત્ર વસ્તુ (`/ccam:switch` પછીનો ખસેડ કંઈ મોકલતો નથી):
+પછી hook Claude Code બંધ કરે છે, અને તેની સાથે ચાલતું ccam, તેને ટેકો આપતાં ટર્મિનલમાં desktop સૂચના બતાવે છે, જેમ કે `ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).` તે ઉપરના ઉદાહરણ output ની પહેલી લાઇન છાપે છે અને એ સેશન માટે પસંદ કરેલા એકાઉન્ટ તરીકે `ccam next --continue` ચલાવે છે, જે તેની બાકીની બે લાઇન છાપે છે અને [relay](#relay) ની જેમ સેશનના ઓપ્શન, permission mode, effort level અને agent સાથે Claude Code શરૂ કરે છે. નવા સેશનનો પહેલો સંદેશ એક નક્કી કરેલું લખાણ છે, ccam તમારા વતી મોકલે તે એકમાત્ર વસ્તુ (`/ccam:switch` પછીનો ખસેડ કંઈ મોકલતો નથી):
 
 ```text
 Your usage limit was reached and ccam moved this conversation to another account. Continue the task you were working on when the limit was reached; do not repeat work that is already complete.
+```
+
+subagent ની મર્યાદા પછી તે આ હોય છે, કારણ કે subagents, વર્કફ્લો અને બૅકગ્રાઉન્ડ કમાન્ડ જૂના સેશન સાથે જ અટકી ગયાં:
+
+```text
+A subagent hit your usage limit and ccam moved this conversation to another account. The subagents, workflows and background commands that were running then have stopped, and their results may be missing: run again what the task still needs, then continue it; do not repeat work that is already complete.
 ```
 
 જો એ એકાઉન્ટ પણ તેની મર્યાદાએ પહોંચે, તો ત્યાં પણ એવું જ થાય છે. મર્યાદા રેકોર્ડ આ સાંકળને કોઈ એકાઉન્ટ પર તેના રીસેટ પહેલાં પાછી જતી રોકે છે, તેથી જ્યારે દરેક એકાઉન્ટ ભરાઈ જાય ત્યારે સેશન છેલ્લા એકાઉન્ટ પર રહે છે.
@@ -221,7 +227,7 @@ Your usage limit was reached and ccam moved this conversation to another account
 
 **Anthropic ની શરતો.** Team અને Enterprise સીટ પર, `auto_switch` તમારું કામ એ જ સંસ્થાની બીજી સીટ પર ખસેડે છે. Anthropic નું સહાય કેન્દ્ર કહે છે કે "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (Team પ્લાનની દરેક સીટ નામથી નક્કી કરેલી એક વ્યક્તિને ફાળવવામાં આવે છે, અને ફક્ત એ વ્યક્તિ જ તેનો ઉપયોગ કરી શકે છે) અને "Users can't route their work through another user's account to use that user's remaining usage" (વપરાશકર્તાઓ બીજા વપરાશકર્તાના એકાઉન્ટ મારફતે પોતાનું કામ ચલાવીને એ વપરાશકર્તાનો બાકી રહેલો વપરાશ વાપરી શકતા નથી) ([Team પ્લાન](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); [Enterprise પ્લાન](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0) માટે પણ એવું જ).
 
-અંગત પ્લાન (Pro, Max) માટે, Anthropic ની શરતો એ કહેતી નથી કે તમારાં પોતાનાં એકાઉન્ટ મર્યાદાએ આપમેળે એકબીજાનું કામ સંભાળી શકે કે નહીં. Anthropic સ્પષ્ટ છૂટ ન આપે ત્યાં સુધી [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) સેવાઓને "through automated or non-human means, whether through a bot, script, or otherwise" (સ્વચાલિત કે માનવ સિવાયના માધ્યમથી, bot, script કે બીજી કોઈ રીતે) વાપરવાની મનાઈ કરે છે, અને ખસેડ ઉપરનો નક્કી કરેલો સંદેશ તમારા વતી મોકલે છે. નવેમ્બર 12, 2026 થી અમલમાં આવતી [Usage Policy](https://www.anthropic.com/legal/aup) જે બાબતોની મનાઈ કરે છે તેમાં "Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products" (અમારાં ઉત્પાદનોમાં સ્થાપિત ક્ષમતાઓ, પ્રતિબંધો કે સુરક્ષા-મર્યાદાઓને ઇરાદાપૂર્વક ટાળવી કે તેમાં દખલ કરવી) ગણાવે છે.
+અંગત પ્લાન (Pro, Max) માટે, Anthropic ની શરતો એ કહેતી નથી કે તમારાં પોતાનાં એકાઉન્ટ મર્યાદાએ આપમેળે એકબીજાનું કામ સંભાળી શકે કે નહીં. Anthropic સ્પષ્ટ છૂટ ન આપે ત્યાં સુધી [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) સેવાઓને "through automated or non-human means, whether through a bot, script, or otherwise" (સ્વચાલિત કે માનવ સિવાયના માધ્યમથી, bot, script કે બીજી કોઈ રીતે) વાપરવાની મનાઈ કરે છે, અને ખસેડ ઉપરના નક્કી કરેલા સંદેશાઓમાંથી એક તમારા વતી મોકલે છે. નવેમ્બર 12, 2026 થી અમલમાં આવતી [Usage Policy](https://www.anthropic.com/legal/aup) જે બાબતોની મનાઈ કરે છે તેમાં "Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products" (અમારાં ઉત્પાદનોમાં સ્થાપિત ક્ષમતાઓ, પ્રતિબંધો કે સુરક્ષા-મર્યાદાઓને ઇરાદાપૂર્વક ટાળવી કે તેમાં દખલ કરવી) ગણાવે છે.
 
 ccam એવો દાવો કરતું નથી કે `auto_switch` આ શરતોનું પાલન કરે છે. તે ચાલુ કરવું એ તમારો નિર્ણય છે, અને જોખમ પણ તમારું છે: Anthropic ને લાગે કે શરતોનો ભંગ થયો છે ત્યારે તે એકાઉન્ટ, કે Team કે Enterprise સંસ્થાની ઍક્સેસ, સ્થગિત કરી શકે છે.
 

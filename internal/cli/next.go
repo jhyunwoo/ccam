@@ -174,6 +174,9 @@ func nextCmd(e *env) *cobra.Command {
 					prompt := ""
 					if own != nil && own.Reason == handoff.Limit && own.Chosen != "" {
 						prompt = handoff.ContinuePrompt // the relay's hop after a limit (D3)
+						if own.Subagent != "" {
+							prompt = handoff.SubagentPrompt
+						}
 					}
 					args, note = continueArgs(e, cfg, conv, to, prompt, args)
 				}

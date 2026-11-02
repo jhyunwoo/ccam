@@ -1,10 +1,10 @@
 ---
 title: 次のアカウントへの切り替え
 description: ccam nextは別のアカウントでClaude Codeを開きます。--autoは余裕が最も多いものを選び、--continueは会話を持ち越し、--fallbackは-pのジョブを再実行します。
-updated: 2026-11-01
+updated: 2026-11-03
 order: 8
 translation: machine
-sourceHash: 79300c521748
+sourceHash: "89e8dea9c55d"
 ---
 
 `ccam next`は、アカウント名を指定しなくても、別のアカウントとしてClaude Codeを開きます。アカウントが使用量の上限に達したときに使います。切り替える方法は4つあります。
@@ -151,7 +151,7 @@ Claude Codeは言及を`"`で終え、`#`で切ってしまうので、要約の
 
   フックは、Claude Codeが使用量の上限とみなすすべてのメッセージを知っています。5時間、週間、通常、モデルの上限（`You've hit your session limit`、`You've hit your limit`、モデルの割り当てについての`You've reached your …`）、使用量クレジットと支出の上限、そしてアカウントを止めた組織です。
 
-  Claude Codeが拒否されたリクエストを会話に書き込んでいる場合、フックはその満杯の時間枠もリセットまで記録します（[上限の記録](/features/usage#the-limit-record)）。ただし、組織が設定した停止は管理者がいつでも解除できるので記録しません。サーバーの短時間のスロットリングやAPIキーのレート制限は使用量の上限ではないので何もしません。サブエージェントの停止と、無人のセッション（`-p`の実行とバックグラウンドセッション）も同じです。
+  Claude Codeが拒否されたリクエストを会話に書き込んでいる場合、フックはその満杯の時間枠もリセットまで記録します（[上限の記録](/features/usage#the-limit-record)）。ただし、組織が設定した停止は管理者がいつでも解除できるので記録しません。サーバーの短時間のスロットリングやAPIキーのレート制限は使用量の上限ではないので何もしません。無人のセッション（`-p`の実行とバックグラウンドセッション）も同じです。サブエージェントやワークフローのエージェントが使用量の上限で止まった場合は、メインの会話がそれを待っているだけでも、そのセッションの停止として扱います。Claude Codeはその拒否されたリクエストを、セッションの`subagents`フォルダーにあるそのエージェント自身のファイルに書き込み、フックはそこから読み取ります。複数のエージェントが同時に止まっても、セッションに残るメモと通知は1つずつです。
 
   Claude Code 2.1.234以降は、5時間の枠がリセットされるとセッション内で待って自動で続行します。通知によって、代わりに切り替えることも選べます。[`auto_switch`](#auto-switch)を有効にしていれば（LinuxとmacOS）、別のアカウントに余裕があるときにccamが代わりに切り替えます。引き継げるアカウントがほかにない場合、つまり同じTeamまたはEnterpriseの組織に属するアカウントがほかにないか、別の個人プランがない場合（`cross_org`を有効にしていれば、ほかのどのClaudeアカウントでも引き継げます）、通知は代わりに`You have no other personal plans, so ccam cannot move this conversation.`または`You have no other accounts in Acme, so ccam cannot move this conversation.`で終わります。
 - `/ccam:switch [account]`は会話をメモに残し、リクエストを送る前にターンを終えます。`/exit`と入力した後、`ccam next --continue`を実行すると、指定したアカウント（または次のアカウント）で会話を続けられます。まだ会話のないセッションでは、続けるものがないことを伝えます。これを実行できるのは、あなた自身が入力したときだけです。プラグイン0.3.2以降、Claudeは`/ccam:switch`を実行できず、Claudeがスケジュールしたジョブ（CronCreate、ScheduleWakeup、`.claude/scheduled_tasks.json`）はこれをただのテキストとしてClaudeに渡します。
@@ -187,7 +187,7 @@ ccamがセッションを移すのは、次のすべてが成り立つときだ�
 
 1. ccamがターミナルでそのセッションを起動し、それと並んで動き続けていること。`auto_switch`は[リレー](#relay)を有効にするので、設定した後に起動した対話型のセッションはこれを満たします。設定する前に、または古いccamのもとで起動したセッションには、``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.``で終わる通知が表示されます。無人のセッション（`-p`の実行とバックグラウンドセッション）、`claude remote-control`、ccamを使わずに起動したClaude Codeが移されることはありません。
 2. そのアカウントで[ccamプラグイン](/docs/install#claude-code-plugin)がオンになっており、フックにプロセスIDを渡す（`CLAUDE_PID`）Claude Code 2.1.214以降を実行していること。
-3. Claude Codeが、拒否されたリクエストを、リセットの時刻とともに会話に書き込んでいること。対象はそのアカウントの5時間、週間、Opus、Sonnetの上限です。支出の上限、使用量クレジットの使い切り、組織が設定した停止、Fableの割り当て（`You've reached your Fable limit.`）、サーバーのスロットリング、APIキーのレート制限、サブエージェントの停止で、セッションが移されることはありません。
+3. Claude Codeが、拒否されたリクエストを、リセットの時刻とともに会話に書き込んでいること。対象はそのアカウントの5時間、週間、Opus、Sonnetの上限です。支出の上限、使用量クレジットの使い切り、組織が設定した停止、Fableの割り当て（`You've reached your Fable limit.`）、サーバーのスロットリング、APIキーのレート制限で、セッションが移されることはありません。サブエージェントやワークフローのエージェントの上限は、メインの会話がそれを待っているだけでも対象になります。それが週間のOpusまたはSonnetの上限の場合、セッションが移されるのは、会話そのものがそのモデルで動いているときだけです。
 4. ccamがそのアカウントのプランを、`.claude.json`から、または`ccam login`が記録した内容から知っていること。知らない場合、通知は`ccam does not know personal's plan, so auto_switch leaves this session.`で終わります。
 5. セッションがRemote Controlに接続されていないこと。別のアカウントになると、操作に使っているアプリに再接続しないので、セッションはそのまま残り、通知がそのことを伝えます。
 6. 上限のリセットが今から15分より先であること。待ち時間がそれより短い場合、ccamはセッションをClaude Codeに任せます: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`
@@ -203,10 +203,16 @@ ccamがセッションを移すのは、次のすべてが成り立つときだ�
 
    最後の3つの条件によって余裕のあるアカウントがすべて外れる場合、通知がそのアカウントを示します: `side has not trusted this folder yet, so the conversation was not moved there. Open the folder once as side to allow it.`、`side has room but its usage credits are on, so auto_switch did not move the conversation there; /ccam:switch side moves it.`または`This conversation runs as agent "reviewer", and side does not share personal's agents, plugins and settings, so auto_switch did not move it there.` [上限の記録](/features/usage#the-limit-record)がある時間枠は満杯と数え、直近2分以内に別のセッションの移動先になったアカウントは、ほかのアカウントの後に回されます。選択は約6秒以内に終える必要があり、使用量の問い合わせがそれより長くかかった場合、セッションはそのまま残ります。`usage_source = "claude"`では、`auto_switch`は保存済みの数値だけで判断し、ccamはClaude Codeの問い合わせやステータスラインから使用量クレジットがオンかどうかを判断できないので、オフとみなします。
 
-その後、フックがClaude Codeを終了させ、それと並んで動いているccamが、デスクトップ通知に対応したターミナルで`ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).`のような通知を表示します。ccamは上の出力例の1行目を表示し、選んだアカウントとしてそのセッションの`ccam next --continue`を実行します。これが残りの2行を表示し、[リレー](#relay)と同じように、セッションのオプション、権限モード、effortレベル、エージェントとともにClaude Codeを起動します。新しいセッションの最初のメッセージは次の決まった文で、これがccamがあなたの代わりに送る唯一のものです（`/ccam:switch`の後の移動では何も送りません）。
+その後、フックがClaude Codeを終了させ、それと並んで動いているccamが、デスクトップ通知に対応したターミナルで`ccam: personal hit its 5-hour limit (resets 3:29am). Moving this conversation to side (12% of its 5 hours used, the least).`のような通知を表示します。ccamは上の出力例の1行目を表示し、選んだアカウントとしてそのセッションの`ccam next --continue`を実行します。これが残りの2行を表示し、[リレー](#relay)と同じように、セッションのオプション、権限モード、effortレベル、エージェントとともにClaude Codeを起動します。新しいセッションの最初のメッセージは決まった文で、これがccamがあなたの代わりに送る唯一のものです（`/ccam:switch`の後の移動では何も送りません）。
 
 ```text
 Your usage limit was reached and ccam moved this conversation to another account. Continue the task you were working on when the limit was reached; do not repeat work that is already complete.
+```
+
+サブエージェントが上限に達した後は、サブエージェント、ワークフロー、バックグラウンドのコマンドが古いセッションとともに止まっているので、次の文になります。
+
+```text
+A subagent hit your usage limit and ccam moved this conversation to another account. The subagents, workflows and background commands that were running then have stopped, and their results may be missing: run again what the task still needs, then continue it; do not repeat work that is already complete.
 ```
 
 そのアカウントも上限に達した場合は、そこで同じことが起こります。上限の記録があるので、この連鎖がリセット前のアカウントに戻ることはなく、すべてのアカウントが満杯になると、セッションは最後のアカウントに留まります。
@@ -221,7 +227,7 @@ Your usage limit was reached and ccam moved this conversation to another account
 
 **Anthropicの規約。** TeamとEnterpriseのシートでは、`auto_switch`はあなたの作業を同じ組織の別のシートに移します。Anthropicのヘルプセンターには、「Each seat on a Team plan is assigned to one named individual, and only that person may use it」（Teamプランの各シートは1人の指定ユーザーに割り当てられ、そのユーザーのみが使用できます）、「Users can't route their work through another user's account to use that user's remaining usage」（ユーザーは別のユーザーのアカウントを通じて作業をルーティングして、そのユーザーの残りの使用量を使用することはできません）と書かれています（[Teamプラン](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)。[Enterpriseプラン](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)も同様です）。
 
-個人プラン（Pro、Max）については、上限に達したときに自分のアカウント同士が自動で引き継ぎ合ってよいかどうかを、Anthropicの規約は述べていません。[消費者向け利用規約](https://www.anthropic.com/legal/consumer-terms)は、Anthropicが明示的に許可しない限り、「through automated or non-human means, whether through a bot, script, or otherwise」（ボット、スクリプト、その他の方法による、自動化された手段または人間以外の手段によって）サービスにアクセスすることを禁じており、移動の際には上の決まったメッセージがあなたの代わりに送られます。2026年11月12日に発効する[利用ポリシー](https://www.anthropic.com/legal/aup)は、禁止事項の1つに「Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products」（当社の製品内に設けられた機能、制限、ガードレールを意図的に回避または妨害すること）を挙げています。
+個人プラン（Pro、Max）については、上限に達したときに自分のアカウント同士が自動で引き継ぎ合ってよいかどうかを、Anthropicの規約は述べていません。[消費者向け利用規約](https://www.anthropic.com/legal/consumer-terms)は、Anthropicが明示的に許可しない限り、「through automated or non-human means, whether through a bot, script, or otherwise」（ボット、スクリプト、その他の方法による、自動化された手段または人間以外の手段によって）サービスにアクセスすることを禁じており、移動の際には上の決まったメッセージのいずれかがあなたの代わりに送られます。2026年11月12日に発効する[利用ポリシー](https://www.anthropic.com/legal/aup)は、禁止事項の1つに「Intentionally bypass or interfere with capabilities, restrictions, or guardrails established within our products」（当社の製品内に設けられた機能、制限、ガードレールを意図的に回避または妨害すること）を挙げています。
 
 ccamは、`auto_switch`がこれらの規約に適合しているとは主張しません。有効にするかどうかはあなたの判断であり、そのリスクもあなたが負います。Anthropicは、規約に違反していると判断した場合、アカウントや、TeamまたはEnterpriseの組織のアクセスを停止することがあります。
 

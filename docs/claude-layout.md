@@ -330,8 +330,18 @@ The row's `<synthetic>` usage is not a reply, so `transcript.Size` and `transcri
   `CLAUDE_CODE_SESSION_ATTENDED`, which is `"0"` for `CLAUDE_CODE_SESSION_KIND` bg, daemon and daemon-worker
   sessions, for teammates, and for a `-p` session (a non-interactive session counts as attended only when it is not a
   child session and its entrypoint is a desktop or remote one). `CLAUDE_CODE_ENTRYPOINT` is `cli` in an interactive
-  session and `sdk-cli` in `-p`. ccam's hook does nothing when `agent_id` is set, when the session is unattended,
-  or when the entrypoint starts with `sdk-`.
+  session and `sdk-cli` in `-p`. ccam's hook does nothing when the session is unattended, or when the entrypoint
+  starts with `sdk-`.
+- A subagent's loop (2.1.316 binary, and transcripts of 2.1.314-2.1.316): the hook input has `agent_id` and
+  `agent_type`, but `transcript_path` is the session's conversation; there is no `agent_transcript_path` (only
+  SubagentStop has one). The limit row (`isSidechain: true`, `agentId`) goes into the subagent's own conversation,
+  `<session id>/subagents/agent-<agent id>.jsonl` beside the session's file, or
+  `<session id>/subagents/workflows/<run>/agent-<agent id>.jsonl` for a workflow's agent, and not into the
+  session's. While the main thread waits for background agents (or a workflow), it makes no request, so it has no
+  limit row and no StopFailure of its own: one session's transcripts had dozens of subagent limit rows with none in
+  the main thread nearby, and the session sat until a person came back. Subagents side by side stop within a
+  fraction of a second of each other. ccam's hook reads the subagent's row (`transcript.SubagentPath`,
+  `SubagentLimit`) and treats the stop as the session's.
 
 ### Limit messages
 

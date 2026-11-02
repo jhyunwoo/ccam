@@ -15,6 +15,7 @@ import (
 
 	"github.com/jhyunwoo/ccam/internal/config"
 	"github.com/jhyunwoo/ccam/internal/handoff"
+	"github.com/jhyunwoo/ccam/internal/lock"
 	"github.com/jhyunwoo/ccam/internal/transcript"
 	"github.com/jhyunwoo/ccam/internal/usage"
 )
@@ -272,12 +273,9 @@ func TestLimitHookRecordsTheLimit(t *testing.T) {
 			t.Fatalf("%s: a note", what)
 		}
 	}
-	// A subagent's loop stopping at the limit: the main thread reports it.
-	out, _, _ := c.run(`{"agent_id":"a1","agent_type":"general-purpose",`+in(msg)[1:], "hook", "stop-failure")
-	nothing("subagent", out)
 	// Nobody sits at a -p or background session.
 	t.Setenv("CLAUDE_CODE_SESSION_ATTENDED", "0")
-	out, _, _ = c.run(in(msg), "hook", "stop-failure")
+	out, _, _ := c.run(in(msg), "hook", "stop-failure")
 	nothing("unattended", out)
 	t.Setenv("CLAUDE_CODE_SESSION_ATTENDED", "")
 	t.Setenv("CLAUDE_CODE_ENTRYPOINT", "sdk-cli")
@@ -318,6 +316,84 @@ func TestLimitHookRecordsTheLimit(t *testing.T) {
 	limitConversation(t, conv, now.Add(-time.Second), reset, msg, bare, `"rateLimitType":"five_hour"`, `"rateLimitType":"overage"`)
 	if out, _, _ = c.run(in(bare), "hook", "stop-failure"); fileThere(record) || !strings.Contains(out, "personal hit its usage limit (resets 3pm)") {
 		t.Fatalf("overage: %q", out)
+	}
+}
+
+// subagentConversation writes conversation conv of session s1 without a
+// limit in it, and below it that of its subagent id, whose last row is
+// Claude Code's refusal at the five_hour limit (as limitConversation, with
+// edits); it returns the subagent's.
+func subagentConversation(t *testing.T, conv, id string, at, reset time.Time, edits ...string) string {
+	t.Helper()
+	path := filepath.Join(strings.TrimSuffix(conv, ".jsonl"), "subagents", "agent-"+id+".jsonl")
+	limitConversation(t, path, at, reset, append([]string{`"isSidechain":false`, `"isSidechain":true`}, edits...)...)
+	limitConversation(t, conv, at, reset)
+	data, _ := os.ReadFile(conv)
+	var keep []string
+	for _, l := range strings.SplitAfter(string(data), "\n") {
+		if !strings.Contains(l, "usage_limit_reached") {
+			keep = append(keep, l)
+		}
+	}
+	if err := os.WriteFile(conv, []byte(strings.Join(keep, "")), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	return path
+}
+
+// A subagent that stops at a usage limit stops its session's work too: its
+// own conversation has the limit, which the hook records and notes as the
+// main thread's. Subagents side by side meet the limit one after another,
+// or at once; the session gets one notification.
+func TestLimitHookSubagent(t *testing.T) {
+	hookEnv(t)
+	c := newTestCLI(t, map[string]int{"personal": 10, "work": 40})
+	cwd, _ := os.Getwd()
+	conv := filepath.Join(transcript.ProjectDir(c.p.ProfileDir("personal"), cwd), "s1.jsonl")
+	now := time.Now().Truncate(time.Second)
+	reset := now.Add(3*time.Hour + 20*time.Minute)
+	msg := "You've hit your session limit · resets 3:30am (Asia/Seoul)" // the fixture's
+	subagentConversation(t, conv, "a2", now.Add(-time.Second), reset)
+	subagentConversation(t, conv, "a1", now.Add(-time.Second), reset)
+	t.Setenv("CCAM_PROFILE", "personal")
+	in := func(agent string) string {
+		return `{"agent_id":"` + agent + `","agent_type":"general-purpose",` + hookJSON(t, map[string]string{"error": "rate_limit",
+			"last_assistant_message": msg, "session_id": "s1", "transcript_path": conv, "cwd": cwd})[1:]
+	}
+	record := filepath.Join(c.p.State, "usage", "personal.limit.json")
+	notePath := handoff.Path(c.p.State, "personal", "s1")
+
+	out, _, code := c.run(in("a1"), "hook", "stop-failure")
+	var got map[string]string
+	want := "\x1b]9;ccam: personal hit its 5-hour limit (resets " + handoff.FormatReset(reset, now) + "). `ccam next --continue`"
+	if code != 0 || json.Unmarshal([]byte(out), &got) != nil || !strings.HasPrefix(got["terminalSequence"], want) {
+		t.Fatalf("%d %q, want %q", code, out, want)
+	}
+	n, ok := handoff.LoadFile(c.p.State, notePath)
+	if !ok || n.Subagent != "a1" || n.Transcript != conv || n.Window != "five_hour" || !n.ResetsAt.Equal(reset) || !fileThere(record) {
+		t.Fatalf("note %+v, record there: %v", n, fileThere(record))
+	}
+	// The next subagent at that limit: the person knows already.
+	if out, _, _ = c.run(in("a2"), "hook", "stop-failure"); out != "" {
+		t.Fatalf("a second notification: %q", out)
+	}
+	// Another hook is at a subagent's limit of this session right now.
+	os.Remove(notePath)
+	l, err := lock.TryFlock(strings.TrimSuffix(notePath, ".json") + ".lock")
+	if err != nil {
+		t.Fatal(err)
+	}
+	out, _, _ = c.run(in("a1"), "hook", "stop-failure")
+	l.Unlock()
+	if _, ok := handoff.LoadFile(c.p.State, notePath); out != "" || ok {
+		t.Fatalf("while another hook runs: %q, note %v", out, ok)
+	}
+	// A subagent's stop does not read the main thread's limit: the message
+	// alone says it.
+	os.Remove(record)
+	limitConversation(t, conv, now.Add(-time.Second), reset)
+	if out, _, _ = c.run(in("a3"), "hook", "stop-failure"); !strings.Contains(out, "personal hit its 5-hour limit (resets 3:30am)") || fileThere(record) {
+		t.Fatalf("no conversation of the subagent: %q, record there: %v", out, fileThere(record))
 	}
 }
 
