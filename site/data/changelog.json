@@ -1,5 +1,11 @@
 [
   {
+    "tag": "v0.13.3",
+    "date": "2026-11-02",
+    "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.13.3",
+    "notes": "<p>Changes to know about: a subagent or workflow agent that stops at a usage limit now counts as its session&#39;s stop, even while the main conversation only waits for it. Before, ccam left it alone, so a session waiting on background agents stayed stopped until you came back.</p>\n<ul>\n<li>The ccam plugin notifies you once and records the limit, however many agents stop at the same time.</li>\n<li>With <code>auto_switch</code> on, ccam moves the session to another account with room, as it does at the session&#39;s own limit. A weekly Opus or Sonnet limit that a subagent hit moves the session only when the conversation itself runs on that model.</li>\n<li>The moved session starts with its own fixed message, which says that the subagents, workflows and background commands that were running have stopped and that Claude should run again what the task still needs.</li>\n</ul>\n<p>The new behaviour comes with the ccam binary. Update the Claude Code plugin to 0.3.3 as well (<code>/plugin</code> in Claude Code), so Claude knows the new message.</p>\n<h3>New</h3>\n<ul>\n<li>A subagent&#39;s or workflow agent&#39;s usage limit counts as its session&#39;s stop: the plugin notifies once, records the limit, and <code>auto_switch</code> moves the session (plugin 0.3.3)</li>\n</ul>\n"
+  },
+  {
     "tag": "v0.13.2",
     "date": "2026-11-01",
     "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.13.2",
