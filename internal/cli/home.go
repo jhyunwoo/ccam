@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"sync"
 	"time"
 
 	tea "charm.land/bubbletea/v2"
@@ -47,9 +48,11 @@ func runHome(e *env) error {
 		// Nothing may print over the dashboard: the backend's notes go nowhere.
 		quiet := *e
 		quiet.stdout, quiet.stderr = io.Discard, io.Discard
-		dash := tui.NewDashboard(backend{&quiet}, cfg, cwd, version())
+		renew := newRenewals()
+		dash := tui.NewDashboard(backend{e: &quiet, renew: renew}, cfg, cwd, version())
 		dash.KeepInstalled(installed)
 		final, err := tea.NewProgram(dash, tea.WithInput(os.Stdin), tea.WithOutput(os.Stdout)).Run()
+		renew.end()
 		if err != nil {
 			return err
 		}
@@ -110,7 +113,46 @@ func addFromAnswers(e *env, a tui.AddAnswers) error {
 
 // backend carries out what the dashboard asks for, with the same code as
 // the commands.
-type backend struct{ e *env }
+type backend struct {
+	e     *env
+	renew *renewals // nil: r renews no login
+}
+
+// renewals are the lookups the dashboard's r makes, which renew an expired
+// login as `ccam usage --refresh` does. A renewal cut off once sent may lose
+// the login (the server may have rotated the refresh token), so runHome ends
+// them before it goes on: lookups not yet renewing stop, and end waits for a
+// renewal in flight.
+type renewals struct {
+	mu     sync.Mutex
+	ctx    context.Context
+	cancel context.CancelFunc
+	wg     sync.WaitGroup
+}
+
+func newRenewals() *renewals {
+	r := &renewals{}
+	r.ctx, r.cancel = context.WithCancel(context.Background())
+	return r
+}
+
+// start reports whether a renewing lookup may begin; wg.Done must follow.
+func (r *renewals) start() bool {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	if r.ctx.Err() != nil {
+		return false
+	}
+	r.wg.Add(1)
+	return true
+}
+
+func (r *renewals) end() {
+	r.mu.Lock()
+	r.cancel()
+	r.mu.Unlock()
+	r.wg.Wait()
+}
 
 var errDryRun = errors.New("this is a dry run (ccam --dry-run): nothing was changed")
 
@@ -126,7 +168,13 @@ func (b backend) Usage(ctx context.Context, name string, fresh bool) usage.Repor
 	if err == nil {
 		for _, a := range usageAccounts(b.e, cfg) {
 			if a.Name == name {
-				return b.e.fetcher().Fetch(ctx, a, usage.Options{NoCache: fresh})
+				opt := usage.Options{NoCache: fresh}
+				// r renews an expired login too, except in a dry run.
+				if fresh && !b.e.dryRun && b.renew != nil && b.renew.start() {
+					defer b.renew.wg.Done()
+					ctx, opt.Refresh = b.renew.ctx, true
+				}
+				return b.e.fetcher().Fetch(ctx, a, opt)
 			}
 		}
 		err = fmt.Errorf("no account %q", name)

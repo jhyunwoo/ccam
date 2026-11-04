@@ -1,10 +1,10 @@
 ---
 title: Chuyển sang tài khoản tiếp theo
 description: "ccam next mở Claude Code bằng tài khoản khác; --auto chọn tài khoản còn nhiều hạn mức nhất, --continue chuyển hội thoại sang, --fallback chạy lại tác vụ -p."
-updated: 2026-11-03
+updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "89e8dea9c55d"
+sourceHash: "de1fd573f1ac"
 ---
 
 `ccam next` mở Claude Code bằng một tài khoản khác mà bạn không cần nêu tên. Hãy dùng nó khi một tài khoản chạm giới hạn sử dụng. Có bốn cách để chuyển đổi:
@@ -82,8 +82,8 @@ Vòng duyệt bắt đầu ở tài khoản dùng gần nhất và dừng ở t�
 
 Một tài khoản được đánh giá theo khoảng 5 giờ và khoảng hàng tuần của nó, và khi `--model` nằm trong các đối số cho Claude Code (sau `--`), theo cả khoảng hàng tuần của mô hình đó (`opus`, `sonnet`, `haiku` hoặc `fable` trong tên). ccam chia các tài khoản thành ba bậc (`Policy.Choose()`):
 
-1. **Còn hạn mức**: mọi khoảng đều dưới `auto_max_usage` (`config.toml`, mặc định 100). Chiến lược chọn trong số này: `headroom` (mặc định) lấy mức sử dụng 5 giờ thấp nhất; `expiring` lấy khoảng 5 giờ được đặt lại sớm nhất, để hạn mức còn lại được dùng trước khi mất; `balance` lấy tài khoản còn nhiều hạn mức hàng tuần nhất cho mỗi ngày cho đến khi tuần của nó được đặt lại, có tính cả từng phiên ccam đang chạy trên tài khoản đó, để hạn mức hàng tuần không bị bỏ phí và các phiên song song được phân tán.
-2. **Vượt ngưỡng**: dưới 100% nhưng bằng hoặc vượt `auto_max_usage`. Chỉ được dùng khi không tài khoản nào còn hạn mức; tài khoản có mức sử dụng 5 giờ thấp nhất được ưu tiên.
+1. **Còn hạn mức**: mọi khoảng đều dưới `auto_max_usage` (`config.toml`, mặc định 100). Chiến lược chọn trong số này: `headroom` (mặc định) lấy mức sử dụng 5 giờ thấp nhất, và trong các tài khoản có cùng mức sử dụng 5 giờ thì lấy tài khoản có mức sử dụng hàng tuần thấp nhất; `expiring` lấy khoảng 5 giờ được đặt lại sớm nhất, để hạn mức còn lại được dùng trước khi mất; `balance` lấy tài khoản còn nhiều hạn mức hàng tuần nhất cho mỗi ngày cho đến khi tuần của nó được đặt lại, có tính cả từng phiên ccam đang chạy trên tài khoản đó, để hạn mức hàng tuần không bị bỏ phí và các phiên song song được phân tán.
+2. **Vượt ngưỡng**: dưới 100% nhưng bằng hoặc vượt `auto_max_usage`. Chỉ được dùng khi không tài khoản nào còn hạn mức; tài khoản có mức sử dụng 5 giờ thấp nhất được ưu tiên, nếu bằng nhau thì ưu tiên tài khoản có mức sử dụng hàng tuần thấp nhất.
 3. **Đầy**: có một khoảng ở mức 100%, hoặc chưa rõ mức sử dụng 5 giờ. Không bao giờ được chọn.
 
 Một khoảng được tính là 100% cho đến khi được đặt lại khi Claude Code đã từ chối một yêu cầu ở đó: hook của [plugin ccam](#inside-claude-code) ghi lại điều này (`~/.local/state/ccam/usage/<name>.limit.json`), bất kể các con số đã lưu nói gì. Vì vậy một tài khoản vừa chạm giới hạn sẽ không được chọn lại trước khi đặt lại, kể cả khi các con số của nó đã cũ.

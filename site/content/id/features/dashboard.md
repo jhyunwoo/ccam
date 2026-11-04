@@ -1,10 +1,10 @@
 ---
 title: Dasbor
 description: ccam di terminal membuka dasbor layar penuh berisi akun, grup, aturan folder, ekstensi, dan pemeriksaan; setiap perubahan menampilkan rencananya dulu.
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: "d65f1b5bb0c8"
+sourceHash: "acb0270d360c"
 ---
 
 `ccam` tanpa argumen membuka dasbor layar penuh jika input dan output standar adalah terminal; jika bukan, ccam mencetak `ccam list`. Dasbor menampilkan setiap akun beserta penggunaan dan grupnya, dan melakukan apa yang dilakukan perintah-perintahnya: menjalankan, menambahkan, login, mengubah grup, menetapkan aturan folder, menampilkan sesi latar belakang, memeriksa, dan memperbaiki. Menjalankan akun, atau menyambung (attach) ke sesi latar belakang, akan menutupnya; menambahkan akun atau login menyerahkan terminal sebentar, lalu kembali ke dasbor.
@@ -33,7 +33,7 @@ Setiap kali dibuka, dasbor bertanya ke GitHub di latar belakang apakah ada rilis
 
 `U` bertanya dulu, lalu memperbarui seperti [`ccam update`](/features/update): rilis diperiksa terhadap checksum SHA-256-nya dan menggantikan ccam dalam satu langkah. Dasbor yang sedang Anda buka masih versi lama, jadi keluar lalu jalankan `ccam` lagi. Jika pembaruan tidak bisa dilakukan di sini, misalnya untuk salinan ccam yang diinstal dari paket `.deb`, dasbor menampilkan saran yang sama seperti `ccam update` dan tetap menyimpan tawarannya.
 
-Bingkai pertama digambar hanya dari `config.toml`, jauh di bawah 100 ms; penggunaan terisi begitu setiap akun menjawab. Setiap batas punya bilahnya sendiri: jendela 5 jam, jendela mingguan untuk semua model, dan jendela mingguan khusus Fable; `-` berarti akun tidak memiliki jendela tersebut. Persentase berubah kuning pada 80% dan merah pada 100%. Jika pencarian gagal, nilai dari cache ditampilkan redup. Jendela yang dilaporkan penuh oleh Claude Code menampilkan 100% sampai di-reset. Token akses yang kedaluwarsa menampilkan `⚠ token expired` yang redup (Claude Code memperbaruinya pada saat dijalankan berikutnya), sedangkan `⚠ login expired` berarti akun itu memerlukan `ccam login`.
+Bingkai pertama digambar hanya dari `config.toml`, jauh di bawah 100 ms; penggunaan terisi begitu setiap akun menjawab. Setiap batas punya bilahnya sendiri: jendela 5 jam, jendela mingguan untuk semua model, dan jendela mingguan khusus Fable; `-` berarti akun tidak memiliki jendela tersebut. Persentase berubah kuning pada 80% dan merah pada 100%. Jika pencarian gagal, nilai dari cache ditampilkan redup. Jendela yang dilaporkan penuh oleh Claude Code menampilkan 100% sampai di-reset. Token akses yang kedaluwarsa menampilkan `⚠ token expired` yang redup (Claude Code memperbaruinya pada saat dijalankan berikutnya, dan `r` memperbaruinya sekarang untuk akun yang tidak sedang berjalan, seperti yang dilakukan `ccam usage --refresh`), sedangkan `⚠ login expired` berarti akun itu memerlukan `ccam login`.
 
 ## Tab
 
@@ -46,7 +46,7 @@ Bingkai pertama digambar hanya dari `config.toml`, jauh di bawah 100 ms; penggun
 | Extensions | apa yang ditampilkan [`ccam ext`](/features/ext), setiap ekstensi satu kali beserta grup asalnya, `off:` akun-akun tempat sebuah plugin tidak diaktifkan, server milik akun itu sendiri yang hanya berlaku untuk folder ini, `This folder's project`, dan masalah yang bukan milik akun mana pun | `r` muat ulang |
 | Health | apa yang dilaporkan [`ccam doctor`](/features/doctor), sebagai satu kotak per akun (lihat di bawah) | `f` perbaiki kotak yang dipilih, `F` perbaiki semua (`doctor --fix`), `↑`/`↓` berpindah antarkotak |
 
-`←`/`→` atau `Tab` berpindah tab, `?` menampilkan tombol-tombol tab yang sedang dibuka, `r` menyegarkan penggunaan tanpa melalui cache singkat dan memuat ulang tab Agents, Extensions, dan Health, dan `q` atau `Esc` keluar.
+`←`/`→` atau `Tab` berpindah tab, `?` menampilkan tombol-tombol tab yang sedang dibuka, `r` menyegarkan penggunaan tanpa melalui cache singkat sambil memperbarui token akses yang kedaluwarsa, dan memuat ulang tab Agents, Extensions, dan Health, dan `q` atau `Esc` keluar. Keluar menunggu pembaruan yang sudah terkirim: server mungkin sudah mengganti refresh token, dan hanya jawabannya yang memegang login.
 
 ## Tombol di tab Accounts
 

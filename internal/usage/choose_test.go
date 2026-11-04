@@ -88,6 +88,9 @@ func TestPolicyChoose(t *testing.T) {
 		want   string
 	}{
 		{"lowest 5-hour usage", Policy{}, []*Report{rep("a", 60, time.Hour, 10), rep("b", 20, 3*time.Hour, 10)}, "b"},
+		{"weekly breaks a 5-hour tie", Policy{}, []*Report{rep("a", 40, time.Hour, 70), rep("b", 40, time.Hour, 20)}, "b"},
+		{"weekly breaks a tie when all are over", Policy{MaxUsage: 30}, []*Report{rep("a", 50, time.Hour, 60), rep("b", 50, time.Hour, 10)}, "b"},
+		{"a 5-hour difference beats weekly", Policy{}, []*Report{rep("a", 39, time.Hour, 90), rep("b", 40, time.Hour, 0)}, "a"},
 		{"full is skipped", Policy{}, []*Report{rep("a", 100, time.Hour, 10), rep("b", 90, time.Hour, 10)}, "b"},
 		{"weekly full is skipped", Policy{}, []*Report{rep("a", 5, time.Hour, 100), rep("b", 90, time.Hour, 10)}, "b"},
 		{"unknown is skipped", Policy{}, []*Report{rep("a", -1, 0, 10), rep("b", 90, time.Hour, 10)}, "b"},

@@ -1,10 +1,10 @@
 ---
 title: Bảng điều khiển
 description: "ccam trên terminal mở bảng điều khiển toàn màn hình gồm tài khoản, nhóm, quy tắc thư mục, tiện ích mở rộng và kiểm tra; mọi thay đổi đều hiện kế hoạch trước."
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: d65f1b5bb0c8
+sourceHash: acb0270d360c
 ---
 
 `ccam` không kèm đối số sẽ mở một bảng điều khiển toàn màn hình khi đầu vào và đầu ra chuẩn là terminal; nếu không, nó in ra `ccam list`. Bảng điều khiển hiển thị mọi tài khoản cùng mức sử dụng và các nhóm của chúng, và làm được những gì các lệnh làm: khởi động, thêm, đăng nhập, thay đổi nhóm, đặt quy tắc thư mục, liệt kê các phiên nền, kiểm tra và sửa chữa. Khởi động một tài khoản, hoặc gắn vào một phiên nền, sẽ đóng bảng điều khiển; thêm tài khoản hoặc đăng nhập thì tạm nhường terminal trong chốc lát, rồi quay lại bảng điều khiển.
@@ -33,7 +33,7 @@ Mỗi lần mở, bảng điều khiển hỏi GitHub ở chế độ nền xem 
 
 `U` hỏi trước, rồi cập nhật theo cách của [`ccam update`](/features/update): bản phát hành được kiểm tra với checksum SHA-256 của nó và thay thế ccam trong một bước. Bảng điều khiển bạn đang dùng vẫn là phiên bản cũ, nên hãy thoát rồi chạy lại `ccam`. Khi không thể cập nhật tại đây, ví dụ với một bản ccam được cài từ gói `.deb`, bảng điều khiển hiển thị cùng lời khuyên như `ccam update` và vẫn giữ lời đề nghị.
 
-Khung hình đầu tiên được vẽ chỉ từ `config.toml`, trong chưa đến 100 ms; mức sử dụng được điền vào khi từng tài khoản phản hồi. Mỗi giới hạn có thanh riêng: khoảng 5 giờ, khoảng hàng tuần cho mọi mô hình, và khoảng hàng tuần riêng của Fable; `-` nghĩa là tài khoản không có khoảng đó. Một tỷ lệ phần trăm chuyển sang màu vàng ở 80% và màu đỏ ở 100%. Nếu một lần tra cứu thất bại, các giá trị từ bộ nhớ đệm được hiển thị mờ. Một khoảng mà Claude Code báo là đã đầy hiển thị 100% cho đến khi được đặt lại. Một access token đã hết hạn hiển thị `⚠ token expired` mờ (Claude Code gia hạn nó ở lần khởi động tiếp theo), còn `⚠ login expired` nghĩa là tài khoản cần `ccam login`.
+Khung hình đầu tiên được vẽ chỉ từ `config.toml`, trong chưa đến 100 ms; mức sử dụng được điền vào khi từng tài khoản phản hồi. Mỗi giới hạn có thanh riêng: khoảng 5 giờ, khoảng hàng tuần cho mọi mô hình, và khoảng hàng tuần riêng của Fable; `-` nghĩa là tài khoản không có khoảng đó. Một tỷ lệ phần trăm chuyển sang màu vàng ở 80% và màu đỏ ở 100%. Nếu một lần tra cứu thất bại, các giá trị từ bộ nhớ đệm được hiển thị mờ. Một khoảng mà Claude Code báo là đã đầy hiển thị 100% cho đến khi được đặt lại. Một access token đã hết hạn hiển thị `⚠ token expired` mờ (Claude Code gia hạn nó ở lần khởi động tiếp theo, và `r` gia hạn nó ngay cho một tài khoản không đang chạy, như `ccam usage --refresh`), còn `⚠ login expired` nghĩa là tài khoản cần `ccam login`.
 
 ## Các thẻ
 
@@ -46,7 +46,7 @@ Khung hình đầu tiên được vẽ chỉ từ `config.toml`, trong chưa đ�
 | Extensions | những gì [`ccam ext`](/features/ext) hiển thị, mỗi tiện ích mở rộng một lần cùng các nhóm mà nó đến từ, `off:` các tài khoản mà một plugin chưa được bật, các máy chủ riêng của tài khoản chỉ áp dụng cho thư mục này, `This folder's project`, và các vấn đề không thuộc tài khoản nào | `r` tải lại |
 | Health | những gì [`ccam doctor`](/features/doctor) báo cáo, dưới dạng một hộp cho mỗi tài khoản (bên dưới) | `f` sửa chữa hộp đang chọn, `F` sửa chữa tất cả (`doctor --fix`), `↑`/`↓` di chuyển giữa các hộp |
 
-`←`/`→` hoặc `Tab` chuyển thẻ, `?` liệt kê các phím của thẻ hiện tại, `r` làm mới mức sử dụng, bỏ qua bộ nhớ đệm ngắn hạn, và tải lại các thẻ Agents, Extensions và Health, và `q` hoặc `Esc` để thoát.
+`←`/`→` hoặc `Tab` chuyển thẻ, `?` liệt kê các phím của thẻ hiện tại, `r` làm mới mức sử dụng, bỏ qua bộ nhớ đệm ngắn hạn và gia hạn các access token đã hết hạn, và tải lại các thẻ Agents, Extensions và Health, và `q` hoặc `Esc` để thoát. Việc thoát sẽ chờ một lần gia hạn đã được gửi đi: máy chủ có thể đã thay refresh token, và chỉ phản hồi của nó mới giữ thông tin đăng nhập.
 
 ## Phím trên thẻ Accounts
 

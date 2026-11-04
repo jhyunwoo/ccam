@@ -8,7 +8,7 @@ import (
 
 // Strategies for Policy.Strategy.
 const (
-	Headroom = "headroom" // the lowest 5-hour usage (default)
+	Headroom = "headroom" // the lowest 5-hour usage, then weekly (default)
 	Expiring = "expiring" // the soonest 5-hour reset, so its quota is not left unused
 	// Balance takes the account whose weekly quota would go unused first:
 	// the most left per day until its reset, less for each running session.
@@ -141,7 +141,12 @@ func (p Policy) before(a, b *Report, now time.Time) bool {
 			return ua > ub
 		}
 	}
-	return a.Limits.FiveHour.Percent < b.Limits.FiveHour.Percent
+	if fa, fb := a.Limits.FiveHour.Percent, b.Limits.FiveHour.Percent; fa != fb {
+		return fa < fb
+	}
+	// On a 5-hour tie, the one with more of its week left. An unknown week
+	// counts as unused, as in urgency.
+	return a.Limits.Weekly.Percent < b.Limits.Weekly.Percent
 }
 
 // sessionCost is how much of the weekly quota per day a running session

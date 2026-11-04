@@ -1,7 +1,7 @@
 ---
 title: The dashboard
 description: ccam on a terminal opens a full-screen dashboard of accounts, groups, folder rules, extensions and checks; every change shows its plan first.
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: source
 ---
@@ -32,7 +32,7 @@ Each time it opens, the dashboard asks GitHub in the background whether a newer 
 
 `U` asks first, then updates the way [`ccam update`](/features/update) does: the release is checked against its SHA-256 checksums and replaces ccam in one step. The dashboard you are in is still the old version, so quit and start `ccam` again. When the update cannot be done here, for example for a copy of ccam installed from the `.deb` package, the dashboard shows the same advice as `ccam update` and keeps the offer.
 
-The first frame draws from `config.toml` alone, in well under 100 ms; usage fills in as each account answers. Each limit has its own bar: the 5-hour window, the weekly window for all models, and Fable's own weekly window; `-` means the account has no such window. A percentage turns yellow at 80% and red at 100%. If a lookup fails, cached values are shown dimmed. A window Claude Code reported full shows 100% until its reset. An expired access token shows a faint `⚠ token expired` (Claude Code renews it at the next start), while `⚠ login expired` means the account needs `ccam login`.
+The first frame draws from `config.toml` alone, in well under 100 ms; usage fills in as each account answers. Each limit has its own bar: the 5-hour window, the weekly window for all models, and Fable's own weekly window; `-` means the account has no such window. A percentage turns yellow at 80% and red at 100%. If a lookup fails, cached values are shown dimmed. A window Claude Code reported full shows 100% until its reset. An expired access token shows a faint `⚠ token expired` (Claude Code renews it at the next start, and `r` renews it now for an account that is not running, as `ccam usage --refresh` does), while `⚠ login expired` means the account needs `ccam login`.
 
 ## Tabs
 
@@ -45,7 +45,7 @@ The first frame draws from `config.toml` alone, in well under 100 ms; usage fill
 | Extensions | what [`ccam ext`](/features/ext) shows, each extension once with the groups it comes from, `off:` the accounts where a plugin is not turned on, the account's own servers that apply to this folder only, `This folder's project`, and problems that belong to no account | `r` reload |
 | Health | what [`ccam doctor`](/features/doctor) reports, as a box per account (below) | `f` repair the selected box, `F` repair all (`doctor --fix`), `↑`/`↓` move between boxes |
 
-`←`/`→` or `Tab` switch tabs, `?` lists the keys of the current tab, `r` refreshes usage, bypassing the short cache, and loads the Agents, Extensions and Health tabs again, and `q` or `Esc` quits.
+`←`/`→` or `Tab` switch tabs, `?` lists the keys of the current tab, `r` refreshes usage, bypassing the short cache and renewing expired access tokens, and loads the Agents, Extensions and Health tabs again, and `q` or `Esc` quits. Quitting waits for a renewal already sent: the server may have replaced the refresh token, and only its answer holds the login.
 
 ## Keys on the Accounts tab
 

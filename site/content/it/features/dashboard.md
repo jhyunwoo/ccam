@@ -1,10 +1,10 @@
 ---
 title: La dashboard
 description: ccam in un terminale apre una dashboard a schermo intero con account, gruppi, regole per cartella, estensioni e controlli; ogni modifica mostra prima il piano.
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: d65f1b5bb0c8
+sourceHash: acb0270d360c
 ---
 
 `ccam` senza argomenti apre una dashboard a schermo intero quando standard input e standard output sono un terminale; altrimenti stampa `ccam list`. La dashboard mostra ogni account con il suo utilizzo e i suoi gruppi, e fa ciò che fanno i comandi: avviare, aggiungere, effettuare il login, cambiare i gruppi, impostare le regole delle cartelle, elencare le sessioni in background, controllare e riparare. Avviare un account, o collegarsi a una sessione in background, la chiude; aggiungere un account o effettuare il login le fa cedere il terminale per un momento, poi si torna alla dashboard.
@@ -33,7 +33,7 @@ Ogni volta che si apre, la dashboard chiede a GitHub in background se esiste una
 
 `U` chiede prima conferma, poi aggiorna come fa [`ccam update`](/features/update): la release viene verificata con i suoi checksum SHA-256 e sostituisce ccam in un solo passaggio. La dashboard in cui ti trovi è ancora la versione vecchia, quindi esci e avvia di nuovo `ccam`. Quando l'aggiornamento non si può fare da qui, per esempio per una copia di ccam installata dal pacchetto `.deb`, la dashboard mostra lo stesso consiglio di `ccam update` e mantiene la proposta.
 
-Il primo fotogramma viene disegnato a partire dal solo `config.toml`, in molto meno di 100 ms; l'utilizzo compare man mano che ogni account risponde. Ogni limite ha la sua barra: la finestra di 5 ore, la finestra settimanale per tutti i modelli e la finestra settimanale propria di Fable; `-` significa che l'account non ha quella finestra. Una percentuale diventa gialla all'80% e rossa al 100%. Se una consultazione fallisce, i valori in cache vengono mostrati attenuati. Una finestra che Claude Code ha segnalato piena mostra 100% fino al suo reset. Un token di accesso scaduto mostra un `⚠ token expired` attenuato (Claude Code lo rinnova al prossimo avvio), mentre `⚠ login expired` significa che l'account ha bisogno di `ccam login`.
+Il primo fotogramma viene disegnato a partire dal solo `config.toml`, in molto meno di 100 ms; l'utilizzo compare man mano che ogni account risponde. Ogni limite ha la sua barra: la finestra di 5 ore, la finestra settimanale per tutti i modelli e la finestra settimanale propria di Fable; `-` significa che l'account non ha quella finestra. Una percentuale diventa gialla all'80% e rossa al 100%. Se una consultazione fallisce, i valori in cache vengono mostrati attenuati. Una finestra che Claude Code ha segnalato piena mostra 100% fino al suo reset. Un token di accesso scaduto mostra un `⚠ token expired` attenuato (Claude Code lo rinnova al prossimo avvio, e `r` lo rinnova subito per un account che non è in esecuzione, come fa `ccam usage --refresh`), mentre `⚠ login expired` significa che l'account ha bisogno di `ccam login`.
 
 ## Schede
 
@@ -46,7 +46,7 @@ Il primo fotogramma viene disegnato a partire dal solo `config.toml`, in molto m
 | Extensions | ciò che mostra [`ccam ext`](/features/ext), ogni estensione una sola volta con i gruppi da cui proviene, `off:` gli account in cui un plugin non è attivato, i server propri dell'account che valgono solo per questa cartella, `This folder's project`, e i problemi che non appartengono a nessun account | `r` ricarica |
 | Health | ciò che segnala [`ccam doctor`](/features/doctor), con un riquadro per account (vedi sotto) | `f` ripara il riquadro selezionato, `F` ripara tutto (`doctor --fix`), `↑`/`↓` passa da un riquadro all'altro |
 
-`←`/`→` o `Tab` cambiano scheda, `?` elenca i tasti della scheda corrente, `r` aggiorna l'utilizzo ignorando la cache breve e ricarica le schede Agents, Extensions e Health, e `q` o `Esc` escono.
+`←`/`→` o `Tab` cambiano scheda, `?` elenca i tasti della scheda corrente, `r` aggiorna l'utilizzo ignorando la cache breve e rinnovando i token di accesso scaduti, e ricarica le schede Agents, Extensions e Health, e `q` o `Esc` escono. L'uscita attende un rinnovo già inviato: il server potrebbe aver sostituito il refresh token, e solo la sua risposta contiene il login.
 
 ## Tasti della scheda Accounts
 

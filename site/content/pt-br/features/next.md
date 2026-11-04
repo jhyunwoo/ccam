@@ -1,10 +1,10 @@
 ---
 title: Trocar para a próxima conta
 description: ccam next abre o Claude Code com outra conta; --auto escolhe a de mais espaço, --continue leva a conversa junto e --fallback reexecuta jobs -p.
-updated: 2026-11-03
+updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "89e8dea9c55d"
+sourceHash: "de1fd573f1ac"
 ---
 
 `ccam next` abre o Claude Code com outra conta sem que você precise dizer qual. Use-o quando uma conta atingir o limite de uso. Há quatro formas de trocar:
@@ -82,8 +82,8 @@ A busca começa na última conta usada e para na primeira conta com login feito 
 
 Uma conta é avaliada pelas janelas de 5 horas e semanal e, quando `--model` está entre os argumentos para o Claude Code (depois de `--`), também pela janela semanal desse modelo (`opus`, `sonnet`, `haiku` ou `fable` no nome). O ccam divide as contas em três níveis (`Policy.Choose()`):
 
-1. **Com espaço**: todas as janelas abaixo de `auto_max_usage` (`config.toml`, padrão 100). A estratégia escolhe entre elas: `headroom` (padrão) pega o menor uso de 5 horas; `expiring` pega a janela de 5 horas que reinicia antes, para que a cota restante seja usada antes de se perder; `balance` pega a conta com mais cota semanal restante por dia até a semana dela reiniciar, contando cada sessão do ccam em execução contra ela, para que a cota semanal não fique sem uso e as sessões em paralelo se distribuam.
-2. **Acima do limite**: abaixo de 100%, mas em `auto_max_usage` ou acima. Usadas só quando nenhuma conta tem espaço; a que tem o menor uso de 5 horas vem primeiro.
+1. **Com espaço**: todas as janelas abaixo de `auto_max_usage` (`config.toml`, padrão 100). A estratégia escolhe entre elas: `headroom` (padrão) pega o menor uso de 5 horas e, entre contas com o mesmo uso de 5 horas, a que usou a menor parte da semana; `expiring` pega a janela de 5 horas que reinicia antes, para que a cota restante seja usada antes de se perder; `balance` pega a conta com mais cota semanal restante por dia até a semana dela reiniciar, contando cada sessão do ccam em execução contra ela, para que a cota semanal não fique sem uso e as sessões em paralelo se distribuam.
+2. **Acima do limite**: abaixo de 100%, mas em `auto_max_usage` ou acima. Usadas só quando nenhuma conta tem espaço; a que tem o menor uso de 5 horas vem primeiro e, em caso de empate, a que usou a menor parte da semana.
 3. **Cheias**: uma janela em 100%, ou uso de 5 horas desconhecido. Nunca escolhidas.
 
 Uma janela conta como 100% até reiniciar quando o Claude Code recusou uma solicitação ali: o hook do [plugin do ccam](#inside-claude-code) registra isso (`~/.local/state/ccam/usage/<name>.limit.json`), não importa o que digam os números salvos. Assim, uma conta que acabou de atingir o limite não é escolhida de novo antes do reinício, mesmo quando os números dela são antigos.

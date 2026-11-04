@@ -1,10 +1,10 @@
 ---
 title: "Le tableau de bord"
 description: "ccam dans un terminal ouvre un tableau de bord plein écran : comptes, groupes, dossiers, extensions et vérifications ; chaque modification montre son plan."
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: "d65f1b5bb0c8"
+sourceHash: "acb0270d360c"
 ---
 
 `ccam` sans argument ouvre un tableau de bord plein écran quand l'entrée et la sortie standard sont un terminal ; sinon, il affiche `ccam list`. Le tableau de bord montre chaque compte avec son utilisation et ses groupes, et fait ce que font les commandes : lancer, ajouter, connecter, changer de groupes, définir des règles de dossier, lister les sessions en arrière-plan, vérifier et réparer. Un lancement, ou le rattachement à une session en arrière-plan, le ferme ; ajouter un compte ou se connecter cède le terminal un instant, puis revient au tableau de bord.
@@ -33,7 +33,7 @@ La ligne sous les noms des onglets indique en une phrase à quoi sert l'onglet c
 
 `U` demande d'abord confirmation, puis met à jour comme le fait [`ccam update`](/features/update) : la version est vérifiée avec ses sommes de contrôle SHA-256 et remplace ccam en une seule étape. Le tableau de bord dans lequel vous êtes reste l'ancienne version : quittez-le et relancez `ccam`. Quand la mise à jour ne peut pas se faire ici, par exemple pour une copie de ccam installée depuis le paquet `.deb`, le tableau de bord affiche le même conseil que `ccam update` et garde la proposition.
 
-La première image n'est dessinée qu'à partir de `config.toml`, en bien moins de 100 ms ; l'utilisation s'affiche au fur et à mesure que chaque compte répond. Chaque limite a sa propre barre : la fenêtre de 5 heures, la fenêtre hebdomadaire de tous les modèles et la fenêtre hebdomadaire propre à Fable ; `-` signifie que le compte n'a pas cette fenêtre. Un pourcentage passe au jaune à 80 % et au rouge à 100 %. Si une consultation échoue, les valeurs en cache sont affichées en atténué. Une fenêtre que Claude Code a signalée pleine affiche 100 % jusqu'à sa réinitialisation. Un jeton d'accès expiré affiche un `⚠ token expired` atténué (Claude Code le renouvelle au prochain démarrage), tandis que `⚠ login expired` signifie que le compte a besoin de `ccam login`.
+La première image n'est dessinée qu'à partir de `config.toml`, en bien moins de 100 ms ; l'utilisation s'affiche au fur et à mesure que chaque compte répond. Chaque limite a sa propre barre : la fenêtre de 5 heures, la fenêtre hebdomadaire de tous les modèles et la fenêtre hebdomadaire propre à Fable ; `-` signifie que le compte n'a pas cette fenêtre. Un pourcentage passe au jaune à 80 % et au rouge à 100 %. Si une consultation échoue, les valeurs en cache sont affichées en atténué. Une fenêtre que Claude Code a signalée pleine affiche 100 % jusqu'à sa réinitialisation. Un jeton d'accès expiré affiche un `⚠ token expired` atténué (Claude Code le renouvelle au prochain démarrage, et `r` le renouvelle tout de suite pour un compte qui n'est pas en cours d'exécution, comme le fait `ccam usage --refresh`), tandis que `⚠ login expired` signifie que le compte a besoin de `ccam login`.
 
 ## Onglets
 
@@ -46,7 +46,7 @@ La première image n'est dessinée qu'à partir de `config.toml`, en bien moins 
 | Extensions | ce que montre [`ccam ext`](/features/ext), chaque extension une seule fois avec les groupes dont elle provient, `off:` les comptes où un plugin n'est pas activé, les serveurs propres au compte qui ne s'appliquent qu'à ce dossier, `This folder's project`, et les problèmes qui n'appartiennent à aucun compte | `r` recharger |
 | Health | ce que signale [`ccam doctor`](/features/doctor), sous forme d'un encadré par compte (ci-dessous) | `f` réparer l'encadré sélectionné, `F` tout réparer (`doctor --fix`), `↑`/`↓` passer d'un encadré à l'autre |
 
-`←`/`→` ou `Tab` changent d'onglet, `?` liste les touches de l'onglet courant, `r` actualise l'utilisation en contournant le cache court et recharge les onglets Agents, Extensions et Health, et `q` ou `Esc` quitte.
+`←`/`→` ou `Tab` changent d'onglet, `?` liste les touches de l'onglet courant, `r` actualise l'utilisation en contournant le cache court et en renouvelant les jetons d'accès expirés, et recharge les onglets Agents, Extensions et Health, et `q` ou `Esc` quitte. Quitter attend un renouvellement déjà envoyé : le serveur a peut-être remplacé le jeton de renouvellement, et seule sa réponse contient la connexion.
 
 ## Touches de l'onglet Accounts
 

@@ -1,10 +1,10 @@
 ---
 title: O painel
 description: O ccam em um terminal abre um painel em tela cheia com contas, grupos, regras de pasta, extensões e verificações; cada mudança mostra o plano antes.
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: "d65f1b5bb0c8"
+sourceHash: "acb0270d360c"
 ---
 
 `ccam` sem argumentos abre um painel em tela cheia quando a entrada e a saída padrão são um terminal; caso contrário, imprime `ccam list`. O painel mostra todas as contas com o uso e os grupos de cada uma e faz o que os comandos fazem: iniciar, adicionar, fazer login, alterar grupos, definir regras de pasta, listar sessões em segundo plano, verificar e reparar. Iniciar uma conta, ou se conectar a uma sessão em segundo plano, fecha o painel; adicionar uma conta ou fazer login entrega o terminal por um momento e depois volta ao painel.
@@ -33,7 +33,7 @@ Toda vez que abre, o painel pergunta ao GitHub em segundo plano se existe uma ve
 
 `U` pergunta primeiro e depois atualiza do mesmo jeito que o [`ccam update`](/features/update): a versão é conferida com seus checksums SHA-256 e substitui o ccam em um único passo. O painel em que você está continua sendo a versão antiga, então saia e inicie o `ccam` de novo. Quando a atualização não pode ser feita aqui, por exemplo com uma cópia do ccam instalada pelo pacote `.deb`, o painel mostra o mesmo conselho que o `ccam update` e mantém a oferta.
 
-O primeiro quadro é desenhado só a partir do `config.toml`, em bem menos de 100 ms; o uso aparece à medida que cada conta responde. Cada limite tem a própria barra: a janela de 5 horas, a janela semanal de todos os modelos e a janela semanal própria do Fable; `-` significa que a conta não tem essa janela. Uma porcentagem fica amarela em 80% e vermelha em 100%. Se uma consulta falhar, os valores do cache aparecem esmaecidos. Uma janela que o Claude Code informou como cheia mostra 100% até reiniciar. Um token de acesso expirado mostra um `⚠ token expired` esmaecido (o Claude Code o renova na próxima inicialização), enquanto `⚠ login expired` significa que a conta precisa de `ccam login`.
+O primeiro quadro é desenhado só a partir do `config.toml`, em bem menos de 100 ms; o uso aparece à medida que cada conta responde. Cada limite tem a própria barra: a janela de 5 horas, a janela semanal de todos os modelos e a janela semanal própria do Fable; `-` significa que a conta não tem essa janela. Uma porcentagem fica amarela em 80% e vermelha em 100%. Se uma consulta falhar, os valores do cache aparecem esmaecidos. Uma janela que o Claude Code informou como cheia mostra 100% até reiniciar. Um token de acesso expirado mostra um `⚠ token expired` esmaecido (o Claude Code o renova na próxima inicialização, e `r` o renova na hora para uma conta que não está em execução, como faz o `ccam usage --refresh`), enquanto `⚠ login expired` significa que a conta precisa de `ccam login`.
 
 ## Abas
 
@@ -46,7 +46,7 @@ O primeiro quadro é desenhado só a partir do `config.toml`, em bem menos de 10
 | Extensions | o que o [`ccam ext`](/features/ext) mostra, cada extensão uma vez, com os grupos de onde ela vem, `off:` as contas em que um plugin não está ativado, os servidores próprios da conta que valem só para esta pasta, `This folder's project` e os problemas que não pertencem a nenhuma conta | `r` recarregar |
 | Health | o que o [`ccam doctor`](/features/doctor) relata, com uma caixa por conta (abaixo) | `f` reparar a caixa selecionada, `F` reparar tudo (`doctor --fix`), `↑`/`↓` passar de uma caixa para outra |
 
-`←`/`→` ou `Tab` trocam de aba, `?` lista as teclas da aba atual, `r` atualiza o uso, ignorando o cache curto, e carrega de novo as abas Agents, Extensions e Health, e `q` ou `Esc` sai.
+`←`/`→` ou `Tab` trocam de aba, `?` lista as teclas da aba atual, `r` atualiza o uso, ignorando o cache curto e renovando os tokens de acesso expirados, e carrega de novo as abas Agents, Extensions e Health, e `q` ou `Esc` sai. Sair espera uma renovação já enviada: o servidor pode ter trocado o token de renovação, e só a resposta dele traz o login.
 
 ## Teclas na aba Accounts
 

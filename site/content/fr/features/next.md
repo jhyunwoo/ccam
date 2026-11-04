@@ -1,10 +1,10 @@
 ---
 title: "Passer au compte suivant"
 description: "ccam next ouvre Claude Code avec un autre compte ; --auto prend le plus de marge, --continue y emporte la conversation et --fallback relance les tâches -p."
-updated: 2026-11-03
+updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "89e8dea9c55d"
+sourceHash: "de1fd573f1ac"
 ---
 
 `ccam next` ouvre Claude Code avec un autre compte sans que vous ayez à le nommer. Utilisez-le quand un compte atteint sa limite d'utilisation. Il y a quatre façons de changer de compte :
@@ -82,8 +82,8 @@ Le parcours commence au compte utilisé en dernier et s'arrête au premier compt
 
 Un compte est jugé sur ses fenêtres de 5 heures et hebdomadaire et, quand `--model` figure parmi les arguments de Claude Code (après `--`), aussi sur la fenêtre hebdomadaire de ce modèle (`opus`, `sonnet`, `haiku` ou `fable` dans le nom). ccam répartit les comptes en trois niveaux (`Policy.Choose()`) :
 
-1. **Marge** : chaque fenêtre sous `auto_max_usage` (`config.toml`, 100 par défaut). La stratégie choisit parmi eux : `headroom` (par défaut) prend l'utilisation sur 5 heures la plus basse ; `expiring` prend la fenêtre de 5 heures qui se réinitialise le plus tôt, afin que son quota restant serve avant d'être perdu ; `balance` prend le compte auquel il reste le plus de quota hebdomadaire par jour jusqu'à la réinitialisation de sa semaine, en décomptant chaque session ccam en cours, afin que le quota hebdomadaire ne reste pas inutilisé et que les sessions parallèles se répartissent.
-2. **Au-dessus** : sous 100 %, mais à `auto_max_usage` ou au-delà. Utilisés seulement quand aucun compte n'a de marge ; celui dont l'utilisation sur 5 heures est la plus basse passe en premier.
+1. **Marge** : chaque fenêtre sous `auto_max_usage` (`config.toml`, 100 par défaut). La stratégie choisit parmi eux : `headroom` (par défaut) prend l'utilisation sur 5 heures la plus basse et, entre comptes à la même utilisation sur 5 heures, celui qui a le moins consommé de sa semaine ; `expiring` prend la fenêtre de 5 heures qui se réinitialise le plus tôt, afin que son quota restant serve avant d'être perdu ; `balance` prend le compte auquel il reste le plus de quota hebdomadaire par jour jusqu'à la réinitialisation de sa semaine, en décomptant chaque session ccam en cours, afin que le quota hebdomadaire ne reste pas inutilisé et que les sessions parallèles se répartissent.
+2. **Au-dessus** : sous 100 %, mais à `auto_max_usage` ou au-delà. Utilisés seulement quand aucun compte n'a de marge ; celui dont l'utilisation sur 5 heures est la plus basse passe en premier et, à égalité, celui qui a le moins consommé de sa semaine.
 3. **Plein** : une fenêtre à 100 %, ou une utilisation sur 5 heures inconnue. Jamais choisis.
 
 Une fenêtre compte pour 100 % jusqu'à sa réinitialisation quand Claude Code y a refusé une requête : le hook du [plugin ccam](#inside-claude-code) l'enregistre (`~/.local/state/ccam/usage/<name>.limit.json`), quels que soient les chiffres enregistrés. Un compte qui vient d'atteindre sa limite n'est donc pas choisi de nouveau avant sa réinitialisation, même quand ses chiffres sont anciens.

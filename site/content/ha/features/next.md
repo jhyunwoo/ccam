@@ -1,10 +1,10 @@
 ---
 title: Sauyawa zuwa asusu na gaba
 description: ccam next yana buɗe Claude Code a matsayin wani asusu; --auto yana zaɓar mafi sarari, --continue yana kai tattaunawar gaba, --fallback yana maimaita ayyukan -p.
-updated: 2026-11-03
+updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "89e8dea9c55d"
+sourceHash: "de1fd573f1ac"
 ---
 
 `ccam next` yana buɗe Claude Code a matsayin wani asusu ba tare da ka ambaci sunansa ba. Yi amfani da shi idan asusu ya kai iyakar amfaninsa. Akwai hanyoyi huɗu na sauyawa:
@@ -83,8 +83,8 @@ An fara `work` kwanan nan, don haka tafiyar tana farawa bayan sa. `side` ba shi 
 
 Ana auna asusu da tagoginsa na awa 5 da na mako, kuma, idan `--model` yana cikin arguments na Claude Code (bayan `--`), da tagar mako ta wannan model ɗin ma (`opus`, `sonnet`, `haiku` ko `fable` a cikin sunan). ccam yana raba asusan zuwa mataki uku (`Policy.Choose()`):
 
-1. **Sarari**: kowace taga tana ƙasa da `auto_max_usage` (`config.toml`, tsoho 100). Dabarar ce ke zaɓa a cikinsu: `headroom` (tsoho) yana ɗaukar mafi ƙarancin amfanin awa 5, `expiring` yana ɗaukar tagar awa 5 da za ta sake saitawa da wuri, don a yi amfani da sauran quota ɗinta kafin ta ɓace; `balance` yana ɗaukar asusun da ke da mafi yawan quota na mako da ya rage ga kowace rana har makonsa ya sake saitawa, yana ƙirga kowane zaman ccam da ke gudana a kansa, don kada a bar quota na mako ba a yi amfani da shi ba kuma zaman da ke gudana a lokaci ɗaya su rarrabu.
-2. **Sama**: ƙasa da 100% amma a ko sama da `auto_max_usage`. Ana amfani da su ne kawai idan babu asusun da ke da sarari; wanda ke da mafi ƙarancin amfanin awa 5 ne yake fara zuwa.
+1. **Sarari**: kowace taga tana ƙasa da `auto_max_usage` (`config.toml`, tsoho 100). Dabarar ce ke zaɓa a cikinsu: `headroom` (tsoho) yana ɗaukar mafi ƙarancin amfanin awa 5, kuma a cikin asusan da amfanin awa 5 ɗinsu ya yi daidai, wanda ke da mafi ƙarancin amfanin mako; `expiring` yana ɗaukar tagar awa 5 da za ta sake saitawa da wuri, don a yi amfani da sauran quota ɗinta kafin ta ɓace; `balance` yana ɗaukar asusun da ke da mafi yawan quota na mako da ya rage ga kowace rana har makonsa ya sake saitawa, yana ƙirga kowane zaman ccam da ke gudana a kansa, don kada a bar quota na mako ba a yi amfani da shi ba kuma zaman da ke gudana a lokaci ɗaya su rarrabu.
+2. **Sama**: ƙasa da 100% amma a ko sama da `auto_max_usage`. Ana amfani da su ne kawai idan babu asusun da ke da sarari; wanda ke da mafi ƙarancin amfanin awa 5 ne yake fara zuwa, kuma idan sun yi daidai, wanda ke da mafi ƙarancin amfanin mako.
 3. **Cike**: taga a 100%, ko amfanin awa 5 da ba a sani ba. Ba a taɓa zaɓar su ba.
 
 Ana ƙirga taga a matsayin 100% har zuwa sake saitinta idan Claude Code ya ƙi buƙata a can: hook na [plugin ɗin ccam](#inside-claude-code) yana rubuta hakan (`~/.local/state/ccam/usage/<name>.limit.json`), ko me lambobin da aka ajiye suka ce. Don haka asusun da ya kai iyakarsa yanzu ba a sake zaɓar sa kafin sake saitinsa, ko da lambobinsa sun tsufa.

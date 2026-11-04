@@ -1,10 +1,10 @@
 ---
 title: Dashibodi
 description: ccam kwenye terminal hufungua dashibodi ya skrini nzima ya akaunti, vikundi, kanuni za folda, viendelezi na ukaguzi; kila badiliko huonyesha mpango wake kwanza.
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: "d65f1b5bb0c8"
+sourceHash: "acb0270d360c"
 ---
 
 `ccam` bila hoja hufungua dashibodi ya skrini nzima wakati ingizo na matokeo ya kawaida ni terminal; vinginevyo huchapisha `ccam list`. Dashibodi huonyesha kila akaunti pamoja na matumizi yake na vikundi vyake, na hufanya kile ambacho amri hufanya: kuanzisha, kuongeza, kuingia, kubadilisha vikundi, kuweka kanuni za folda, kuorodhesha vipindi vya chinichini, kukagua na kurekebisha. Kuanzisha, au kuunganishwa na kipindi cha chinichini, huifunga; kuongeza akaunti au kuingia hukabidhi terminal kwa muda mfupi, kisha hurudi kwenye dashibodi.
@@ -33,7 +33,7 @@ Kila inapofunguliwa, dashibodi huuliza GitHub chinichini kama kuna toleo jipya z
 
 `U` huuliza kwanza, kisha husasisha kama [`ccam update`](/features/update) inavyofanya: toleo hukaguliwa dhidi ya checksum zake za SHA-256 na huchukua nafasi ya ccam kwa hatua moja. Dashibodi uliyomo bado ni toleo la zamani, kwa hiyo toka kisha uanzishe `ccam` tena. Sasisho lisipoweza kufanywa hapa, kwa mfano kwa nakala ya ccam iliyosakinishwa kutoka kifurushi cha `.deb`, dashibodi huonyesha ushauri ule ule kama `ccam update` na huendelea kulitoa toleo hilo.
 
-Fremu ya kwanza huchorwa kutoka `config.toml` pekee, kwa muda mfupi sana chini ya 100 ms; matumizi hujazwa kadiri kila akaunti inavyojibu. Kila kikomo kina upau wake: dirisha la saa 5, dirisha la wiki kwa model zote, na dirisha la wiki la Fable lenyewe; `-` inamaanisha akaunti haina dirisha hilo. Asilimia hugeuka manjano kwenye 80% na nyekundu kwenye 100%. Utafutaji ukishindwa, thamani kutoka kwenye akiba (cache) huonyeshwa kwa rangi hafifu. Dirisha ambalo Claude Code iliripoti kuwa limejaa huonyesha 100% hadi liwekwe upya. Tokeni ya ufikiaji iliyoisha muda huonyesha `⚠ token expired` hafifu (Claude Code huifanya upya katika uanzishaji unaofuata), ilhali `⚠ login expired` inamaanisha akaunti inahitaji `ccam login`.
+Fremu ya kwanza huchorwa kutoka `config.toml` pekee, kwa muda mfupi sana chini ya 100 ms; matumizi hujazwa kadiri kila akaunti inavyojibu. Kila kikomo kina upau wake: dirisha la saa 5, dirisha la wiki kwa model zote, na dirisha la wiki la Fable lenyewe; `-` inamaanisha akaunti haina dirisha hilo. Asilimia hugeuka manjano kwenye 80% na nyekundu kwenye 100%. Utafutaji ukishindwa, thamani kutoka kwenye akiba (cache) huonyeshwa kwa rangi hafifu. Dirisha ambalo Claude Code iliripoti kuwa limejaa huonyesha 100% hadi liwekwe upya. Tokeni ya ufikiaji iliyoisha muda huonyesha `⚠ token expired` hafifu (Claude Code huifanya upya katika uanzishaji unaofuata, na `r` huifanya upya sasa hivi kwa akaunti isiyoendeshwa, kama `ccam usage --refresh` inavyofanya), ilhali `⚠ login expired` inamaanisha akaunti inahitaji `ccam login`.
 
 ## Vichupo
 
@@ -46,7 +46,7 @@ Fremu ya kwanza huchorwa kutoka `config.toml` pekee, kwa muda mfupi sana chini y
 | Extensions | kile ambacho [`ccam ext`](/features/ext) huonyesha, kila kiendelezi mara moja pamoja na vikundi kinakotoka, `off:` akaunti ambazo plugin haijawashwa, seva za akaunti yenyewe zinazotumika kwa folda hii pekee, `This folder's project`, na matatizo yasiyo ya akaunti yoyote | `r` pakia upya |
 | Health | kile ambacho [`ccam doctor`](/features/doctor) huripoti, kama kisanduku kimoja kwa kila akaunti (hapa chini) | `f` rekebisha kisanduku kilichochaguliwa, `F` rekebisha vyote (`doctor --fix`), `↑`/`↓` sogea kati ya visanduku |
 
-`←`/`→` au `Tab` hubadilisha vichupo, `?` huorodhesha vitufe vya kichupo cha sasa, `r` huonyesha upya matumizi, ikipita akiba fupi, na hupakia upya vichupo vya Agents, Extensions na Health, na `q` au `Esc` hufunga.
+`←`/`→` au `Tab` hubadilisha vichupo, `?` huorodhesha vitufe vya kichupo cha sasa, `r` huonyesha upya matumizi, ikipita akiba fupi na kufanya upya tokeni za ufikiaji zilizoisha muda, na hupakia upya vichupo vya Agents, Extensions na Health, na `q` au `Esc` hufunga. Kufunga husubiri ufanyaji upya ambao tayari umetumwa: huenda seva imebadilisha refresh token, na jibu lake pekee ndilo hubeba kuingia.
 
 ## Vitufe kwenye kichupo cha Accounts
 

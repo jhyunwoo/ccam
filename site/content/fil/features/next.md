@@ -1,10 +1,10 @@
 ---
 title: Paglipat sa susunod na account
 description: Sa ccam next, bubukas ang Claude Code bilang ibang account; --auto para sa pinakamaluwag, --continue para dalhin ang usapan, --fallback para ulitin ang -p job.
-updated: 2026-11-03
+updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "89e8dea9c55d"
+sourceHash: "de1fd573f1ac"
 ---
 
 Binubuksan ng `ccam next` ang Claude Code bilang ibang account nang hindi mo ito pinapangalanan. Gamitin ito kapag naabot ng isang account ang usage limit nito. May apat na paraan para lumipat:
@@ -82,8 +82,8 @@ Nagpapasya ang `--auto` ayon sa usage sa halip na sa pagkakasunod-sunod ng slot.
 
 Hinuhusgahan ang isang account ayon sa 5-oras at lingguhang window nito, at, kapag kasama ang `--model` sa mga argument para sa Claude Code (pagkatapos ng `--`), ayon din sa lingguhang window ng model na iyon (`opus`, `sonnet`, `haiku` o `fable` sa pangalan). Hinahati ng ccam ang mga account sa tatlong antas (`Policy.Choose()`):
 
-1. **May natitira**: bawat window ay mas mababa sa `auto_max_usage` (`config.toml`, default 100). Ang strategy ang pumipili sa kanila: kinukuha ng `headroom` (default) ang pinakamababang 5-oras na usage; kinukuha ng `expiring` ang 5-oras na window na pinakamalapit mag-reset, para magamit ang natitirang quota nito bago ito mawala; kinukuha ng `balance` ang account na may pinakamaraming natitirang lingguhang quota bawat araw hanggang mag-reset ang linggo nito, na ibinibilang laban dito ang bawat tumatakbong ccam session, para hindi masayang ang lingguhang quota at kumalat ang mga parallel session.
-2. **Lampas**: mas mababa sa 100% pero nasa o lampas sa `auto_max_usage`. Ginagamit lang kapag walang account na may natitira; nauuna ang may pinakamababang 5-oras na usage.
+1. **May natitira**: bawat window ay mas mababa sa `auto_max_usage` (`config.toml`, default 100). Ang strategy ang pumipili sa kanila: kinukuha ng `headroom` (default) ang pinakamababang 5-oras na usage, at sa mga account na pareho ang 5-oras na usage, ang may pinakakaunting nagamit sa linggo nito; kinukuha ng `expiring` ang 5-oras na window na pinakamalapit mag-reset, para magamit ang natitirang quota nito bago ito mawala; kinukuha ng `balance` ang account na may pinakamaraming natitirang lingguhang quota bawat araw hanggang mag-reset ang linggo nito, na ibinibilang laban dito ang bawat tumatakbong ccam session, para hindi masayang ang lingguhang quota at kumalat ang mga parallel session.
+2. **Lampas**: mas mababa sa 100% pero nasa o lampas sa `auto_max_usage`. Ginagamit lang kapag walang account na may natitira; nauuna ang may pinakamababang 5-oras na usage, at kapag tabla, ang may pinakakaunting nagamit sa linggo nito.
 3. **Puno**: may window na nasa 100%, o hindi alam ang 5-oras na usage. Hindi kailanman pinipili.
 
 Itinuturing na 100% ang isang window hanggang sa reset nito kapag tinanggihan doon ng Claude Code ang isang request: itinatala ito ng hook ng [ccam plugin](#inside-claude-code) (`~/.local/state/ccam/usage/<name>.limit.json`), anuman ang sabihin ng mga naka-save na numero. Kaya hindi pinipili ulit bago ang reset nito ang account na kaaabot lang sa limit nito, kahit luma na ang mga numero nito.
