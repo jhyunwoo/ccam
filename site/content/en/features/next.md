@@ -1,7 +1,7 @@
 ---
 title: Switching to the next account
 description: ccam next opens Claude Code as another account; --auto picks the most room, --continue carries the conversation over, and --fallback reruns -p jobs.
-updated: 2026-11-03
+updated: 2026-11-05
 order: 8
 translation: source
 ---
@@ -81,8 +81,8 @@ The walk starts at the account used last and stops at the first logged-in accoun
 
 An account is judged by its 5-hour and weekly windows, and, when `--model` is among the arguments for Claude Code (after `--`), by that model's weekly window too (`opus`, `sonnet`, `haiku` or `fable` in the name). ccam sorts the accounts into three tiers (`Policy.Choose()`):
 
-1. **Room**: every window below `auto_max_usage` (`config.toml`, default 100). The strategy chooses among them: `headroom` (default) takes the lowest 5-hour usage; `expiring` takes the 5-hour window that resets soonest, so its remaining quota is used before it is lost; `balance` takes the account with the most weekly quota left per day until its week resets, counting each running ccam session against it, so weekly quota is not left unused and parallel sessions spread out.
-2. **Over**: below 100% but at or over `auto_max_usage`. Used only when no account has room; the one with the lowest 5-hour usage comes first.
+1. **Room**: every window below `auto_max_usage` (`config.toml`, default 100). The strategy chooses among them: `headroom` (default) takes the lowest 5-hour usage, and of accounts at the same 5-hour usage the one with the least of its week used; `expiring` takes the 5-hour window that resets soonest, so its remaining quota is used before it is lost; `balance` takes the account with the most weekly quota left per day until its week resets, counting each running ccam session against it, so weekly quota is not left unused and parallel sessions spread out.
+2. **Over**: below 100% but at or over `auto_max_usage`. Used only when no account has room; the one with the lowest 5-hour usage comes first, and on a tie the one with the least of its week used.
 3. **Full**: a window at 100%, or unknown 5-hour usage. Never chosen.
 
 A window counts as 100% until its reset when Claude Code refused a request there: the [ccam plugin](#inside-claude-code)'s hook records it (`~/.local/state/ccam/usage/<name>.limit.json`), whatever the saved numbers say. So an account that has just hit its limit is not chosen again before its reset, even when its numbers are old.

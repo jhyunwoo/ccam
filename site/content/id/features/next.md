@@ -1,10 +1,10 @@
 ---
 title: Beralih ke akun berikutnya
 description: ccam next membuka Claude Code sebagai akun lain; --auto memilih ruang terbanyak, --continue membawa percakapan, dan --fallback mengulang tugas -p.
-updated: 2026-11-03
+updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "89e8dea9c55d"
+sourceHash: "de1fd573f1ac"
 ---
 
 `ccam next` membuka Claude Code sebagai akun lain tanpa Anda perlu menyebutkan namanya. Gunakan saat sebuah akun mencapai batas penggunaannya. Ada empat cara untuk berpindah:
@@ -82,8 +82,8 @@ Penelusuran dimulai dari akun yang terakhir dipakai dan berhenti di akun pertama
 
 Akun dinilai berdasarkan jendela 5 jam dan mingguannya, dan, jika `--model` ada di antara argumen untuk Claude Code (setelah `--`), juga berdasarkan jendela mingguan model itu (`opus`, `sonnet`, `haiku`, atau `fable` di namanya). ccam membagi akun menjadi tiga tingkatan (`Policy.Choose()`):
 
-1. **Ada ruang**: setiap jendela di bawah `auto_max_usage` (`config.toml`, bawaan 100). Strategi memilih di antaranya: `headroom` (bawaan) mengambil penggunaan 5 jam terendah; `expiring` mengambil jendela 5 jam yang paling cepat di-reset, sehingga sisa kuotanya terpakai sebelum hangus; `balance` mengambil akun dengan sisa kuota mingguan terbanyak per hari hingga minggunya di-reset, dengan menghitung setiap sesi ccam yang sedang berjalan sebagai beban akun itu, sehingga kuota mingguan tidak dibiarkan tak terpakai dan sesi paralel tersebar.
-2. **Lewat batas**: di bawah 100% tetapi sama dengan atau di atas `auto_max_usage`. Hanya dipakai jika tidak ada akun yang punya ruang; akun dengan penggunaan 5 jam terendah didahulukan.
+1. **Ada ruang**: setiap jendela di bawah `auto_max_usage` (`config.toml`, bawaan 100). Strategi memilih di antaranya: `headroom` (bawaan) mengambil penggunaan 5 jam terendah, dan di antara akun dengan penggunaan 5 jam yang sama, akun dengan penggunaan mingguan paling sedikit; `expiring` mengambil jendela 5 jam yang paling cepat di-reset, sehingga sisa kuotanya terpakai sebelum hangus; `balance` mengambil akun dengan sisa kuota mingguan terbanyak per hari hingga minggunya di-reset, dengan menghitung setiap sesi ccam yang sedang berjalan sebagai beban akun itu, sehingga kuota mingguan tidak dibiarkan tak terpakai dan sesi paralel tersebar.
+2. **Lewat batas**: di bawah 100% tetapi sama dengan atau di atas `auto_max_usage`. Hanya dipakai jika tidak ada akun yang punya ruang; akun dengan penggunaan 5 jam terendah didahulukan, dan jika sama, akun dengan penggunaan mingguan paling sedikit.
 3. **Penuh**: sebuah jendela di 100%, atau penggunaan 5 jam yang tidak diketahui. Tidak pernah dipilih.
 
 Sebuah jendela dihitung 100% sampai di-reset jika Claude Code menolak permintaan di sana: hook [plugin ccam](#inside-claude-code) mencatatnya (`~/.local/state/ccam/usage/<name>.limit.json`), apa pun kata angka yang tersimpan. Jadi akun yang baru saja mencapai batasnya tidak dipilih lagi sebelum di-reset, bahkan jika angkanya sudah lama.

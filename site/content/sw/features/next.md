@@ -1,10 +1,10 @@
 ---
 title: Kubadili kwenda akaunti inayofuata
 description: ccam next hufungua Claude Code kama akaunti nyingine; --auto huchagua nafasi kubwa zaidi, --continue huhamisha mazungumzo, --fallback hurudia kazi za -p.
-updated: 2026-11-03
+updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "89e8dea9c55d"
+sourceHash: "de1fd573f1ac"
 ---
 
 `ccam next` hufungua Claude Code kama akaunti nyingine bila wewe kuitaja. Itumie akaunti inapofikia kikomo chake cha matumizi. Kuna njia nne za kubadili:
@@ -82,8 +82,8 @@ Mzunguko huanza kwenye akaunti iliyotumiwa mwisho na husimama kwenye akaunti ya 
 
 Akaunti hupimwa kwa vipindi vyake vya saa 5 na vya wiki, na, `--model` ikiwa miongoni mwa hoja za Claude Code (baada ya `--`), pia kwa kipindi cha wiki cha modeli hiyo (`opus`, `sonnet`, `haiku` au `fable` katika jina). ccam hupanga akaunti katika ngazi tatu (`Policy.Choose()`):
 
-1. **Nafasi**: kila kipindi kiko chini ya `auto_max_usage` (`config.toml`, chaguo-msingi 100). Mkakati huchagua kati yao: `headroom` (chaguo-msingi) huchukua matumizi ya chini zaidi ya saa 5, `expiring` huchukua kipindi cha saa 5 kitakachoanza upya mapema zaidi, ili kiasi chake kilichobaki kitumike kabla hakijapotea; `balance` huchukua akaunti yenye kiasi kikubwa zaidi cha wiki kilichobaki kwa kila siku hadi wiki yake ianze upya, ikihesabu kila kipindi cha ccam kinachoendeshwa dhidi yake, ili kiasi cha wiki kisibaki bila kutumika na vipindi sambamba vienee.
-2. **Juu**: chini ya 100% lakini kwenye au juu ya `auto_max_usage`. Hutumiwa tu wakati hakuna akaunti yenye nafasi; ile yenye matumizi ya chini zaidi ya saa 5 huja kwanza.
+1. **Nafasi**: kila kipindi kiko chini ya `auto_max_usage` (`config.toml`, chaguo-msingi 100). Mkakati huchagua kati yao: `headroom` (chaguo-msingi) huchukua matumizi ya chini zaidi ya saa 5, na kati ya akaunti zenye matumizi sawa ya saa 5, ile iliyotumia sehemu ndogo zaidi ya wiki yake; `expiring` huchukua kipindi cha saa 5 kitakachoanza upya mapema zaidi, ili kiasi chake kilichobaki kitumike kabla hakijapotea; `balance` huchukua akaunti yenye kiasi kikubwa zaidi cha wiki kilichobaki kwa kila siku hadi wiki yake ianze upya, ikihesabu kila kipindi cha ccam kinachoendeshwa dhidi yake, ili kiasi cha wiki kisibaki bila kutumika na vipindi sambamba vienee.
+2. **Juu**: chini ya 100% lakini kwenye au juu ya `auto_max_usage`. Hutumiwa tu wakati hakuna akaunti yenye nafasi; ile yenye matumizi ya chini zaidi ya saa 5 huja kwanza, na zikilingana, ile iliyotumia sehemu ndogo zaidi ya wiki yake.
 3. **Imejaa**: kipindi kiko 100%, au matumizi ya saa 5 hayajulikani. Haichaguliwi kamwe.
 
 Claude Code ilipokataa ombi katika kipindi cha muda, kipindi hicho huhesabiwa kama 100% hadi kianze upya: hook ya [plugin ya ccam](#inside-claude-code) hukirekodi (`~/.local/state/ccam/usage/<name>.limit.json`), bila kujali namba zilizohifadhiwa zinasema nini. Kwa hiyo akaunti iliyofikia kikomo chake sasa hivi haichaguliwi tena kabla ya kuanza upya, hata namba zake zikiwa za zamani.

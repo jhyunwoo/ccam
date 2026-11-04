@@ -1,10 +1,10 @@
 ---
 title: 切换到下一个账号
 description: ccam next 以另一个账号打开 Claude Code；--auto 选择余量最多的账号，--continue 把对话带到新账号，--fallback 重新运行 -p 任务。
-updated: 2026-11-03
+updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "89e8dea9c55d"
+sourceHash: "de1fd573f1ac"
 ---
 
 `ccam next` 无需你指定账号名，就能以另一个账号打开 Claude Code。当某个账号达到用量限制时使用它。有四种切换方式：
@@ -82,8 +82,8 @@ Claude Code 自己的选项，例如 `--dangerously-skip-permissions` 或 `--mod
 
 账号按其 5 小时和每周时间窗口来判断；当传给 Claude Code 的参数中（`--` 之后）有 `--model` 时，还会计入该模型的每周时间窗口（名称中含有 `opus`、`sonnet`、`haiku` 或 `fable`）。ccam 把账号分为三类（`Policy.Choose()`）：
 
-1. **有余量**：每个时间窗口都低于 `auto_max_usage`（`config.toml`，默认 100）。由策略在其中选择：`headroom`（默认）选 5 小时用量最低的账号；`expiring` 选 5 小时时间窗口最早重置的账号，让它剩余的配额在失效前被用掉；`balance` 选在每周时间窗口重置之前平均每天剩余配额最多的账号，并把每个正在运行的 ccam 会话计入其中，这样每周配额不会被浪费，并行的会话也会分散开。
-2. **超出**：低于 100%，但达到或超过 `auto_max_usage`。只在没有账号有余量时使用；5 小时用量最低的排在最前。
+1. **有余量**：每个时间窗口都低于 `auto_max_usage`（`config.toml`，默认 100）。由策略在其中选择：`headroom`（默认）选 5 小时用量最低的账号，5 小时用量相同时选每周用量最低的账号；`expiring` 选 5 小时时间窗口最早重置的账号，让它剩余的配额在失效前被用掉；`balance` 选在每周时间窗口重置之前平均每天剩余配额最多的账号，并把每个正在运行的 ccam 会话计入其中，这样每周配额不会被浪费，并行的会话也会分散开。
+2. **超出**：低于 100%，但达到或超过 `auto_max_usage`。只在没有账号有余量时使用；5 小时用量最低的排在最前，相同时则每周用量最低的在前。
 3. **已满**：某个时间窗口已达 100%，或 5 小时用量未知。从不选择。
 
 当 Claude Code 在某个时间窗口拒绝了请求时，该时间窗口在重置前一律按 100% 计算：[ccam 插件](#inside-claude-code)的钩子会记录它（`~/.local/state/ccam/usage/<name>.limit.json`），无论保存的数字是多少。因此刚刚达到限制的账号在重置前不会再次被选中，即使它的数字已经过时。

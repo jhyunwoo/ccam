@@ -1,10 +1,10 @@
 ---
 title: Przełączanie na następne konto
 description: ccam next otwiera Claude Code jako inne konto; --auto wybiera konto z największym zapasem, --continue przenosi rozmowę, --fallback ponawia zadania -p.
-updated: 2026-11-03
+updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "89e8dea9c55d"
+sourceHash: "de1fd573f1ac"
 ---
 
 `ccam next` otwiera Claude Code jako inne konto bez podawania jego nazwy. Używaj go, gdy konto osiągnie limit użycia. Są cztery sposoby przełączenia:
@@ -82,8 +82,8 @@ Przejście zaczyna się od ostatnio używanego konta i zatrzymuje na pierwszym z
 
 Konto jest oceniane według okna 5-godzinnego i tygodniowego, a gdy wśród argumentów dla Claude Code (po `--`) jest `--model`, także według tygodniowego okna tego modelu (`opus`, `sonnet`, `haiku` lub `fable` w nazwie). ccam dzieli konta na trzy poziomy (`Policy.Choose()`):
 
-1. **Z zapasem**: każde okno poniżej `auto_max_usage` (`config.toml`, domyślnie 100). Spośród nich wybiera strategia: `headroom` (domyślna) bierze najniższe użycie 5-godzinne; `expiring` bierze okno 5-godzinne, które zresetuje się najwcześniej, żeby pozostały limit został zużyty, zanim przepadnie; `balance` bierze konto z największym tygodniowym limitem pozostałym na każdy dzień do resetu tygodnia, licząc przeciw niemu każdą uruchomioną sesję ccam, żeby tygodniowy limit nie przepadał niewykorzystany, a równoległe sesje się rozkładały.
-2. **Powyżej progu**: poniżej 100%, ale na poziomie `auto_max_usage` lub wyżej. Używane tylko wtedy, gdy żadne konto nie ma zapasu; jako pierwsze idzie to z najniższym użyciem 5-godzinnym.
+1. **Z zapasem**: każde okno poniżej `auto_max_usage` (`config.toml`, domyślnie 100). Spośród nich wybiera strategia: `headroom` (domyślna) bierze najniższe użycie 5-godzinne, a spośród kont o tym samym użyciu 5-godzinnym to z najniższym użyciem tygodniowym; `expiring` bierze okno 5-godzinne, które zresetuje się najwcześniej, żeby pozostały limit został zużyty, zanim przepadnie; `balance` bierze konto z największym tygodniowym limitem pozostałym na każdy dzień do resetu tygodnia, licząc przeciw niemu każdą uruchomioną sesję ccam, żeby tygodniowy limit nie przepadał niewykorzystany, a równoległe sesje się rozkładały.
+2. **Powyżej progu**: poniżej 100%, ale na poziomie `auto_max_usage` lub wyżej. Używane tylko wtedy, gdy żadne konto nie ma zapasu; jako pierwsze idzie to z najniższym użyciem 5-godzinnym, a przy remisie to z najniższym użyciem tygodniowym.
 3. **Pełne**: okno na poziomie 100% albo nieznane użycie 5-godzinne. Nigdy niewybierane.
 
 Okno liczy się jako 100% aż do resetu, gdy Claude Code odrzucił w nim żądanie: hook [pluginu ccam](#inside-claude-code) to zapisuje (`~/.local/state/ccam/usage/<name>.limit.json`), bez względu na zapisane liczby. Dzięki temu konto, które właśnie osiągnęło limit, nie zostanie wybrane ponownie przed resetem, nawet gdy jego liczby są stare.
