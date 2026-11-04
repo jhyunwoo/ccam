@@ -1,10 +1,10 @@
 ---
 title: El panel
 description: ccam en una terminal abre un panel a pantalla completa con cuentas, grupos, reglas de carpeta, extensiones y comprobaciones; cada cambio muestra antes su plan.
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: "d65f1b5bb0c8"
+sourceHash: "acb0270d360c"
 ---
 
 `ccam` sin argumentos abre un panel a pantalla completa cuando la entrada y la salida estándar son una terminal; si no, imprime `ccam list`. El panel muestra cada cuenta con su uso y sus grupos, y hace lo mismo que los comandos: iniciar, agregar, iniciar sesión, cambiar grupos, definir reglas de carpeta, listar sesiones en segundo plano, comprobar y reparar. Al iniciar una cuenta, o al conectarse a una sesión en segundo plano, se cierra; al agregar una cuenta o iniciar sesión, cede la terminal por un momento y luego vuelve al panel.
@@ -33,7 +33,7 @@ Cada vez que se abre, el panel pregunta a GitHub en segundo plano si existe una 
 
 `U` pregunta primero y luego actualiza como lo hace [`ccam update`](/features/update): la versión se comprueba con sus sumas de comprobación SHA-256 y reemplaza ccam en un solo paso. El panel en el que estás sigue siendo la versión anterior, así que sal y vuelve a iniciar `ccam`. Cuando la actualización no se puede hacer aquí, por ejemplo con una copia de ccam instalada desde el paquete `.deb`, el panel muestra el mismo consejo que `ccam update` y mantiene la oferta.
 
-El primer fotograma se dibuja solo a partir de `config.toml`, en mucho menos de 100 ms; el uso se completa a medida que responde cada cuenta. Cada límite tiene su propia barra: la ventana de 5 horas, la ventana semanal de todos los modelos y la ventana semanal propia de Fable; `-` significa que la cuenta no tiene esa ventana. Un porcentaje se vuelve amarillo al 80 % y rojo al 100 %. Si una consulta falla, los valores en caché se muestran atenuados. Una ventana que Claude Code informó llena muestra 100 % hasta su restablecimiento. Un token de acceso caducado muestra un `⚠ token expired` atenuado (Claude Code lo renueva en el siguiente inicio), mientras que `⚠ login expired` significa que la cuenta necesita `ccam login`.
+El primer fotograma se dibuja solo a partir de `config.toml`, en mucho menos de 100 ms; el uso se completa a medida que responde cada cuenta. Cada límite tiene su propia barra: la ventana de 5 horas, la ventana semanal de todos los modelos y la ventana semanal propia de Fable; `-` significa que la cuenta no tiene esa ventana. Un porcentaje se vuelve amarillo al 80 % y rojo al 100 %. Si una consulta falla, los valores en caché se muestran atenuados. Una ventana que Claude Code informó llena muestra 100 % hasta su restablecimiento. Un token de acceso caducado muestra un `⚠ token expired` atenuado (Claude Code lo renueva en el siguiente inicio, y `r` lo renueva al momento para una cuenta que no está en ejecución, como hace `ccam usage --refresh`), mientras que `⚠ login expired` significa que la cuenta necesita `ccam login`.
 
 ## Pestañas
 
@@ -46,7 +46,7 @@ El primer fotograma se dibuja solo a partir de `config.toml`, en mucho menos de 
 | Extensions | lo que muestra [`ccam ext`](/features/ext), cada extensión una vez con los grupos de los que proviene, `off:` las cuentas en las que un plugin no está activado, los servidores propios de la cuenta que se aplican solo a esta carpeta, `This folder's project` y los problemas que no pertenecen a ninguna cuenta | `r` volver a cargar |
 | Health | lo que informa [`ccam doctor`](/features/doctor), con un recuadro por cuenta (más abajo) | `f` reparar el recuadro seleccionado, `F` reparar todo (`doctor --fix`), `↑`/`↓` pasar de un recuadro a otro |
 
-`←`/`→` o `Tab` cambian de pestaña, `?` lista las teclas de la pestaña actual, `r` actualiza el uso, sin pasar por la caché corta, y vuelve a cargar las pestañas Agents, Extensions y Health, y `q` o `Esc` salen.
+`←`/`→` o `Tab` cambian de pestaña, `?` lista las teclas de la pestaña actual, `r` actualiza el uso, sin pasar por la caché corta y renovando los tokens de acceso caducados, y vuelve a cargar las pestañas Agents, Extensions y Health, y `q` o `Esc` salen. Al salir se espera a una renovación ya enviada: puede que el servidor haya sustituido el token de actualización, y solo su respuesta contiene el inicio de sesión.
 
 ## Teclas en la pestaña Accounts
 

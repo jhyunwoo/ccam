@@ -1,10 +1,10 @@
 ---
 title: Das Dashboard
 description: ccam öffnet im Terminal ein Vollbild-Dashboard mit Konten, Gruppen, Ordnerregeln, Erweiterungen und Prüfungen; jede Änderung zeigt zuerst ihren Plan.
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: "d65f1b5bb0c8"
+sourceHash: "acb0270d360c"
 ---
 
 `ccam` ohne Argumente öffnet ein Vollbild-Dashboard, wenn Standardeingabe und -ausgabe ein Terminal sind; andernfalls gibt es `ccam list` aus. Das Dashboard zeigt jedes Konto mit seiner Nutzung und seinen Gruppen und erledigt, was die Befehle tun: starten, hinzufügen, anmelden, Gruppen ändern, Ordnerregeln setzen, Hintergrundsitzungen auflisten, prüfen und reparieren. Ein Start oder das Verbinden mit einer Hintergrundsitzung schließt es; beim Hinzufügen eines Kontos oder bei der Anmeldung gibt es das Terminal kurz ab und kehrt dann zum Dashboard zurück.
@@ -33,7 +33,7 @@ Bei jedem Öffnen fragt das Dashboard im Hintergrund bei GitHub nach, ob es ein 
 
 `U` fragt zuerst nach und aktualisiert dann so wie [`ccam update`](/features/update): Das Release wird gegen seine SHA-256-Prüfsummen geprüft und ersetzt ccam in einem Schritt. Das Dashboard, in dem du gerade bist, ist noch die alte Version, also beende es und starte `ccam` neu. Wenn das Update hier nicht möglich ist, etwa bei einer aus dem `.deb`-Paket installierten Kopie von ccam, zeigt das Dashboard denselben Hinweis wie `ccam update` und behält das Angebot bei.
 
-Das erste Bild entsteht allein aus `config.toml`, in deutlich unter 100 ms; die Nutzung erscheint, sobald das jeweilige Konto antwortet. Jedes Limit hat seinen eigenen Balken: das 5-Stunden-Fenster, das Wochenfenster für alle Modelle und das eigene Wochenfenster von Fable; `-` bedeutet, dass das Konto kein solches Fenster hat. Ein Prozentwert wird bei 80 % gelb und bei 100 % rot. Schlägt eine Abfrage fehl, werden zwischengespeicherte Werte blass dargestellt. Ein Zeitfenster, das Claude Code als voll gemeldet hat, zeigt bis zu seinem Zurücksetzen 100 %. Ein abgelaufenes Zugriffstoken zeigt ein blasses `⚠ token expired` (Claude Code erneuert es beim nächsten Start), während `⚠ login expired` bedeutet, dass das Konto `ccam login` braucht.
+Das erste Bild entsteht allein aus `config.toml`, in deutlich unter 100 ms; die Nutzung erscheint, sobald das jeweilige Konto antwortet. Jedes Limit hat seinen eigenen Balken: das 5-Stunden-Fenster, das Wochenfenster für alle Modelle und das eigene Wochenfenster von Fable; `-` bedeutet, dass das Konto kein solches Fenster hat. Ein Prozentwert wird bei 80 % gelb und bei 100 % rot. Schlägt eine Abfrage fehl, werden zwischengespeicherte Werte blass dargestellt. Ein Zeitfenster, das Claude Code als voll gemeldet hat, zeigt bis zu seinem Zurücksetzen 100 %. Ein abgelaufenes Zugriffstoken zeigt ein blasses `⚠ token expired` (Claude Code erneuert es beim nächsten Start, und `r` erneuert es sofort für ein Konto, das gerade nicht läuft, so wie `ccam usage --refresh`), während `⚠ login expired` bedeutet, dass das Konto `ccam login` braucht.
 
 ## Tabs
 
@@ -46,7 +46,7 @@ Das erste Bild entsteht allein aus `config.toml`, in deutlich unter 100 ms; die 
 | Extensions | was [`ccam ext`](/features/ext) zeigt, jede Erweiterung einmal mit den Gruppen, aus denen sie kommt, `off:` die Konten, in denen ein Plugin nicht eingeschaltet ist, die eigenen Server des Kontos, die nur für diesen Ordner gelten, `This folder's project` und Probleme, die zu keinem Konto gehören | `r` neu laden |
 | Health | was [`ccam doctor`](/features/doctor) meldet, als Kasten pro Konto (siehe unten) | `f` den ausgewählten Kasten reparieren, `F` alles reparieren (`doctor --fix`), `↑`/`↓` zwischen Kästen wechseln |
 
-`←`/`→` oder `Tab` wechseln den Tab, `?` listet die Tasten des aktuellen Tabs auf, `r` aktualisiert die Nutzung unter Umgehung des kurzen Caches und lädt die Tabs Agents, Extensions und Health neu, und `q` oder `Esc` beendet.
+`←`/`→` oder `Tab` wechseln den Tab, `?` listet die Tasten des aktuellen Tabs auf, `r` aktualisiert die Nutzung unter Umgehung des kurzen Caches, erneuert abgelaufene Zugriffstokens und lädt die Tabs Agents, Extensions und Health neu, und `q` oder `Esc` beendet. Beim Beenden wird auf eine bereits gesendete Erneuerung gewartet: Der Server hat das Refresh-Token womöglich ersetzt, und nur seine Antwort enthält die Anmeldung.
 
 ## Tasten auf dem Tab Accounts
 

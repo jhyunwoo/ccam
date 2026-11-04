@@ -1,10 +1,10 @@
 ---
 title: Ang dashboard
 description: Sa terminal, nagbubukas ang ccam ng full-screen dashboard ng mga account, group, folder rule, extension at pagsusuri; may plano muna ang bawat pagbabago.
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: "d65f1b5bb0c8"
+sourceHash: "acb0270d360c"
 ---
 
 Binubuksan ng `ccam` na walang argument ang isang full-screen dashboard kapag terminal ang standard input at output; kung hindi, ipi-print nito ang `ccam list`. Ipinapakita ng dashboard ang bawat account kasama ang usage at mga group nito, at ginagawa nito ang ginagawa ng mga command: magsimula, magdagdag, mag-log in, magbago ng mga group, magtakda ng mga folder rule, maglista ng mga background session, magsuri at mag-ayos. Nagsasara ito kapag nagsimula ang isang account o kapag kumabit ka sa isang background session; kapag nagdagdag ng account o nag-log in, ibinibigay muna nito sandali ang terminal, saka bumabalik sa dashboard.
@@ -33,7 +33,7 @@ Tuwing nagbubukas ito, tinatanong ng dashboard sa GitHub sa background kung may 
 
 Nagtatanong muna ang `U`, saka nag-a-update gaya ng ginagawa ng [`ccam update`](/features/update): sinusuri ang release laban sa mga SHA-256 checksum nito at pinapalitan nito ang ccam sa isang hakbang. Lumang bersyon pa rin ang dashboard na kinaroroonan mo, kaya lumabas at simulan muli ang `ccam`. Kapag hindi magagawa rito ang update, halimbawa para sa kopya ng ccam na in-install mula sa `.deb` package, ipinapakita ng dashboard ang parehong payo gaya ng `ccam update` at pinananatili ang alok.
 
-Iginuguhit ang unang frame mula sa `config.toml` lang, sa mas mababa pa nang husto sa 100 ms; napupunan ang usage habang sumasagot ang bawat account. May sariling bar ang bawat limit: ang 5-oras na window, ang lingguhang window para sa lahat ng model, at ang sariling lingguhang window ng Fable; ang ibig sabihin ng `-` ay walang ganoong window ang account. Nagiging dilaw ang porsiyento sa 80% at pula sa 100%. Kapag pumalya ang isang lookup, malabong ipinapakita ang mga naka-cache na value. 100% ang ipinapakita ng window na iniulat ng Claude Code na puno na hanggang sa reset nito. Nagpapakita ang expired na access token ng malabong `⚠ token expired` (nire-renew ito ng Claude Code sa susunod na pagsisimula), habang ang ibig sabihin ng `⚠ login expired` ay kailangan ng account ang `ccam login`.
+Iginuguhit ang unang frame mula sa `config.toml` lang, sa mas mababa pa nang husto sa 100 ms; napupunan ang usage habang sumasagot ang bawat account. May sariling bar ang bawat limit: ang 5-oras na window, ang lingguhang window para sa lahat ng model, at ang sariling lingguhang window ng Fable; ang ibig sabihin ng `-` ay walang ganoong window ang account. Nagiging dilaw ang porsiyento sa 80% at pula sa 100%. Kapag pumalya ang isang lookup, malabong ipinapakita ang mga naka-cache na value. 100% ang ipinapakita ng window na iniulat ng Claude Code na puno na hanggang sa reset nito. Nagpapakita ang expired na access token ng malabong `⚠ token expired` (nire-renew ito ng Claude Code sa susunod na pagsisimula, at nire-renew ito ng `r` ngayon din para sa account na hindi tumatakbo, gaya ng ginagawa ng `ccam usage --refresh`), habang ang ibig sabihin ng `⚠ login expired` ay kailangan ng account ang `ccam login`.
 
 ## Mga tab
 
@@ -46,7 +46,7 @@ Iginuguhit ang unang frame mula sa `config.toml` lang, sa mas mababa pa nang hus
 | Extensions | ang ipinapakita ng [`ccam ext`](/features/ext), bawat extension nang isang beses kasama ang mga group na pinanggagalingan nito, `off:` ang mga account kung saan hindi naka-on ang isang plugin, ang sariling mga server ng account na para lang sa folder na ito, `This folder's project`, at ang mga problemang hindi pag-aari ng anumang account | `r` i-reload |
 | Health | ang iniuulat ng [`ccam doctor`](/features/doctor), bilang isang kahon bawat account (sa ibaba) | `f` ayusin ang napiling kahon, `F` ayusin lahat (`doctor --fix`), `↑`/`↓` lumipat sa pagitan ng mga kahon |
 
-Nagpapalit ng tab ang `←`/`→` o `Tab`, inililista ng `?` ang mga key ng kasalukuyang tab, nire-refresh ng `r` ang usage nang nilalampasan ang maikling cache at nilo-load ulit ang mga tab na Agents, Extensions at Health, at lumalabas ang `q` o `Esc`.
+Nagpapalit ng tab ang `←`/`→` o `Tab`, inililista ng `?` ang mga key ng kasalukuyang tab, nire-refresh ng `r` ang usage nang nilalampasan ang maikling cache at nire-renew ang mga expired na access token, at nilo-load ulit ang mga tab na Agents, Extensions at Health, at lumalabas ang `q` o `Esc`. Sa paglabas, hinihintay ang renewal na naipadala na: maaaring napalitan na ng server ang refresh token, at ang sagot lang nito ang may hawak ng login.
 
 ## Mga key sa tab na Accounts
 

@@ -1,10 +1,10 @@
 ---
 title: Kontrol paneli
 description: Terminalde ccam; hesapların, grupların, klasör kurallarının, uzantıların ve denetimlerin tam ekran kontrol panelini açar; her değişiklik önce planını gösterir.
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: d65f1b5bb0c8
+sourceHash: acb0270d360c
 ---
 
 Argümansız `ccam`, standart girdi ve çıktı bir terminal olduğunda tam ekran bir kontrol paneli açar; aksi halde `ccam list` çıktısını yazdırır. Kontrol paneli her hesabı kullanımı ve gruplarıyla birlikte gösterir ve komutların yaptığını yapar: başlatma, ekleme, giriş yapma, grupları değiştirme, klasör kuralları belirleme, arka plan oturumlarını listeleme, denetleme ve onarma. Başlatma ya da bir arka plan oturumuna bağlanma paneli kapatır; bir hesap eklemek veya giriş yapmak terminali kısa bir süre devreder, ardından kontrol paneline geri döner.
@@ -33,7 +33,7 @@ Kontrol paneli her açıldığında arka planda GitHub'a daha yeni bir ccam sür
 
 `U` önce sorar, sonra [`ccam update`](/features/update) gibi günceller: sürüm SHA-256 sağlama toplamlarıyla doğrulanır ve tek adımda ccam'in yerini alır. İçinde bulunduğunuz kontrol paneli hâlâ eski sürümdür; bu yüzden çıkın ve `ccam` komutunu yeniden başlatın. Güncelleme burada yapılamadığında, örneğin `.deb` paketinden kurulmuş bir ccam kopyası için, kontrol paneli `ccam update` ile aynı öneriyi gösterir ve teklifi korur.
 
-İlk kare yalnızca `config.toml` dosyasından, 100 ms'nin çok altında çizilir; kullanım her hesap yanıt verdikçe dolar. Her limitin kendi çubuğu vardır: 5 saatlik pencere, tüm modeller için haftalık pencere ve Fable'ın kendi haftalık penceresi; `-` hesabın böyle bir penceresi olmadığı anlamına gelir. Bir yüzde %80'de sarıya, %100'de kırmızıya döner. Bir sorgu başarısız olursa önbellekteki değerler soluk gösterilir. Claude Code'un dolu bildirdiği bir pencere sıfırlanana kadar %100 gösterir. Süresi dolmuş bir erişim token'ı soluk bir `⚠ token expired` gösterir (Claude Code onu bir sonraki başlatmada yeniler); `⚠ login expired` ise hesabın `ccam login` gerektirdiği anlamına gelir.
+İlk kare yalnızca `config.toml` dosyasından, 100 ms'nin çok altında çizilir; kullanım her hesap yanıt verdikçe dolar. Her limitin kendi çubuğu vardır: 5 saatlik pencere, tüm modeller için haftalık pencere ve Fable'ın kendi haftalık penceresi; `-` hesabın böyle bir penceresi olmadığı anlamına gelir. Bir yüzde %80'de sarıya, %100'de kırmızıya döner. Bir sorgu başarısız olursa önbellekteki değerler soluk gösterilir. Claude Code'un dolu bildirdiği bir pencere sıfırlanana kadar %100 gösterir. Süresi dolmuş bir erişim token'ı soluk bir `⚠ token expired` gösterir (Claude Code onu bir sonraki başlatmada yeniler; çalışmayan bir hesap için `r` de onu `ccam usage --refresh` gibi hemen yeniler); `⚠ login expired` ise hesabın `ccam login` gerektirdiği anlamına gelir.
 
 ## Sekmeler
 
@@ -46,7 +46,7 @@ Kontrol paneli her açıldığında arka planda GitHub'a daha yeni bir ccam sür
 | Extensions | [`ccam ext`](/features/ext) komutunun gösterdikleri, her uzantı bir kez ve geldiği gruplarla; `off:` bir eklentinin açık olmadığı hesaplar, hesabın yalnızca bu klasör için geçerli olan kendi sunucuları, `This folder's project` ve hiçbir hesaba ait olmayan sorunlar | `r` yeniden yükle |
 | Health | [`ccam doctor`](/features/doctor) komutunun bildirdikleri, hesap başına bir kutu olarak (aşağıda) | `f` seçili kutuyu onarır, `F` hepsini onarır (`doctor --fix`), `↑`/`↓` kutular arasında geçer |
 
-`←`/`→` veya `Tab` sekmeler arasında geçer, `?` geçerli sekmenin tuşlarını listeler, `r` kısa önbelleği atlayarak kullanımı yeniler ve Agents, Extensions ve Health sekmelerini yeniden yükler, `q` veya `Esc` ise çıkar.
+`←`/`→` veya `Tab` sekmeler arasında geçer, `?` geçerli sekmenin tuşlarını listeler, `r` kısa önbelleği atlayarak ve süresi dolmuş erişim token'larını yenileyerek kullanımı yeniler ve Agents, Extensions ve Health sekmelerini yeniden yükler, `q` veya `Esc` ise çıkar. Çıkış, gönderilmiş bir yenilemeyi bekler: sunucu yenileme token'ını değiştirmiş olabilir ve girişi yalnızca onun yanıtı taşır.
 
 ## Accounts sekmesindeki tuşlar
 

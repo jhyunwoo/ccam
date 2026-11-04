@@ -1,10 +1,10 @@
 ---
 title: Dashboard
 description: ccam a terminal yana buɗe dashboard mai cike allo na asusai, rukunoni, ƙa'idodin folda, extensions da dubawa; kowane canji yana fara nuna shirinsa.
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: d65f1b5bb0c8
+sourceHash: acb0270d360c
 ---
 
 `ccam` ba tare da arguments ba yana buɗe dashboard mai cike allo idan standard input da output terminal ne; in ba haka ba yana buga `ccam list`. Dashboard yana nuna kowane asusu tare da amfaninsa da rukunoninsa, kuma yana yin abin da umarnan ke yi: farawa, ƙarawa, shiga, canza rukunoni, saita ƙa'idodin folda, lissafa zaman bayan fage, dubawa da gyarawa. Farawa, ko haɗawa da zaman bayan fage, yana rufe shi; ƙara asusu ko shiga yana miƙa terminal na ɗan lokaci, sannan ya dawo kan dashboard.
@@ -33,7 +33,7 @@ Duk lokacin da ya buɗe, dashboard yana tambayar GitHub a bayan fage ko akwai sa
 
 `U` yana tambaya da farko, sannan yana sabuntawa yadda [`ccam update`](/features/update) ke yi: ana duba sakin da SHA-256 checksums nasa kuma yana maye gurbin ccam a mataki ɗaya. Dashboard ɗin da kake ciki har yanzu tsohon sigar ne, don haka ka fita ka sake fara `ccam`. Idan ba za a iya yin sabuntawar a nan ba, misali ga kwafin ccam da aka girka daga kunshin `.deb`, dashboard yana nuna shawara ɗaya da ta `ccam update` kuma yana riƙe tayin.
 
-Firam na farko yana zana daga `config.toml` kaɗai, cikin ƙasa da 100 ms sosai; amfani yana cika yayin da kowane asusu ya amsa. Kowace iyaka tana da nata sandar: taga ta awa 5, taga ta mako ga dukkan model, da taga ta mako ta Fable kanta; `-` yana nufin asusun ba shi da irin wannan taga. Kashi yana zama rawaya a 80% kuma ja a 100%. Idan nema ya gaza, ana nuna ƙimomin cache a dusashe. Tagar da Claude Code ya ba da rahoton ta cika tana nuna 100% har zuwa sake saitinta. Access token da ya ƙare yana nuna `⚠ token expired` a dusashe (Claude Code yana sabunta shi a farawa ta gaba), yayin da `⚠ login expired` yana nufin asusun yana buƙatar `ccam login`.
+Firam na farko yana zana daga `config.toml` kaɗai, cikin ƙasa da 100 ms sosai; amfani yana cika yayin da kowane asusu ya amsa. Kowace iyaka tana da nata sandar: taga ta awa 5, taga ta mako ga dukkan model, da taga ta mako ta Fable kanta; `-` yana nufin asusun ba shi da irin wannan taga. Kashi yana zama rawaya a 80% kuma ja a 100%. Idan nema ya gaza, ana nuna ƙimomin cache a dusashe. Tagar da Claude Code ya ba da rahoton ta cika tana nuna 100% har zuwa sake saitinta. Access token da ya ƙare yana nuna `⚠ token expired` a dusashe (Claude Code yana sabunta shi a farawa ta gaba, kuma `r` yana sabunta shi yanzu ga asusun da ba ya gudana, kamar yadda `ccam usage --refresh` ke yi), yayin da `⚠ login expired` yana nufin asusun yana buƙatar `ccam login`.
 
 ## Shafuka
 
@@ -46,7 +46,7 @@ Firam na farko yana zana daga `config.toml` kaɗai, cikin ƙasa da 100 ms sosai;
 | Extensions | abin da [`ccam ext`](/features/ext) ke nunawa, kowane extension sau ɗaya tare da rukunonin da yake fitowa daga gare su, `off:` asusan da ba a kunna plugin a cikinsu ba, sabobin asusun na kansa da ke aiki ga wannan foldar kawai, `This folder's project`, da matsalolin da ba na wani asusu ba | `r` sake lodawa |
 | Health | abin da [`ccam doctor`](/features/doctor) ke bayar da rahoto, a matsayin akwati ɗaya ga kowane asusu (a ƙasa) | `f` gyara akwatin da aka zaɓa, `F` gyara duka (`doctor --fix`), `↑`/`↓` matsawa tsakanin akwatuna |
 
-`←`/`→` ko `Tab` suna sauya shafuka, `?` yana lissafa maɓallan shafin yanzu, `r` yana sabunta amfani, yana tsallake gajeren cache, kuma yana sake lodawa shafukan Agents, Extensions da Health, kuma `q` ko `Esc` yana fita.
+`←`/`→` ko `Tab` suna sauya shafuka, `?` yana lissafa maɓallan shafin yanzu, `r` yana sabunta amfani, yana tsallake gajeren cache kuma yana sabunta access token da suka ƙare, kuma yana sake lodawa shafukan Agents, Extensions da Health, kuma `q` ko `Esc` yana fita. Fita tana jiran sabuntawar da aka riga aka aika: sabar ta iya maye gurbin refresh token, kuma amsarta kaɗai ce ke riƙe da shigar.
 
 ## Maɓallai a shafin Accounts
 

@@ -1,10 +1,10 @@
 ---
 title: Panel
 description: ccam w terminalu otwiera pełnoekranowy panel kont, grup, reguł folderów, rozszerzeń i sprawdzeń; każda zmiana najpierw pokazuje swój plan.
-updated: 2026-10-30
+updated: 2026-11-05
 order: 15
 translation: machine
-sourceHash: "d65f1b5bb0c8"
+sourceHash: "acb0270d360c"
 ---
 
 `ccam` bez argumentów otwiera pełnoekranowy panel, gdy standardowe wejście i wyjście są terminalem; w przeciwnym razie wypisuje `ccam list`. Panel pokazuje każde konto z jego użyciem i grupami i robi to samo co polecenia: uruchamia, dodaje, loguje, zmienia grupy, ustawia reguły folderów, wyświetla sesje w tle, sprawdza i naprawia. Uruchomienie konta albo podłączenie się do sesji w tle go zamyka; dodawanie konta lub logowanie na chwilę oddaje terminal, a potem wraca do panelu.
@@ -33,7 +33,7 @@ Przy każdym otwarciu panel pyta w tle GitHub, czy istnieje nowsze wydanie ccam;
 
 `U` najpierw pyta, a potem aktualizuje tak jak [`ccam update`](/features/update): wydanie jest sprawdzane z jego sumami kontrolnymi SHA-256 i zastępuje ccam w jednym kroku. Otwarty panel to wciąż stara wersja, więc wyjdź i uruchom `ccam` ponownie. Gdy aktualizacji nie da się wykonać tutaj, na przykład dla kopii ccam zainstalowanej z pakietu `.deb`, panel pokazuje tę samą wskazówkę co `ccam update` i zachowuje propozycję.
 
-Pierwsza klatka jest rysowana wyłącznie z `config.toml`, w znacznie mniej niż 100 ms; użycie pojawia się, gdy tylko dane konto odpowie. Każdy limit ma własny pasek: okno 5-godzinne, tygodniowe okno dla wszystkich modeli i własne tygodniowe okno Fable; `-` oznacza, że konto nie ma takiego okna. Procent zmienia kolor na żółty przy 80% i na czerwony przy 100%. Jeśli zapytanie się nie powiedzie, wartości z pamięci podręcznej są pokazywane przyciemnione. Okno, które Claude Code zgłosił jako pełne, pokazuje 100% aż do resetu. Wygasły token dostępu pokazuje blade `⚠ token expired` (Claude Code odnawia go przy następnym uruchomieniu), a `⚠ login expired` oznacza, że konto wymaga `ccam login`.
+Pierwsza klatka jest rysowana wyłącznie z `config.toml`, w znacznie mniej niż 100 ms; użycie pojawia się, gdy tylko dane konto odpowie. Każdy limit ma własny pasek: okno 5-godzinne, tygodniowe okno dla wszystkich modeli i własne tygodniowe okno Fable; `-` oznacza, że konto nie ma takiego okna. Procent zmienia kolor na żółty przy 80% i na czerwony przy 100%. Jeśli zapytanie się nie powiedzie, wartości z pamięci podręcznej są pokazywane przyciemnione. Okno, które Claude Code zgłosił jako pełne, pokazuje 100% aż do resetu. Wygasły token dostępu pokazuje blade `⚠ token expired` (Claude Code odnawia go przy następnym uruchomieniu, a `r` odnawia go od razu dla konta, które nie jest uruchomione, tak jak `ccam usage --refresh`), a `⚠ login expired` oznacza, że konto wymaga `ccam login`.
 
 ## Karty
 
@@ -46,7 +46,7 @@ Pierwsza klatka jest rysowana wyłącznie z `config.toml`, w znacznie mniej niż
 | Extensions | to, co pokazuje [`ccam ext`](/features/ext), każde rozszerzenie raz, z grupami, z których pochodzi, `off:` konta, na których wtyczka nie jest włączona, własne serwery konta, które dotyczą tylko tego folderu, `This folder's project` oraz problemy, które nie należą do żadnego konta | `r` ponowne wczytanie |
 | Health | to, co zgłasza [`ccam doctor`](/features/doctor), jako ramka dla każdego konta (poniżej) | `f` naprawa zaznaczonej ramki, `F` naprawa wszystkiego (`doctor --fix`), `↑`/`↓` przejście między ramkami |
 
-`←`/`→` lub `Tab` przełączają karty, `?` wyświetla klawisze bieżącej karty, `r` odświeża użycie z pominięciem krótkiej pamięci podręcznej i ponownie wczytuje karty Agents, Extensions i Health, a `q` lub `Esc` zamyka panel.
+`←`/`→` lub `Tab` przełączają karty, `?` wyświetla klawisze bieżącej karty, `r` odświeża użycie z pominięciem krótkiej pamięci podręcznej i z odnowieniem wygasłych tokenów dostępu oraz ponownie wczytuje karty Agents, Extensions i Health, a `q` lub `Esc` zamyka panel. Zamknięcie czeka na odnowienie, które zostało już wysłane: serwer mógł wymienić token odświeżania i tylko jego odpowiedź zawiera login.
 
 ## Klawisze na karcie Accounts
 
