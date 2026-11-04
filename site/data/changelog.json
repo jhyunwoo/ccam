@@ -1,5 +1,11 @@
 [
   {
+    "tag": "v0.13.4",
+    "date": "2026-11-04",
+    "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.13.4",
+    "notes": "<p>Changes to know about: <code>ccam next --auto</code> now uses weekly usage to choose between accounts at the same 5-hour usage, and the dashboard&#39;s <code>r</code> renews expired logins, so it shows current usage instead of saved numbers.</p>\n<ul>\n<li>Of accounts at the same 5-hour usage, <code>next --auto</code> takes the one with the least of its week used. Before, the first in the list won. <code>ccam pick</code>, <code>--fallback</code> and the dashboard&#39;s <code>n</code> follow the same rule, and it also settles ties of the <code>expiring</code> and <code>balance</code> strategies.</li>\n<li>In the dashboard, <code>r</code> already skipped the short cache, but an account whose access token had expired kept showing its saved usage. <code>r</code> now renews that token first, as <code>ccam usage --refresh</code> does, for accounts that are not running. Quitting the dashboard waits for a renewal already sent, so the login is not lost.</li>\n</ul>\n<h3>New</h3>\n<ul>\n<li><code>next --auto</code> breaks a 5-hour tie by weekly usage: of accounts at the same 5-hour usage, it takes the one with the least of its week used</li>\n<li>The dashboard&#39;s <code>r</code> renews the expired logins of accounts that are not running, as <code>ccam usage --refresh</code> does, so it shows current usage</li>\n</ul>\n"
+  },
+  {
     "tag": "v0.13.3",
     "date": "2026-11-02",
     "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.13.3",
