@@ -45,10 +45,10 @@ func nextCmd(e *env) *cobra.Command {
 			"git status. That costs far less than resuming a long conversation, but details are left out.\n" +
 			"Claude says where the work stands and waits, or follows a prompt you give after --. --dry-run\n" +
 			"prints the summary instead of saving it. Claude Code's own --brief flag goes after -- as well.\n" +
-			"--auto picks by usage: the lowest 5-hour usage, then weekly, among accounts below auto_max_usage\n" +
-			"(config.toml, default 100), skipping full ones; --max-usage and --strategy override\n" +
-			"the config, and --wait waits for an account to reset when none has room. With no\n" +
-			"account to pick, ccam exits with code 75.",
+			"--auto picks by usage among accounts below auto_max_usage (config.toml, default 100),\n" +
+			"skipping full ones: of those within 3 points of the lowest 5-hour usage, the least weekly\n" +
+			"usage. --max-usage and --strategy override the config, and --wait waits for an account\n" +
+			"to reset when none has room. With no account to pick, ccam exits with code 75.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfg, err := e.load()
 			if err != nil {

@@ -32,7 +32,7 @@ func pickAuto(e *env, cfg *config.Config, cands []next.Candidate, from *config.P
 	to, err := untilRoom(e, p, d, "no account with known usage and headroom (see `ccam usage`)", func() (*config.Profile, []*usage.Report, error) {
 		reports := reportsOf(e, cfg, profs, usage.Options{})
 		if best := p.Choose(reports, clock()); best != nil {
-			why = p.Why(best, clock())
+			why = p.Why(best, reports, clock())
 			prof, _ := cfg.Find(best.Name)
 			return prof, reports, nil
 		}

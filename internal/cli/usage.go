@@ -259,7 +259,7 @@ func showUsage(ctx context.Context, e *env, f *usage.Fetcher, cfg *config.Config
 		if p.Strategy == "" || p.Strategy == usage.Headroom {
 			e.printf("→ Most headroom: %s   (open it with ccam next --auto)\n", best.Name)
 		} else {
-			e.printf("→ next --auto picks %s: %s\n", best.Name, p.Why(best, time.Now()))
+			e.printf("→ next --auto picks %s: %s\n", best.Name, p.Why(best, pool, time.Now()))
 		}
 	}
 	return nil

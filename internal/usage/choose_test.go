@@ -32,19 +32,24 @@ func sessions(r *Report, n int) *Report {
 
 func TestPolicyWhy(t *testing.T) {
 	a, b := rep("a", 12, 42*time.Minute, 41), sessions(rep("b", 30, time.Hour, 20), 1)
+	// d is within 3 points of e's 5-hour use, with less of its week used.
+	d, e := rep("d", 52, time.Hour, 10), rep("e", 50, time.Hour, 60)
 	cases := []struct {
 		policy Policy
 		in     *Report
+		from   []*Report
 		want   string
 	}{
-		{Policy{}, a, "12% of its 5 hours used, the least"},
-		{Policy{Strategy: Expiring}, a, "its 5-hour window resets first, in 42m (12% of its 5 hours used)"},
-		{Policy{Strategy: Balance}, b, "80% of its week is left, resetting in 3d 0h; 1 running"},
-		{Policy{MaxUsage: 10}, a, "every account is at 10% or more; it has the lowest use, 12% of its 5 hours used"},
-		{Policy{}, rep("c", -1, 0, -1), ""},
+		{Policy{}, a, []*Report{a, b}, "12% of its 5 hours used, the least"},
+		{Policy{Strategy: Expiring}, a, []*Report{a, b}, "its 5-hour window resets first, in 42m (12% of its 5 hours used)"},
+		{Policy{Strategy: Balance}, b, []*Report{a, b}, "80% of its week is left, resetting in 3d 0h; 1 running"},
+		{Policy{MaxUsage: 10}, a, []*Report{a, b}, "every account is at 10% or more; it has the lowest use, 12% of its 5 hours used"},
+		{Policy{}, d, []*Report{d, e}, "52% of its 5 hours used, within 3 points of e's 50%, with less of its week used (10% against 60%)"},
+		{Policy{MaxUsage: 30}, d, []*Report{d, e}, "every account is at 30% or more; 52% of its 5 hours used, within 3 points of e's 50%, with less of its week used (10% against 60%)"},
+		{Policy{}, rep("c", -1, 0, -1), nil, ""},
 	}
 	for _, c := range cases {
-		if got := c.policy.Why(c.in, fixedNow); got != c.want {
+		if got := c.policy.Why(c.in, c.from, fixedNow); got != c.want {
 			t.Errorf("%+v for %s: got %q, want %q", c.policy, c.in.Name, got, c.want)
 		}
 	}
@@ -90,7 +95,14 @@ func TestPolicyChoose(t *testing.T) {
 		{"lowest 5-hour usage", Policy{}, []*Report{rep("a", 60, time.Hour, 10), rep("b", 20, 3*time.Hour, 10)}, "b"},
 		{"weekly breaks a 5-hour tie", Policy{}, []*Report{rep("a", 40, time.Hour, 70), rep("b", 40, time.Hour, 20)}, "b"},
 		{"weekly breaks a tie when all are over", Policy{MaxUsage: 30}, []*Report{rep("a", 50, time.Hour, 60), rep("b", 50, time.Hour, 10)}, "b"},
-		{"a 5-hour difference beats weekly", Policy{}, []*Report{rep("a", 39, time.Hour, 90), rep("b", 40, time.Hour, 0)}, "a"},
+		{"within 3 points the week decides", Policy{}, []*Report{rep("a", 10, time.Hour, 90), rep("b", 12, time.Hour, 50)}, "b"},
+		{"3 points still count", Policy{}, []*Report{rep("a", 10, time.Hour, 90), rep("b", 13, time.Hour, 50)}, "b"},
+		{"over 3 points the 5 hours decide", Policy{}, []*Report{rep("a", 10, time.Hour, 90), rep("b", 13.5, time.Hour, 0)}, "a"},
+		// c is within 3 points of b but not of a, the lowest: not taken.
+		{"3 points from the lowest", Policy{}, []*Report{rep("a", 10, time.Hour, 90), rep("b", 12, time.Hour, 50), rep("c", 14, time.Hour, 10)}, "b"},
+		{"3 points from the lowest, in any order", Policy{}, []*Report{rep("c", 14, time.Hour, 10), rep("b", 12, time.Hour, 50), rep("a", 10, time.Hour, 90)}, "b"},
+		{"within 3 points when all are over", Policy{MaxUsage: 30}, []*Report{rep("a", 50, time.Hour, 60), rep("b", 52, time.Hour, 10)}, "b"},
+		{"expiring keeps its own order", Policy{Strategy: Expiring}, []*Report{rep("a", 10, time.Hour, 90), rep("b", 12, time.Hour, 10)}, "a"},
 		{"full is skipped", Policy{}, []*Report{rep("a", 100, time.Hour, 10), rep("b", 90, time.Hour, 10)}, "b"},
 		{"weekly full is skipped", Policy{}, []*Report{rep("a", 5, time.Hour, 100), rep("b", 90, time.Hour, 10)}, "b"},
 		{"unknown is skipped", Policy{}, []*Report{rep("a", -1, 0, 10), rep("b", 90, time.Hour, 10)}, "b"},

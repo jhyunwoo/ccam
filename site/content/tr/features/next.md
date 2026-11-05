@@ -4,7 +4,7 @@ description: ccam next, Claude Code'u başka bir hesapla açar; --auto en çok p
 updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "de1fd573f1ac"
+sourceHash: "bc9837b7a6ae"
 ---
 
 `ccam next`, Claude Code'u adını vermenize gerek kalmadan başka bir hesapla açar. Bir hesap kullanım limitine ulaştığında kullanın. Geçiş yapmanın dört yolu vardır:
@@ -82,8 +82,8 @@ En son `work` başlatıldığı için ilerleme ondan sonra başlar. `side` hesab
 
 Bir hesap 5 saatlik ve haftalık pencerelerine göre, Claude Code argümanları arasında `--model` varsa (`--` sonrasında) o modelin haftalık penceresine göre de değerlendirilir (adında `opus`, `sonnet`, `haiku` veya `fable` geçen). ccam hesapları üç kademeye ayırır (`Policy.Choose()`):
 
-1. **Payı olan**: her pencere `auto_max_usage` (`config.toml`, varsayılan 100) altında. Aralarından strateji seçer: `headroom` (varsayılan) en düşük 5 saatlik kullanımı alır, 5 saatlik kullanımı aynı olan hesaplar arasından da haftalık kullanımı en düşük olanı; `expiring` en erken sıfırlanacak 5 saatlik pencereyi alır, böylece kalan kotası kaybolmadan kullanılır; `balance` haftası sıfırlanana kadar gün başına en çok haftalık kotası kalan hesabı alır ve çalışan her ccam oturumunu bu kotadan sayar; böylece haftalık kota kullanılmadan kalmaz ve paralel oturumlar dağılır.
-2. **Eşiği aşan**: %100'ün altında ama `auto_max_usage` değerinde veya üstünde. Yalnızca hiçbir hesapta pay yoksa kullanılır; 5 saatlik kullanımı en düşük olan önce gelir, eşitlikte ise haftalık kullanımı en düşük olan.
+1. **Payı olan**: her pencere `auto_max_usage` (`config.toml`, varsayılan 100) altında. Aralarından strateji seçer: `headroom` (varsayılan), 5 saatlik kullanımı en düşük olanın en fazla 3 puan üstünde olan hesaplar arasından haftalık kullanımı en düşük olanı alır; böylece haftasının daha azı kullanılmışsa %12'deki bir hesap %10'dakini geçer, ama %14'teki geçemez; `expiring` en erken sıfırlanacak 5 saatlik pencereyi alır, böylece kalan kotası kaybolmadan kullanılır; `balance` haftası sıfırlanana kadar gün başına en çok haftalık kotası kalan hesabı alır ve çalışan her ccam oturumunu bu kotadan sayar; böylece haftalık kota kullanılmadan kalmaz ve paralel oturumlar dağılır.
+2. **Eşiği aşan**: %100'ün altında ama `auto_max_usage` değerinde veya üstünde. Yalnızca hiçbir hesapta pay yoksa kullanılır; aralarından `headroom` stratejisinin alacağı hesap önce gelir.
 3. **Dolu**: %100'de bir pencere ya da bilinmeyen 5 saatlik kullanım. Hiçbir zaman seçilmez.
 
 Claude Code orada bir isteği reddettiğinde bir pencere, sıfırlanana kadar %100 sayılır: [ccam eklentisinin](#inside-claude-code) hook'u bunu, kayıtlı sayılar ne derse desin, kaydeder (`~/.local/state/ccam/usage/<name>.limit.json`). Böylece limitine yeni ulaşmış bir hesap, sayıları eski olsa bile, sıfırlanmadan önce yeniden seçilmez.

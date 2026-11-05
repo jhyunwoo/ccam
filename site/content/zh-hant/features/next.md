@@ -4,7 +4,7 @@ description: ccam next 會以另一個帳號開啟 Claude Code；--auto 選擇�
 updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "de1fd573f1ac"
+sourceHash: "bc9837b7a6ae"
 ---
 
 `ccam next` 不需要你指定名稱，就能以另一個帳號開啟 Claude Code。當某個帳號達到用量限制時使用它。切換的方式有四種：
@@ -82,8 +82,8 @@ Claude Code 自己的選項，例如 `--dangerously-skip-permissions` 或 `--mod
 
 帳號依它的 5 小時和每週區間判斷；當 Claude Code 的參數中（`--` 後面）有 `--model` 時，也會依該模型的每週區間判斷（名稱中含有 `opus`、`sonnet`、`haiku` 或 `fable`）。ccam 把帳號分成三個等級（`Policy.Choose()`）：
 
-1. **有餘裕**：每個區間都低於 `auto_max_usage`（`config.toml`，預設 100）。策略會在其中選擇：`headroom`（預設）選 5 小時用量最低的帳號，5 小時用量相同時選每週用量最低的帳號，`expiring` 選 5 小時區間最早重設的帳號，讓它剩下的額度在失效前用掉；`balance` 選在每週區間重設前，平均每天剩餘每週額度最多的帳號，並把每個執行中的 ccam 工作階段計入該帳號，讓每週額度不會閒置，平行的工作階段也會分散開來。
-2. **超過**：低於 100%，但達到或超過 `auto_max_usage`。只有在沒有帳號有餘裕時才會使用；5 小時用量最低的帳號優先，相同時則每週用量最低的帳號優先。
+1. **有餘裕**：每個區間都低於 `auto_max_usage`（`config.toml`，預設 100）。策略會在其中選擇：`headroom`（預設）在 5 小時用量與最低值相差不超過 3 個百分點的帳號中，選每週用量最低的帳號，因此每週用量較低時，12% 的帳號會勝過 10% 的帳號，但 14% 的帳號不會；`expiring` 選 5 小時區間最早重設的帳號，讓它剩下的額度在失效前用掉；`balance` 選在每週區間重設前，平均每天剩餘每週額度最多的帳號，並把每個執行中的 ccam 工作階段計入該帳號，讓每週額度不會閒置，平行的工作階段也會分散開來。
+2. **超過**：低於 100%，但達到或超過 `auto_max_usage`。只有在沒有帳號有餘裕時才會使用；其中 `headroom` 會選的帳號優先。
 3. **已滿**：有區間達到 100%，或 5 小時用量未知。絕不會被選中。
 
 當 Claude Code 在某個區間拒絕了請求時，該區間在重設前都算作 100%：[ccam 外掛](#inside-claude-code)的 hook 會記錄它（`~/.local/state/ccam/usage/<name>.limit.json`），不論已儲存的數字是多少。因此剛達到上限的帳號在重設前不會再次被選中，即使它的數字已經過時也一樣。
