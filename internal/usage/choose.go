@@ -8,7 +8,7 @@ import (
 
 // Strategies for Policy.Strategy.
 const (
-	Headroom = "headroom" // the lowest 5-hour usage, then weekly (default)
+	Headroom = "headroom" // the least weekly usage within nearFive of the lowest 5-hour usage (default)
 	Expiring = "expiring" // the soonest 5-hour reset, so its quota is not left unused
 	// Balance takes the account whose weekly quota would go unused first:
 	// the most left per day until its reset, less for each running session.
@@ -96,9 +96,19 @@ func (p Policy) Full(r *Report) bool {
 
 // Choose returns the account to use, or nil when every account is full or
 // its usage is unknown. Below MaxUsage the strategy decides; when every
-// account is at or over it, the one with the lowest usage is taken.
+// account is at or over it, the one headroom would choose is taken.
 func (p Policy) Choose(reports []*Report, now time.Time) *Report {
-	var free, over []*Report
+	rs, over := p.pool(reports)
+	if over {
+		return Policy{}.best(rs, now)
+	}
+	return p.best(rs, now)
+}
+
+// pool is what Choose chooses among: the accounts below MaxUsage or, when
+// none is, those below 100% (over).
+func (p Policy) pool(reports []*Report) (rs []*Report, over bool) {
+	var free, overs []*Report
 	for _, r := range reports {
 		if !usable(r) {
 			continue
@@ -106,18 +116,38 @@ func (p Policy) Choose(reports []*Report, now time.Time) *Report {
 		switch top := p.peak(r); {
 		case top >= 100:
 		case top >= p.max():
-			over = append(over, r)
+			overs = append(overs, r)
 		default:
 			free = append(free, r)
 		}
 	}
 	if len(free) > 0 {
-		return p.best(free, now)
+		return free, false
 	}
-	return Policy{}.best(over, now)
+	return overs, true
 }
 
+// nearFive is how many points of 5-hour usage headroom counts as about the
+// same: of the accounts within it of the lowest, the one with the least of
+// its week used is taken.
+const nearFive = 3
+
+func (p Policy) headroom() bool { return p.Strategy == "" || p.Strategy == Headroom }
+
 func (p Policy) best(rs []*Report, now time.Time) *Report {
+	if p.headroom() {
+		// Measured from the lowest, so the choice does not depend on the
+		// order of rs: 12% may beat 10%, and 14% 12%, but 14% never 10%.
+		if low := lowest(rs); low != nil {
+			var near []*Report
+			for _, r := range rs {
+				if r.Limits.FiveHour.Percent-low.Limits.FiveHour.Percent <= nearFive {
+					near = append(near, r)
+				}
+			}
+			rs = near
+		}
+	}
 	var best *Report
 	for _, r := range rs {
 		if best == nil || p.before(r, best, now) {
@@ -140,13 +170,34 @@ func (p Policy) before(a, b *Report, now time.Time) bool {
 		if ua != ub {
 			return ua > ub
 		}
+	case "", Headroom:
+		// best kept those near the lowest 5-hour usage. An unknown week
+		// counts as unused, as in urgency.
+		if wa, wb := a.Limits.Weekly.Percent, b.Limits.Weekly.Percent; wa != wb {
+			return wa < wb
+		}
 	}
+	return fewer(a, b)
+}
+
+// fewer reports whether a has used less of its 5 hours than b, or as much
+// and less of its week.
+func fewer(a, b *Report) bool {
 	if fa, fb := a.Limits.FiveHour.Percent, b.Limits.FiveHour.Percent; fa != fb {
 		return fa < fb
 	}
-	// On a 5-hour tie, the one with more of its week left. An unknown week
-	// counts as unused, as in urgency.
 	return a.Limits.Weekly.Percent < b.Limits.Weekly.Percent
+}
+
+// lowest is the account of rs with the least of its 5 hours used.
+func lowest(rs []*Report) *Report {
+	var low *Report
+	for _, r := range rs {
+		if low == nil || fewer(r, low) {
+			low = r
+		}
+	}
+	return low
 }
 
 // sessionCost is how much of the weekly quota per day a running session
@@ -168,14 +219,22 @@ func urgency(r *Report, now time.Time) float64 {
 	return left/days - sessionCost*float64(r.Sessions)
 }
 
-// Why says in a few words why Choose took r.
-func (p Policy) Why(r *Report, now time.Time) string {
+// Why says in a few words why Choose took r from reports.
+func (p Policy) Why(r *Report, reports []*Report, now time.Time) string {
 	if r == nil || !usable(r) {
 		return ""
 	}
 	five := fmt.Sprintf("%.0f%% of its 5 hours used", r.Limits.FiveHour.Percent)
 	if top := p.peak(r); top >= p.max() {
+		if near := p.nearWhy(r, reports, five); near != "" {
+			return fmt.Sprintf("every account is at %.0f%% or more; %s", p.max(), near)
+		}
 		return fmt.Sprintf("every account is at %.0f%% or more; it has the lowest use, %s", p.max(), five)
+	}
+	if p.headroom() {
+		if near := p.nearWhy(r, reports, five); near != "" {
+			return near
+		}
 	}
 	switch p.Strategy {
 	case Expiring:
@@ -199,6 +258,22 @@ func (p Policy) Why(r *Report, now time.Time) string {
 	return five + ", the least"
 }
 
+// nearWhy says why headroom took r over the account with the least of its
+// 5 hours used, or "" when r is that account (or ties with it).
+func (p Policy) nearWhy(r *Report, reports []*Report, five string) string {
+	rs, _ := p.pool(reports)
+	low := lowest(rs)
+	if low == nil || low.Limits.FiveHour.Percent >= r.Limits.FiveHour.Percent {
+		return ""
+	}
+	week := "unknown, counted as unused"
+	if r.Limits.Weekly.Known {
+		week = fmt.Sprintf("%.0f%%", r.Limits.Weekly.Percent)
+	}
+	return fmt.Sprintf("%s, within %d points of %s's %.0f%%, with less of its week used (%s against %.0f%%)",
+		five, nearFive, low.Name, low.Limits.FiveHour.Percent, week, low.Limits.Weekly.Percent)
+}
+
 // Use says in a few words how far r is by what p goes by, as Why does but
 // without comparing it with other accounts: for an account taken while the
 // one Choose takes was passed over.
@@ -214,7 +289,7 @@ func (p Policy) Use(r *Report, now time.Time) string {
 				return fmt.Sprintf("its 5-hour window resets in %s (%s)", Duration(at.Sub(now)), five)
 			}
 		case Balance:
-			return p.Why(r, now) // it names no other account
+			return p.Why(r, nil, now) // it names no other account
 		}
 	}
 	return five

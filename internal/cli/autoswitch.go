@@ -187,7 +187,7 @@ func autoTarget(ctx context.Context, e *env, cfg *config.Config, from *config.Pr
 			// Nobody may be there to log in again: an account whose login
 			// Claude Code cannot renew is left out.
 			if to, _ := cfg.Find(best.Name); creds.Has(profile.Dir(e.paths, to), e.paths.Home) {
-				tg.to, tg.why = to, p.Why(best, now)
+				tg.to, tg.why = to, p.Why(best, ok, now)
 				if top := p.Choose(ok, now); top != best {
 					// spread passed over top, which another session took a
 					// moment ago: Why would compare best with every account.

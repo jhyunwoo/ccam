@@ -874,3 +874,11 @@ clausona(larcane97/clausona v0.12.0-beta) 조사에서 나온 단점을 보완�
 - 대시보드 종료: bubbletea는 Quit 뒤에 실행 중인 Cmd를 기다리지 않으므로, 보낸 갱신(서버가 refresh token을 이미 바꿨을 수 있음)이 저장되기 전에 ccam이 끝날 수 있었습니다. `runHome`은 `Run` 직후 `renewals.end()`를 부릅니다. context를 취소해 아직 보내지 않은 갱신과 조회는 멈추고(`refresh`의 `ctx.Err()` 확인), 보낸 갱신은 `WithoutCancel`로 끝까지 가며 그 저장을 WaitGroup으로 기다립니다. `start`와 `end`를 mutex로 묶어 Wait 뒤에 Add가 오지 않습니다(그 뒤의 조회는 갱신 없이 조회만). q·Esc·Ctrl+C와 SIGTERM(bubbletea가 Quit으로 바꿈)에서 기다립니다. SIGHUP(터미널 닫힘)은 bubbletea가 잡지 않아 기다리지 않으며, 이전과 같습니다.
 - 문서: `ccam next --help`의 `--auto` 문장, 사이트 features/next(Room·Over 항목)와 features/dashboard(`⚠ token expired` 문단, `r` 문단), 30개 언어.
 - 테스트: usage `TestPolicyChoose`(5시간 동점, 모두 넘침일 때의 동점, 5시간 차이가 주간보다 우선), cli `TestDashboardReloadRenewsLogin`(열 때와 dry run은 갱신하지 않고 `r`은 갱신해 live 값), `TestDashboardWaitsForRenewal`(토큰 서버가 답하기 전에 부른 `end`가 저장까지 기다림). `r.wg.Wait()`를 지우거나 `Refresh`를 끄는 변이는 각각 이 테스트가 잡습니다.
+
+## 2026-11-05 (2): headroom의 3포인트 범위
+
+- 요청: 5시간 사용량이 ±3% 차이면 주간 사용량이 적은 계정을 고를 것. 같은 날의 "5시간이 정확히 같을 때만 주간"을 바꿉니다.
+- 규칙: headroom(기본값)과 넘침 계정(모든 계정이 `auto_max_usage` 이상, 늘 headroom으로 고름)은 5시간 사용률이 가장 낮은 계정에서 3포인트 이내(포함)인 계정만 남기고(`best`), 그중 주간 사용률이 가장 낮은 계정, 주간이 같으면 5시간이 낮은 계정을 고릅니다(`before`). ±3%는 퍼센트포인트입니다. 판단: 두 계정씩 비교하는 허용 오차는 추이적이지 않습니다(10%·12%·14%에서 12가 10을, 14가 12를 이기고 14는 10에게 짐). 그러면 결과가 목록 순서에 달리므로, 범위를 가장 낮은 5시간에서 잽니다. 그래서 14%는 10%를 넘지 못하고 순서와 무관합니다. 3은 상수 `nearFive`이고 설정은 만들지 않았습니다. expiring·balance는 전략의 값, 5시간, 주간 순서 그대로입니다. 주간을 모르는 계정은 이전처럼 0%로 보므로, 3포인트 안에서는 주간을 아는 계정보다 앞섭니다.
+- 이유 문구: `Why`가 "…, the least"라고 하면 5시간이 더 높은 계정을 고른 경우 거짓이 되므로, `Why`가 고른 계정들(Choose에 준 것과 같은 목록)을 받습니다. 가장 낮은 5시간 계정보다 높은 계정을 고르면 `52% of its 5 hours used, within 3 points of e's 50%, with less of its week used (10% against 60%)`, 넘침이면 앞에 `every account is at N% or more; `가 붙습니다. 고른 계정의 주간을 모르면 `(unknown, counted as unused against …)`입니다. 가장 낮은 계정(또는 그와 같은 5시간)을 고르면 문구는 예전 그대로입니다. 호출자 4곳(`next --auto`, `usage`의 추천 줄, `pick --json`, auto_switch 알림)이 각자 Choose에 준 목록을 넘깁니다. `Use`(비교하지 않는 문구)는 그대로입니다.
+- 문서: `ccam next --help`의 `--auto` 문장, 사이트 features/next의 Room·Over 항목(30개 언어).
+- 테스트: `TestPolicyChoose`(3포인트 안에서 주간, 3포인트 포함, 3포인트 넘으면 5시간, 가장 낮은 계정 기준과 순서 무관, 넘침에서도, expiring은 그대로), `TestPolicyWhy`(범위 안의 선택과 넘침의 이유). 범위를 없애거나 3을 미포함으로 바꾸거나 범위 안에서 주간을 보지 않거나 `nearWhy`를 끄는 변이는 모두 이 테스트들이 잡습니다.

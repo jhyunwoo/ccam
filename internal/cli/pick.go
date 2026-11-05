@@ -97,7 +97,7 @@ func pickCmd(e *env) *cobra.Command {
 				return nil
 			}
 			now := clock()
-			why := p.Why(picked, now)
+			why := p.Why(picked, all, now)
 			if top := p.Choose(all, now); top != picked {
 				// spread passed over top, picked a moment ago: Why would
 				// compare picked with every account.

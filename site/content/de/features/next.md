@@ -4,7 +4,7 @@ description: ccam next startet Claude Code als anderes Konto; --auto wählt das 
 updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "de1fd573f1ac"
+sourceHash: "bc9837b7a6ae"
 ---
 
 `ccam next` öffnet Claude Code mit einem anderen Konto, ohne dass du es benennen musst. Verwende es, wenn ein Konto sein Nutzungslimit erreicht. Es gibt vier Wege zu wechseln:
@@ -82,8 +82,8 @@ Der Durchlauf beginnt beim zuletzt verwendeten Konto und endet beim ersten angem
 
 Ein Konto wird nach seinem 5-Stunden- und seinem Wochenfenster beurteilt und, wenn `--model` unter den Argumenten für Claude Code steht (hinter `--`), auch nach dem Wochenfenster dieses Modells (`opus`, `sonnet`, `haiku` oder `fable` im Namen). ccam teilt die Konten in drei Stufen ein (`Policy.Choose()`):
 
-1. **Spielraum**: jedes Fenster unter `auto_max_usage` (`config.toml`, Standard 100). Die Strategie wählt unter ihnen: `headroom` (Standard) nimmt die niedrigste 5-Stunden-Nutzung und unter Konten mit gleicher 5-Stunden-Nutzung das, dessen Woche am wenigsten verbraucht ist; `expiring` nimmt das 5-Stunden-Fenster, das am frühesten zurückgesetzt wird, damit sein restliches Kontingent genutzt wird, bevor es verfällt; `balance` nimmt das Konto mit dem meisten verbleibenden Wochenkontingent pro Tag bis zur Zurücksetzung seiner Woche und rechnet jede laufende ccam-Sitzung dagegen, damit kein Wochenkontingent ungenutzt bleibt und sich parallele Sitzungen verteilen.
-2. **Darüber**: unter 100 %, aber bei oder über `auto_max_usage`. Wird nur verwendet, wenn kein Konto Spielraum hat; das mit der niedrigsten 5-Stunden-Nutzung kommt zuerst, bei Gleichstand das, dessen Woche am wenigsten verbraucht ist.
+1. **Spielraum**: jedes Fenster unter `auto_max_usage` (`config.toml`, Standard 100). Die Strategie wählt unter ihnen: `headroom` (Standard) nimmt unter den Konten, deren 5-Stunden-Nutzung höchstens 3 Prozentpunkte über der niedrigsten liegt, das, dessen Woche am wenigsten verbraucht ist, sodass ein Konto bei 12 % eines bei 10 % schlägt, wenn von seiner Woche weniger verbraucht ist, eines bei 14 % aber nicht; `expiring` nimmt das 5-Stunden-Fenster, das am frühesten zurückgesetzt wird, damit sein restliches Kontingent genutzt wird, bevor es verfällt; `balance` nimmt das Konto mit dem meisten verbleibenden Wochenkontingent pro Tag bis zur Zurücksetzung seiner Woche und rechnet jede laufende ccam-Sitzung dagegen, damit kein Wochenkontingent ungenutzt bleibt und sich parallele Sitzungen verteilen.
+2. **Darüber**: unter 100 %, aber bei oder über `auto_max_usage`. Wird nur verwendet, wenn kein Konto Spielraum hat; das Konto, das `headroom` unter ihnen nehmen würde, kommt zuerst.
 3. **Voll**: ein Fenster bei 100 % oder unbekannte 5-Stunden-Nutzung. Wird nie gewählt.
 
 Ein Zeitfenster zählt bis zu seinem Zurücksetzen als 100 %, wenn Claude Code dort eine Anfrage abgelehnt hat: Der Hook des [ccam-Plugins](#inside-claude-code) hält das fest (`~/.local/state/ccam/usage/<name>.limit.json`), egal was die gespeicherten Zahlen sagen. Ein Konto, das gerade sein Limit erreicht hat, wird also vor seinem Zurücksetzen nicht wieder gewählt, auch wenn seine Zahlen alt sind.
