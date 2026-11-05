@@ -1,5 +1,11 @@
 [
   {
+    "tag": "v0.13.6",
+    "date": "2026-11-05",
+    "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.13.6",
+    "notes": "<p>A wording fix for 0.13.5. The <code>--strategy</code> help of <code>ccam next</code> and <code>ccam pick</code> now describes the default <code>headroom</code> strategy the way it has chosen since 0.13.5: the least weekly usage among the accounts within 3 points of the lowest 5-hour usage, not simply the lowest 5-hour usage. How accounts are chosen has not changed.</p>\n<p>The site&#39;s short descriptions of <code>headroom</code> and of the account <code>--fallback</code> tries next say the same now, in every language.</p>\n<h3>Fixed</h3>\n<ul>\n<li><code>--strategy</code> help describes <code>headroom</code> as it chooses since 0.13.5, the least weekly usage within 3 points of the lowest 5-hour usage</li>\n</ul>\n"
+  },
+  {
     "tag": "v0.13.5",
     "date": "2026-11-05",
     "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.13.5",
