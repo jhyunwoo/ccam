@@ -1,5 +1,11 @@
 [
   {
+    "tag": "v0.13.5",
+    "date": "2026-11-05",
+    "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.13.5",
+    "notes": "<p>Changes to know about: <code>ccam next --auto</code> now counts 5-hour usage within 3 points as about the same and takes the account with the least of its week used among those. In 0.13.4, weekly usage decided only when 5-hour usage was exactly equal.</p>\n<ul>\n<li>The range is measured from the account with the lowest 5-hour usage, so the choice does not depend on the order of your accounts: at 10%, 12% and 14%, the 12% account can beat the 10% one when less of its week is used, but the 14% one never beats the 10% one.</li>\n<li>This is the default <code>headroom</code> strategy, also used when every account is at or over <code>auto_max_usage</code>. <code>expiring</code> and <code>balance</code> choose as before. <code>ccam pick</code>, <code>--fallback</code>, <code>auto_switch</code> and the dashboard&#39;s <code>n</code> follow the same rule.</li>\n<li>When the account taken has more 5-hour usage than another, the reason says why, for example <code>52% of its 5 hours used, within 3 points of work&#39;s 50%, with less of its week used (10% against 60%)</code>.</li>\n</ul>\n<h3>New</h3>\n<ul>\n<li><code>next --auto</code> takes, of the accounts within 3 points of the lowest 5-hour usage, the one with the least of its week used, and says so in its reason</li>\n</ul>\n"
+  },
+  {
     "tag": "v0.13.4",
     "date": "2026-11-04",
     "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.13.4",
