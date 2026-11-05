@@ -1,10 +1,10 @@
 ---
 title: Limity użycia i przełączanie kont
 description: Sprawdź 5-godzinne i tygodniowe użycie każdego konta Claude Code przez ccam usage i otwórz konto z największym zapasem przez ccam next --auto.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` pokazuje dla każdego konta, jaka część każdego limitu jest wykorzystana: 5-godzinnego limitu, tygodniowego limitu i własnego tygodniowego limitu każdego modelu (takiego jak Fable). `ccam next --auto` otwiera konto z największym zapasem, a `--continue` przenosi bieżącą rozmowę.
@@ -66,7 +66,7 @@ Claude Code pokazuje wtedy nazwę konta i jego użycie na pasku stanu, na przyk�
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

@@ -1,10 +1,10 @@
 ---
 title: ಬಳಕೆಯ ಮಿತಿಗಳು ಮತ್ತು ಖಾತೆ ಬದಲಾವಣೆ
 description: ccam usage ಮೂಲಕ ಎಲ್ಲಾ Claude Code ಖಾತೆಗಳ 5 ಗಂಟೆಯ ಮತ್ತು ವಾರದ ಬಳಕೆಯನ್ನು ನೋಡಿ, ccam next --auto ಮೂಲಕ ಹೆಚ್ಚು ಅವಕಾಶ ಇರುವ ಖಾತೆಯನ್ನು ತೆರೆಯಿರಿ.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` ಪ್ರತಿ ಖಾತೆಗೂ, ಪ್ರತಿ ಮಿತಿಯಲ್ಲಿ ಎಷ್ಟು ಬಳಕೆಯಾಗಿದೆ ಎಂದು ತೋರಿಸುತ್ತದೆ: 5 ಗಂಟೆಯ ಮಿತಿ, ವಾರದ ಮಿತಿ ಮತ್ತು ಪ್ರತಿ ಮಾಡೆಲ್‌ನ ಸ್ವಂತ ವಾರದ ಮಿತಿ (ಉದಾಹರಣೆಗೆ Fable). `ccam next --auto` ಹೆಚ್ಚು ಅವಕಾಶ ಇರುವ ಖಾತೆಯನ್ನು ತೆರೆಯುತ್ತದೆ, ಮತ್ತು `--continue` ಈಗಿನ ಸಂಭಾಷಣೆಯನ್ನು ಅಲ್ಲಿಗೆ ಕೊಂಡೊಯ್ಯುತ್ತದೆ.
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

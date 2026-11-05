@@ -46,7 +46,7 @@ ccam prints the switch as `→ <from> → <to>` on standard error, with the reas
 | --- | --- | --- |
 | `--auto` | Pick the logged-in account by usage (see below), skipping accounts at 100% | off |
 | `--max-usage <1-100>` | With `--auto`: prefer accounts below this usage | `auto_max_usage`, otherwise 100 |
-| `--strategy headroom\|expiring\|balance` | With `--auto`: the lowest 5-hour usage, the soonest 5-hour reset or the most weekly quota left per day | `auto_strategy`, otherwise `headroom` |
+| `--strategy headroom\|expiring\|balance` | With `--auto`: the least weekly usage within 3 points of the lowest 5-hour usage, the soonest 5-hour reset or the most weekly quota left per day | `auto_strategy`, otherwise `headroom` |
 | `--cross-org` | With `--auto`: also choose accounts of another organization (see below) | `cross_org`, otherwise off |
 | `--wait[=<duration>]` | With `--auto`: when no account has room, wait for the first one to reset, at most this long. The value goes after `=`: `--wait 2h` is refused with the hint `--wait takes its value after '=': --wait=2h` | off; `5h` when given alone |
 | `-c`, `--continue` | Continue this folder's last conversation on the new account (see below) | off |
@@ -253,7 +253,7 @@ Summary: …
 3. ccam starts `claude` as a child process instead of `exec`, holds its standard output back, and passes standard error through as it comes.
 4. When `claude` exits with 0, or fails for another reason, the held output and the exit code are passed on unchanged. So is a run ended by a signal (an exit code above 128): it was asked to stop, and is not run again.
 5. A failure counts as the usage limit when Claude Code's message says so, any of the usage-limit messages the [hook](#inside-claude-code) knows, also inside `--output-format json` or `stream-json` output, or when the account's usage shows its 5-hour, weekly or `--model` window at 100% (a limit record included).
-6. Then the output of that attempt is dropped and the same command runs as another logged-in account: the one with the lowest 5-hour usage, then accounts whose usage cannot be looked up, in number order. Accounts at 100% are skipped, accounts with an API key login are never tried, and each account is tried at most once.
+6. Then the output of that attempt is dropped and the same command runs as another logged-in account: the one `--auto` would choose, then accounts whose usage cannot be looked up, in number order. Accounts at 100% are skipped, accounts with an API key login are never tried, and each account is tried at most once.
 7. With `-c`, `--continue`, `-r` or `--resume` among the arguments, only accounts in the same history group are tried, so the conversation can be found.
 8. Only accounts of the same organization are tried, as with `--auto` (`cross_org = true` lifts this).
 

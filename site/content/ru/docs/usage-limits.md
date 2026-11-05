@@ -1,10 +1,10 @@
 ---
 title: Лимиты использования и переключение аккаунтов
 description: Смотрите использование за 5 часов и за неделю для всех аккаунтов Claude Code через ccam usage и открывайте самый свободный через ccam next --auto.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` показывает для каждого аккаунта, какая часть каждого лимита использована: 5-часового лимита, недельного лимита и собственного недельного лимита каждой модели (например, Fable). `ccam next --auto` открывает аккаунт с наибольшим запасом, а `--continue` переносит текущий разговор.
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

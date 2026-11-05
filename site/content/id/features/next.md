@@ -4,7 +4,7 @@ description: ccam next membuka Claude Code sebagai akun lain; --auto memilih rua
 updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "bc9837b7a6ae"
+sourceHash: "a320c160caef"
 ---
 
 `ccam next` membuka Claude Code sebagai akun lain tanpa Anda perlu menyebutkan namanya. Gunakan saat sebuah akun mencapai batas penggunaannya. Ada empat cara untuk berpindah:
@@ -47,7 +47,7 @@ ccam menampilkan perpindahan sebagai `→ <from> → <to>` di error standar, bes
 | --- | --- | --- |
 | `--auto` | Memilih akun yang sudah login berdasarkan penggunaan (lihat di bawah), melewati akun yang sudah 100% | nonaktif |
 | `--max-usage <1-100>` | Dengan `--auto`: utamakan akun di bawah penggunaan ini | `auto_max_usage`, jika tidak, 100 |
-| `--strategy headroom\|expiring\|balance` | Dengan `--auto`: penggunaan 5 jam terendah, reset 5 jam yang paling cepat, atau sisa kuota mingguan terbanyak per hari | `auto_strategy`, jika tidak, `headroom` |
+| `--strategy headroom\|expiring\|balance` | Dengan `--auto`: penggunaan mingguan paling sedikit di antara akun yang penggunaan 5 jamnya paling banyak 3 poin di atas penggunaan 5 jam terendah, reset 5 jam yang paling cepat, atau sisa kuota mingguan terbanyak per hari | `auto_strategy`, jika tidak, `headroom` |
 | `--cross-org` | Dengan `--auto`: juga memilih akun dari organisasi lain (lihat di bawah) | `cross_org`, jika tidak, nonaktif |
 | `--wait[=<duration>]` | Dengan `--auto`: jika tidak ada akun yang punya ruang, tunggu akun pertama di-reset, paling lama selama ini. Nilainya ditaruh setelah `=`: `--wait 2h` ditolak dengan petunjuk `--wait takes its value after '=': --wait=2h` | nonaktif; `5h` jika diberikan tanpa nilai |
 | `-c`, `--continue` | Melanjutkan percakapan terakhir di folder ini di akun baru (lihat di bawah) | nonaktif |
@@ -246,7 +246,7 @@ Summary: …
 3. ccam menjalankan `claude` sebagai proses anak alih-alih `exec`, menahan output standarnya, dan meneruskan error standar begitu muncul.
 4. Saat `claude` keluar dengan 0, atau gagal karena alasan lain, output yang ditahan dan kode keluarnya diteruskan tanpa diubah. Begitu pula proses yang diakhiri sinyal (kode keluar di atas 128): proses itu diminta berhenti, dan tidak dijalankan lagi.
 5. Kegagalan dianggap sebagai batas penggunaan jika pesan Claude Code menyatakannya, yaitu salah satu pesan batas penggunaan yang dikenali [hook](#inside-claude-code), juga di dalam output `--output-format json` atau `stream-json`, atau jika penggunaan akun menunjukkan jendela 5 jam, mingguan, atau `--model`-nya di 100% (termasuk catatan batas).
-6. Kemudian output percobaan itu dibuang dan perintah yang sama dijalankan sebagai akun lain yang sudah login: akun dengan penggunaan 5 jam terendah, lalu akun yang penggunaannya tidak bisa dicek, sesuai urutan nomor. Akun di 100% dilewati, akun dengan login kunci API tidak pernah dicoba, dan setiap akun dicoba paling banyak sekali.
+6. Kemudian output percobaan itu dibuang dan perintah yang sama dijalankan sebagai akun lain yang sudah login: akun yang akan dipilih oleh `--auto`, lalu akun yang penggunaannya tidak bisa dicek, sesuai urutan nomor. Akun di 100% dilewati, akun dengan login kunci API tidak pernah dicoba, dan setiap akun dicoba paling banyak sekali.
 7. Jika ada `-c`, `--continue`, `-r`, atau `--resume` di antara argumen, hanya akun dalam grup riwayat yang sama yang dicoba, sehingga percakapannya bisa ditemukan.
 8. Hanya akun dari organisasi yang sama yang dicoba, seperti pada `--auto` (`cross_org = true` mencabut aturan ini).
 

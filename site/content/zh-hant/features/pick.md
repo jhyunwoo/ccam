@@ -1,10 +1,10 @@
 ---
 title: 為指令碼選擇帳號
 description: ccam pick 為指令碼印出剩餘額度最多的帳號，讓同時啟動的工作程序使用不同帳號，沒有帳號有額度時以 75 結束。
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: "321c8e351cf7"
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` 會印出剩餘額度最多的已登入帳號名稱，讓指令碼用它啟動 Claude Code。只要有足夠多還有額度的帳號，同時啟動的工作程序就會各自拿到不同的帳號，所以一批 `claude -p` 工作會分散到你的各個帳號，而不是把一個帳號用光。
@@ -49,7 +49,7 @@ $ ccam pick --json
 | `--json` | 印出帳號、它的 5 小時和每週用量、這些數字的來源，以及選擇它的原因 | 關閉 |
 | `--model <model>` | 也計入該模型的每週區間，例如 `opus` | 無 |
 | `--max-usage <1-100>` | 優先選擇用量低於此值的帳號 | `auto_max_usage`，否則為 100 |
-| `--strategy headroom\|expiring\|balance` | 5 小時用量最低、5 小時區間最早重設，或平均每天剩餘每週額度最多的帳號 | `auto_strategy`，否則為 `headroom` |
+| `--strategy headroom\|expiring\|balance` | 在 5 小時用量與最低值相差不超過 3 個百分點的帳號中每週用量最低的帳號、5 小時區間最早重設的帳號，或平均每天剩餘每週額度最多的帳號 | `auto_strategy`，否則為 `headroom` |
 | `--cross-org` | 也選擇其他組織的帳號 | `cross_org`，否則為關閉 |
 | `--wait[=<duration>]` | 沒有帳號還有額度時，等待第一個帳號重設，最多等這麼久。值要寫在 `=` 之後：`--wait 30m` 會被拒絕，並提示 `--wait takes its value after '=': --wait=30m` | 關閉；單獨指定時為 `5h` |
 | `--dry-run` | 只選擇，不記錄這次選擇 | 關閉 |

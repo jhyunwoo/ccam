@@ -1,10 +1,10 @@
 ---
 title: વપરાશ મર્યાદા અને એકાઉન્ટ સ્વિચ કરવું
 description: ccam usage વડે દરેક Claude Code એકાઉન્ટનો 5 કલાકનો અને સાપ્તાહિક વપરાશ જુઓ, અને ccam next --auto વડે સૌથી વધુ જગ્યાવાળું એકાઉન્ટ ખોલો.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: 28e652ad94f8
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` દરેક એકાઉન્ટ માટે બતાવે છે કે દરેક મર્યાદામાંથી કેટલું વપરાયું છે: 5 કલાકની મર્યાદા, સાપ્તાહિક મર્યાદા અને દરેક મૉડલની પોતાની સાપ્તાહિક મર્યાદા (જેમ કે Fable). `ccam next --auto` સૌથી વધુ જગ્યાવાળું એકાઉન્ટ ખોલે છે, અને `--continue` હાલની વાતચીત ત્યાં લઈ જાય છે.
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

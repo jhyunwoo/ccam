@@ -1,10 +1,10 @@
 ---
 title: Ліміти використання та перемикання облікових записів
 description: Перегляньте 5-годинне й тижневе використання всіх облікових записів Claude Code через ccam usage і відкрийте найвільніший через ccam next --auto.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` показує для кожного облікового запису, яку частку кожного ліміту використано: 5-годинного ліміту, тижневого ліміту й власного тижневого ліміту кожної моделі (наприклад, Fable). `ccam next --auto` відкриває обліковий запис із найбільшим запасом, а `--continue` переносить поточну розмову.
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

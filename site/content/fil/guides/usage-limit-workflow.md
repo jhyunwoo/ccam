@@ -1,10 +1,10 @@
 ---
 title: Kapag naabot mo ang Claude Code usage limit
 description: Maghintay ng reset o ituloy agad ang parehong usapan sa ibang Claude Code account. Paano gumagana ang 5-oras at lingguhang limit, hakbang-hakbang.
-updated: 2026-11-01
+updated: 2026-11-05
 order: 3
 translation: machine
-sourceHash: "760a36724feb"
+sourceHash: "53b1e3634ea9"
 ---
 
 Kapag naabot ng isang account ang usage limit nito (madalas tawaging rate limit), may dalawa kang pagpipilian: maghintay hanggang mag-reset ang limit, o ituloy ngayon din ang parehong usapan sa isa pang account na pag-aari mo. Sa ccam, isang command lang ang pangalawa, `ccam next --auto --continue`.
@@ -63,7 +63,7 @@ Kapag nasa Claude Code ang [ccam plugin](/docs/install#claude-code-plugin), nagp
 
 Kapag binuksan mo lang ito.
 
-- Bilang default, hindi tumatakbo ang ccam habang nagtatrabaho ka: sinisimulan nito ang Claude Code at pinapalitan ang sarili nito ng Claude Code, kaya ikaw ang nagpapasya kung kailan lilipat. Pinipili ng `ccam next --auto` ang account na may pinakamababang 5-oras na usage, nilalaktawan ang mga account na nasa 100% o hindi naka-log in, at nananatili sa iisang Team o Enterprise na organisasyon, o sa mga personal na plan.
+- Bilang default, hindi tumatakbo ang ccam habang nagtatrabaho ka: sinisimulan nito ang Claude Code at pinapalitan ang sarili nito ng Claude Code, kaya ikaw ang nagpapasya kung kailan lilipat. Pumipili ang `ccam next --auto` ayon sa usage, kinukuha ang may pinakakaunting lingguhang usage sa mga account na nasa loob ng 3 puntos ng pinakamababang 5-oras na usage; nilalaktawan nito ang mga account na nasa 100% o hindi naka-log in, at nananatili sa iisang Team o Enterprise na organisasyon, o sa mga personal na plan.
 - Kapag may `relay = true` sa `config.toml`, patuloy namang tumatakbo ang ccam kasabay ng session, kaya kusang ipinagpapatuloy ng `/ccam:switch` ang usapan, at pinapanatili nito ang mga option, permission mode, effort level at agent ng session; bago nito ilipat ang usapan sa account ng ibang organisasyon, nagtatanong muna sa iyo ang ccam.
 - Kapag may `auto_switch = true` (Linux at macOS; eksperimental), ang ccam mismo rin ang lumilipat: kapag pinahinto ng Claude Code ang session sa limit nito at may natitira ang ibang account na kauri nito, tinatapos ng ccam ang session at ipinagpapatuloy doon ang usapan ([mga kondisyon at kapalit](/features/next#auto-switch)).
 

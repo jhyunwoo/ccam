@@ -1,10 +1,10 @@
 ---
 title: వినియోగ పరిమితులు, ఖాతాలు మార్చడం
 description: ccam usage తో ప్రతి Claude Code ఖాతా యొక్క 5 గంటల, వారపు వినియోగాన్ని చూడండి, ccam next --auto తో ఎక్కువ అవకాశం ఉన్న ఖాతాను తెరవండి.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` ప్రతి ఖాతాకు, ప్రతి పరిమితిలో ఎంత ఉపయోగించబడిందో చూపిస్తుంది: 5 గంటల పరిమితి, వారపు పరిమితి, ప్రతి మోడల్ సొంత వారపు పరిమితి (Fable వంటిది). `ccam next --auto` ఎక్కువ అవకాశం మిగిలి ఉన్న ఖాతాను తెరుస్తుంది, `--continue` ప్రస్తుత సంభాషణను దానికి తీసుకువెళ్తుంది.
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

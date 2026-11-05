@@ -1,10 +1,10 @@
 ---
 title: उपयोग सीमाएँ और अकाउंट स्विच करना
 description: ccam usage से हर Claude Code अकाउंट का 5 घंटे और साप्ताहिक उपयोग देखें, और ccam next --auto से सबसे ज़्यादा गुंजाइश वाला अकाउंट खोलें।
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` हर अकाउंट के लिए दिखाता है कि हर सीमा का कितना हिस्सा इस्तेमाल हुआ है: 5 घंटे की सीमा, साप्ताहिक सीमा और हर मॉडल की अपनी साप्ताहिक सीमा (जैसे Fable)। `ccam next --auto` सबसे ज़्यादा गुंजाइश वाला अकाउंट खोलता है, और `--continue` मौजूदा बातचीत को साथ ले जाता है।
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

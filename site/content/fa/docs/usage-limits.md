@@ -1,10 +1,10 @@
 ---
 title: سقف مصرف و جابه‌جایی بین حساب‌ها
 description: مصرف ۵ ساعته و هفتگی همه حساب‌های Claude Code را با ccam usage ببینید و حسابی را که بیشترین ظرفیت را دارد با ccam next --auto باز کنید.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: 28e652ad94f8
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` برای هر حساب نشان می‌دهد چه مقدار از هر سقف مصرف شده است: سقف ۵ ساعته، سقف هفتگی و سقف هفتگی ویژه هر مدل (مانند Fable). `ccam next --auto` حسابی را که بیشترین ظرفیت را دارد باز می‌کند و `--continue` گفتگوی فعلی را به آن منتقل می‌کند.
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

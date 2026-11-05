@@ -1,10 +1,10 @@
 ---
 title: 用量限制与切换账号
 description: 用 ccam usage 查看每个 Claude Code 账号的 5 小时用量和每周用量，并用 ccam next --auto 打开余量最多的账号。
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` 显示每个账号的各项限额已用掉多少：5 小时限额、每周限额，以及各模型自己的每周限额（例如 Fable）。`ccam next --auto` 打开余量最多的账号，`--continue` 会把当前对话带过去。
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

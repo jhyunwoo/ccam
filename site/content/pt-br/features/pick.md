@@ -1,10 +1,10 @@
 ---
 title: Escolher uma conta para scripts
 description: ccam pick imprime a conta com mais espaço para um script, dá contas diferentes a workers iniciados juntos e sai com 75 quando nenhuma tem espaço.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: "321c8e351cf7"
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` imprime o nome da conta com login feito que tem mais espaço, para que um script possa iniciar o Claude Code com ela. Workers iniciados ao mesmo tempo recebem cada um uma conta diferente, desde que contas suficientes tenham espaço, então um lote de jobs `claude -p` se espalha pelas suas contas em vez de esgotar uma só.
@@ -49,7 +49,7 @@ Códigos de saída: `0` com um nome na saída padrão, `75` (`EX_TEMPFAIL`) quan
 | `--json` | Imprime a conta, o uso de 5 horas e o semanal, de onde vêm os números e por que ela foi escolhida | desativado |
 | `--model <model>` | Também conta a janela semanal desse modelo, como `opus` | nenhum |
 | `--max-usage <1-100>` | Prefere as contas abaixo deste uso | `auto_max_usage`, senão 100 |
-| `--strategy headroom\|expiring\|balance` | O menor uso de 5 horas, o reinício de 5 horas mais próximo ou a maior cota semanal restante por dia | `auto_strategy`, senão `headroom` |
+| `--strategy headroom\|expiring\|balance` | O menor uso semanal a até 3 pontos percentuais do menor uso de 5 horas, o reinício de 5 horas mais próximo ou a maior cota semanal restante por dia | `auto_strategy`, senão `headroom` |
 | `--cross-org` | Também escolhe contas de outras organizações | `cross_org`, senão desativado |
 | `--wait[=<duration>]` | Quando nenhuma conta tem espaço, espera o reinício da primeira, no máximo por este tempo. O valor vai depois de `=`: `--wait 30m` é recusado com a dica `--wait takes its value after '=': --wait=30m` | desativado; `5h` quando usado sozinho |
 | `--dry-run` | Escolhe sem registrar a escolha | desativado |

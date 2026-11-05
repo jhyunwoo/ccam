@@ -1,10 +1,10 @@
 ---
 title: Vikomo vya matumizi na kubadili akaunti
 description: Ona matumizi ya saa 5 na ya wiki ya kila akaunti ya Claude Code kwa ccam usage, na ufungue akaunti yenye nafasi kubwa zaidi kwa ccam next --auto.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` huonyesha, kwa kila akaunti, kiasi kilichotumika cha kila kikomo: kikomo cha saa 5, kikomo cha wiki na kikomo cha wiki cha kila model (kama Fable). `ccam next --auto` hufungua akaunti yenye nafasi kubwa zaidi, na `--continue` huhamisha mazungumzo ya sasa.
@@ -66,7 +66,7 @@ Kisha Claude Code huonyesha jina la akaunti na matumizi yake kwenye mstari wa ha
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

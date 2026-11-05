@@ -1,10 +1,10 @@
 ---
 title: Wybór konta dla skryptów
 description: ccam pick wypisuje konto z największym zapasem dla skryptu, daje workerom uruchomionym razem różne konta i kończy się kodem 75, gdy żadne nie ma zapasu.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: "321c8e351cf7"
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` wypisuje nazwę zalogowanego konta z największym zapasem, żeby skrypt mógł na nim uruchomić Claude Code. Workery uruchomione w tym samym czasie dostają każdy inne konto, dopóki jest wystarczająco wiele kont z zapasem, więc partia zadań `claude -p` rozkłada się na twoje konta, zamiast wyczerpywać jedno.
@@ -49,7 +49,7 @@ Kody wyjścia: `0` z nazwą na standardowym wyjściu, `75` (`EX_TEMPFAIL`), gdy 
 | `--json` | Wypisuje konto, jego użycie 5-godzinne i tygodniowe, źródło liczb i powód wyboru | wyłączone |
 | `--model <model>` | Uwzględnia też tygodniowe okno tego modelu, np. `opus` | brak |
 | `--max-usage <1-100>` | Preferuje konta poniżej tego użycia | `auto_max_usage`, w przeciwnym razie 100 |
-| `--strategy headroom\|expiring\|balance` | Najniższe użycie 5-godzinne, najbliższy reset okna 5-godzinnego albo największy tygodniowy limit pozostały na dzień | `auto_strategy`, w przeciwnym razie `headroom` |
+| `--strategy headroom\|expiring\|balance` | Najniższe użycie tygodniowe w granicach 3 punktów procentowych od najniższego użycia 5-godzinnego, najbliższy reset okna 5-godzinnego albo największy tygodniowy limit pozostały na dzień | `auto_strategy`, w przeciwnym razie `headroom` |
 | `--cross-org` | Wybiera też konta innych organizacji | `cross_org`, w przeciwnym razie wyłączone |
 | `--wait[=<duration>]` | Gdy żadne konto nie ma zapasu, czeka na reset pierwszego, najwyżej tyle. Wartość podaje się po `=`: `--wait 30m` jest odrzucane z podpowiedzią `--wait takes its value after '=': --wait=30m` | wyłączone; `5h`, gdy podano samą opcję |
 | `--dry-run` | Wybiera bez zapisywania wyboru | wyłączone |

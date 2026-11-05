@@ -1,10 +1,10 @@
 ---
 title: "Limites d'utilisation et changement de compte"
 description: "Consultez l'utilisation sur 5 heures et hebdomadaire de chaque compte Claude Code avec ccam usage, et ouvrez celui qui a le plus de marge avec ccam next --auto."
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: 28e652ad94f8
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` indique, pour chaque compte, quelle part de chaque limite est utilisée : la limite sur 5 heures, la limite hebdomadaire et la limite hebdomadaire propre à chaque modèle (comme Fable). `ccam next --auto` ouvre le compte qui a le plus de marge, et `--continue` reprend la conversation en cours.
@@ -66,7 +66,7 @@ Claude Code affiche alors le nom du compte et son utilisation dans la ligne d'é
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

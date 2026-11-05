@@ -1,10 +1,10 @@
 ---
 title: Claude Code 达到用量限制时该怎么办
 description: 等待额度重置，或立即在另一个 Claude Code 账号上继续同一个对话。逐步说明 5 小时限制和每周限制的工作方式。
-updated: 2026-11-01
+updated: 2026-11-05
 order: 3
 translation: machine
-sourceHash: "760a36724feb"
+sourceHash: "53b1e3634ea9"
 ---
 
 当一个账号达到用量限制（常被称为 rate limit）时，你有两个选择：等到限制重置，或者现在就在你拥有的另一个账号上继续同一个对话。使用 ccam 时，第二种做法只需一条命令：`ccam next --auto --continue`。
@@ -63,7 +63,7 @@ Claude Code 会以 `work` 账号启动，并打开当前文件夹中最近的对
 
 只有在你开启后才会。
 
-- 默认情况下，你工作时 ccam 并没有在运行：它启动 Claude Code 后就用 Claude Code 替换了自身，所以何时切换由你决定。`ccam next --auto` 会选择 5 小时用量最低的账号，跳过用量已达 100% 或未登录的账号，并且只在同一个 Team 或 Enterprise 组织内，或在个人套餐之间选择。
+- 默认情况下，你工作时 ccam 并没有在运行：它启动 Claude Code 后就用 Claude Code 替换了自身，所以何时切换由你决定。`ccam next --auto` 会按用量选择：在 5 小时用量与最低值相差不超过 3 个百分点的账号中，选每周用量最低的账号；它会跳过用量已达 100% 或未登录的账号，并且只在同一个 Team 或 Enterprise 组织内，或在个人套餐之间选择。
 - 在 `config.toml` 中设置 `relay = true` 后，ccam 会改为在会话旁边持续运行，这样 `/ccam:switch` 就能自行继续对话，并沿用会话的选项、权限模式、推理强度和代理；在把对话移到另一个组织的账号之前，ccam 会先询问你。
 - 设置 `auto_switch = true`（仅限 Linux 和 macOS；实验性功能）后，ccam 还会自己完成切换：当 Claude Code 因用量限制停止会话，并且另一个同类账号还有余量时，ccam 会结束该会话，并在那个账号上继续这个对话（[条件与代价](/features/next#auto-switch)）。
 

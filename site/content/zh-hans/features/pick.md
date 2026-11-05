@@ -1,10 +1,10 @@
 ---
 title: 为脚本选择账号
 description: ccam pick 为脚本输出余量最多的账号，让同时启动的并行任务各用不同的账号，并在没有账号还有余量时以 75 退出。
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: "321c8e351cf7"
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` 输出已登录账号中余量最多的那个账号的名称，这样脚本就能用它启动 Claude Code。只要有足够多的账号还有余量，同时启动的并行任务就会各自拿到不同的账号，这样一批 `claude -p` 任务会分散到你的各个账号上，而不是耗尽其中一个。
@@ -49,7 +49,7 @@ $ ccam pick --json
 | `--json` | 输出账号、它的 5 小时和每周用量、这些数字的来源，以及选中它的理由 | 关闭 |
 | `--model <model>` | 同时计入该模型的每周时间窗口，例如 `opus` | 无 |
 | `--max-usage <1-100>` | 优先选择用量低于此值的账号 | `auto_max_usage`，否则为 100 |
-| `--strategy headroom\|expiring\|balance` | 5 小时用量最低的账号、5 小时时间窗口最早重置的账号，或平均每天剩余每周配额最多的账号 | `auto_strategy`，否则为 `headroom` |
+| `--strategy headroom\|expiring\|balance` | 在 5 小时用量与最低值相差不超过 3 个百分点的账号中每周用量最低的账号、5 小时时间窗口最早重置的账号，或平均每天剩余每周配额最多的账号 | `auto_strategy`，否则为 `headroom` |
 | `--cross-org` | 也选择其他组织的账号 | `cross_org`，否则为关闭 |
 | `--wait[=<duration>]` | 没有账号还有余量时，等待第一个账号重置，最多等待这么久。值写在 `=` 之后：`--wait 30m` 会被拒绝，并给出提示 `--wait takes its value after '=': --wait=30m` | 关闭；单独给出时为 `5h` |
 | `--dry-run` | 只做选择，不记录这次选择 | 关闭 |

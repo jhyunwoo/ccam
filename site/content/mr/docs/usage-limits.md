@@ -1,10 +1,10 @@
 ---
 title: वापर मर्यादा आणि खाते बदलणे
 description: ccam usage ने प्रत्येक Claude Code खात्याचा 5 तासांचा आणि साप्ताहिक वापर पाहा, आणि ccam next --auto ने सर्वात जास्त जागा असलेले खाते उघडा.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` प्रत्येक खात्यासाठी प्रत्येक मर्यादेपैकी किती वापरले ते दाखवते: 5 तासांची मर्यादा, साप्ताहिक मर्यादा आणि प्रत्येक मॉडेलची स्वतःची साप्ताहिक मर्यादा (उदा. Fable). `ccam next --auto` सर्वात जास्त जागा असलेले खाते उघडते, आणि `--continue` चालू संभाषण तिकडे नेते.
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

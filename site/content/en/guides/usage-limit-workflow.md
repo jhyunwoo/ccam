@@ -1,7 +1,7 @@
 ---
 title: What to do when Claude Code hits its usage limit
 description: Wait for the reset or continue the same conversation on another Claude Code account right away. How the 5-hour and weekly limits work, step by step.
-updated: 2026-11-01
+updated: 2026-11-05
 published: 2026-10-19
 order: 3
 translation: source
@@ -63,7 +63,7 @@ With the [ccam plugin](/docs/install#claude-code-plugin) in Claude Code, a sessi
 
 Only if you turn it on.
 
-- By default, ccam is not running while you work: it starts Claude Code and replaces itself with it, so you decide when to switch. `ccam next --auto` picks the account with the lowest 5-hour usage, skips accounts that are at 100% or not logged in, and stays within one Team or Enterprise organization, or among personal plans.
+- By default, ccam is not running while you work: it starts Claude Code and replaces itself with it, so you decide when to switch. `ccam next --auto` picks by usage, taking the least weekly usage among the accounts within 3 points of the lowest 5-hour usage; it skips accounts that are at 100% or not logged in, and stays within one Team or Enterprise organization, or among personal plans.
 - With `relay = true` in `config.toml`, ccam keeps running alongside the session instead, so `/ccam:switch` continues the conversation by itself, keeping the session's options, permission mode, effort level and agent; before it moves the conversation to an account of another organization, ccam asks you.
 - With `auto_switch = true` (Linux and macOS; experimental), ccam also makes the switch itself: when Claude Code stops the session at its limit and another account of the same kind has room, ccam ends the session and continues the conversation there ([conditions and costs](/features/next#auto-switch)).
 

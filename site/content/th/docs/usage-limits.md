@@ -1,10 +1,10 @@
 ---
 title: ขีดจำกัดการใช้งานและการสลับบัญชี
 description: "ดูการใช้งาน 5 ชั่วโมงและรายสัปดาห์ของทุกบัญชี Claude Code ด้วย ccam usage และเปิดบัญชีที่เหลือโควตามากสุดด้วย ccam next --auto"
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` แสดงว่าแต่ละบัญชีใช้ขีดจำกัดแต่ละแบบไปแล้วเท่าไร ได้แก่ ขีดจำกัดแบบ 5 ชั่วโมง ขีดจำกัดรายสัปดาห์ และขีดจำกัดรายสัปดาห์เฉพาะของแต่ละโมเดล (เช่น Fable) `ccam next --auto` เปิดบัญชีที่เหลือโควตามากที่สุด และ `--continue` จะนำการสนทนาปัจจุบันไปต่อด้วย
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

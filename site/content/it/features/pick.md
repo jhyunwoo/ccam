@@ -1,10 +1,10 @@
 ---
 title: Scegliere un account per gli script
 description: ccam pick stampa l'account con più margine per uno script, dà account diversi ai worker avviati insieme ed esce con 75 quando nessuno ha margine.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: 321c8e351cf7
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` stampa il nome dell'account con login che ha più margine, così uno script può avviarci Claude Code. I worker avviati nello stesso momento ricevono ciascuno un account diverso finché abbastanza account hanno margine, così un gruppo di job `claude -p` si distribuisce sui tuoi account invece di esaurirne uno.
@@ -49,7 +49,7 @@ Codici di uscita: `0` con un nome sullo standard output, `75` (`EX_TEMPFAIL`) qu
 | `--json` | Stampa l'account, il suo utilizzo su 5 ore e settimanale, la provenienza dei numeri e il motivo della scelta | disattivata |
 | `--model <model>` | Conta anche la finestra settimanale di quel modello, come `opus` | nessuno |
 | `--max-usage <1-100>` | Preferisce gli account sotto questo utilizzo | `auto_max_usage`, altrimenti 100 |
-| `--strategy headroom\|expiring\|balance` | L'utilizzo su 5 ore più basso, l'azzeramento su 5 ore più vicino oppure la maggiore quota settimanale residua per giorno | `auto_strategy`, altrimenti `headroom` |
+| `--strategy headroom\|expiring\|balance` | L'utilizzo settimanale più basso tra gli account entro 3 punti percentuali dall'utilizzo su 5 ore più basso, l'azzeramento su 5 ore più vicino oppure la maggiore quota settimanale residua per giorno | `auto_strategy`, altrimenti `headroom` |
 | `--cross-org` | Sceglie anche account di altre organizzazioni | `cross_org`, altrimenti disattivata |
 | `--wait[=<duration>]` | Quando nessun account ha margine, attende l'azzeramento del primo, al massimo per questo tempo. Il valore va dopo `=`: `--wait 30m` viene rifiutato con il suggerimento `--wait takes its value after '=': --wait=30m` | disattivata; `5h` se indicata da sola |
 | `--dry-run` | Sceglie senza registrare la scelta | disattivata |

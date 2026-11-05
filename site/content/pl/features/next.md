@@ -4,7 +4,7 @@ description: ccam next otwiera Claude Code jako inne konto; --auto wybiera konto
 updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "bc9837b7a6ae"
+sourceHash: "a320c160caef"
 ---
 
 `ccam next` otwiera Claude Code jako inne konto bez podawania jego nazwy. Używaj go, gdy konto osiągnie limit użycia. Są cztery sposoby przełączenia:
@@ -47,7 +47,7 @@ ccam wypisuje przełączenie jako `→ <from> → <to>` na standardowe wyjście 
 | --- | --- | --- |
 | `--auto` | Wybiera zalogowane konto według użycia (zobacz niżej), pomijając konta na poziomie 100% | wyłączone |
 | `--max-usage <1-100>` | Z `--auto`: preferuje konta poniżej tego użycia | `auto_max_usage`, w przeciwnym razie 100 |
-| `--strategy headroom\|expiring\|balance` | Z `--auto`: najniższe użycie 5-godzinne, najbliższy reset okna 5-godzinnego albo największy tygodniowy limit pozostały na dzień | `auto_strategy`, w przeciwnym razie `headroom` |
+| `--strategy headroom\|expiring\|balance` | Z `--auto`: najniższe użycie tygodniowe w granicach 3 punktów procentowych od najniższego użycia 5-godzinnego, najbliższy reset okna 5-godzinnego albo największy tygodniowy limit pozostały na dzień | `auto_strategy`, w przeciwnym razie `headroom` |
 | `--cross-org` | Z `--auto`: wybiera też konta innej organizacji (zobacz niżej) | `cross_org`, w przeciwnym razie wyłączone |
 | `--wait[=<duration>]` | Z `--auto`: gdy żadne konto nie ma zapasu, czeka na reset pierwszego, najwyżej tyle. Wartość podaje się po `=`: `--wait 2h` jest odrzucane z podpowiedzią `--wait takes its value after '=': --wait=2h` | wyłączone; `5h`, gdy podano samą opcję |
 | `-c`, `--continue` | Kontynuuje ostatnią rozmowę z tego folderu na nowym koncie (zobacz niżej) | wyłączone |
@@ -252,7 +252,7 @@ Summary: …
 3. ccam uruchamia `claude` jako proces potomny zamiast przez `exec`, wstrzymuje jego standardowe wyjście, a standardowe wyjście błędów przekazuje na bieżąco.
 4. Gdy `claude` zakończy się kodem 0 albo nie powiedzie się z innego powodu, wstrzymane wyjście i kod wyjścia są przekazywane bez zmian. Tak samo przebieg zakończony sygnałem (kod wyjścia powyżej 128): poproszono go o zatrzymanie, więc nie jest uruchamiany ponownie.
 5. Błąd jest uznawany za limit użycia, gdy tak mówi komunikat Claude Code, czyli dowolny z komunikatów o limicie użycia znanych [hookowi](#inside-claude-code), także w wyjściu `--output-format json` lub `stream-json`, albo gdy użycie konta pokazuje okno 5-godzinne, tygodniowe lub `--model` na poziomie 100% (łącznie z zapisem limitu).
-6. Wtedy wyjście tej próby jest odrzucane, a to samo polecenie uruchamia się na innym zalogowanym koncie: najpierw na tym z najniższym użyciem 5-godzinnym, potem na kontach, których użycia nie da się sprawdzić, według numerów. Konta na poziomie 100% są pomijane, konta z loginem kluczem API nigdy nie są próbowane, a każde konto jest próbowane najwyżej raz.
+6. Wtedy wyjście tej próby jest odrzucane, a to samo polecenie uruchamia się na innym zalogowanym koncie: najpierw na tym, które wybrałoby `--auto`, potem na kontach, których użycia nie da się sprawdzić, według numerów. Konta na poziomie 100% są pomijane, konta z loginem kluczem API nigdy nie są próbowane, a każde konto jest próbowane najwyżej raz.
 7. Gdy wśród argumentów jest `-c`, `--continue`, `-r` lub `--resume`, próbowane są tylko konta z tej samej grupy historii, żeby dało się znaleźć rozmowę.
 8. Próbowane są tylko konta z tej samej organizacji, tak jak w `--auto` (`cross_org = true` znosi to ograniczenie).
 

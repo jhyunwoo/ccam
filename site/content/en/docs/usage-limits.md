@@ -1,7 +1,7 @@
 ---
 title: Usage limits and switching accounts
 description: See the 5-hour and weekly usage of every Claude Code account with ccam usage, and open the account with the most room with ccam next --auto.
-updated: 2026-10-26
+updated: 2026-11-05
 published: 2026-10-19
 order: 5
 translation: source
@@ -66,7 +66,7 @@ Claude Code then shows the account name and its usage in the status line, for ex
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

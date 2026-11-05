@@ -1,10 +1,10 @@
 ---
 title: Betikler için hesap seçme
 description: ccam pick bir betik için en çok payı kalan hesabı yazdırır, birlikte başlatılan süreçlere farklı hesaplar verir ve hiçbirinde pay yoksa 75 ile çıkar.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: 321c8e351cf7
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick`, en çok payı kalan girişli hesabın adını yazdırır; böylece bir betik Claude Code'u o hesapla başlatabilir. Aynı anda başlatılan çalışan süreçler, payı kalan yeterli hesap olduğu sürece her biri farklı bir hesap alır; böylece bir grup `claude -p` işi tek bir hesabı tüketmek yerine hesaplarınıza dağılır.
@@ -49,7 +49,7 @@ $ ccam pick --json
 | `--json` | Hesabı, 5 saatlik ve haftalık kullanımını, sayıların nereden geldiğini ve neden seçildiğini yazdırır | kapalı |
 | `--model <model>` | O modelin haftalık penceresini de sayar, örneğin `opus` | yok |
 | `--max-usage <1-100>` | Bu kullanımın altındaki hesapları tercih eder | `auto_max_usage`, aksi halde 100 |
-| `--strategy headroom\|expiring\|balance` | En düşük 5 saatlik kullanım, en yakın 5 saatlik sıfırlanma ya da gün başına en çok kalan haftalık kota | `auto_strategy`, aksi halde `headroom` |
+| `--strategy headroom\|expiring\|balance` | 5 saatlik kullanımı en düşük olanın en fazla 3 puan üstünde olan hesaplar arasında en düşük haftalık kullanım, en yakın 5 saatlik sıfırlanma ya da gün başına en çok kalan haftalık kota | `auto_strategy`, aksi halde `headroom` |
 | `--cross-org` | Başka kuruluşların hesaplarını da seçer | `cross_org`, aksi halde kapalı |
 | `--wait[=<duration>]` | Hiçbir hesapta pay yoksa ilk hesabın sıfırlanmasını en fazla bu süre kadar bekler. Değer `=` işaretinden sonra yazılır: `--wait 30m`, `--wait takes its value after '=': --wait=30m` ipucuyla reddedilir | kapalı; tek başına verilirse `5h` |
 | `--dry-run` | Seçimi kaydetmeden seçer | kapalı |

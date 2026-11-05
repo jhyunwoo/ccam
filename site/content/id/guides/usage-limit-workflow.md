@@ -1,10 +1,10 @@
 ---
 title: Saat Claude Code mencapai batas penggunaan
 description: Tunggu reset atau langsung lanjutkan percakapan yang sama di akun Claude Code lain. Cara kerja batas 5 jam dan mingguan, langkah demi langkah.
-updated: 2026-11-01
+updated: 2026-11-05
 order: 3
 translation: machine
-sourceHash: "760a36724feb"
+sourceHash: "53b1e3634ea9"
 ---
 
 Saat sebuah akun mencapai batas penggunaannya (sering disebut rate limit), Anda punya dua pilihan: menunggu sampai batasnya direset, atau melanjutkan percakapan yang sama sekarang juga di akun lain milik Anda. Dengan ccam, pilihan kedua cukup satu perintah, `ccam next --auto --continue`.
@@ -63,7 +63,7 @@ Dengan [plugin ccam](/docs/install#claude-code-plugin) di Claude Code, sesi yang
 
 Hanya jika Anda mengaktifkannya.
 
-- Secara default, ccam tidak berjalan selama Anda bekerja: ccam menjalankan Claude Code lalu menggantikan dirinya dengan Claude Code, jadi Anda yang menentukan kapan berganti. `ccam next --auto` memilih akun dengan penggunaan 5 jam terendah, melewati akun yang sudah 100% atau belum login, dan tetap berada dalam satu organisasi Team atau Enterprise, atau di antara paket pribadi.
+- Secara default, ccam tidak berjalan selama Anda bekerja: ccam menjalankan Claude Code lalu menggantikan dirinya dengan Claude Code, jadi Anda yang menentukan kapan berganti. `ccam next --auto` memilih berdasarkan penggunaan, dengan mengambil penggunaan mingguan paling sedikit di antara akun yang penggunaan 5 jamnya paling banyak 3 poin di atas penggunaan 5 jam terendah; perintah ini melewati akun yang sudah 100% atau belum login, dan tetap berada dalam satu organisasi Team atau Enterprise, atau di antara paket pribadi.
 - Dengan `relay = true` di `config.toml`, ccam justru tetap berjalan di samping sesi, sehingga `/ccam:switch` melanjutkan percakapan dengan sendirinya, dengan mempertahankan opsi, mode izin, tingkat effort, dan agen sesi tersebut; sebelum memindahkan percakapan ke akun organisasi lain, ccam bertanya kepada Anda.
 - Dengan `auto_switch = true` (Linux dan macOS; eksperimental), ccam juga melakukan perpindahan itu sendiri: saat Claude Code menghentikan sesi di batasnya dan akun lain yang sejenis punya ruang, ccam mengakhiri sesi itu dan melanjutkan percakapan di sana ([syarat dan biaya](/features/next#auto-switch)).
 
