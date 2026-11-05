@@ -4,7 +4,7 @@ description: Sa ccam next, bubukas ang Claude Code bilang ibang account; --auto 
 updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "bc9837b7a6ae"
+sourceHash: "a320c160caef"
 ---
 
 Binubuksan ng `ccam next` ang Claude Code bilang ibang account nang hindi mo ito pinapangalanan. Gamitin ito kapag naabot ng isang account ang usage limit nito. May apat na paraan para lumipat:
@@ -47,7 +47,7 @@ Ipi-print ng ccam ang paglipat bilang `→ <from> → <to>` sa standard error, k
 | --- | --- | --- |
 | `--auto` | Piliin ang naka-log in na account ayon sa usage (tingnan sa ibaba), at laktawan ang mga account na nasa 100% | off |
 | `--max-usage <1-100>` | Kasama ang `--auto`: unahin ang mga account na mas mababa sa usage na ito | `auto_max_usage`, kung wala ay 100 |
-| `--strategy headroom\|expiring\|balance` | Kasama ang `--auto`: ang pinakamababang 5-oras na usage, ang pinakamalapit na 5-oras na reset o ang pinakamaraming natitirang lingguhang quota bawat araw | `auto_strategy`, kung wala ay `headroom` |
+| `--strategy headroom\|expiring\|balance` | Kasama ang `--auto`: ang pinakakaunting lingguhang usage sa mga account na nasa loob ng 3 puntos ng pinakamababang 5-oras na usage, ang pinakamalapit na 5-oras na reset o ang pinakamaraming natitirang lingguhang quota bawat araw | `auto_strategy`, kung wala ay `headroom` |
 | `--cross-org` | Kasama ang `--auto`: pumili rin ng mga account ng ibang organisasyon (tingnan sa ibaba) | `cross_org`, kung wala ay off |
 | `--wait[=<duration>]` | Kasama ang `--auto`: kapag walang account na may natitira, hintayin ang unang mag-reset, nang hindi hihigit sa tagal na ito. Inilalagay ang value pagkatapos ng `=`: tinatanggihan ang `--wait 2h` kasama ang pahiwatig na `--wait takes its value after '=': --wait=2h` | off; `5h` kapag ibinigay nang mag-isa |
 | `-c`, `--continue` | Ipagpatuloy ang huling usapan ng folder na ito sa bagong account (tingnan sa ibaba) | off |
@@ -254,7 +254,7 @@ Summary: …
 3. Sinisimulan ng ccam ang `claude` bilang child process sa halip na `exec`, pinipigil ang standard output nito, at ipinapasa ang standard error habang dumarating ito.
 4. Kapag lumabas ang `claude` nang may 0, o pumalya dahil sa ibang dahilan, ipinapasa nang walang pagbabago ang pinigil na output at ang exit code. Ganoon din ang run na tinapos ng isang signal (exit code na lampas sa 128): hiniling itong huminto, at hindi na ito pinapatakbo ulit.
 5. Itinuturing na usage limit ang pagkabigo kapag sinasabi iyon ng mensahe ng Claude Code, alinman sa mga mensahe ng usage limit na kilala ng [hook](#inside-claude-code), pati sa loob ng output na `--output-format json` o `stream-json`, o kapag ipinapakita ng usage ng account na nasa 100% ang 5-oras, lingguhan o `--model` na window nito (kasama ang tala ng limit).
-6. Saka itinatapon ang output ng pagtatangkang iyon at pinapatakbo ang parehong command bilang ibang naka-log in na account: ang may pinakamababang 5-oras na usage, saka ang mga account na hindi matingnan ang usage, ayon sa pagkakasunod-sunod ng numero. Nilalaktawan ang mga account na nasa 100%, hindi kailanman sinusubukan ang mga account na may API key login, at sinusubukan ang bawat account nang hindi hihigit sa isang beses.
+6. Saka itinatapon ang output ng pagtatangkang iyon at pinapatakbo ang parehong command bilang ibang naka-log in na account: ang pipiliin ng `--auto`, saka ang mga account na hindi matingnan ang usage, ayon sa pagkakasunod-sunod ng numero. Nilalaktawan ang mga account na nasa 100%, hindi kailanman sinusubukan ang mga account na may API key login, at sinusubukan ang bawat account nang hindi hihigit sa isang beses.
 7. Kapag kasama sa mga argument ang `-c`, `--continue`, `-r` o `--resume`, ang mga account lang sa parehong history group ang sinusubukan, para mahanap ang usapan.
 8. Ang mga account lang ng parehong organisasyon ang sinusubukan, gaya sa `--auto` (inaalis ito ng `cross_org = true`).
 

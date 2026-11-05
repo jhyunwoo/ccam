@@ -43,7 +43,7 @@ const DefaultWait = "5h"
 
 func (c *choiceFlags) add(cmd *cobra.Command) {
 	cmd.Flags().Float64Var(&c.maxUsage, "max-usage", 0, "prefer accounts below this usage, 1-100 (config: auto_max_usage)")
-	cmd.Flags().StringVar(&c.strategy, "strategy", "", "headroom (lowest 5-hour usage), expiring (soonest reset) or balance (weekly quota that would go unused first) (config: auto_strategy)")
+	cmd.Flags().StringVar(&c.strategy, "strategy", "", "headroom (least weekly usage within 3 points of the lowest 5-hour usage), expiring (soonest reset) or balance (weekly quota that would go unused first) (config: auto_strategy)")
 	cmd.Flags().StringVar(&c.wait, "wait", "", "when no account has room, wait for one, at most this long (default "+DefaultWait+")")
 	cmd.Flags().Lookup("wait").NoOptDefVal = DefaultWait
 	cmd.Flags().BoolVar(&c.crossOrg, "cross-org", false, "also choose accounts of other organizations (config: cross_org)")

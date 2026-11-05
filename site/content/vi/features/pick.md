@@ -1,10 +1,10 @@
 ---
 title: Chọn tài khoản cho script
 description: ccam pick in tài khoản còn nhiều hạn mức nhất cho script, giao tài khoản khác nhau cho các worker khởi động cùng lúc, và thoát 75 khi hết hạn mức.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: 321c8e351cf7
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` in tên của tài khoản đã đăng nhập còn nhiều hạn mức nhất, để một script có thể dùng nó khởi động Claude Code. Các worker khởi động cùng lúc sẽ mỗi worker nhận một tài khoản khác nhau, miễn là có đủ tài khoản còn hạn mức, nên một loạt tác vụ `claude -p` được trải ra trên các tài khoản của bạn thay vì dùng cạn một tài khoản.
@@ -49,7 +49,7 @@ Mã thoát: `0` kèm một tên trên đầu ra chuẩn, `75` (`EX_TEMPFAIL`) kh
 | `--json` | In tài khoản, mức sử dụng 5 giờ và hàng tuần của nó, nguồn của các con số và lý do nó được chọn | tắt |
 | `--model <model>` | Tính cả khoảng hàng tuần của mô hình đó, chẳng hạn `opus` | không có |
 | `--max-usage <1-100>` | Ưu tiên các tài khoản có mức sử dụng dưới giá trị này | `auto_max_usage`, nếu không thì 100 |
-| `--strategy headroom\|expiring\|balance` | Mức sử dụng 5 giờ thấp nhất, khoảng 5 giờ được đặt lại sớm nhất, hoặc nhiều hạn mức hàng tuần còn lại nhất cho mỗi ngày | `auto_strategy`, nếu không thì `headroom` |
+| `--strategy headroom\|expiring\|balance` | Mức sử dụng hàng tuần thấp nhất trong số các tài khoản có mức sử dụng 5 giờ cao hơn mức thấp nhất không quá 3 điểm phần trăm, khoảng 5 giờ được đặt lại sớm nhất, hoặc nhiều hạn mức hàng tuần còn lại nhất cho mỗi ngày | `auto_strategy`, nếu không thì `headroom` |
 | `--cross-org` | Chọn cả các tài khoản thuộc tổ chức khác | `cross_org`, nếu không thì tắt |
 | `--wait[=<duration>]` | Khi không tài khoản nào còn hạn mức, chờ tài khoản đầu tiên được đặt lại, tối đa chừng này thời gian. Giá trị đặt sau `=`: `--wait 30m` bị từ chối kèm gợi ý `--wait takes its value after '=': --wait=30m` | tắt; `5h` khi chỉ ghi cờ |
 | `--dry-run` | Chọn mà không ghi lại lần chọn | tắt |

@@ -1,10 +1,10 @@
 ---
 title: Cha kufanya Claude Code ikifikia kikomo cha matumizi
 description: Subiri kikomo kianze upya au endeleza mazungumzo yale yale kwenye akaunti nyingine ya Claude Code mara moja. Jinsi vikomo vya saa 5 na vya wiki hufanya kazi.
-updated: 2026-11-01
+updated: 2026-11-05
 order: 3
 translation: machine
-sourceHash: "760a36724feb"
+sourceHash: "53b1e3634ea9"
 ---
 
 Akaunti inapofikia kikomo chake cha matumizi (mara nyingi huitwa rate limit), una machaguo mawili: kusubiri hadi kikomo kianze upya, au kuendeleza mazungumzo yale yale sasa hivi kwenye akaunti nyingine unayoimiliki. Kwa ccam, chaguo la pili huchukua amri moja, `ccam next --auto --continue`.
@@ -63,7 +63,7 @@ Ukiwa na [plugin ya ccam](/docs/install#claude-code-plugin) ndani ya Claude Code
 
 Ni pale tu unapoiwasha.
 
-- Kwa chaguo-msingi, ccam haiendeshwi wakati unafanya kazi: huanzisha Claude Code na kujibadilisha nayo, kwa hiyo wewe ndiye unaamua wakati wa kubadili. `ccam next --auto` huchagua akaunti yenye matumizi ya chini zaidi ya saa 5, huruka akaunti zilizofikia 100% au ambazo hazijaingiwa, na hubaki ndani ya shirika moja la Team au Enterprise, au miongoni mwa mipango ya binafsi.
+- Kwa chaguo-msingi, ccam haiendeshwi wakati unafanya kazi: huanzisha Claude Code na kujibadilisha nayo, kwa hiyo wewe ndiye unaamua wakati wa kubadili. `ccam next --auto` huchagua akaunti kwa matumizi, ikichukua ile yenye matumizi ya chini zaidi ya wiki kati ya akaunti zilizo ndani ya pointi 3 za asilimia kutoka matumizi ya chini zaidi ya saa 5; huruka akaunti zilizofikia 100% au ambazo hazijaingiwa, na hubaki ndani ya shirika moja la Team au Enterprise, au miongoni mwa mipango ya binafsi.
 - Kwa `relay = true` katika `config.toml`, ccam badala yake huendelea kuendeshwa kando ya kipindi, kwa hiyo `/ccam:switch` huendeleza mazungumzo yenyewe, ikihifadhi chaguo za kipindi, hali ya ruhusa, kiwango cha juhudi (effort) na agent; kabla haijayahamisha mazungumzo kwenye akaunti ya shirika jingine, ccam hukuuliza.
 - Kwa `auto_switch = true` (Linux na macOS; ya majaribio), ccam pia hufanya ubadilishaji yenyewe: Claude Code inaposimamisha kipindi kwenye kikomo chake na akaunti nyingine ya aina hiyo hiyo ina nafasi, ccam humaliza kipindi na huendeleza mazungumzo huko ([masharti na gharama](/features/next#auto-switch)).
 

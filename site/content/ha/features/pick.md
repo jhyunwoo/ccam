@@ -1,10 +1,10 @@
 ---
 title: Zaɓar asusu don rubutun umarni
 description: ccam pick yana buga asusun da ya fi sarari don rubutun umarni, yana ba workers da aka fara tare asusai daban-daban, kuma yana fita da 75 idan babu sarari.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: 321c8e351cf7
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` yana buga sunan asusun da aka shiga da shi wanda ya fi sarari, don rubutun umarni (script) ya iya fara Claude Code da shi. Workers da aka fara a lokaci ɗaya kowannensu yana samun asusu daban muddin isassun asusai suna da sarari, don haka rukunin ayyukan `claude -p` yana rarrabuwa a kan asusanka maimakon ya shanye ɗaya.
@@ -50,7 +50,7 @@ Exit codes: `0` tare da suna a standard output, `75` (`EX_TEMPFAIL`) idan babu a
 | `--json` | Buga asusun, amfaninsa na awa 5 da na mako, inda lambobin suka fito da dalilin da ya sa aka zaɓe shi | a kashe |
 | `--model <model>` | Ƙirga tagar mako ta wannan model ɗin ma, kamar `opus` | babu |
 | `--max-usage <1-100>` | Fifita asusan da ke ƙasa da wannan amfani | `auto_max_usage`, in ba haka ba 100 |
-| `--strategy headroom\|expiring\|balance` | Mafi ƙarancin amfanin awa 5, sake saitin awa 5 mafi kusa ko mafi yawan kason mako da ya rage ga kowace rana | `auto_strategy`, in ba haka ba `headroom` |
+| `--strategy headroom\|expiring\|balance` | Mafi ƙarancin amfanin mako a cikin asusan da amfanin awa 5 ɗinsu bai zarce mafi ƙarancin amfanin awa 5 da maki 3 ba, sake saitin awa 5 mafi kusa ko mafi yawan kason mako da ya rage ga kowace rana | `auto_strategy`, in ba haka ba `headroom` |
 | `--cross-org` | Zaɓi asusan wasu ƙungiyoyi (organizations) ma | `cross_org`, in ba haka ba a kashe |
 | `--wait[=<duration>]` | Idan babu asusun da ke da sarari, jira na farko ya sake saitawa, har zuwa iyakar wannan tsawon. Ƙimar tana zuwa bayan `=`: ana ƙin `--wait 30m` da shawarar `--wait takes its value after '=': --wait=30m` | a kashe; `5h` idan an ba shi shi kaɗai |
 | `--dry-run` | Zaɓa ba tare da rubuta zaɓin ba | a kashe |

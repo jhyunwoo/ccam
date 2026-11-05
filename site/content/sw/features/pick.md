@@ -1,10 +1,10 @@
 ---
 title: Kuchagua akaunti kwa ajili ya script
 description: ccam pick huchapisha akaunti yenye nafasi kubwa zaidi kwa script, huwapa workers walioanzishwa pamoja akaunti tofauti, na hutoka na 75 isipokuwa na nafasi.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: "321c8e351cf7"
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` huchapisha jina la akaunti iliyoingia yenye nafasi kubwa zaidi, ili script iweze kuanzisha Claude Code nayo. Workers walioanzishwa kwa wakati mmoja kila mmoja hupata akaunti tofauti maadamu akaunti za kutosha zina nafasi, kwa hiyo kundi la kazi za `claude -p` husambaa kwenye akaunti zako badala ya kumaliza moja.
@@ -49,7 +49,7 @@ Exit codes: `0` pamoja na jina kwenye standard output, `75` (`EX_TEMPFAIL`) waka
 | `--json` | Huchapisha akaunti, matumizi yake ya saa 5 na ya wiki, chanzo cha namba na kwa nini ilichaguliwa | imezimwa |
 | `--model <model>` | Huhesabu pia kipindi cha wiki cha modeli hiyo, kama `opus` | hakuna |
 | `--max-usage <1-100>` | Hupendelea akaunti zilizo chini ya matumizi haya | `auto_max_usage`, vinginevyo 100 |
-| `--strategy headroom\|expiring\|balance` | Matumizi ya chini zaidi ya saa 5, kipindi cha saa 5 kinachoanza upya mapema zaidi au kiasi kikubwa zaidi cha wiki kilichobaki kwa kila siku | `auto_strategy`, vinginevyo `headroom` |
+| `--strategy headroom\|expiring\|balance` | Matumizi ya chini zaidi ya wiki ndani ya pointi 3 za asilimia kutoka matumizi ya chini zaidi ya saa 5, kipindi cha saa 5 kinachoanza upya mapema zaidi au kiasi kikubwa zaidi cha wiki kilichobaki kwa kila siku | `auto_strategy`, vinginevyo `headroom` |
 | `--cross-org` | Huchagua pia akaunti za mashirika mengine | `cross_org`, vinginevyo imezimwa |
 | `--wait[=<duration>]` | Hakuna akaunti yenye nafasi, husubiri ya kwanza ianze upya, si zaidi ya muda huu. Thamani huwekwa baada ya `=`: `--wait 30m` hukataliwa pamoja na kidokezo `--wait takes its value after '=': --wait=30m` | imezimwa; `5h` ikitolewa peke yake |
 | `--dry-run` | Huchagua bila kurekodi uchaguzi | imezimwa |

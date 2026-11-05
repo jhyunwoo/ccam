@@ -1,10 +1,10 @@
 ---
 title: "Choisir un compte pour les scripts"
 description: "ccam pick affiche le compte qui a le plus de marge pour un script, donne des comptes différents aux workers lancés ensemble et quitte avec 75 sans marge."
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: 321c8e351cf7
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` affiche le nom du compte connecté qui a le plus de marge, pour qu'un script puisse lancer Claude Code avec lui. Les workers lancés en même temps reçoivent chacun un compte différent tant que suffisamment de comptes ont de la marge, si bien qu'un lot de tâches `claude -p` se répartit sur vos comptes au lieu d'en épuiser un seul.
@@ -49,7 +49,7 @@ Codes de sortie : `0` avec un nom sur la sortie standard, `75` (`EX_TEMPFAIL`) q
 | `--json` | Afficher le compte, son utilisation sur 5 heures et hebdomadaire, l'origine des chiffres et la raison de ce choix | désactivé |
 | `--model <model>` | Compter aussi la fenêtre hebdomadaire de ce modèle, comme `opus` | aucun |
 | `--max-usage <1-100>` | Préférer les comptes sous ce niveau d'utilisation | `auto_max_usage`, sinon 100 |
-| `--strategy headroom\|expiring\|balance` | L'utilisation sur 5 heures la plus basse, la réinitialisation sur 5 heures la plus proche ou le plus de quota hebdomadaire restant par jour | `auto_strategy`, sinon `headroom` |
+| `--strategy headroom\|expiring\|balance` | L'utilisation hebdomadaire la plus faible parmi les comptes à 3 points au plus de l'utilisation sur 5 heures la plus basse, la réinitialisation sur 5 heures la plus proche ou le plus de quota hebdomadaire restant par jour | `auto_strategy`, sinon `headroom` |
 | `--cross-org` | Choisir aussi des comptes d'autres organisations | `cross_org`, sinon désactivé |
 | `--wait[=<duration>]` | Quand aucun compte n'a de marge, attendre la réinitialisation du premier, au plus cette durée. La valeur se place après `=` : `--wait 30m` est refusé avec l'indication `--wait takes its value after '=': --wait=30m` | désactivé ; `5h` s'il est donné seul |
 | `--dry-run` | Choisir sans enregistrer le choix | désactivé |

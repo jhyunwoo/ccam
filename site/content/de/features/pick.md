@@ -1,10 +1,10 @@
 ---
 title: Ein Konto für Skripte wählen
 description: "ccam pick gibt das Konto mit dem meisten Spielraum für Skripte aus, verteilt gleichzeitig gestartete Worker auf Konten und endet mit 75 ohne Spielraum."
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: "321c8e351cf7"
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` gibt den Namen des angemeldeten Kontos mit dem meisten Spielraum aus, damit ein Skript Claude Code damit starten kann. Gleichzeitig gestartete Worker erhalten jeweils ein anderes Konto, solange genug Konten Spielraum haben, sodass sich ein Stapel von `claude -p`-Jobs auf deine Konten verteilt, statt ein einziges aufzubrauchen.
@@ -49,7 +49,7 @@ Exit-Codes: `0` mit einem Namen auf der Standardausgabe, `75` (`EX_TEMPFAIL`), w
 | `--json` | Das Konto, seine 5-Stunden- und Wochennutzung, die Herkunft der Zahlen und den Grund der Wahl ausgeben | aus |
 | `--model <model>` | Auch das Wochenfenster dieses Modells berücksichtigen, etwa `opus` | keins |
 | `--max-usage <1-100>` | Konten unter dieser Nutzung bevorzugen | `auto_max_usage`, andernfalls 100 |
-| `--strategy headroom\|expiring\|balance` | Die niedrigste 5-Stunden-Nutzung, die früheste 5-Stunden-Zurücksetzung oder das meiste verbleibende Wochenkontingent pro Tag | `auto_strategy`, andernfalls `headroom` |
+| `--strategy headroom\|expiring\|balance` | Die niedrigste Wochennutzung unter den Konten, deren 5-Stunden-Nutzung höchstens 3 Prozentpunkte über der niedrigsten liegt, die früheste 5-Stunden-Zurücksetzung oder das meiste verbleibende Wochenkontingent pro Tag | `auto_strategy`, andernfalls `headroom` |
 | `--cross-org` | Auch Konten anderer Organisationen wählen | `cross_org`, andernfalls aus |
 | `--wait[=<duration>]` | Wenn kein Konto Spielraum hat, auf die Zurücksetzung des ersten warten, höchstens so lange. Der Wert steht nach `=`: `--wait 30m` wird mit dem Hinweis `--wait takes its value after '=': --wait=30m` abgelehnt | aus; `5h`, wenn ohne Wert angegeben |
 | `--dry-run` | Wählen, ohne die Wahl zu erfassen | aus |

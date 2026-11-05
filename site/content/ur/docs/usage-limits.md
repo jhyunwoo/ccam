@@ -1,10 +1,10 @@
 ---
 title: "استعمال کی حدیں اور اکاؤنٹ تبدیل کرنا"
 description: "ccam usage سے Claude Code کے ہر اکاؤنٹ کا 5 گھنٹے اور ہفتہ وار استعمال دیکھیں، اور ccam next --auto سے سب سے زیادہ گنجائش والا اکاؤنٹ کھولیں۔"
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: 28e652ad94f8
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` ہر اکاؤنٹ کے لیے دکھاتا ہے کہ ہر حد کا کتنا حصہ استعمال ہو چکا ہے: 5 گھنٹے کی حد، ہفتہ وار حد اور ہر ماڈل کی اپنی ہفتہ وار حد (جیسے Fable)۔ `ccam next --auto` سب سے زیادہ گنجائش والا اکاؤنٹ کھولتا ہے، اور `--continue` موجودہ گفتگو کو ساتھ لے جاتا ہے۔
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

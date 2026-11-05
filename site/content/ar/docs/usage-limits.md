@@ -1,10 +1,10 @@
 ---
 title: حدود الاستخدام والتبديل بين الحسابات
 description: اعرض استخدام كل حساب Claude Code خلال 5 ساعات وخلال الأسبوع باستخدام ccam usage، وافتح الحساب الأكثر سعة باستخدام ccam next --auto.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 يعرض `ccam usage`، لكل حساب، مقدار ما استُخدم من كل حد: حد الخمس ساعات، والحد الأسبوعي، والحد الأسبوعي الخاص بكل نموذج (مثل Fable). ويفتح `ccam next --auto` الحساب الأكثر سعة متبقية، وينقل `--continue` المحادثة الحالية معه.
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

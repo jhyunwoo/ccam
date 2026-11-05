@@ -1,10 +1,10 @@
 ---
 title: Elegir una cuenta para scripts
 description: "ccam pick imprime la cuenta con más margen para un script, da cuentas distintas a los workers iniciados a la vez y sale con 75 cuando ninguna tiene margen."
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: "321c8e351cf7"
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` imprime el nombre de la cuenta con sesión iniciada que tiene más margen, para que un script pueda iniciar Claude Code con ella. Los workers iniciados a la vez reciben cada uno una cuenta distinta siempre que haya suficientes cuentas con margen, así que un lote de trabajos `claude -p` se reparte entre tus cuentas en lugar de agotar una sola.
@@ -49,7 +49,7 @@ Códigos de salida: `0` con un nombre en la salida estándar, `75` (`EX_TEMPFAIL
 | `--json` | Imprime la cuenta, su uso de 5 horas y semanal, de dónde salen las cifras y por qué se eligió | desactivada |
 | `--model <model>` | Cuenta también la ventana semanal de ese modelo, como `opus` | ninguno |
 | `--max-usage <1-100>` | Prefiere las cuentas por debajo de este uso | `auto_max_usage`, o 100 |
-| `--strategy headroom\|expiring\|balance` | El menor uso de 5 horas, el restablecimiento de 5 horas más próximo o la mayor cuota semanal restante por día | `auto_strategy`, o `headroom` |
+| `--strategy headroom\|expiring\|balance` | El menor uso semanal entre las cuentas que están a 3 puntos porcentuales o menos del menor uso de 5 horas, el restablecimiento de 5 horas más próximo o la mayor cuota semanal restante por día | `auto_strategy`, o `headroom` |
 | `--cross-org` | Elige también cuentas de otras organizaciones | `cross_org`, o desactivada |
 | `--wait[=<duration>]` | Cuando ninguna cuenta tiene margen, espera a que se restablezca la primera, como máximo este tiempo. El valor va después de `=`: `--wait 30m` se rechaza con la sugerencia `--wait takes its value after '=': --wait=30m` | desactivada; `5h` si se da sola |
 | `--dry-run` | Elige sin registrar la elección | desactivada |

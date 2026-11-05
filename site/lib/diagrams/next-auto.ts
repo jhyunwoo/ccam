@@ -1,8 +1,9 @@
 import { box, figure, glow, label, line, packet, reveal } from "../motion.ts";
 
 // `ccam next --auto`: ask every logged-in account for its usage at once,
-// then usage.Policy.Choose() takes the lowest 5-hour usage below
-// auto_max_usage (overflowing to the lowest below 100).
+// then usage.Policy.Choose() takes, below auto_max_usage (overflowing to
+// below 100), the least weekly usage within 3 points of the lowest 5-hour
+// usage.
 export default function nextAuto(): string {
   const h = 44, colW = 120, cols = [10, 140, 270], cx = cols.map((x) => x + colW / 2);
   const yTop = 10, yFetch = 70, yAcct = 148, yBest = 226, yRun = 296;
@@ -20,7 +21,7 @@ export default function nextAuto(): string {
     box(60, yTop, 280, h, "ccam next --auto", { sub: "pickAuto()" }),
     box(60, yFetch, 280, h, "FetchAll()", { sub: "usage.Options{}" }),
     ...accts.map((a, i) => box(cols[i], yAcct, colW, h, a.name, { sub: a.sub })),
-    box(60, yBest, 280, h, "Policy.Choose()", { sub: "min(5h) · peak < max · < 100" }),
+    box(60, yBest, 280, h, "Policy.Choose()", { sub: "5h ≤ min+3 → min(week) · < max · < 100" }),
     box(60, yRun, 280, h, "LaunchWith(work)", { sub: "syscall.Exec(claude)" }),
   ];
   parts.push(

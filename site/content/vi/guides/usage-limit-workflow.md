@@ -1,10 +1,10 @@
 ---
 title: Làm gì khi Claude Code chạm giới hạn sử dụng
 description: "Chờ giới hạn được đặt lại hoặc tiếp tục ngay cùng cuộc hội thoại trên một tài khoản Claude Code khác. Giới hạn 5 giờ và hàng tuần, từng bước một."
-updated: 2026-11-01
+updated: 2026-11-05
 order: 3
 translation: machine
-sourceHash: 760a36724feb
+sourceHash: "53b1e3634ea9"
 ---
 
 Khi một tài khoản chạm giới hạn sử dụng (thường gọi là rate limit), bạn có hai lựa chọn: chờ đến khi giới hạn được đặt lại, hoặc tiếp tục ngay cùng cuộc hội thoại trên một tài khoản khác của bạn. Với ccam, cách thứ hai chỉ cần một lệnh, `ccam next --auto --continue`.
@@ -63,7 +63,7 @@ Với [plugin ccam](/docs/install#claude-code-plugin) trong Claude Code, một p
 
 Chỉ khi bạn bật tính năng đó.
 
-- Theo mặc định, ccam không chạy trong lúc bạn làm việc: nó khởi động Claude Code rồi tự thay thế mình bằng Claude Code, nên bạn quyết định khi nào đổi. `ccam next --auto` chọn tài khoản có mức sử dụng 5 giờ thấp nhất, bỏ qua các tài khoản đã đạt 100% hoặc chưa đăng nhập, và chỉ ở trong một tổ chức Team hoặc Enterprise, hoặc giữa các gói cá nhân.
+- Theo mặc định, ccam không chạy trong lúc bạn làm việc: nó khởi động Claude Code rồi tự thay thế mình bằng Claude Code, nên bạn quyết định khi nào đổi. `ccam next --auto` chọn theo mức sử dụng, lấy tài khoản có mức sử dụng hàng tuần thấp nhất trong số các tài khoản có mức sử dụng 5 giờ cao hơn mức thấp nhất không quá 3 điểm phần trăm; nó bỏ qua các tài khoản đã đạt 100% hoặc chưa đăng nhập, và chỉ ở trong một tổ chức Team hoặc Enterprise, hoặc giữa các gói cá nhân.
 - Với `relay = true` trong `config.toml`, thay vào đó ccam tiếp tục chạy song song với phiên, nên `/ccam:switch` tự tiếp tục cuộc hội thoại, giữ lại các tùy chọn, chế độ quyền, mức effort và agent của phiên; trước khi chuyển cuộc hội thoại sang một tài khoản của tổ chức khác, ccam sẽ hỏi bạn.
 - Với `auto_switch = true` (Linux và macOS; thử nghiệm), ccam còn tự thực hiện việc chuyển: khi Claude Code dừng phiên ở giới hạn của nó và một tài khoản khác cùng loại còn hạn mức, ccam kết thúc phiên và tiếp tục cuộc hội thoại ở đó ([điều kiện và chi phí](/features/next#auto-switch)).
 

@@ -4,7 +4,7 @@ description: ccam next yana buɗe Claude Code a matsayin wani asusu; --auto yana
 updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "bc9837b7a6ae"
+sourceHash: "a320c160caef"
 ---
 
 `ccam next` yana buɗe Claude Code a matsayin wani asusu ba tare da ka ambaci sunansa ba. Yi amfani da shi idan asusu ya kai iyakar amfaninsa. Akwai hanyoyi huɗu na sauyawa:
@@ -48,7 +48,7 @@ ccam yana buga sauyawar a matsayin `→ <from> → <to>` a standard error, tare 
 | --- | --- | --- |
 | `--auto` | Zaɓi asusun da aka shiga da shi bisa amfani (duba ƙasa), ana tsallake asusan da suka kai 100% | a kashe |
 | `--max-usage <1-100>` | Da `--auto`: fifita asusan da ke ƙasa da wannan amfani | `auto_max_usage`, in ba haka ba 100 |
-| `--strategy headroom\|expiring\|balance` | Da `--auto`: mafi ƙarancin amfanin awa 5, sake saitin awa 5 mafi kusa ko mafi yawan kason mako da ya rage ga kowace rana | `auto_strategy`, in ba haka ba `headroom` |
+| `--strategy headroom\|expiring\|balance` | Da `--auto`: mafi ƙarancin amfanin mako a cikin asusan da amfanin awa 5 ɗinsu bai zarce mafi ƙarancin amfanin awa 5 da maki 3 ba, sake saitin awa 5 mafi kusa ko mafi yawan kason mako da ya rage ga kowace rana | `auto_strategy`, in ba haka ba `headroom` |
 | `--cross-org` | Da `--auto`: zaɓi asusan wata ƙungiya (organization) dabam ma (duba ƙasa) | `cross_org`, in ba haka ba a kashe |
 | `--wait[=<duration>]` | Da `--auto`: idan babu asusun da ke da sarari, jira na farko ya sake saitawa, har zuwa iyakar wannan tsawon. Ƙimar tana zuwa bayan `=`: ana ƙin `--wait 2h` da shawarar `--wait takes its value after '=': --wait=2h` | a kashe; `5h` idan an ba shi shi kaɗai |
 | `-c`, `--continue` | Ci gaba da tattaunawar ƙarshe ta wannan foldar a sabon asusun (duba ƙasa) | a kashe |
@@ -255,7 +255,7 @@ Summary: …
 3. ccam yana fara `claude` a matsayin child process maimakon `exec`, yana riƙe standard output ɗinsa, kuma yana miƙa standard error yadda yake zuwa.
 4. Idan `claude` ya fita da 0, ko ya gaza saboda wani dalili, ana miƙa output ɗin da aka riƙe da exit code ba tare da canji ba. Haka ma gudun da signal ya ƙare (exit code sama da 128): an nemi ya tsaya, kuma ba a sake gudanar da shi.
 5. Gazawa tana ƙirguwa a matsayin iyakar amfani idan saƙon Claude Code ya faɗi haka, kowane daga cikin saƙonnin iyakar amfani da [hook ɗin](#inside-claude-code) ya sani, har a cikin output na `--output-format json` ko `stream-json`, ko idan amfanin asusun ya nuna tagarsa ta awa 5, ta mako ko ta `--model` a 100% (har da rikodin iyaka).
-6. Sannan ana watsar da output ɗin wannan yunƙurin kuma umarnin iri ɗaya yana gudana a matsayin wani asusu da aka shiga da shi: wanda ke da mafi ƙarancin amfanin awa 5, sannan asusan da ba za a iya neman amfaninsu ba, bisa tsarin lambobi. Ana tsallake asusan da suka kai 100%, ba a taɓa gwada asusan da ke da shigar API key ba, kuma ana gwada kowane asusu sau ɗaya kawai.
+6. Sannan ana watsar da output ɗin wannan yunƙurin kuma umarnin iri ɗaya yana gudana a matsayin wani asusu da aka shiga da shi: wanda `--auto` zai zaɓa, sannan asusan da ba za a iya neman amfaninsu ba, bisa tsarin lambobi. Ana tsallake asusan da suka kai 100%, ba a taɓa gwada asusan da ke da shigar API key ba, kuma ana gwada kowane asusu sau ɗaya kawai.
 7. Idan akwai `-c`, `--continue`, `-r` ko `--resume` a cikin arguments, asusan da ke rukunin tarihi ɗaya ne kawai ake gwadawa, don a sami tattaunawar.
 8. Asusan ƙungiya ɗaya ne kawai ake gwadawa, kamar da `--auto` (`cross_org = true` yana ɗage wannan).
 

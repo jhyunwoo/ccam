@@ -1,10 +1,10 @@
 ---
 title: O que fazer no limite de uso do Claude Code
 description: Espere o limite reiniciar ou continue na hora a mesma conversa em outra conta do Claude Code. Como funcionam os limites de 5 horas e semanal, passo a passo.
-updated: 2026-11-01
+updated: 2026-11-05
 order: 3
 translation: machine
-sourceHash: "760a36724feb"
+sourceHash: "53b1e3634ea9"
 ---
 
 Quando uma conta atinge o limite de uso (muitas vezes chamado de rate limit), você tem duas opções: esperar até o limite reiniciar ou continuar agora a mesma conversa em outra conta sua. Com o ccam, a segunda opção é um único comando, `ccam next --auto --continue`.
@@ -63,7 +63,7 @@ Com o [plugin do ccam](/docs/install#claude-code-plugin) no Claude Code, uma ses
 
 Só se você ativar isso.
 
-- Por padrão, o ccam não fica em execução enquanto você trabalha: ele inicia o Claude Code e se substitui por ele, então você decide quando trocar. `ccam next --auto` escolhe a conta com o menor uso de 5 horas, pula as contas que estão em 100% ou sem login e fica dentro de uma mesma organização Team ou Enterprise, ou entre planos pessoais.
+- Por padrão, o ccam não fica em execução enquanto você trabalha: ele inicia o Claude Code e se substitui por ele, então você decide quando trocar. `ccam next --auto` escolhe a conta pelo uso, pegando a de menor uso semanal entre as contas a até 3 pontos percentuais do menor uso de 5 horas; pula as contas que estão em 100% ou sem login e fica dentro de uma mesma organização Team ou Enterprise, ou entre planos pessoais.
 - Com `relay = true` no `config.toml`, o ccam, em vez disso, continua rodando ao lado da sessão, então `/ccam:switch` continua a conversa sozinho, mantendo as opções, o modo de permissão, o nível de esforço e o agente da sessão; antes de mover a conversa para uma conta de outra organização, o ccam pergunta a você.
 - Com `auto_switch = true` (Linux e macOS; experimental), o ccam também faz a troca sozinho: quando o Claude Code interrompe a sessão no limite dela e outra conta do mesmo tipo tem espaço, o ccam encerra a sessão e continua a conversa nessa conta ([condições e custos](/features/next#auto-switch)).
 

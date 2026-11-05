@@ -1,10 +1,10 @@
 ---
 title: 스크립트용 계정 고르기
 description: ccam pick은 스크립트에 여유가 가장 많은 계정을 출력하고, 함께 시작한 워커에는 서로 다른 계정을 주며, 여유 있는 계정이 없으면 75로 종료합니다.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: "321c8e351cf7"
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick`은 로그인된 계정 중 여유가 가장 많은 계정의 이름을 출력하므로, 스크립트가 그 계정으로 Claude Code를 시작할 수 있습니다. 여유 있는 계정이 충분하면 동시에 시작한 워커는 저마다 다른 계정을 받으므로, `claude -p` 작업 묶음이 한 계정을 다 써 버리지 않고 여러 계정에 나뉩니다.
@@ -49,7 +49,7 @@ $ ccam pick --json
 | `--json` | 계정, 그 계정의 5시간·주간 사용량, 수치의 출처, 선택한 이유를 출력합니다 | 꺼짐 |
 | `--model <model>` | `opus`처럼 그 모델의 주간 구간도 따집니다 | 없음 |
 | `--max-usage <1-100>` | 사용량이 이 값 미만인 계정을 우선합니다 | `auto_max_usage`, 없으면 100 |
-| `--strategy headroom\|expiring\|balance` | 5시간 사용량이 가장 낮은 계정, 5시간 구간이 가장 먼저 초기화되는 계정, 또는 하루당 남은 주간 할당량이 가장 많은 계정 | `auto_strategy`, 없으면 `headroom` |
+| `--strategy headroom\|expiring\|balance` | 5시간 사용량이 최저치에서 3%p 이내인 계정 중 주간 사용량이 가장 낮은 계정, 5시간 구간이 가장 먼저 초기화되는 계정, 또는 하루당 남은 주간 할당량이 가장 많은 계정 | `auto_strategy`, 없으면 `headroom` |
 | `--cross-org` | 다른 조직의 계정도 고릅니다 | `cross_org`, 없으면 꺼짐 |
 | `--wait[=<duration>]` | 여유 있는 계정이 없으면 첫 계정이 초기화될 때까지 최대 이 시간만큼 기다립니다. 값은 `=` 뒤에 씁니다. `--wait 30m`은 `--wait takes its value after '=': --wait=30m`라는 힌트와 함께 거부합니다 | 꺼짐, 값 없이 주면 `5h` |
 | `--dry-run` | 고르기만 하고 선택을 기록하지 않습니다 | 꺼짐 |

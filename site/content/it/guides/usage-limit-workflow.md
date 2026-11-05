@@ -1,10 +1,10 @@
 ---
 title: Cosa fare al limite di utilizzo di Claude Code
 description: Aspetta il reset o continua subito la stessa conversazione su un altro account Claude Code. Come funzionano i limiti di 5 ore e settimanale, passo dopo passo.
-updated: 2026-11-01
+updated: 2026-11-05
 order: 3
 translation: machine
-sourceHash: 760a36724feb
+sourceHash: "53b1e3634ea9"
 ---
 
 Quando un account raggiunge il limite di utilizzo (spesso chiamato rate limit), hai due possibilità: aspettare che il limite si azzeri oppure continuare subito la stessa conversazione su un altro account che possiedi. Con ccam la seconda richiede un solo comando, `ccam next --auto --continue`.
@@ -63,7 +63,7 @@ Con il [plugin di ccam](/docs/install#claude-code-plugin) in Claude Code, una se
 
 Solo se lo attivi.
 
-- Per impostazione predefinita, ccam non è in esecuzione mentre lavori: avvia Claude Code e si sostituisce con esso, quindi decidi tu quando cambiare. `ccam next --auto` sceglie l'account con l'utilizzo su 5 ore più basso, salta gli account al 100% o senza login, e resta all'interno di una stessa organizzazione Team o Enterprise, oppure tra i piani personali.
+- Per impostazione predefinita, ccam non è in esecuzione mentre lavori: avvia Claude Code e si sostituisce con esso, quindi decidi tu quando cambiare. `ccam next --auto` sceglie in base all'utilizzo, prendendo l'utilizzo settimanale più basso tra gli account entro 3 punti percentuali dall'utilizzo su 5 ore più basso; salta gli account al 100% o senza login, e resta all'interno di una stessa organizzazione Team o Enterprise, oppure tra i piani personali.
 - Con `relay = true` in `config.toml`, ccam invece resta in esecuzione accanto alla sessione, così `/ccam:switch` continua da solo la conversazione, mantenendo le opzioni, la modalità dei permessi, il livello di effort e l'agente della sessione; prima di spostare la conversazione su un account di un'altra organizzazione, ccam te lo chiede.
 - Con `auto_switch = true` (Linux e macOS; sperimentale), ccam fa anche il cambio da solo: quando Claude Code ferma la sessione al suo limite e un altro account dello stesso tipo ha margine disponibile, ccam chiude la sessione e continua la conversazione lì ([condizioni e costi](/features/next#auto-switch)).
 

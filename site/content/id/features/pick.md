@@ -1,10 +1,10 @@
 ---
 title: Memilih akun untuk skrip
 description: ccam pick mencetak akun dengan ruang terbanyak untuk skrip, memberi akun berbeda ke worker yang dimulai bersamaan, dan keluar 75 jika tak ada ruang.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: "321c8e351cf7"
+sourceHash: "0ec25752ace9"
 ---
 
 `ccam pick` mencetak nama akun yang sudah login dengan ruang terbanyak, sehingga skrip bisa menjalankan Claude Code dengannya. Worker yang dimulai pada waktu yang sama masing-masing mendapat akun berbeda selama masih cukup akun yang punya ruang, sehingga sekumpulan tugas `claude -p` tersebar ke akun-akun Anda alih-alih menghabiskan satu akun.
@@ -49,7 +49,7 @@ Kode keluar: `0` dengan nama di output standar, `75` (`EX_TEMPFAIL`) jika tidak 
 | `--json` | Mencetak akun, penggunaan 5 jam dan mingguannya, asal angka-angka itu, dan alasan akun itu dipilih | nonaktif |
 | `--model <model>` | Juga menghitung jendela mingguan model itu, seperti `opus` | tidak ada |
 | `--max-usage <1-100>` | Utamakan akun di bawah penggunaan ini | `auto_max_usage`, jika tidak, 100 |
-| `--strategy headroom\|expiring\|balance` | Penggunaan 5 jam terendah, reset 5 jam yang paling cepat, atau sisa kuota mingguan terbanyak per hari | `auto_strategy`, jika tidak, `headroom` |
+| `--strategy headroom\|expiring\|balance` | Penggunaan mingguan paling sedikit di antara akun yang penggunaan 5 jamnya paling banyak 3 poin di atas penggunaan 5 jam terendah, reset 5 jam yang paling cepat, atau sisa kuota mingguan terbanyak per hari | `auto_strategy`, jika tidak, `headroom` |
 | `--cross-org` | Juga memilih akun dari organisasi lain | `cross_org`, jika tidak, nonaktif |
 | `--wait[=<duration>]` | Jika tidak ada akun yang punya ruang, tunggu akun pertama di-reset, paling lama selama ini. Nilainya ditaruh setelah `=`: `--wait 30m` ditolak dengan petunjuk `--wait takes its value after '=': --wait=30m` | nonaktif; `5h` jika diberikan tanpa nilai |
 | `--dry-run` | Memilih tanpa mencatat pilihan itu | nonaktif |

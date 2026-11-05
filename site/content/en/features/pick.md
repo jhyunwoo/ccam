@@ -1,7 +1,7 @@
 ---
 title: Picking an account for scripts
 description: ccam pick prints the account with the most room for a script, gives workers started together different accounts, and exits 75 when none has room.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: source
 ---
@@ -48,7 +48,7 @@ Exit codes: `0` with a name on standard output, `75` (`EX_TEMPFAIL`) when no acc
 | `--json` | Print the account, its 5-hour and weekly usage, where the numbers come from and why it was chosen | off |
 | `--model <model>` | Count that model's weekly window too, such as `opus` | none |
 | `--max-usage <1-100>` | Prefer accounts below this usage | `auto_max_usage`, otherwise 100 |
-| `--strategy headroom\|expiring\|balance` | The lowest 5-hour usage, the soonest 5-hour reset or the most weekly quota left per day | `auto_strategy`, otherwise `headroom` |
+| `--strategy headroom\|expiring\|balance` | The least weekly usage within 3 points of the lowest 5-hour usage, the soonest 5-hour reset or the most weekly quota left per day | `auto_strategy`, otherwise `headroom` |
 | `--cross-org` | Also choose accounts of other organizations | `cross_org`, otherwise off |
 | `--wait[=<duration>]` | When no account has room, wait for the first one to reset, at most this long. The value goes after `=`: `--wait 30m` is refused with the hint `--wait takes its value after '=': --wait=30m` | off; `5h` when given alone |
 | `--dry-run` | Choose without recording the pick | off |

@@ -4,7 +4,7 @@ description: "ccam next mở Claude Code bằng tài khoản khác; --auto chọ
 updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "bc9837b7a6ae"
+sourceHash: "a320c160caef"
 ---
 
 `ccam next` mở Claude Code bằng một tài khoản khác mà bạn không cần nêu tên. Hãy dùng nó khi một tài khoản chạm giới hạn sử dụng. Có bốn cách để chuyển đổi:
@@ -47,7 +47,7 @@ ccam in việc chuyển đổi dưới dạng `→ <from> → <to>` ra đầu ra
 | --- | --- | --- |
 | `--auto` | Chọn tài khoản đã đăng nhập theo mức sử dụng (xem bên dưới), bỏ qua các tài khoản ở mức 100% | tắt |
 | `--max-usage <1-100>` | Với `--auto`: ưu tiên các tài khoản có mức sử dụng dưới giá trị này | `auto_max_usage`, nếu không thì 100 |
-| `--strategy headroom\|expiring\|balance` | Với `--auto`: mức sử dụng 5 giờ thấp nhất, khoảng 5 giờ được đặt lại sớm nhất, hoặc nhiều hạn mức hàng tuần còn lại nhất cho mỗi ngày | `auto_strategy`, nếu không thì `headroom` |
+| `--strategy headroom\|expiring\|balance` | Với `--auto`: mức sử dụng hàng tuần thấp nhất trong số các tài khoản có mức sử dụng 5 giờ cao hơn mức thấp nhất không quá 3 điểm phần trăm, khoảng 5 giờ được đặt lại sớm nhất, hoặc nhiều hạn mức hàng tuần còn lại nhất cho mỗi ngày | `auto_strategy`, nếu không thì `headroom` |
 | `--cross-org` | Với `--auto`: chọn cả các tài khoản thuộc tổ chức khác (xem bên dưới) | `cross_org`, nếu không thì tắt |
 | `--wait[=<duration>]` | Với `--auto`: khi không tài khoản nào còn hạn mức, chờ tài khoản đầu tiên được đặt lại, tối đa chừng này thời gian. Giá trị đặt sau `=`: `--wait 2h` bị từ chối kèm gợi ý `--wait takes its value after '=': --wait=2h` | tắt; `5h` khi chỉ ghi cờ |
 | `-c`, `--continue` | Tiếp tục cuộc hội thoại gần nhất của thư mục này trên tài khoản mới (xem bên dưới) | tắt |
@@ -254,7 +254,7 @@ Summary: …
 3. ccam khởi động `claude` như một tiến trình con thay vì `exec`, giữ lại đầu ra chuẩn của nó, và chuyển tiếp đầu ra lỗi chuẩn ngay khi có.
 4. Khi `claude` thoát với 0, hoặc thất bại vì lý do khác, đầu ra đã giữ và mã thoát được chuyển tiếp nguyên vẹn. Một lần chạy bị kết thúc bởi tín hiệu (mã thoát lớn hơn 128) cũng vậy: nó đã được yêu cầu dừng, và không được chạy lại.
 5. Một lần thất bại được tính là do giới hạn sử dụng khi thông báo của Claude Code nói vậy, bất kỳ thông báo giới hạn sử dụng nào mà [hook](#inside-claude-code) nhận ra, kể cả bên trong đầu ra `--output-format json` hoặc `stream-json`, hoặc khi mức sử dụng của tài khoản cho thấy khoảng 5 giờ, hàng tuần hoặc của `--model` ở mức 100% (tính cả bản ghi giới hạn).
-6. Khi đó đầu ra của lần thử đó bị bỏ đi và cùng lệnh chạy bằng một tài khoản đã đăng nhập khác: tài khoản có mức sử dụng 5 giờ thấp nhất, rồi đến các tài khoản không tra cứu được mức sử dụng, theo thứ tự số. Tài khoản ở mức 100% bị bỏ qua, tài khoản đăng nhập bằng API key không bao giờ được thử, và mỗi tài khoản được thử nhiều nhất một lần.
+6. Khi đó đầu ra của lần thử đó bị bỏ đi và cùng lệnh chạy bằng một tài khoản đã đăng nhập khác: tài khoản mà `--auto` sẽ chọn, rồi đến các tài khoản không tra cứu được mức sử dụng, theo thứ tự số. Tài khoản ở mức 100% bị bỏ qua, tài khoản đăng nhập bằng API key không bao giờ được thử, và mỗi tài khoản được thử nhiều nhất một lần.
 7. Khi có `-c`, `--continue`, `-r` hoặc `--resume` trong các đối số, chỉ các tài khoản trong cùng nhóm lịch sử được thử, để có thể tìm thấy cuộc hội thoại.
 8. Chỉ các tài khoản thuộc cùng tổ chức được thử, như với `--auto` (`cross_org = true` bỏ giới hạn này).
 

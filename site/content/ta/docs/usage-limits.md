@@ -1,10 +1,10 @@
 ---
 title: பயன்பாட்டு வரம்புகளும் கணக்கு மாற்றமும்
 description: ccam usage மூலம் ஒவ்வொரு Claude Code கணக்கின் 5 மணி நேர, வாராந்திரப் பயன்பாட்டைப் பாருங்கள், ccam next --auto மூலம் அதிக இடம் உள்ள கணக்கைத் திறங்கள்.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: 28e652ad94f8
+sourceHash: "06bd349073e3"
 ---
 
 `ccam usage` ஒவ்வொரு கணக்குக்கும், ஒவ்வொரு வரம்பிலும் எவ்வளவு பயன்படுத்தப்பட்டுள்ளது என்று காட்டுகிறது: 5 மணி நேர வரம்பு, வாராந்திர வரம்பு, ஒவ்வொரு model-இன் சொந்த வாராந்திர வரம்பு (Fable போன்றது). `ccam next --auto` அதிக இடம் உள்ள கணக்கைத் திறக்கிறது, `--continue` தற்போதைய உரையாடலை அதற்குக் கொண்டு செல்கிறது.
@@ -66,7 +66,7 @@ ccam statusline install
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

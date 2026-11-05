@@ -1,10 +1,10 @@
 ---
 title: Claude Code kullanım limitine ulaştığında ne yapmalı
 description: Sıfırlanmayı bekleyin ya da aynı konuşmaya hemen başka bir Claude Code hesabında devam edin. 5 saatlik ve haftalık limitlerin işleyişi, adım adım.
-updated: 2026-11-01
+updated: 2026-11-05
 order: 3
 translation: machine
-sourceHash: 760a36724feb
+sourceHash: "53b1e3634ea9"
 ---
 
 Bir hesap kullanım limitine (çoğu zaman rate limit olarak da anılır) ulaştığında iki seçeneğiniz vardır: limitin sıfırlanmasını beklemek ya da aynı konuşmaya şimdi sahip olduğunuz başka bir hesapta devam etmek. ccam ile ikincisi tek bir komut sürer: `ccam next --auto --continue`.
@@ -63,7 +63,7 @@ Claude Code'da [ccam eklentisi](/docs/install#claude-code-plugin) varken limitin
 
 Yalnızca siz açarsanız.
 
-- Varsayılan olarak siz çalışırken ccam çalışmaz: Claude Code'u başlatır ve kendi yerini ona bırakır; böylece ne zaman geçiş yapacağınıza siz karar verirsiniz. `ccam next --auto`, 5 saatlik kullanımı en düşük olan hesabı seçer, %100'de olan ya da oturum açılmamış hesapları atlar ve tek bir Team veya Enterprise kuruluşunun içinde ya da kişisel planlar arasında kalır.
+- Varsayılan olarak siz çalışırken ccam çalışmaz: Claude Code'u başlatır ve kendi yerini ona bırakır; böylece ne zaman geçiş yapacağınıza siz karar verirsiniz. `ccam next --auto`, kullanıma göre seçer: 5 saatlik kullanımı en düşük olanın en fazla 3 puan üstünde olan hesaplar arasından haftalık kullanımı en düşük olanı alır; %100'de olan ya da oturum açılmamış hesapları atlar ve tek bir Team veya Enterprise kuruluşunun içinde ya da kişisel planlar arasında kalır.
 - `config.toml` içinde `relay = true` olduğunda ccam bunun yerine oturumun yanında çalışmaya devam eder; böylece `/ccam:switch`, oturumun seçeneklerini, izin modunu, efor düzeyini ve ajanını koruyarak konuşmaya kendiliğinden devam eder; konuşmayı başka bir kuruluşun hesabına taşımadan önce ccam size sorar.
 - `auto_switch = true` olduğunda (Linux ve macOS; deneysel) geçişi ccam de kendisi yapar: Claude Code oturumu limitinde durdurduğunda ve aynı türden başka bir hesabın payı kaldığında ccam oturumu sonlandırır ve konuşmaya orada devam eder ([koşullar ve maliyetler](/features/next#auto-switch)).
 

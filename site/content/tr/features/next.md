@@ -4,7 +4,7 @@ description: ccam next, Claude Code'u başka bir hesapla açar; --auto en çok p
 updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "bc9837b7a6ae"
+sourceHash: "a320c160caef"
 ---
 
 `ccam next`, Claude Code'u adını vermenize gerek kalmadan başka bir hesapla açar. Bir hesap kullanım limitine ulaştığında kullanın. Geçiş yapmanın dört yolu vardır:
@@ -47,7 +47,7 @@ ccam geçişi, bir `--auto` seçiminde nedeniyle birlikte, standart hataya `→ 
 | --- | --- | --- |
 | `--auto` | %100'deki hesapları atlayarak girişli hesabı kullanıma göre seçer (aşağıya bakın) | kapalı |
 | `--max-usage <1-100>` | `--auto` ile: bu kullanımın altındaki hesapları tercih eder | `auto_max_usage`, aksi halde 100 |
-| `--strategy headroom\|expiring\|balance` | `--auto` ile: en düşük 5 saatlik kullanım, en yakın 5 saatlik sıfırlanma ya da gün başına en çok kalan haftalık kota | `auto_strategy`, aksi halde `headroom` |
+| `--strategy headroom\|expiring\|balance` | `--auto` ile: 5 saatlik kullanımı en düşük olanın en fazla 3 puan üstünde olan hesaplar arasında en düşük haftalık kullanım, en yakın 5 saatlik sıfırlanma ya da gün başına en çok kalan haftalık kota | `auto_strategy`, aksi halde `headroom` |
 | `--cross-org` | `--auto` ile: başka bir kuruluşun hesaplarını da seçer (aşağıya bakın) | `cross_org`, aksi halde kapalı |
 | `--wait[=<duration>]` | `--auto` ile: hiçbir hesapta pay yoksa ilk hesabın sıfırlanmasını en fazla bu süre kadar bekler. Değer `=` işaretinden sonra yazılır: `--wait 2h`, `--wait takes its value after '=': --wait=2h` ipucuyla reddedilir | kapalı; tek başına verilirse `5h` |
 | `-c`, `--continue` | Bu klasörün son konuşmasına yeni hesapta devam eder (aşağıya bakın) | kapalı |
@@ -254,7 +254,7 @@ Summary: …
 3. ccam, `claude` komutunu `exec` yerine bir alt süreç olarak başlatır, standart çıktısını bekletir ve standart hatayı geldikçe iletir.
 4. `claude` 0 ile çıktığında ya da başka bir nedenle başarısız olduğunda bekletilen çıktı ve çıkış kodu değiştirilmeden iletilir. Bir sinyalle sonlandırılan çalıştırma da (128'in üzerinde bir çıkış kodu) öyle: ona durması söylenmiştir ve yeniden çalıştırılmaz.
 5. Claude Code'un mesajı bunu söylediğinde, yani [hook'un](#inside-claude-code) tanıdığı kullanım limiti mesajlarından herhangi biri, `--output-format json` veya `stream-json` çıktısının içinde de, ya da hesabın kullanımı 5 saatlik, haftalık veya `--model` penceresini %100'de gösterdiğinde (bir limit kaydı dahil), hata kullanım limiti sayılır.
-6. Bu durumda o denemenin çıktısı atılır ve aynı komut başka bir girişli hesapla çalışır: önce 5 saatlik kullanımı en düşük olan, ardından kullanımı sorgulanamayan hesaplar, numara sırasıyla. %100'deki hesaplar atlanır, API anahtarıyla giriş yapan hesaplar hiçbir zaman denenmez ve her hesap en fazla bir kez denenir.
+6. Bu durumda o denemenin çıktısı atılır ve aynı komut başka bir girişli hesapla çalışır: önce `--auto` ile seçilecek hesap, ardından kullanımı sorgulanamayan hesaplar, numara sırasıyla. %100'deki hesaplar atlanır, API anahtarıyla giriş yapan hesaplar hiçbir zaman denenmez ve her hesap en fazla bir kez denenir.
 7. Argümanlar arasında `-c`, `--continue`, `-r` veya `--resume` varsa yalnızca aynı geçmiş grubundaki hesaplar denenir, böylece konuşma bulunabilir.
 8. `--auto` ile olduğu gibi yalnızca aynı kuruluşun hesapları denenir (`cross_org = true` bunu kaldırır).
 

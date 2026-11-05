@@ -1,10 +1,10 @@
 ---
 title: Mga usage limit at paglipat ng account
 description: Tingnan ang 5-oras at lingguhang usage ng bawat Claude Code account gamit ang ccam usage, at buksan ang may pinakamaraming natitira gamit ang ccam next --auto.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 5
 translation: machine
-sourceHash: "28e652ad94f8"
+sourceHash: "06bd349073e3"
 ---
 
 Ipinapakita ng `ccam usage`, para sa bawat account, kung gaano kalaki na ang nagamit sa bawat limit: ang 5-oras na limit, ang lingguhang limit at ang sariling lingguhang limit ng bawat model (gaya ng Fable). Binubuksan ng `ccam next --auto` ang account na may pinakamaraming natitira, at dinadala ng `--continue` ang kasalukuyang usapan.
@@ -66,7 +66,7 @@ Ipapakita na ng Claude Code ang pangalan ng account at ang usage nito sa status 
 
 ```sh
 ccam next             # the account after the one you used last
-ccam next --auto      # the account with the lowest 5-hour usage
+ccam next --auto      # the account with the most room
 ccam next --continue  # continue this folder's conversation on the next account
 ```
 

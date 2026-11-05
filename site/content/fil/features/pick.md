@@ -1,10 +1,10 @@
 ---
 title: Pagpili ng account para sa mga script
 description: Ipi-print ng ccam pick ang account na may pinakamaraming natitira para sa script, iba't ibang account sa sabay na worker, at exit 75 kapag wala.
-updated: 2026-10-26
+updated: 2026-11-05
 order: 12
 translation: machine
-sourceHash: "321c8e351cf7"
+sourceHash: "0ec25752ace9"
 ---
 
 Ipi-print ng `ccam pick` ang pangalan ng naka-log in na account na may pinakamaraming natitira, para masimulan ng isang script ang Claude Code gamit ito. Ang mga worker na sabay na sinimulan ay may kanya-kanyang account basta may sapat na account na may natitira, kaya kumakalat sa mga account mo ang isang batch ng mga `claude -p` job sa halip na maubos ang iisa.
@@ -49,7 +49,7 @@ Mga exit code: `0` na may pangalan sa standard output, `75` (`EX_TEMPFAIL`) kapa
 | `--json` | I-print ang account, ang 5-oras at lingguhang usage nito, kung saan galing ang mga numero at kung bakit ito napili | off |
 | `--model <model>` | Bilangin din ang lingguhang window ng model na iyon, gaya ng `opus` | wala |
 | `--max-usage <1-100>` | Unahin ang mga account na mas mababa sa usage na ito | `auto_max_usage`, kung wala ay 100 |
-| `--strategy headroom\|expiring\|balance` | Ang pinakamababang 5-oras na usage, ang pinakamalapit na 5-oras na reset o ang pinakamaraming natitirang lingguhang quota bawat araw | `auto_strategy`, kung wala ay `headroom` |
+| `--strategy headroom\|expiring\|balance` | Ang pinakakaunting lingguhang usage sa mga account na nasa loob ng 3 puntos ng pinakamababang 5-oras na usage, ang pinakamalapit na 5-oras na reset o ang pinakamaraming natitirang lingguhang quota bawat araw | `auto_strategy`, kung wala ay `headroom` |
 | `--cross-org` | Pumili rin ng mga account ng ibang organisasyon | `cross_org`, kung wala ay off |
 | `--wait[=<duration>]` | Kapag walang account na may natitira, hintayin ang unang mag-reset, nang hindi hihigit sa tagal na ito. Inilalagay ang value pagkatapos ng `=`: tinatanggihan ang `--wait 30m` kasama ang pahiwatig na `--wait takes its value after '=': --wait=30m` | off; `5h` kapag ibinigay nang mag-isa |
 | `--dry-run` | Pumili nang hindi itinatala ang pagpili | off |

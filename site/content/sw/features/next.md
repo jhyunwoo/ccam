@@ -4,7 +4,7 @@ description: ccam next hufungua Claude Code kama akaunti nyingine; --auto huchag
 updated: 2026-11-05
 order: 8
 translation: machine
-sourceHash: "bc9837b7a6ae"
+sourceHash: "a320c160caef"
 ---
 
 `ccam next` hufungua Claude Code kama akaunti nyingine bila wewe kuitaja. Itumie akaunti inapofikia kikomo chake cha matumizi. Kuna njia nne za kubadili:
@@ -47,7 +47,7 @@ ccam huchapisha ubadilishaji kama `→ <from> → <to>` kwenye standard error, p
 | --- | --- | --- |
 | `--auto` | Huchagua akaunti iliyoingia kwa matumizi (tazama hapa chini), ikiruka akaunti zilizofikia 100% | imezimwa |
 | `--max-usage <1-100>` | Pamoja na `--auto`: hupendelea akaunti zilizo chini ya matumizi haya | `auto_max_usage`, vinginevyo 100 |
-| `--strategy headroom\|expiring\|balance` | Pamoja na `--auto`: matumizi ya chini zaidi ya saa 5, kipindi cha saa 5 kinachoanza upya mapema zaidi au kiasi kikubwa zaidi cha wiki kilichobaki kwa kila siku | `auto_strategy`, vinginevyo `headroom` |
+| `--strategy headroom\|expiring\|balance` | Pamoja na `--auto`: matumizi ya chini zaidi ya wiki ndani ya pointi 3 za asilimia kutoka matumizi ya chini zaidi ya saa 5, kipindi cha saa 5 kinachoanza upya mapema zaidi au kiasi kikubwa zaidi cha wiki kilichobaki kwa kila siku | `auto_strategy`, vinginevyo `headroom` |
 | `--cross-org` | Pamoja na `--auto`: chagua pia akaunti za shirika jingine (tazama hapa chini) | `cross_org`, vinginevyo imezimwa |
 | `--wait[=<duration>]` | Pamoja na `--auto`: hakuna akaunti yenye nafasi, husubiri ya kwanza ianze upya, si zaidi ya muda huu. Thamani huwekwa baada ya `=`: `--wait 2h` hukataliwa pamoja na kidokezo `--wait takes its value after '=': --wait=2h` | imezimwa; `5h` ikitolewa peke yake |
 | `-c`, `--continue` | Huendeleza mazungumzo ya mwisho ya folda hii kwenye akaunti mpya (tazama hapa chini) | imezimwa |
@@ -254,7 +254,7 @@ Summary: …
 3. ccam huanzisha `claude` kama mchakato mtoto badala ya `exec`, huzuia standard output yake, na hupitisha standard error kama inavyokuja.
 4. `claude` inapotoka kwa 0, au inaposhindwa kwa sababu nyingine, output iliyozuiwa na exit code hupitishwa bila kubadilishwa. Vivyo hivyo uendeshaji uliokomeshwa na ishara (exit code iliyo juu ya 128): uliombwa kusimama, na hauendeshwi tena.
 5. Kushindwa huhesabiwa kama kikomo cha matumizi ujumbe wa Claude Code unaposema hivyo, yaani ujumbe wowote wa kikomo cha matumizi ambao [hook](#inside-claude-code) inaujua, hata ndani ya output ya `--output-format json` au `stream-json`, au matumizi ya akaunti yanapoonyesha kipindi chake cha saa 5, cha wiki au cha `--model` kiko 100% (pamoja na rekodi ya kikomo).
-6. Kisha output ya jaribio hilo hutupwa na amri ile ile huendeshwa kama akaunti nyingine iliyoingia: ile yenye matumizi ya chini zaidi ya saa 5, kisha akaunti ambazo matumizi yao hayawezi kupatikana, kwa mpangilio wa namba. Akaunti zilizofikia 100% hurukwa, akaunti zenye kuingia kwa API key hazijaribiwi kamwe, na kila akaunti hujaribiwa si zaidi ya mara moja.
+6. Kisha output ya jaribio hilo hutupwa na amri ile ile huendeshwa kama akaunti nyingine iliyoingia: ile ambayo `--auto` ingeichagua, kisha akaunti ambazo matumizi yao hayawezi kupatikana, kwa mpangilio wa namba. Akaunti zilizofikia 100% hurukwa, akaunti zenye kuingia kwa API key hazijaribiwi kamwe, na kila akaunti hujaribiwa si zaidi ya mara moja.
 7. Kukiwa na `-c`, `--continue`, `-r` au `--resume` miongoni mwa hoja, akaunti zilizo katika kikundi kile kile cha historia pekee ndizo hujaribiwa, ili mazungumzo yaweze kupatikana.
 8. Akaunti za shirika lile lile pekee ndizo hujaribiwa, kama ilivyo kwa `--auto` (`cross_org = true` huondoa hili).
 
