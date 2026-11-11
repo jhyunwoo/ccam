@@ -1,7 +1,7 @@
 ---
 title: The dashboard
 description: ccam on a terminal opens a full-screen dashboard of accounts, groups, folder rules, extensions and checks; every change shows its plan first.
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: source
 ---
@@ -9,15 +9,15 @@ translation: source
 `ccam` without arguments opens a full-screen dashboard when standard input and output are a terminal; otherwise it prints `ccam list`. The dashboard shows every account with its usage and groups, and does what the commands do: launch, add, log in, change groups, set folder rules, list background sessions, check and repair. Launching, or attaching to a background session, closes it; adding an account or logging in hands the terminal over for a moment, then returns to the dashboard.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -32,13 +32,13 @@ Each time it opens, the dashboard asks GitHub in the background whether a newer 
 
 `U` asks first, then updates the way [`ccam update`](/features/update) does: the release is checked against its SHA-256 checksums and replaces ccam in one step. The dashboard you are in is still the old version, so quit and start `ccam` again. When the update cannot be done here, for example for a copy of ccam installed from the `.deb` package, the dashboard shows the same advice as `ccam update` and keeps the offer.
 
-The first frame draws from `config.toml` alone, in well under 100 ms; usage fills in as each account answers. Each limit has its own bar: the 5-hour window, the weekly window for all models, and Fable's own weekly window; `-` means the account has no such window. A percentage turns yellow at 80% and red at 100%. If a lookup fails, cached values are shown dimmed. A window Claude Code reported full shows 100% until its reset. An expired access token shows a faint `⚠ token expired` (Claude Code renews it at the next start, and `r` renews it now for an account that is not running, as `ccam usage --refresh` does), while `⚠ login expired` means the account needs `ccam login`.
+The first frame draws from `config.toml` alone, in well under 100 ms; usage fills in as each account answers. Each limit has its own column: the 5-hour window, the weekly window for all models, and Fable's own weekly window; `-` means the account has no such window. A column shows the percentage used and how long until the window resets (`1h 40m`, `3d 6h`), counting down while the dashboard stays open; a terminal about 94 columns or wider also draws a bar in front of the percentage. A percentage turns yellow at 80% and red at 100%. `↻` marks an account that holds an unused limit reset, which Claude Code's `/limit-reset` can use. ccam knows this only from what Claude Code saved in the account's folder the last time it ran there within three days, so an account without the mark may still hold one, and the dashboard cannot tell how many. If a lookup fails, cached values are shown dimmed. A window Claude Code reported full shows 100% until its reset. An expired access token shows a faint `⚠ token expired` (Claude Code renews it at the next start, and `r` renews it now for an account that is not running, as `ccam usage --refresh` does), while `⚠ login expired` means the account needs `ccam login`.
 
 ## Tabs
 
 | Tab | What it shows | Keys |
 | --- | --- | --- |
-| Accounts | number, name, email, 5-hour, weekly and Fable bars, last use, groups; `✔` the default, `▸` this folder's account, `•` running (also Claude Code started without ccam: plain `claude`, an IDE, background sessions and their daemon) | below |
+| Accounts | number, name, email, 5-hour, weekly and Fable usage with the time to each reset, last use, groups; `✔` the default, `▸` this folder's account, `•` running (also Claude Code started without ccam: plain `claude`, an IDE, background sessions and their daemon), `↻` holds an unused limit reset | below |
 | Agents | what [`ccam agents`](/features/agents) lists: the background sessions and open sessions of every account, with their state, folder and start time (below) | `enter` attach (as `ccam attach`), `x` stop, `r` reload |
 | Groups | each group, what it shares and its accounts, and the accounts in no group | `enter` edit, `n` new, `e` rename, `x` remove |
 | Folders | the [`ccam folder`](/features/folder) rules and the one that applies here, even when you reached the folder through a symbolic link (new rules are stored with links resolved) | `n` use an account here, `enter` change, `x` remove |
@@ -56,7 +56,7 @@ The first frame draws from `config.toml` alone, in well under 100 ms; usage fill
 | `↑`/`↓`, `k`/`j` | Move |
 | `n` | Start the account [`ccam next --auto`](/features/next) would choose |
 | `o` | Start with options: `--continue`, `--resume`, other arguments, or a dry run |
-| `u` | Usage details: 5-hour, weekly and model windows with their resets and where the numbers come from |
+| `u` | Usage details: 5-hour, weekly and model windows with their resets, whether the account holds an unused limit reset, and where the numbers come from |
 | `a` | Add an account (the wizard below) |
 | `l` | Log in again |
 | `s` | Choose the account's groups |

@@ -1,24 +1,24 @@
 ---
 title: 儀表板
 description: 在終端機中執行 ccam 會開啟全螢幕儀表板，顯示帳號、群組、資料夾規則、擴充功能和檢查結果；每項變更都會先顯示計畫。
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: "acb0270d360c"
+sourceHash: "96e86408a237"
 ---
 
 不帶參數的 `ccam` 在標準輸入和輸出都是終端機時會開啟全螢幕儀表板，否則會印出 `ccam list`。儀表板會顯示每個帳號及其用量和群組，並能完成各個指令的工作：啟動、新增、登入、變更群組、設定資料夾規則、列出背景工作階段、檢查和修復。啟動帳號或連接到背景工作階段時，儀表板會關閉；新增帳號或登入時則會暫時把終端機交出去，完成後再回到儀表板。
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ sourceHash: "acb0270d360c"
 
 `U` 會先詢問，再以 [`ccam update`](/features/update) 的方式更新：以 SHA-256 校驗碼檢查該發行版本，並一次取代 ccam。你目前所在的儀表板仍是舊版本，所以請退出並重新啟動 `ccam`。若無法在這裡更新，例如透過 `.deb` 套件安裝的 ccam 副本，儀表板會顯示與 `ccam update` 相同的建議，並保留這個更新提示。
 
-第一個畫面只根據 `config.toml` 繪製，遠低於 100 ms；用量會在每個帳號回應時陸續填入。每項限制都有自己的長條：5 小時區間、所有模型共用的每週區間，以及 Fable 自己的每週區間；`-` 表示該帳號沒有這個區間。百分比在 80% 時變成黃色，在 100% 時變成紅色。如果查詢失敗，快取的數值會以淡色顯示。Claude Code 回報已滿的區間在重設前都會顯示 100%。存取權杖過期時會以淡色顯示 `⚠ token expired`（Claude Code 會在下次啟動時更新它；對於沒有在執行的帳號，`r` 會像 `ccam usage --refresh` 一樣立即更新它），而 `⚠ login expired` 表示該帳號需要執行 `ccam login`。
+第一個畫面只根據 `config.toml` 繪製，遠低於 100 ms；用量會在每個帳號回應時陸續填入。每項限制都有自己的一欄：5 小時區間、所有模型共用的每週區間，以及 Fable 自己的每週區間；`-` 表示該帳號沒有這個區間。每欄顯示已用百分比和距離區間重設還剩多久（`1h 40m`、`3d 6h`），儀表板開著的期間會持續倒數；終端機寬度約 94 欄以上時，還會在百分比前面畫出長條。百分比在 80% 時變成黃色，在 100% 時變成紅色。`↻` 表示該帳號有一次尚未使用的限制重設，可以透過 Claude Code 的 `/limit-reset` 使用。ccam 只能從 Claude Code 在三天內最後一次於該帳號資料夾中執行時儲存的內容得知這件事，因此沒有這個標記的帳號也可能有，而且儀表板無法得知有幾次。如果查詢失敗，快取的數值會以淡色顯示。Claude Code 回報已滿的區間在重設前都會顯示 100%。存取權杖過期時會以淡色顯示 `⚠ token expired`（Claude Code 會在下次啟動時更新它；對於沒有在執行的帳號，`r` 會像 `ccam usage --refresh` 一樣立即更新它），而 `⚠ login expired` 表示該帳號需要執行 `ccam login`。
 
 ## 分頁
 
 | 分頁 | 顯示的內容 | 按鍵 |
 | --- | --- | --- |
-| Accounts | 編號、名稱、電子郵件、5 小時、每週和 Fable 用量長條、上次使用時間、群組；`✔` 為預設帳號，`▸` 為這個資料夾的帳號，`•` 為執行中（也包括不透過 ccam 啟動的 Claude Code：直接執行 `claude`、IDE、背景工作階段及其常駐程式） | 見下文 |
+| Accounts | 編號、名稱、電子郵件、5 小時、每週和 Fable 用量及距離各自重設的時間、上次使用時間、群組；`✔` 為預設帳號，`▸` 為這個資料夾的帳號，`•` 為執行中（也包括不透過 ccam 啟動的 Claude Code：直接執行 `claude`、IDE、背景工作階段及其常駐程式），`↻` 為有尚未使用的限制重設 | 見下文 |
 | Agents | [`ccam agents`](/features/agents) 列出的內容：所有帳號的背景工作階段和開啟中的工作階段，以及它們的狀態、資料夾和啟動時間（見下文） | `enter` 連接（如同 `ccam attach`），`x` 停止，`r` 重新載入 |
 | Groups | 每個群組、它共用的項目和它的帳號，以及不屬於任何群組的帳號 | `enter` 編輯，`n` 新增，`e` 重新命名，`x` 移除 |
 | Folders | [`ccam folder`](/features/folder) 規則，以及適用於這裡的規則，即使你是透過符號連結來到這個資料夾也一樣（新規則會以解析連結後的路徑儲存） | `n` 在這裡使用某個帳號，`enter` 變更，`x` 移除 |
@@ -57,7 +57,7 @@ sourceHash: "acb0270d360c"
 | `↑`/`↓`、`k`/`j` | 移動 |
 | `n` | 啟動 [`ccam next --auto`](/features/next) 會選擇的帳號 |
 | `o` | 帶選項啟動：`--continue`、`--resume`、其他參數，或試執行 |
-| `u` | 用量詳細資料：5 小時、每週和各模型的區間，以及它們的重設時間和數字的來源 |
+| `u` | 用量詳細資料：5 小時、每週和各模型的區間，以及它們的重設時間、該帳號是否有尚未使用的限制重設，還有數字的來源 |
 | `a` | 新增帳號（使用下文的設定精靈） |
 | `l` | 重新登入 |
 | `s` | 選擇帳號的群組 |

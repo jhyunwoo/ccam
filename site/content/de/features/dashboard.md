@@ -1,24 +1,24 @@
 ---
 title: Das Dashboard
 description: ccam öffnet im Terminal ein Vollbild-Dashboard mit Konten, Gruppen, Ordnerregeln, Erweiterungen und Prüfungen; jede Änderung zeigt zuerst ihren Plan.
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: "acb0270d360c"
+sourceHash: "96e86408a237"
 ---
 
 `ccam` ohne Argumente öffnet ein Vollbild-Dashboard, wenn Standardeingabe und -ausgabe ein Terminal sind; andernfalls gibt es `ccam list` aus. Das Dashboard zeigt jedes Konto mit seiner Nutzung und seinen Gruppen und erledigt, was die Befehle tun: starten, hinzufügen, anmelden, Gruppen ändern, Ordnerregeln setzen, Hintergrundsitzungen auflisten, prüfen und reparieren. Ein Start oder das Verbinden mit einer Hintergrundsitzung schließt es; beim Hinzufügen eines Kontos oder bei der Anmeldung gibt es das Terminal kurz ab und kehrt dann zum Dashboard zurück.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ Bei jedem Öffnen fragt das Dashboard im Hintergrund bei GitHub nach, ob es ein 
 
 `U` fragt zuerst nach und aktualisiert dann so wie [`ccam update`](/features/update): Das Release wird gegen seine SHA-256-Prüfsummen geprüft und ersetzt ccam in einem Schritt. Das Dashboard, in dem du gerade bist, ist noch die alte Version, also beende es und starte `ccam` neu. Wenn das Update hier nicht möglich ist, etwa bei einer aus dem `.deb`-Paket installierten Kopie von ccam, zeigt das Dashboard denselben Hinweis wie `ccam update` und behält das Angebot bei.
 
-Das erste Bild entsteht allein aus `config.toml`, in deutlich unter 100 ms; die Nutzung erscheint, sobald das jeweilige Konto antwortet. Jedes Limit hat seinen eigenen Balken: das 5-Stunden-Fenster, das Wochenfenster für alle Modelle und das eigene Wochenfenster von Fable; `-` bedeutet, dass das Konto kein solches Fenster hat. Ein Prozentwert wird bei 80 % gelb und bei 100 % rot. Schlägt eine Abfrage fehl, werden zwischengespeicherte Werte blass dargestellt. Ein Zeitfenster, das Claude Code als voll gemeldet hat, zeigt bis zu seinem Zurücksetzen 100 %. Ein abgelaufenes Zugriffstoken zeigt ein blasses `⚠ token expired` (Claude Code erneuert es beim nächsten Start, und `r` erneuert es sofort für ein Konto, das gerade nicht läuft, so wie `ccam usage --refresh`), während `⚠ login expired` bedeutet, dass das Konto `ccam login` braucht.
+Das erste Bild entsteht allein aus `config.toml`, in deutlich unter 100 ms; die Nutzung erscheint, sobald das jeweilige Konto antwortet. Jedes Limit hat seine eigene Spalte: das 5-Stunden-Fenster, das Wochenfenster für alle Modelle und das eigene Wochenfenster von Fable; `-` bedeutet, dass das Konto kein solches Fenster hat. Eine Spalte zeigt den verbrauchten Prozentsatz und wie lange es noch bis zum Zurücksetzen des Fensters dauert (`1h 40m`, `3d 6h`), und zählt herunter, solange das Dashboard offen bleibt; ein Terminal mit etwa 94 Spalten oder mehr zeichnet vor dem Prozentwert zusätzlich einen Balken. Ein Prozentwert wird bei 80 % gelb und bei 100 % rot. `↻` markiert ein Konto, das noch eine ungenutzte Limit-Zurücksetzung hat, die `/limit-reset` von Claude Code einlösen kann. ccam weiß das nur aus dem, was Claude Code bei seinem letzten Lauf innerhalb der letzten drei Tage im Ordner des Kontos gespeichert hat; ein Konto ohne die Markierung kann also trotzdem eine haben, und das Dashboard kann nicht erkennen, wie viele. Schlägt eine Abfrage fehl, werden zwischengespeicherte Werte blass dargestellt. Ein Zeitfenster, das Claude Code als voll gemeldet hat, zeigt bis zu seinem Zurücksetzen 100 %. Ein abgelaufenes Zugriffstoken zeigt ein blasses `⚠ token expired` (Claude Code erneuert es beim nächsten Start, und `r` erneuert es sofort für ein Konto, das gerade nicht läuft, so wie `ccam usage --refresh`), während `⚠ login expired` bedeutet, dass das Konto `ccam login` braucht.
 
 ## Tabs
 
 | Tab | Was er zeigt | Tasten |
 | --- | --- | --- |
-| Accounts | Nummer, Name, E-Mail-Adresse, Balken für 5 Stunden, Woche und Fable, letzte Verwendung, Gruppen; `✔` das Standardkonto, `▸` das Konto dieses Ordners, `•` läuft (auch Claude Code, das ohne ccam gestartet wurde: einfaches `claude`, eine IDE, Hintergrundsitzungen und ihr Daemon) | siehe unten |
+| Accounts | Nummer, Name, E-Mail-Adresse, Nutzung für 5 Stunden, Woche und Fable mit der Zeit bis zum jeweiligen Zurücksetzen, letzte Verwendung, Gruppen; `✔` das Standardkonto, `▸` das Konto dieses Ordners, `•` läuft (auch Claude Code, das ohne ccam gestartet wurde: einfaches `claude`, eine IDE, Hintergrundsitzungen und ihr Daemon), `↻` hat eine ungenutzte Limit-Zurücksetzung | siehe unten |
 | Agents | was [`ccam agents`](/features/agents) auflistet: die Hintergrundsitzungen und offenen Sitzungen jedes Kontos, mit Zustand, Ordner und Startzeit (siehe unten) | `enter` verbinden (wie `ccam attach`), `x` stoppen, `r` neu laden |
 | Groups | jede Gruppe, was sie teilt und ihre Konten, sowie die Konten ohne Gruppe | `enter` bearbeiten, `n` neu, `e` umbenennen, `x` entfernen |
 | Folders | die Regeln von [`ccam folder`](/features/folder) und die, die hier gilt, selbst wenn du den Ordner über einen symbolischen Link erreicht hast (neue Regeln werden mit aufgelösten Links gespeichert) | `n` ein Konto hier verwenden, `enter` ändern, `x` entfernen |
@@ -57,7 +57,7 @@ Das erste Bild entsteht allein aus `config.toml`, in deutlich unter 100 ms; die 
 | `↑`/`↓`, `k`/`j` | Bewegen |
 | `n` | Das Konto starten, das [`ccam next --auto`](/features/next) wählen würde |
 | `o` | Mit Optionen starten: `--continue`, `--resume`, andere Argumente oder ein Probelauf |
-| `u` | Nutzungsdetails: 5-Stunden-, Wochen- und Modellfenster mit ihren Zurücksetzungen und der Herkunft der Zahlen |
+| `u` | Nutzungsdetails: 5-Stunden-, Wochen- und Modellfenster mit ihren Zurücksetzungen, ob das Konto eine ungenutzte Limit-Zurücksetzung hat, und woher die Zahlen kommen |
 | `a` | Ein Konto hinzufügen (der Assistent unten) |
 | `l` | Erneut anmelden |
 | `s` | Die Gruppen des Kontos wählen |

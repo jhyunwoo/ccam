@@ -1,24 +1,24 @@
 ---
 title: Dashboard
 description: ccam a terminal yana buɗe dashboard mai cike allo na asusai, rukunoni, ƙa'idodin folda, extensions da dubawa; kowane canji yana fara nuna shirinsa.
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: acb0270d360c
+sourceHash: "96e86408a237"
 ---
 
 `ccam` ba tare da arguments ba yana buɗe dashboard mai cike allo idan standard input da output terminal ne; in ba haka ba yana buga `ccam list`. Dashboard yana nuna kowane asusu tare da amfaninsa da rukunoninsa, kuma yana yin abin da umarnan ke yi: farawa, ƙarawa, shiga, canza rukunoni, saita ƙa'idodin folda, lissafa zaman bayan fage, dubawa da gyarawa. Farawa, ko haɗawa da zaman bayan fage, yana rufe shi; ƙara asusu ko shiga yana miƙa terminal na ɗan lokaci, sannan ya dawo kan dashboard.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ Duk lokacin da ya buɗe, dashboard yana tambayar GitHub a bayan fage ko akwai sa
 
 `U` yana tambaya da farko, sannan yana sabuntawa yadda [`ccam update`](/features/update) ke yi: ana duba sakin da SHA-256 checksums nasa kuma yana maye gurbin ccam a mataki ɗaya. Dashboard ɗin da kake ciki har yanzu tsohon sigar ne, don haka ka fita ka sake fara `ccam`. Idan ba za a iya yin sabuntawar a nan ba, misali ga kwafin ccam da aka girka daga kunshin `.deb`, dashboard yana nuna shawara ɗaya da ta `ccam update` kuma yana riƙe tayin.
 
-Firam na farko yana zana daga `config.toml` kaɗai, cikin ƙasa da 100 ms sosai; amfani yana cika yayin da kowane asusu ya amsa. Kowace iyaka tana da nata sandar: taga ta awa 5, taga ta mako ga dukkan model, da taga ta mako ta Fable kanta; `-` yana nufin asusun ba shi da irin wannan taga. Kashi yana zama rawaya a 80% kuma ja a 100%. Idan nema ya gaza, ana nuna ƙimomin cache a dusashe. Tagar da Claude Code ya ba da rahoton ta cika tana nuna 100% har zuwa sake saitinta. Access token da ya ƙare yana nuna `⚠ token expired` a dusashe (Claude Code yana sabunta shi a farawa ta gaba, kuma `r` yana sabunta shi yanzu ga asusun da ba ya gudana, kamar yadda `ccam usage --refresh` ke yi), yayin da `⚠ login expired` yana nufin asusun yana buƙatar `ccam login`.
+Firam na farko yana zana daga `config.toml` kaɗai, cikin ƙasa da 100 ms sosai; amfani yana cika yayin da kowane asusu ya amsa. Kowace iyaka tana da nata ginshiƙi: taga ta awa 5, taga ta mako ga dukkan model, da taga ta mako ta Fable kanta; `-` yana nufin asusun ba shi da irin wannan taga. Ginshiƙi yana nuna kashin da aka yi amfani da shi da tsawon lokacin da ya rage kafin a sake saita tagar (`1h 40m`, `3d 6h`), kuma yana ƙirgawa baya muddin dashboard yana buɗe; terminal mai faɗin kusan ginshiƙai 94 ko fiye yana kuma zana sanda a gaban kashin. Kashi yana zama rawaya a 80% kuma ja a 100%. `↻` yana nuna asusun da ke riƙe da sake saitin iyaka da ba a yi amfani da shi ba, wanda `/limit-reset` na Claude Code zai iya amfani da shi. ccam yana sanin hakan ne kawai daga abin da Claude Code ya ajiye a foldar asusun a lokaci na ƙarshe da ya gudana a can cikin kwanaki uku, don haka asusun da ba shi da alamar zai iya riƙe ɗaya har yanzu, kuma dashboard ba zai iya faɗin guda nawa ba. Idan nema ya gaza, ana nuna ƙimomin cache a dusashe. Tagar da Claude Code ya ba da rahoton ta cika tana nuna 100% har zuwa sake saitinta. Access token da ya ƙare yana nuna `⚠ token expired` a dusashe (Claude Code yana sabunta shi a farawa ta gaba, kuma `r` yana sabunta shi yanzu ga asusun da ba ya gudana, kamar yadda `ccam usage --refresh` ke yi), yayin da `⚠ login expired` yana nufin asusun yana buƙatar `ccam login`.
 
 ## Shafuka
 
 | Shafi | Abin da yake nunawa | Maɓallai |
 | --- | --- | --- |
-| Accounts | lamba, suna, imel, sandunan awa 5, na mako da na Fable, amfani na ƙarshe, rukunoni; `✔` tsoho, `▸` asusun wannan foldar, `•` mai aiki (har da Claude Code da aka fara ba ta ccam ba: `claude` na yau da kullum, IDE, zaman bayan fage da daemon ɗinsu) | a ƙasa |
+| Accounts | lamba, suna, imel, amfanin awa 5, na mako da na Fable tare da lokacin da ya rage kafin kowane sake saiti, amfani na ƙarshe, rukunoni; `✔` tsoho, `▸` asusun wannan foldar, `•` mai aiki (har da Claude Code da aka fara ba ta ccam ba: `claude` na yau da kullum, IDE, zaman bayan fage da daemon ɗinsu), `↻` yana riƙe da sake saitin iyaka da ba a yi amfani da shi ba | a ƙasa |
 | Agents | abin da [`ccam agents`](/features/agents) ke lissafawa: zaman bayan fage da zaman da ke buɗe na kowane asusu, tare da yanayinsu, foldarsu da lokacin farawarsu (a ƙasa) | `enter` haɗawa (kamar `ccam attach`), `x` dakatarwa, `r` sake lodawa |
 | Groups | kowane rukuni, abin da yake rabawa da asusansa, da asusan da ba sa cikin kowane rukuni | `enter` gyara, `n` sabo, `e` sake suna, `x` cire |
 | Folders | ƙa'idodin [`ccam folder`](/features/folder) da wanda ke aiki a nan, har ma idan ka isa foldar ta mahaɗi na alama (symbolic link) (ana ajiye sababbin ƙa'idodi tare da warware mahaɗai) | `n` yi amfani da asusu a nan, `enter` canza, `x` cire |
@@ -57,7 +57,7 @@ Firam na farko yana zana daga `config.toml` kaɗai, cikin ƙasa da 100 ms sosai;
 | `↑`/`↓`, `k`/`j` | Matsawa |
 | `n` | Fara asusun da [`ccam next --auto`](/features/next) zai zaɓa |
 | `o` | Fara da zaɓuɓɓuka: `--continue`, `--resume`, wasu arguments, ko dry run |
-| `u` | Cikakken bayanin amfani: tagogin awa 5, na mako da na model tare da lokutan sake saitinsu da inda lambobin suka fito |
+| `u` | Cikakken bayanin amfani: tagogin awa 5, na mako da na model tare da lokutan sake saitinsu, ko asusun yana riƙe da sake saitin iyaka da ba a yi amfani da shi ba, da inda lambobin suka fito |
 | `a` | Ƙara asusu (mataimakin da ke ƙasa) |
 | `l` | Sake shiga |
 | `s` | Zaɓi rukunonin asusun |

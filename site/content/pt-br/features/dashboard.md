@@ -1,24 +1,24 @@
 ---
 title: O painel
 description: O ccam em um terminal abre um painel em tela cheia com contas, grupos, regras de pasta, extensões e verificações; cada mudança mostra o plano antes.
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: "acb0270d360c"
+sourceHash: "96e86408a237"
 ---
 
 `ccam` sem argumentos abre um painel em tela cheia quando a entrada e a saída padrão são um terminal; caso contrário, imprime `ccam list`. O painel mostra todas as contas com o uso e os grupos de cada uma e faz o que os comandos fazem: iniciar, adicionar, fazer login, alterar grupos, definir regras de pasta, listar sessões em segundo plano, verificar e reparar. Iniciar uma conta, ou se conectar a uma sessão em segundo plano, fecha o painel; adicionar uma conta ou fazer login entrega o terminal por um momento e depois volta ao painel.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ Toda vez que abre, o painel pergunta ao GitHub em segundo plano se existe uma ve
 
 `U` pergunta primeiro e depois atualiza do mesmo jeito que o [`ccam update`](/features/update): a versão é conferida com seus checksums SHA-256 e substitui o ccam em um único passo. O painel em que você está continua sendo a versão antiga, então saia e inicie o `ccam` de novo. Quando a atualização não pode ser feita aqui, por exemplo com uma cópia do ccam instalada pelo pacote `.deb`, o painel mostra o mesmo conselho que o `ccam update` e mantém a oferta.
 
-O primeiro quadro é desenhado só a partir do `config.toml`, em bem menos de 100 ms; o uso aparece à medida que cada conta responde. Cada limite tem a própria barra: a janela de 5 horas, a janela semanal de todos os modelos e a janela semanal própria do Fable; `-` significa que a conta não tem essa janela. Uma porcentagem fica amarela em 80% e vermelha em 100%. Se uma consulta falhar, os valores do cache aparecem esmaecidos. Uma janela que o Claude Code informou como cheia mostra 100% até reiniciar. Um token de acesso expirado mostra um `⚠ token expired` esmaecido (o Claude Code o renova na próxima inicialização, e `r` o renova na hora para uma conta que não está em execução, como faz o `ccam usage --refresh`), enquanto `⚠ login expired` significa que a conta precisa de `ccam login`.
+O primeiro quadro é desenhado só a partir do `config.toml`, em bem menos de 100 ms; o uso aparece à medida que cada conta responde. Cada limite tem a própria coluna: a janela de 5 horas, a janela semanal de todos os modelos e a janela semanal própria do Fable; `-` significa que a conta não tem essa janela. Uma coluna mostra a porcentagem usada e quanto falta para a janela reiniciar (`1h 40m`, `3d 6h`), em contagem regressiva enquanto o painel fica aberto; um terminal com cerca de 94 colunas ou mais também desenha uma barra antes da porcentagem. Uma porcentagem fica amarela em 80% e vermelha em 100%. `↻` marca uma conta que tem um reinício de limite não usado, que o `/limit-reset` do Claude Code pode usar. O ccam só sabe disso pelo que o Claude Code salvou na pasta da conta na última vez que rodou ali nos últimos três dias, então uma conta sem a marca ainda pode ter um, e o painel não consegue dizer quantos. Se uma consulta falhar, os valores do cache aparecem esmaecidos. Uma janela que o Claude Code informou como cheia mostra 100% até reiniciar. Um token de acesso expirado mostra um `⚠ token expired` esmaecido (o Claude Code o renova na próxima inicialização, e `r` o renova na hora para uma conta que não está em execução, como faz o `ccam usage --refresh`), enquanto `⚠ login expired` significa que a conta precisa de `ccam login`.
 
 ## Abas
 
 | Aba | O que mostra | Teclas |
 | --- | --- | --- |
-| Accounts | número, nome, e-mail, barras de 5 horas, semanal e do Fable, último uso, grupos; `✔` a conta padrão, `▸` a conta desta pasta, `•` em execução (inclusive o Claude Code iniciado sem o ccam: `claude` simples, uma IDE, sessões em segundo plano e o daemon delas) | abaixo |
+| Accounts | número, nome, e-mail, uso de 5 horas, semanal e do Fable com o tempo até cada reinício, último uso, grupos; `✔` a conta padrão, `▸` a conta desta pasta, `•` em execução (inclusive o Claude Code iniciado sem o ccam: `claude` simples, uma IDE, sessões em segundo plano e o daemon delas), `↻` tem um reinício de limite não usado | abaixo |
 | Agents | o que o [`ccam agents`](/features/agents) lista: as sessões em segundo plano e as sessões abertas de todas as contas, com estado, pasta e horário de início (abaixo) | `enter` conectar (como `ccam attach`), `x` parar, `r` recarregar |
 | Groups | cada grupo, o que ele compartilha e suas contas, e as contas que não estão em nenhum grupo | `enter` editar, `n` novo, `e` renomear, `x` remover |
 | Folders | as regras do [`ccam folder`](/features/folder) e a que vale aqui, mesmo quando você chegou à pasta por um link simbólico (regras novas são guardadas com os links resolvidos) | `n` usar uma conta aqui, `enter` alterar, `x` remover |
@@ -57,7 +57,7 @@ O primeiro quadro é desenhado só a partir do `config.toml`, em bem menos de 10
 | `↑`/`↓`, `k`/`j` | Move o cursor |
 | `n` | Inicia a conta que o [`ccam next --auto`](/features/next) escolheria |
 | `o` | Inicia com opções: `--continue`, `--resume`, outros argumentos ou uma simulação |
-| `u` | Detalhes do uso: as janelas de 5 horas, semanal e por modelo, com os reinícios e a origem dos números |
+| `u` | Detalhes do uso: as janelas de 5 horas, semanal e por modelo, com os reinícios, se a conta tem um reinício de limite não usado e a origem dos números |
 | `a` | Adiciona uma conta (o assistente abaixo) |
 | `l` | Faz login novamente |
 | `s` | Escolhe os grupos da conta |

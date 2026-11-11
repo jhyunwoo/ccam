@@ -1,24 +1,24 @@
 ---
 title: Kontrol paneli
 description: Terminalde ccam; hesapların, grupların, klasör kurallarının, uzantıların ve denetimlerin tam ekran kontrol panelini açar; her değişiklik önce planını gösterir.
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: acb0270d360c
+sourceHash: "96e86408a237"
 ---
 
 Argümansız `ccam`, standart girdi ve çıktı bir terminal olduğunda tam ekran bir kontrol paneli açar; aksi halde `ccam list` çıktısını yazdırır. Kontrol paneli her hesabı kullanımı ve gruplarıyla birlikte gösterir ve komutların yaptığını yapar: başlatma, ekleme, giriş yapma, grupları değiştirme, klasör kuralları belirleme, arka plan oturumlarını listeleme, denetleme ve onarma. Başlatma ya da bir arka plan oturumuna bağlanma paneli kapatır; bir hesap eklemek veya giriş yapmak terminali kısa bir süre devreder, ardından kontrol paneline geri döner.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ Kontrol paneli her açıldığında arka planda GitHub'a daha yeni bir ccam sür
 
 `U` önce sorar, sonra [`ccam update`](/features/update) gibi günceller: sürüm SHA-256 sağlama toplamlarıyla doğrulanır ve tek adımda ccam'in yerini alır. İçinde bulunduğunuz kontrol paneli hâlâ eski sürümdür; bu yüzden çıkın ve `ccam` komutunu yeniden başlatın. Güncelleme burada yapılamadığında, örneğin `.deb` paketinden kurulmuş bir ccam kopyası için, kontrol paneli `ccam update` ile aynı öneriyi gösterir ve teklifi korur.
 
-İlk kare yalnızca `config.toml` dosyasından, 100 ms'nin çok altında çizilir; kullanım her hesap yanıt verdikçe dolar. Her limitin kendi çubuğu vardır: 5 saatlik pencere, tüm modeller için haftalık pencere ve Fable'ın kendi haftalık penceresi; `-` hesabın böyle bir penceresi olmadığı anlamına gelir. Bir yüzde %80'de sarıya, %100'de kırmızıya döner. Bir sorgu başarısız olursa önbellekteki değerler soluk gösterilir. Claude Code'un dolu bildirdiği bir pencere sıfırlanana kadar %100 gösterir. Süresi dolmuş bir erişim token'ı soluk bir `⚠ token expired` gösterir (Claude Code onu bir sonraki başlatmada yeniler; çalışmayan bir hesap için `r` de onu `ccam usage --refresh` gibi hemen yeniler); `⚠ login expired` ise hesabın `ccam login` gerektirdiği anlamına gelir.
+İlk kare yalnızca `config.toml` dosyasından, 100 ms'nin çok altında çizilir; kullanım her hesap yanıt verdikçe dolar. Her limitin kendi sütunu vardır: 5 saatlik pencere, tüm modeller için haftalık pencere ve Fable'ın kendi haftalık penceresi; `-` hesabın böyle bir penceresi olmadığı anlamına gelir. Bir sütun, kullanılan yüzdeyi ve pencerenin sıfırlanmasına ne kadar kaldığını (`1h 40m`, `3d 6h`) gösterir; bu süre kontrol paneli açık kaldıkça geri sayar. Yaklaşık 94 sütun ya da daha geniş bir terminal, yüzdenin önüne bir çubuk da çizer. Bir yüzde %80'de sarıya, %100'de kırmızıya döner. `↻`, Claude Code'un `/limit-reset` komutuyla kullanılabilecek, kullanılmamış bir limit sıfırlaması olan hesabı işaretler. ccam bunu yalnızca Claude Code'un son üç gün içinde o hesabın klasöründe en son çalıştığında oraya kaydettiklerinden bilir; bu yüzden işareti olmayan bir hesapta da bir tane olabilir ve kontrol paneli kaç tane olduğunu bilemez. Bir sorgu başarısız olursa önbellekteki değerler soluk gösterilir. Claude Code'un dolu bildirdiği bir pencere sıfırlanana kadar %100 gösterir. Süresi dolmuş bir erişim token'ı soluk bir `⚠ token expired` gösterir (Claude Code onu bir sonraki başlatmada yeniler; çalışmayan bir hesap için `r` de onu `ccam usage --refresh` gibi hemen yeniler); `⚠ login expired` ise hesabın `ccam login` gerektirdiği anlamına gelir.
 
 ## Sekmeler
 
 | Sekme | Gösterdiği | Tuşlar |
 | --- | --- | --- |
-| Accounts | numara, ad, e-posta, 5 saatlik, haftalık ve Fable çubukları, son kullanım, gruplar; `✔` varsayılan, `▸` bu klasörün hesabı, `•` çalışıyor (ccam olmadan başlatılan Claude Code da: düz `claude`, bir IDE, arka plan oturumları ve onların daemon'ı) | aşağıda |
+| Accounts | numara, ad, e-posta, her birinin sıfırlanmasına kalan süreyle 5 saatlik, haftalık ve Fable kullanımı, son kullanım, gruplar; `✔` varsayılan, `▸` bu klasörün hesabı, `•` çalışıyor (ccam olmadan başlatılan Claude Code da: düz `claude`, bir IDE, arka plan oturumları ve onların daemon'ı), `↻` kullanılmamış bir limit sıfırlaması var | aşağıda |
 | Agents | [`ccam agents`](/features/agents) komutunun listeledikleri: her hesabın arka plan oturumları ve açık oturumları, durumları, klasörleri ve başlama zamanlarıyla (aşağıda) | `enter` bağlan (`ccam attach` gibi), `x` durdur, `r` yeniden yükle |
 | Groups | her grup, neyi paylaştığı ve hesapları, ayrıca hiçbir grupta olmayan hesaplar | `enter` düzenle, `n` yeni, `e` yeniden adlandır, `x` kaldır |
 | Folders | [`ccam folder`](/features/folder) kuralları ve burada geçerli olan kural; klasöre sembolik bir bağlantı üzerinden ulaştığınızda da (yeni kurallar bağlantılar çözülmüş olarak saklanır) | `n` burada bir hesap kullan, `enter` değiştir, `x` kaldır |
@@ -57,7 +57,7 @@ Kontrol paneli her açıldığında arka planda GitHub'a daha yeni bir ccam sür
 | `↑`/`↓`, `k`/`j` | Hareket eder |
 | `n` | [`ccam next --auto`](/features/next) komutunun seçeceği hesabı başlatır |
 | `o` | Seçeneklerle başlatır: `--continue`, `--resume`, başka argümanlar ya da bir kuru çalıştırma |
-| `u` | Kullanım ayrıntıları: sıfırlanma zamanlarıyla 5 saatlik, haftalık ve model pencereleri ve sayıların nereden geldiği |
+| `u` | Kullanım ayrıntıları: sıfırlanma zamanlarıyla 5 saatlik, haftalık ve model pencereleri, hesapta kullanılmamış bir limit sıfırlaması olup olmadığı ve sayıların nereden geldiği |
 | `a` | Bir hesap ekler (aşağıdaki sihirbaz) |
 | `l` | Yeniden giriş yapar |
 | `s` | Hesabın gruplarını seçer |

@@ -1,24 +1,24 @@
 ---
 title: Ang dashboard
 description: Sa terminal, nagbubukas ang ccam ng full-screen dashboard ng mga account, group, folder rule, extension at pagsusuri; may plano muna ang bawat pagbabago.
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: "acb0270d360c"
+sourceHash: "96e86408a237"
 ---
 
 Binubuksan ng `ccam` na walang argument ang isang full-screen dashboard kapag terminal ang standard input at output; kung hindi, ipi-print nito ang `ccam list`. Ipinapakita ng dashboard ang bawat account kasama ang usage at mga group nito, at ginagawa nito ang ginagawa ng mga command: magsimula, magdagdag, mag-log in, magbago ng mga group, magtakda ng mga folder rule, maglista ng mga background session, magsuri at mag-ayos. Nagsasara ito kapag nagsimula ang isang account o kapag kumabit ka sa isang background session; kapag nagdagdag ng account o nag-log in, ibinibigay muna nito sandali ang terminal, saka bumabalik sa dashboard.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ Tuwing nagbubukas ito, tinatanong ng dashboard sa GitHub sa background kung may 
 
 Nagtatanong muna ang `U`, saka nag-a-update gaya ng ginagawa ng [`ccam update`](/features/update): sinusuri ang release laban sa mga SHA-256 checksum nito at pinapalitan nito ang ccam sa isang hakbang. Lumang bersyon pa rin ang dashboard na kinaroroonan mo, kaya lumabas at simulan muli ang `ccam`. Kapag hindi magagawa rito ang update, halimbawa para sa kopya ng ccam na in-install mula sa `.deb` package, ipinapakita ng dashboard ang parehong payo gaya ng `ccam update` at pinananatili ang alok.
 
-Iginuguhit ang unang frame mula sa `config.toml` lang, sa mas mababa pa nang husto sa 100 ms; napupunan ang usage habang sumasagot ang bawat account. May sariling bar ang bawat limit: ang 5-oras na window, ang lingguhang window para sa lahat ng model, at ang sariling lingguhang window ng Fable; ang ibig sabihin ng `-` ay walang ganoong window ang account. Nagiging dilaw ang porsiyento sa 80% at pula sa 100%. Kapag pumalya ang isang lookup, malabong ipinapakita ang mga naka-cache na value. 100% ang ipinapakita ng window na iniulat ng Claude Code na puno na hanggang sa reset nito. Nagpapakita ang expired na access token ng malabong `⚠ token expired` (nire-renew ito ng Claude Code sa susunod na pagsisimula, at nire-renew ito ng `r` ngayon din para sa account na hindi tumatakbo, gaya ng ginagawa ng `ccam usage --refresh`), habang ang ibig sabihin ng `⚠ login expired` ay kailangan ng account ang `ccam login`.
+Iginuguhit ang unang frame mula sa `config.toml` lang, sa mas mababa pa nang husto sa 100 ms; napupunan ang usage habang sumasagot ang bawat account. May sariling column ang bawat limit: ang 5-oras na window, ang lingguhang window para sa lahat ng model, at ang sariling lingguhang window ng Fable; ang ibig sabihin ng `-` ay walang ganoong window ang account. Ipinapakita ng bawat column ang porsiyentong nagamit na at kung gaano katagal pa bago mag-reset ang window (`1h 40m`, `3d 6h`), na bumababa habang nananatiling bukas ang dashboard; sa terminal na mga 94 column o mas malapad, may iginuguhit ding bar sa unahan ng porsiyento. Nagiging dilaw ang porsiyento sa 80% at pula sa 100%. Minamarkahan ng `↻` ang account na may hawak na hindi pa nagagamit na limit reset, na magagamit ng `/limit-reset` ng Claude Code. Nalalaman lang ito ng ccam mula sa sine-save ng Claude Code sa folder ng account noong huling beses itong tumakbo roon sa loob ng nakaraang tatlong araw, kaya maaaring may hawak pa rin nito ang account na walang marka, at hindi masasabi ng dashboard kung ilan. Kapag pumalya ang isang lookup, malabong ipinapakita ang mga naka-cache na value. 100% ang ipinapakita ng window na iniulat ng Claude Code na puno na hanggang sa reset nito. Nagpapakita ang expired na access token ng malabong `⚠ token expired` (nire-renew ito ng Claude Code sa susunod na pagsisimula, at nire-renew ito ng `r` ngayon din para sa account na hindi tumatakbo, gaya ng ginagawa ng `ccam usage --refresh`), habang ang ibig sabihin ng `⚠ login expired` ay kailangan ng account ang `ccam login`.
 
 ## Mga tab
 
 | Tab | Ano ang ipinapakita | Mga key |
 | --- | --- | --- |
-| Accounts | numero, pangalan, email, mga bar ng 5-oras, lingguhan at Fable, huling paggamit, mga group; `✔` ang default, `▸` ang account ng folder na ito, `•` tumatakbo (pati ang Claude Code na sinimulan nang walang ccam: karaniwang `claude`, isang IDE, mga background session at ang daemon nila) | sa ibaba |
+| Accounts | numero, pangalan, email, usage ng 5-oras, lingguhan at Fable kasama ang oras bago ang bawat reset, huling paggamit, mga group; `✔` ang default, `▸` ang account ng folder na ito, `•` tumatakbo (pati ang Claude Code na sinimulan nang walang ccam: karaniwang `claude`, isang IDE, mga background session at ang daemon nila), `↻` may hawak na hindi pa nagagamit na limit reset | sa ibaba |
 | Agents | ang inililista ng [`ccam agents`](/features/agents): ang mga background session at bukas na session ng bawat account, kasama ang state, folder at oras ng pagsisimula nila (sa ibaba) | `enter` kumabit (gaya ng `ccam attach`), `x` ihinto, `r` i-reload |
 | Groups | bawat group, kung ano ang shine-share nito at ang mga account nito, at ang mga account na walang group | `enter` baguhin, `n` bago, `e` palitan ang pangalan, `x` alisin |
 | Folders | ang mga patakaran ng [`ccam folder`](/features/folder) at ang nalalapat dito, kahit narating mo ang folder sa pamamagitan ng symbolic link (sine-save ang mga bagong patakaran na naresolba ang mga link) | `n` gumamit ng account dito, `enter` baguhin, `x` alisin |
@@ -57,7 +57,7 @@ Nagpapalit ng tab ang `←`/`→` o `Tab`, inililista ng `?` ang mga key ng kasa
 | `↑`/`↓`, `k`/`j` | Lumipat |
 | `n` | Simulan ang account na pipiliin ng [`ccam next --auto`](/features/next) |
 | `o` | Simulan nang may mga option: `--continue`, `--resume`, ibang argument, o dry run |
-| `u` | Mga detalye ng usage: ang 5-oras, lingguhan at model na mga window, kasama ang mga reset nila at kung saan galing ang mga numero |
+| `u` | Mga detalye ng usage: ang 5-oras, lingguhan at model na mga window, kasama ang mga reset nila, kung may hawak ang account na hindi pa nagagamit na limit reset, at kung saan galing ang mga numero |
 | `a` | Magdagdag ng account (ang wizard sa ibaba) |
 | `l` | Mag-log in muli |
 | `s` | Piliin ang mga group ng account |
