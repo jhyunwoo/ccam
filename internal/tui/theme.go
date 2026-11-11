@@ -115,6 +115,7 @@ const (
 	symInfo    = "ℹ"
 	symHere    = "▸"
 	symRunning = "•"
+	symReset   = "↻"
 	symDot     = " · "
 	symDetail  = "⎿"
 	symItem    = "●"

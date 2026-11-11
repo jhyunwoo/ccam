@@ -195,6 +195,41 @@ func LoggedInAs(p paths.Paths, prof *config.Profile) (*config.Identity, bool) {
 	return read, true
 }
 
+// resetCheckAge is how long Claude Code (2.1.322) believes its saved check
+// of an account's limit resets.
+const resetCheckAge = 72 * time.Hour
+
+// HoldsReset reports whether the login in dir holds an unused limit reset
+// (Claude Code's /limit-reset), as Claude Code last saw it: the
+// unusedLimitResetStatusCache it keeps in .claude.json, read by its own
+// rules (the login of now, checked within three days, not yet run out).
+// The usage endpoint tells the resets only to Claude Code itself, so an
+// account Claude Code has not run on lately reads false.
+func HoldsReset(dir string, now time.Time) bool {
+	data, err := os.ReadFile(filepath.Join(dir, ".claude.json"))
+	if err != nil {
+		return false
+	}
+	var acct struct {
+		AccountUUID string `json:"accountUuid"`
+	}
+	var c struct {
+		AccountUUID string  `json:"accountUuid"`
+		Holds       bool    `json:"holdsUnusedReset"`
+		CheckedAt   float64 `json:"checkedAt"` // Unix milliseconds
+		ValidUntil  float64 `json:"validUntil"`
+	}
+	for key, v := range map[string]any{"oauthAccount": &acct, "unusedLimitResetStatusCache": &c} {
+		raw, ok, err := TopLevelValue(data, key)
+		if err != nil || !ok || json.Unmarshal(raw, v) != nil {
+			return false
+		}
+	}
+	at, ms := time.UnixMilli(int64(c.CheckedAt)), float64(now.UnixMilli())
+	return c.Holds && acct.AccountUUID != "" && c.AccountUUID == acct.AccountUUID &&
+		!at.After(now) && now.Sub(at) < resetCheckAge && ms < c.ValidUntil
+}
+
 // DecodeFileKey decodes one top-level key of a JSON file into v.
 func DecodeFileKey(path, key string, v any) (bool, error) {
 	data, err := os.ReadFile(path)

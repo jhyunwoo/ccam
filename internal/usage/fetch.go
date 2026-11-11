@@ -73,6 +73,9 @@ type Report struct {
 	// Sessions is how many ccam sessions of the account run now; the
 	// caller fills it in for the balance strategy.
 	Sessions int `json:"sessions,omitempty"`
+	// HoldsReset means the account holds an unused limit reset, as Claude
+	// Code last saw it (profile.HoldsReset); the dashboard fills it in.
+	HoldsReset bool `json:"holds_reset,omitempty"`
 }
 
 type Options struct {

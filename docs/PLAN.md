@@ -883,3 +883,11 @@ clausona(larcane97/clausona v0.12.0-beta) 조사에서 나온 단점을 보완�
 - 문서: `ccam next --help`의 `--auto` 문장, 사이트 features/next의 Room·Over 항목(30개 언어).
 - 테스트: `TestPolicyChoose`(3포인트 안에서 주간, 3포인트 포함, 3포인트 넘으면 5시간, 가장 낮은 계정 기준과 순서 무관, 넘침에서도, expiring은 그대로), `TestPolicyWhy`(범위 안의 선택과 넘침의 이유). 범위를 없애거나 3을 미포함으로 바꾸거나 범위 안에서 주간을 보지 않거나 `nearWhy`를 끄는 변이는 모두 이 테스트들이 잡습니다.
 - 후속(v0.13.6): headroom을 "5시간 사용량이 가장 낮은 계정"으로만 요약한 곳을 고쳤습니다. `--strategy` 도움말(`internal/cli/choose.go`), 사이트 next·pick의 전략 표, `--fallback`의 다음 계정(이제 "`--auto`가 고를 계정"), docs/usage-limits의 코드 주석, guides/usage-limit-workflow, next-auto 도식입니다(30개 언어). 고르는 방식은 바뀌지 않았습니다.
+
+## 2026-11-11: 대시보드의 reset까지 남은 시간과 리셋권 표시
+
+- 소유자 요청: `ccam` 대시보드의 계정 목록에서 5시간·주간 한도가 초기화될 때까지 남은 시간을 보이고, 가능하면 리셋권(Claude Code의 `/limit-reset`) 보유 여부도 보입니다. 모양은 소유자가 "한 줄, 칸 안에"를 골랐습니다.
+- 목록: 5-hour·Weekly·Fable 칸마다 퍼센트 뒤에 `usage.Duration`(`2h 10m`, `3d 4h`, `40m`, 지났으면 `soon`)을 흐리게 붙입니다. reset 시각을 모르는 창은 퍼센트만입니다. 칸은 `100% 12h 30m`(12칸)이고, 막대까지 넣은 `██████ 100% 12h 30m`(19칸)은 Groups 최소 12칸까지 들어갈 때만 씁니다(이름 8칸이면 94칸부터). 그래서 80칸에서는 막대 대신 시간이 보입니다. 우선순위는 시간, 막대, Last, Email입니다. 판단: 80칸에서 막대와 시간을 모두 넣으면 Groups가 잘리고, 퍼센트는 색(80% 노랑, 100% 빨강)이 이미 알려 줍니다.
+- 열려 있는 동안 남은 시간이 줄도록 `runHome`이 1분마다 `tui.Redraw`를 보냅니다. Init의 `tea.Tick`으로 하지 않은 이유: cli 테스트의 `runCmds`가 명령을 끝까지 동기로 실행하므로 끝나지 않는 tick은 테스트를 멈춥니다.
+- 리셋권: 사용량 엔드포인트는 `?cedar_ember=1`에도 ccam에는 `ineligible_reason: "surface"`와 빈 grants를 줍니다(c3로 한 번 확인, docs/claude-layout.md "Limit resets"). Claude Code인 척 User-Agent를 바꾸지 않기로 했습니다. 대신 Claude Code가 `.claude.json`에 남기는 `unusedLimitResetStatusCache`를 Claude Code와 같은 규칙으로 읽습니다(`profile.HoldsReset`). 대시보드의 `backend.Usage`가 `Report.HoldsReset`을 채우고(API 계정 제외), 목록의 네 번째 표시 `↻`, 범례 `↻ limit reset`(자리가 있을 때만), `u` 창의 `↻ Holds an unused limit reset · /limit-reset in Claude Code uses it`로 보입니다. 있음/모름만 알 수 있고 개수와 만료일은 모릅니다. Claude Code가 3일 안에 그 계정으로 돌지 않았으면 표시가 없습니다. `ccam usage`의 표와 선택 규칙은 바뀌지 않았고, 조회 요청도 그대로입니다.
+- 테스트: profile `TestHoldsReset`(보유, 없음, 다른 로그인, 3일 넘음, 만료, 미래 시각, 기록 없음, 로그아웃, 잘못된 형식, 깨진 파일, 파일 없음), tui `TestAccountsShowTimeToReset`(110칸과 80칸, 표시, `u` 창), `TestRedrawCountsDown`, `TestAccountsShowFiveHourWeeklyAndFable`(새 칸 너비), cli `TestDashboardUsageSaysWhoHoldsAReset`.

@@ -2,11 +2,13 @@ package profile
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/jhyunwoo/ccam/internal/config"
 	"github.com/jhyunwoo/ccam/internal/fsutil"
@@ -263,5 +265,56 @@ func TestRenameOverAStaleMember(t *testing.T) {
 	}
 	if len(cfg.Groups[0].Members) != 0 {
 		t.Fatalf("%v", cfg.Groups[0].Members)
+	}
+}
+
+// An account holds an unused limit reset when Claude Code's saved check in
+// .claude.json says so for the login that is there now, was made within
+// three days and has not run out.
+func TestHoldsReset(t *testing.T) {
+	now := time.UnixMilli(1794302764636).Add(time.Hour)
+	ms := func(d time.Duration) int64 { return now.Add(d).UnixMilli() }
+	cache := func(uuid string, holds bool, checked, valid int64) string {
+		return fmt.Sprintf(`{"projects":{"/a":{}},"oauthAccount":{"accountUuid":"u-1"},"unusedLimitResetStatusCache":{"accountUuid":%q,"holdsUnusedReset":%t,"checkedAt":%d,"validUntil":%d}}`,
+			uuid, holds, checked, valid)
+	}
+	for name, tc := range map[string]struct {
+		file string
+		want bool
+	}{
+		"held":                  {cache("u-1", true, ms(-time.Hour), ms(71*time.Hour)), true},
+		"none":                  {cache("u-1", false, ms(-time.Hour), ms(71*time.Hour)), false},
+		"another login":         {cache("u-2", true, ms(-time.Hour), ms(71*time.Hour)), false},
+		"checked long ago":      {cache("u-1", true, ms(-73*time.Hour), ms(time.Hour)), false},
+		"the reset expired":     {cache("u-1", true, ms(-2*time.Hour), ms(-time.Hour)), false},
+		"checked in the future": {cache("u-1", true, ms(time.Hour), ms(72*time.Hour)), false},
+		"never checked":         {`{"oauthAccount":{"accountUuid":"u-1"}}`, false},
+		"logged out":            {`{"unusedLimitResetStatusCache":{"accountUuid":"u-1","holdsUnusedReset":true,"checkedAt":1,"validUntil":9999999999999}}`, false},
+		"not an object":         {`{"oauthAccount":{"accountUuid":"u-1"},"unusedLimitResetStatusCache":"yes"}`, false},
+		"broken file":           {`{"oauthAccount":`, false},
+	} {
+		dir := t.TempDir()
+		os.WriteFile(filepath.Join(dir, ".claude.json"), []byte(tc.file), 0o600)
+		if got := HoldsReset(dir, now); got != tc.want {
+			t.Errorf("%s: %v", name, got)
+		}
+	}
+	if HoldsReset(t.TempDir(), now) {
+		t.Error("a folder without .claude.json")
+	}
+}
+
+// HoldsReset reads a .claude.json of about 100 KB, as real ones are, once
+// per account each time the dashboard loads usage.
+func BenchmarkHoldsReset(b *testing.B) {
+	dir := b.TempDir()
+	now := time.Now()
+	big := fmt.Sprintf(`{"projects":{"/a":{"x":%q}},"oauthAccount":{"accountUuid":"u-1"},"unusedLimitResetStatusCache":{"accountUuid":"u-1","holdsUnusedReset":true,"checkedAt":%d,"validUntil":%d}}`,
+		strings.Repeat("x", 100<<10), now.Add(-time.Hour).UnixMilli(), now.Add(time.Hour).UnixMilli())
+	os.WriteFile(filepath.Join(dir, ".claude.json"), []byte(big), 0o600)
+	for b.Loop() {
+		if !HoldsReset(dir, now) {
+			b.Fatal("no reset")
+		}
 	}
 }
