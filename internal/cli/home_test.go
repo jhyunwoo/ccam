@@ -80,3 +80,22 @@ func TestDashboardWaitsForRenewal(t *testing.T) {
 		t.Fatalf("the dashboard ended before the renewal was saved: %s", data)
 	}
 }
+
+// The dashboard marks an account that holds an unused limit reset: what
+// Claude Code saved in the account's .claude.json, read with its usage.
+func TestDashboardUsageSaysWhoHoldsAReset(t *testing.T) {
+	c := newTestCLI(t, map[string]int{"personal": 5, "work": 5})
+	now := time.Now()
+	saved := fmt.Sprintf(`{"oauthAccount":{"accountUuid":"u-1"},"unusedLimitResetStatusCache":{"accountUuid":"u-1","holdsUnusedReset":true,"checkedAt":%d,"validUntil":%d}}`,
+		now.Add(-time.Hour).UnixMilli(), now.Add(time.Hour).UnixMilli())
+	if err := os.WriteFile(filepath.Join(c.p.ProfileDir("work"), ".claude.json"), []byte(saved), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	e, _ := c.env()
+	b := backend{e: e}
+	for name, want := range map[string]bool{"work": true, "personal": false} {
+		if r := b.Usage(context.Background(), name, false); r.Status != usage.StatusOK || r.HoldsReset != want {
+			t.Errorf("%s: %+v", name, r)
+		}
+	}
+}

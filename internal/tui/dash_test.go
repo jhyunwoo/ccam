@@ -623,10 +623,80 @@ func TestAccountsShowFiveHourWeeklyAndFable(t *testing.T) {
 	d.width, d.height = 100, 30
 	m := drain(d, d.fetchAll(false))
 	s := screen(m)
-	for _, want := range []string{"5-hour       Weekly       Fable", "███░░░  50%  █▌░░░░  25%  ██████ 100%", "  2%  -            -"} {
+	for _, want := range []string{"5-hour               Weekly               Fable", "███░░░  50%          █▌░░░░  25%          ██████ 100%", "  2%          -                    -"} {
 		if !strings.Contains(s, want) {
 			t.Errorf("missing %q in\n%s", want, s)
 		}
+	}
+}
+
+// Each window says how long until it resets: beside its bar in a wide
+// terminal, in place of the bar in a narrow one. An account that holds an
+// unused limit reset is marked, and its usage dialog says so.
+func TestAccountsShowTimeToReset(t *testing.T) {
+	f := newFake(t)
+	now := time.Date(2026, 11, 11, 9, 0, 0, 0, time.UTC)
+	w := func(p float64, in time.Duration) usage.Window {
+		return usage.Window{Percent: p, Known: true, ResetsAt: now.Add(in)}
+	}
+	f.usage["personal"] = usage.Report{Name: "personal", Status: usage.StatusOK, HoldsReset: true, Limits: &usage.Limits{
+		FiveHour: w(50, 2*time.Hour+10*time.Minute), Weekly: w(25, 76*time.Hour),
+		Scoped: []usage.Scoped{{Name: "Fable", Window: w(100, 30*time.Hour)}}}}
+	f.usage["work"] = usage.Report{Name: "work", Status: usage.StatusOK, Limits: &usage.Limits{FiveHour: w(2, 12*time.Hour+30*time.Minute)}}
+	for width, wants := range map[int][]string{
+		110: {"5-hour               Weekly               Fable", "███░░░  50% 2h 10m   █▌░░░░  25% 3d 4h    ██████ 100% 1d 6h",
+			"  2% 12h 30m  -                    -", "↻ limit reset"},
+		80: {"5-hour        Weekly        Fable", " 50% 2h 10m    25% 3d 4h    100% 1d 6h", "  2% 12h 30m  -             -"},
+	} {
+		d := dash(f)
+		d.now = func() time.Time { return now }
+		d.width, d.height = width, 30
+		m := drain(d, d.fetchAll(false))
+		s := screen(m)
+		for _, want := range wants {
+			if !strings.Contains(s, want) {
+				t.Errorf("%d columns: missing %q in\n%s", width, want, s)
+			}
+		}
+		if width == 80 && strings.Contains(s, "█") {
+			t.Errorf("80 columns keeps the bars:\n%s", s)
+		}
+		for _, line := range strings.Split(s, "\n") {
+			if strings.Contains(line, "limit reset") { // the legend
+				continue
+			}
+			if marked := strings.Contains(line, "↻"); marked != strings.Contains(line, "1. personal") {
+				t.Errorf("%d columns: the reset mark: %q", width, line)
+			}
+		}
+		if s := screen(press(t, m, "u")); !strings.Contains(s, "5-hour        ██████████░░░░░░░░░░  50%  resets in 2h 10m") ||
+			!strings.Contains(s, "Holds an unused limit reset") {
+			t.Errorf("%d columns: usage of personal:\n%s", width, s)
+		}
+		if s := screen(press(t, m, "esc", "down", "u")); !strings.Contains(s, "Usage of work") || strings.Contains(s, "Holds an unused") {
+			t.Errorf("usage of work, which holds no reset:\n%s", s)
+		}
+	}
+}
+
+// The program sends Redraw each minute: the times to a reset count down
+// while the dashboard is left open.
+func TestRedrawCountsDown(t *testing.T) {
+	f := newFake(t)
+	now := time.Date(2026, 11, 11, 9, 0, 0, 0, time.UTC)
+	f.usage["personal"] = usage.Report{Name: "personal", Status: usage.StatusOK, Limits: &usage.Limits{
+		FiveHour: usage.Window{Percent: 50, Known: true, ResetsAt: now.Add(130 * time.Minute)}}}
+	d := dash(f)
+	d.now = func() time.Time { return now }
+	d.width, d.height = 80, 24
+	m := drain(d, d.fetchAll(false))
+	if s := screen(m); !strings.Contains(s, " 50% 2h 10m") {
+		t.Fatal(s)
+	}
+	now = now.Add(time.Minute)
+	m, cmd := m.Update(Redraw{})
+	if s := screen(m); cmd != nil || !strings.Contains(s, " 50% 2h 9m") {
+		t.Fatalf("%v\n%s", cmd != nil, s)
 	}
 }
 

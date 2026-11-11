@@ -1,24 +1,24 @@
 ---
 title: "Le tableau de bord"
 description: "ccam dans un terminal ouvre un tableau de bord plein écran : comptes, groupes, dossiers, extensions et vérifications ; chaque modification montre son plan."
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: "acb0270d360c"
+sourceHash: "96e86408a237"
 ---
 
 `ccam` sans argument ouvre un tableau de bord plein écran quand l'entrée et la sortie standard sont un terminal ; sinon, il affiche `ccam list`. Le tableau de bord montre chaque compte avec son utilisation et ses groupes, et fait ce que font les commandes : lancer, ajouter, connecter, changer de groupes, définir des règles de dossier, lister les sessions en arrière-plan, vérifier et réparer. Un lancement, ou le rattachement à une session en arrière-plan, le ferme ; ajouter un compte ou se connecter cède le terminal un instant, puis revient au tableau de bord.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ La ligne sous les noms des onglets indique en une phrase à quoi sert l'onglet c
 
 `U` demande d'abord confirmation, puis met à jour comme le fait [`ccam update`](/features/update) : la version est vérifiée avec ses sommes de contrôle SHA-256 et remplace ccam en une seule étape. Le tableau de bord dans lequel vous êtes reste l'ancienne version : quittez-le et relancez `ccam`. Quand la mise à jour ne peut pas se faire ici, par exemple pour une copie de ccam installée depuis le paquet `.deb`, le tableau de bord affiche le même conseil que `ccam update` et garde la proposition.
 
-La première image n'est dessinée qu'à partir de `config.toml`, en bien moins de 100 ms ; l'utilisation s'affiche au fur et à mesure que chaque compte répond. Chaque limite a sa propre barre : la fenêtre de 5 heures, la fenêtre hebdomadaire de tous les modèles et la fenêtre hebdomadaire propre à Fable ; `-` signifie que le compte n'a pas cette fenêtre. Un pourcentage passe au jaune à 80 % et au rouge à 100 %. Si une consultation échoue, les valeurs en cache sont affichées en atténué. Une fenêtre que Claude Code a signalée pleine affiche 100 % jusqu'à sa réinitialisation. Un jeton d'accès expiré affiche un `⚠ token expired` atténué (Claude Code le renouvelle au prochain démarrage, et `r` le renouvelle tout de suite pour un compte qui n'est pas en cours d'exécution, comme le fait `ccam usage --refresh`), tandis que `⚠ login expired` signifie que le compte a besoin de `ccam login`.
+La première image n'est dessinée qu'à partir de `config.toml`, en bien moins de 100 ms ; l'utilisation s'affiche au fur et à mesure que chaque compte répond. Chaque limite a sa propre colonne : la fenêtre de 5 heures, la fenêtre hebdomadaire de tous les modèles et la fenêtre hebdomadaire propre à Fable ; `-` signifie que le compte n'a pas cette fenêtre. Une colonne affiche le pourcentage utilisé et le temps restant avant la réinitialisation de la fenêtre (`1h 40m`, `3d 6h`), avec un compte à rebours tant que le tableau de bord reste ouvert ; un terminal d'environ 94 colonnes ou plus dessine aussi une barre devant le pourcentage. Un pourcentage passe au jaune à 80 % et au rouge à 100 %. `↻` signale un compte qui dispose d'une réinitialisation de limite inutilisée, que `/limit-reset` de Claude Code peut utiliser. ccam ne le sait que d'après ce que Claude Code a enregistré dans le dossier du compte la dernière fois qu'il s'y est exécuté au cours des trois derniers jours ; un compte sans ce symbole peut donc tout de même en avoir une, et le tableau de bord ne peut pas savoir combien. Si une consultation échoue, les valeurs en cache sont affichées en atténué. Une fenêtre que Claude Code a signalée pleine affiche 100 % jusqu'à sa réinitialisation. Un jeton d'accès expiré affiche un `⚠ token expired` atténué (Claude Code le renouvelle au prochain démarrage, et `r` le renouvelle tout de suite pour un compte qui n'est pas en cours d'exécution, comme le fait `ccam usage --refresh`), tandis que `⚠ login expired` signifie que le compte a besoin de `ccam login`.
 
 ## Onglets
 
 | Onglet | Ce qu'il montre | Touches |
 | --- | --- | --- |
-| Accounts | numéro, nom, adresse e-mail, barres sur 5 heures, hebdomadaire et Fable, dernière utilisation, groupes ; `✔` le compte par défaut, `▸` le compte de ce dossier, `•` en cours d'exécution (y compris Claude Code lancé sans ccam : `claude` seul, un IDE, les sessions en arrière-plan et leur démon) | ci-dessous |
+| Accounts | numéro, nom, adresse e-mail, utilisation sur 5 heures, hebdomadaire et Fable avec le temps restant avant chaque réinitialisation, dernière utilisation, groupes ; `✔` le compte par défaut, `▸` le compte de ce dossier, `•` en cours d'exécution (y compris Claude Code lancé sans ccam : `claude` seul, un IDE, les sessions en arrière-plan et leur démon), `↻` dispose d'une réinitialisation de limite inutilisée | ci-dessous |
 | Agents | ce que liste [`ccam agents`](/features/agents) : les sessions en arrière-plan et les sessions ouvertes de tous les comptes, avec leur état, leur dossier et leur heure de démarrage (ci-dessous) | `enter` se rattacher (comme `ccam attach`), `x` arrêter, `r` recharger |
 | Groups | chaque groupe, ce qu'il partage et ses comptes, ainsi que les comptes sans groupe | `enter` modifier, `n` nouveau, `e` renommer, `x` supprimer |
 | Folders | les règles [`ccam folder`](/features/folder) et celle qui s'applique ici, y compris quand vous êtes arrivé dans le dossier par un lien symbolique (les nouvelles règles sont enregistrées avec les liens résolus) | `n` utiliser un compte ici, `enter` changer, `x` supprimer |
@@ -57,7 +57,7 @@ La première image n'est dessinée qu'à partir de `config.toml`, en bien moins 
 | `↑`/`↓`, `k`/`j` | Se déplacer |
 | `n` | Lancer le compte que choisirait [`ccam next --auto`](/features/next) |
 | `o` | Lancer avec des options : `--continue`, `--resume`, d'autres arguments, ou une simulation |
-| `u` | Détails de l'utilisation : fenêtres sur 5 heures, hebdomadaire et par modèle, avec leurs réinitialisations et l'origine des chiffres |
+| `u` | Détails de l'utilisation : fenêtres sur 5 heures, hebdomadaire et par modèle, avec leurs réinitialisations, l'indication d'une éventuelle réinitialisation de limite inutilisée, et l'origine des chiffres |
 | `a` | Ajouter un compte (l'assistant ci-dessous) |
 | `l` | Se reconnecter |
 | `s` | Choisir les groupes du compte |

@@ -1,24 +1,24 @@
 ---
 title: Panel
 description: ccam w terminalu otwiera pełnoekranowy panel kont, grup, reguł folderów, rozszerzeń i sprawdzeń; każda zmiana najpierw pokazuje swój plan.
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: "acb0270d360c"
+sourceHash: "96e86408a237"
 ---
 
 `ccam` bez argumentów otwiera pełnoekranowy panel, gdy standardowe wejście i wyjście są terminalem; w przeciwnym razie wypisuje `ccam list`. Panel pokazuje każde konto z jego użyciem i grupami i robi to samo co polecenia: uruchamia, dodaje, loguje, zmienia grupy, ustawia reguły folderów, wyświetla sesje w tle, sprawdza i naprawia. Uruchomienie konta albo podłączenie się do sesji w tle go zamyka; dodawanie konta lub logowanie na chwilę oddaje terminal, a potem wraca do panelu.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ Przy każdym otwarciu panel pyta w tle GitHub, czy istnieje nowsze wydanie ccam;
 
 `U` najpierw pyta, a potem aktualizuje tak jak [`ccam update`](/features/update): wydanie jest sprawdzane z jego sumami kontrolnymi SHA-256 i zastępuje ccam w jednym kroku. Otwarty panel to wciąż stara wersja, więc wyjdź i uruchom `ccam` ponownie. Gdy aktualizacji nie da się wykonać tutaj, na przykład dla kopii ccam zainstalowanej z pakietu `.deb`, panel pokazuje tę samą wskazówkę co `ccam update` i zachowuje propozycję.
 
-Pierwsza klatka jest rysowana wyłącznie z `config.toml`, w znacznie mniej niż 100 ms; użycie pojawia się, gdy tylko dane konto odpowie. Każdy limit ma własny pasek: okno 5-godzinne, tygodniowe okno dla wszystkich modeli i własne tygodniowe okno Fable; `-` oznacza, że konto nie ma takiego okna. Procent zmienia kolor na żółty przy 80% i na czerwony przy 100%. Jeśli zapytanie się nie powiedzie, wartości z pamięci podręcznej są pokazywane przyciemnione. Okno, które Claude Code zgłosił jako pełne, pokazuje 100% aż do resetu. Wygasły token dostępu pokazuje blade `⚠ token expired` (Claude Code odnawia go przy następnym uruchomieniu, a `r` odnawia go od razu dla konta, które nie jest uruchomione, tak jak `ccam usage --refresh`), a `⚠ login expired` oznacza, że konto wymaga `ccam login`.
+Pierwsza klatka jest rysowana wyłącznie z `config.toml`, w znacznie mniej niż 100 ms; użycie pojawia się, gdy tylko dane konto odpowie. Każdy limit ma własną kolumnę: okno 5-godzinne, tygodniowe okno dla wszystkich modeli i własne tygodniowe okno Fable; `-` oznacza, że konto nie ma takiego okna. Kolumna pokazuje procent wykorzystania i czas do resetu okna (`1h 40m`, `3d 6h`), odliczany na bieżąco, dopóki panel jest otwarty; w terminalu o szerokości około 94 kolumn lub większej przed procentem rysowany jest też pasek. Procent zmienia kolor na żółty przy 80% i na czerwony przy 100%. `↻` oznacza konto, które ma niewykorzystany reset limitu, z którego może skorzystać `/limit-reset` w Claude Code. ccam wie o tym tylko z tego, co Claude Code zapisał w folderze konta, gdy ostatni raz tam działał w ciągu ostatnich trzech dni, więc konto bez tego znaku może mimo to go mieć, a panel nie potrafi określić, ile ich jest. Jeśli zapytanie się nie powiedzie, wartości z pamięci podręcznej są pokazywane przyciemnione. Okno, które Claude Code zgłosił jako pełne, pokazuje 100% aż do resetu. Wygasły token dostępu pokazuje blade `⚠ token expired` (Claude Code odnawia go przy następnym uruchomieniu, a `r` odnawia go od razu dla konta, które nie jest uruchomione, tak jak `ccam usage --refresh`), a `⚠ login expired` oznacza, że konto wymaga `ccam login`.
 
 ## Karty
 
 | Karta | Co pokazuje | Klawisze |
 | --- | --- | --- |
-| Accounts | numer, nazwa, adres e-mail, paski 5-godzinny, tygodniowy i Fable, ostatnie użycie, grupy; `✔` konto domyślne, `▸` konto tego folderu, `•` uruchomione (także Claude Code uruchomiony bez ccam: zwykłe `claude`, IDE, sesje w tle i ich demon) | poniżej |
+| Accounts | numer, nazwa, adres e-mail, użycie 5-godzinne, tygodniowe i Fable z czasem do każdego resetu, ostatnie użycie, grupy; `✔` konto domyślne, `▸` konto tego folderu, `•` uruchomione (także Claude Code uruchomiony bez ccam: zwykłe `claude`, IDE, sesje w tle i ich demon), `↻` ma niewykorzystany reset limitu | poniżej |
 | Agents | to, co wyświetla [`ccam agents`](/features/agents): sesje w tle i otwarte sesje każdego konta, z ich stanem, folderem i czasem startu (poniżej) | `enter` podłączenie (jak `ccam attach`), `x` zatrzymanie, `r` ponowne wczytanie |
 | Groups | każda grupa, co współdzieli i jej konta, oraz konta, które nie należą do żadnej grupy | `enter` edycja, `n` nowa, `e` zmiana nazwy, `x` usunięcie |
 | Folders | reguły [`ccam folder`](/features/folder) i ta, która obowiązuje tutaj, nawet gdy trafiłeś do folderu przez link symboliczny (nowe reguły są zapisywane z rozwiązanymi linkami) | `n` użyj tu konta, `enter` zmiana, `x` usunięcie |
@@ -57,7 +57,7 @@ Pierwsza klatka jest rysowana wyłącznie z `config.toml`, w znacznie mniej niż
 | `↑`/`↓`, `k`/`j` | Przesuwa zaznaczenie |
 | `n` | Uruchamia konto, które wybrałby [`ccam next --auto`](/features/next) |
 | `o` | Uruchamia z opcjami: `--continue`, `--resume`, inne argumenty albo próbne uruchomienie |
-| `u` | Szczegóły użycia: okna 5-godzinne, tygodniowe i modeli z ich resetami oraz źródło liczb |
+| `u` | Szczegóły użycia: okna 5-godzinne, tygodniowe i modeli z ich resetami, informacja, czy konto ma niewykorzystany reset limitu, oraz źródło liczb |
 | `a` | Dodaje konto (kreator opisany niżej) |
 | `l` | Loguje ponownie |
 | `s` | Wybiera grupy konta |

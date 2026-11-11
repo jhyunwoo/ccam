@@ -1,24 +1,24 @@
 ---
 title: Dasbor
 description: ccam di terminal membuka dasbor layar penuh berisi akun, grup, aturan folder, ekstensi, dan pemeriksaan; setiap perubahan menampilkan rencananya dulu.
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: "acb0270d360c"
+sourceHash: "96e86408a237"
 ---
 
 `ccam` tanpa argumen membuka dasbor layar penuh jika input dan output standar adalah terminal; jika bukan, ccam mencetak `ccam list`. Dasbor menampilkan setiap akun beserta penggunaan dan grupnya, dan melakukan apa yang dilakukan perintah-perintahnya: menjalankan, menambahkan, login, mengubah grup, menetapkan aturan folder, menampilkan sesi latar belakang, memeriksa, dan memperbaiki. Menjalankan akun, atau menyambung (attach) ke sesi latar belakang, akan menutupnya; menambahkan akun atau login menyerahkan terminal sebentar, lalu kembali ke dasbor.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ Setiap kali dibuka, dasbor bertanya ke GitHub di latar belakang apakah ada rilis
 
 `U` bertanya dulu, lalu memperbarui seperti [`ccam update`](/features/update): rilis diperiksa terhadap checksum SHA-256-nya dan menggantikan ccam dalam satu langkah. Dasbor yang sedang Anda buka masih versi lama, jadi keluar lalu jalankan `ccam` lagi. Jika pembaruan tidak bisa dilakukan di sini, misalnya untuk salinan ccam yang diinstal dari paket `.deb`, dasbor menampilkan saran yang sama seperti `ccam update` dan tetap menyimpan tawarannya.
 
-Bingkai pertama digambar hanya dari `config.toml`, jauh di bawah 100 ms; penggunaan terisi begitu setiap akun menjawab. Setiap batas punya bilahnya sendiri: jendela 5 jam, jendela mingguan untuk semua model, dan jendela mingguan khusus Fable; `-` berarti akun tidak memiliki jendela tersebut. Persentase berubah kuning pada 80% dan merah pada 100%. Jika pencarian gagal, nilai dari cache ditampilkan redup. Jendela yang dilaporkan penuh oleh Claude Code menampilkan 100% sampai di-reset. Token akses yang kedaluwarsa menampilkan `⚠ token expired` yang redup (Claude Code memperbaruinya pada saat dijalankan berikutnya, dan `r` memperbaruinya sekarang untuk akun yang tidak sedang berjalan, seperti yang dilakukan `ccam usage --refresh`), sedangkan `⚠ login expired` berarti akun itu memerlukan `ccam login`.
+Bingkai pertama digambar hanya dari `config.toml`, jauh di bawah 100 ms; penggunaan terisi begitu setiap akun menjawab. Setiap batas punya kolomnya sendiri: jendela 5 jam, jendela mingguan untuk semua model, dan jendela mingguan khusus Fable; `-` berarti akun tidak memiliki jendela tersebut. Kolom menampilkan persentase yang sudah terpakai dan sisa waktu sampai jendela itu di-reset (`1h 40m`, `3d 6h`), yang terus menghitung mundur selama dasbor terbuka; terminal yang lebarnya sekitar 94 kolom atau lebih juga menggambar bilah di depan persentase. Persentase berubah kuning pada 80% dan merah pada 100%. `↻` menandai akun yang masih menyimpan reset batas yang belum dipakai, yang bisa digunakan oleh `/limit-reset` di Claude Code. ccam mengetahuinya hanya dari apa yang disimpan Claude Code di folder akun itu saat terakhir kali berjalan di sana dalam tiga hari terakhir, jadi akun tanpa tanda itu mungkin tetap menyimpannya, dan dasbor tidak bisa tahu berapa jumlahnya. Jika pencarian gagal, nilai dari cache ditampilkan redup. Jendela yang dilaporkan penuh oleh Claude Code menampilkan 100% sampai di-reset. Token akses yang kedaluwarsa menampilkan `⚠ token expired` yang redup (Claude Code memperbaruinya pada saat dijalankan berikutnya, dan `r` memperbaruinya sekarang untuk akun yang tidak sedang berjalan, seperti yang dilakukan `ccam usage --refresh`), sedangkan `⚠ login expired` berarti akun itu memerlukan `ccam login`.
 
 ## Tab
 
 | Tab | Yang ditampilkan | Tombol |
 | --- | --- | --- |
-| Accounts | nomor, nama, email, bilah 5 jam, mingguan, dan Fable, pemakaian terakhir, grup; `✔` akun default, `▸` akun folder ini, `•` sedang berjalan (juga Claude Code yang dijalankan tanpa ccam: `claude` biasa, IDE, sesi latar belakang, dan daemon-nya) | lihat di bawah |
+| Accounts | nomor, nama, email, penggunaan 5 jam, mingguan, dan Fable beserta sisa waktu sampai masing-masing di-reset, pemakaian terakhir, grup; `✔` akun default, `▸` akun folder ini, `•` sedang berjalan (juga Claude Code yang dijalankan tanpa ccam: `claude` biasa, IDE, sesi latar belakang, dan daemon-nya), `↻` menyimpan reset batas yang belum dipakai | lihat di bawah |
 | Agents | apa yang dicantumkan [`ccam agents`](/features/agents): sesi latar belakang dan sesi terbuka dari setiap akun, beserta status, folder, dan waktu mulainya (lihat di bawah) | `enter` menyambung (seperti `ccam attach`), `x` menghentikan, `r` memuat ulang |
 | Groups | setiap grup, apa yang dibagikannya dan akun-akunnya, serta akun yang tidak ada di grup mana pun | `enter` sunting, `n` baru, `e` ganti nama, `x` hapus |
 | Folders | aturan [`ccam folder`](/features/folder) dan aturan yang berlaku di sini, bahkan saat Anda mencapai folder itu melalui tautan simbolik (aturan baru disimpan dengan tautan yang sudah di-resolve) | `n` pakai sebuah akun di sini, `enter` ubah, `x` hapus |
@@ -57,7 +57,7 @@ Bingkai pertama digambar hanya dari `config.toml`, jauh di bawah 100 ms; penggun
 | `↑`/`↓`, `k`/`j` | Berpindah |
 | `n` | Menjalankan akun yang akan dipilih [`ccam next --auto`](/features/next) |
 | `o` | Menjalankan dengan opsi: `--continue`, `--resume`, argumen lain, atau uji coba (dry run) |
-| `u` | Rincian penggunaan: jendela 5 jam, mingguan, dan per model beserta waktu reset-nya dan asal angka-angkanya |
+| `u` | Rincian penggunaan: jendela 5 jam, mingguan, dan per model beserta waktu reset-nya, apakah akun menyimpan reset batas yang belum dipakai, dan asal angka-angkanya |
 | `a` | Menambahkan akun (wizard di bawah) |
 | `l` | Login ulang |
 | `s` | Memilih grup akun tersebut |

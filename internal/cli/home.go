@@ -51,7 +51,22 @@ func runHome(e *env) error {
 		renew := newRenewals()
 		dash := tui.NewDashboard(backend{e: &quiet, renew: renew}, cfg, cwd, version())
 		dash.KeepInstalled(installed)
-		final, err := tea.NewProgram(dash, tea.WithInput(os.Stdin), tea.WithOutput(os.Stdout)).Run()
+		prog := tea.NewProgram(dash, tea.WithInput(os.Stdin), tea.WithOutput(os.Stdout))
+		// The times to a reset count down while the dashboard is left open.
+		clock, closed := time.NewTicker(time.Minute), make(chan struct{})
+		go func() {
+			for {
+				select {
+				case <-clock.C:
+					prog.Send(tui.Redraw{})
+				case <-closed:
+					return
+				}
+			}
+		}()
+		final, err := prog.Run()
+		clock.Stop()
+		close(closed)
 		renew.end()
 		if err != nil {
 			return err
@@ -174,7 +189,9 @@ func (b backend) Usage(ctx context.Context, name string, fresh bool) usage.Repor
 					defer b.renew.wg.Done()
 					ctx, opt.Refresh = b.renew.ctx, true
 				}
-				return b.e.fetcher().Fetch(ctx, a, opt)
+				r := b.e.fetcher().Fetch(ctx, a, opt)
+				r.HoldsReset = !a.API && profile.HoldsReset(a.Dir, time.Now())
+				return r
 			}
 		}
 		err = fmt.Errorf("no account %q", name)

@@ -177,6 +177,10 @@ type (
 	updatedMsg struct{ err error }
 )
 
+// Redraw only draws the dashboard again. The program sends it each minute,
+// so the times to a reset count down while the dashboard is left open.
+type Redraw struct{}
+
 // notice is the line above the keys: a result or an error, cleared by the
 // next key.
 type notice struct {
@@ -391,6 +395,8 @@ func (d *Dashboard) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if d.loading() {
 			return d, d.tick()
 		}
+		return d, nil
+	case Redraw:
 		return d, nil
 	case usageMsg:
 		r := msg.report
@@ -610,9 +616,14 @@ func (d *Dashboard) render() string {
 	var spare []int // lines of top a short screen leaves out
 	head := " " + t.bold().Render("ccam") + t.dim().Render(" "+d.version+symDot+plural(len(d.cfg.Profiles), "account")+symDot+plural(len(d.cfg.Groups), "group"))
 	if d.tab == tabAccounts {
-		legend := t.dim().Render(t.success().Render(symOK)+" default"+symDot+symHere+" this folder"+symDot+symRunning+" running") + " "
-		if gap := w - ansi.StringWidth(head) - ansi.StringWidth(legend); gap > 1 {
-			head += strings.Repeat(" ", gap) + legend
+		legend := t.success().Render(symOK) + " default" + symDot + symHere + " this folder" + symDot + symRunning + " running"
+		// The mark of an unused limit reset is explained where there is room.
+		for _, l := range []string{legend + symDot + symReset + " limit reset", legend} {
+			l = t.dim().Render(l) + " "
+			if gap := w - ansi.StringWidth(head) - ansi.StringWidth(l); gap > 1 {
+				head += strings.Repeat(" ", gap) + l
+				break
+			}
 		}
 	}
 	top = append(top, head)

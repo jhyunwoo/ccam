@@ -369,6 +369,28 @@ Claude Code's own lookup did not succeed (its status was not `ok` or `seeded`); 
 key, Bedrock, Vertex). The usage endpoint's `extra_usage.is_enabled` says whether usage credits are on
 (`Limits.Credits` in ccam).
 
+### Limit resets (2.1.322)
+
+Claude Code's `/limit-reset` uses a "reset" an account was granted, which refills its limits. In the binary the
+program is `cedar_ember`. Claude Code reads it with `GET /api/oauth/usage?cedar_ember=1&skip_spend=1`: the
+response then has `cedar_ember: {eligible, ineligible_reason, at_limit, grants: [{id, label, resets_total,
+resets_left, starts_at, ends_at, paused, usable_now, use_requires_limit, type (session|weekly|full), …}],
+next_grant_id, weekly_resets_at, cooldown_until}`, and it claims one with
+`POST /api/organizations/<org>/reset_rate_limits` (`{program, grant_id, request_id}`).
+
+Tried with a real login (2026-11-11, `User-Agent: ccam`): the plain request has `cedar_ember: null`; with
+`?cedar_ember=1` the block is `{"eligible": false, "ineligible_reason": "surface", "grants": []}` for an account
+Claude Code says holds a reset, so the server tells the grants only to Claude Code itself. `skip_spend=1` also
+drops `extra_usage` and `spend` (which `Limits.Credits` needs). ccam therefore sends neither parameter.
+
+What ccam reads instead is Claude Code's saved check, top-level in `.claude.json`:
+`unusedLimitResetStatusCache: {accountUuid, holdsUnusedReset, checkedAt, validUntil}` (Unix milliseconds).
+Claude Code writes it after its own read (`validUntil` is the earlier of three days after the check and the last
+`ends_at` of a grant with resets left that is not paused), drops it on logout, and believes it only when
+`accountUuid` is `oauthAccount.accountUuid`, `checkedAt` is not in the future and less than three days old, and
+now is before `validUntil`. `profile.HoldsReset` follows the same rules; the dashboard marks such an account `↻`.
+It is yes or unknown: no count, and nothing for an account Claude Code has not run on in three days.
+
 ### Rows after a limit (2.1.310)
 
 Read from the 2.1.310 binary, 2026-10-24; the key names match rows of real conversations on this machine (read for

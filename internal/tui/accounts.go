@@ -19,8 +19,8 @@ import (
 
 const (
 	cellBarW = 6
-	cellW    = cellBarW + 5 // "██████ 100%"
-	usageW   = 3*cellW + 4  // 5-hour, weekly and Fable
+	timeW    = 7         // "12h 30m"
+	cellW    = 5 + timeW // "100% 12h 30m"; a wide terminal adds the bar: "██████ 100% 12h 30m"
 	lastW    = 4
 )
 
@@ -70,15 +70,23 @@ func (d *Dashboard) accountsView(w int) ([]string, int) {
 		slotW = max(slotW, len(strconv.Itoa(p.Slot))+1)
 	}
 	nameW, emailW = min(nameW, 20), min(emailW, 24)
-	fixed := 1 + 2 + slotW + 1 + nameW + 4 + usageW + 2
 	const groupsMin = 12
+	// 5-hour, weekly and Fable. Each cell always says when it resets; its
+	// bar needs a wide terminal.
+	cw := cellBarW + 1 + cellW
+	bars := 1+2+slotW+1+nameW+5+3*cw+4+2+groupsMin <= w
+	if !bars {
+		cw = cellW
+	}
+	usageW := 3*cw + 4
+	fixed := 1 + 2 + slotW + 1 + nameW + 5 + usageW + 2
 	showEmail := fixed+emailW+2+lastW+2+groupsMin <= w
 	showLast := fixed+lastW+2+groupsMin <= w || showEmail
-	head := " " + strings.Repeat(" ", 2+slotW-1) + "# " + padRight("Account", nameW) + "     "
+	head := " " + strings.Repeat(" ", 2+slotW-1) + "# " + padRight("Account", nameW) + "      "
 	if showEmail {
 		head += padRight("Email", emailW) + "  "
 	}
-	head += padRight("5-hour", cellW) + "  " + padRight("Weekly", cellW) + "  " + padRight("Fable", cellW) + "  "
+	head += padRight("5-hour", cw) + "  " + padRight("Weekly", cw) + "  " + padRight("Fable", cw) + "  "
 	if showLast {
 		head += padRight("Last", lastW) + "  "
 	}
@@ -98,7 +106,8 @@ func (d *Dashboard) accountsView(w int) ([]string, int) {
 		for _, m := range []struct {
 			on  bool
 			sym string
-		}{{def != nil && def.Name == p.Name, t.success().Render(symOK)}, {here != nil && here.Account == p.Name, symHere}, {d.info[p.Name].running, t.accent().Render(symRunning)}} {
+		}{{def != nil && def.Name == p.Name, t.success().Render(symOK)}, {here != nil && here.Account == p.Name, symHere}, {d.info[p.Name].running, t.accent().Render(symRunning)},
+			{d.usage[p.Name] != nil && d.usage[p.Name].HoldsReset, t.accent().Render(symReset)}} {
 			if m.on {
 				marks += m.sym
 			} else {
@@ -109,7 +118,7 @@ func (d *Dashboard) accountsView(w int) ([]string, int) {
 		if showEmail {
 			line += t.dim().Render(padRight(ansi.Truncate(emailOf(p), emailW, symMore), emailW)) + "  "
 		}
-		line += d.usageCell(p) + "  "
+		line += d.usageCell(p, bars, now) + "  "
 		if showLast {
 			line += t.dim().Render(padRight(shortAgo(d.info[p.Name].last, now), lastW)) + "  "
 		}
@@ -127,9 +136,15 @@ func (d *Dashboard) accountsView(w int) ([]string, int) {
 	return out, d.cursor[tabAccounts] + 1
 }
 
-// usageCell is the 5-hour, weekly and Fable columns, usageW wide.
-func (d *Dashboard) usageCell(p *config.Profile) string {
+// usageCell is the 5-hour, weekly and Fable columns: for each its bar (with
+// bars), the percent used and the time until it resets.
+func (d *Dashboard) usageCell(p *config.Profile, bars bool, now time.Time) string {
 	t := d.theme
+	cw := cellW
+	if bars {
+		cw += cellBarW + 1
+	}
+	usageW := 3*cw + 4
 	r, ok := d.usage[p.Name]
 	switch {
 	case !ok:
@@ -154,13 +169,22 @@ func (d *Dashboard) usageCell(p *config.Profile) string {
 	stale := r.Status != usage.StatusOK
 	cell := func(w usage.Window) string {
 		if !w.Known {
-			return padRight(t.dim().Render("-"), cellW)
+			return padRight(t.dim().Render("-"), cw)
 		}
-		pct := fmt.Sprintf("%3.0f%%", w.Percent)
-		if stale {
-			return t.dim().Render(plainBar(w.Percent, cellBarW) + " " + pct)
+		pct, left := fmt.Sprintf("%3.0f%%", w.Percent), ""
+		if !w.ResetsAt.IsZero() {
+			left = usage.Duration(w.ResetsAt.Sub(now))
 		}
-		return t.bar(w.Percent, cellBarW) + " " + t.percentStyle(w.Percent).Render(pct)
+		left = padRight(" "+left, 1+timeW)
+		switch {
+		case stale && bars:
+			return t.dim().Render(plainBar(w.Percent, cellBarW) + " " + pct + left)
+		case stale:
+			return t.dim().Render(pct + left)
+		case bars:
+			return t.bar(w.Percent, cellBarW) + " " + t.percentStyle(w.Percent).Render(pct) + t.dim().Render(left)
+		}
+		return t.percentStyle(w.Percent).Render(pct) + t.dim().Render(left)
 	}
 	l := r.Limits
 	return cell(l.FiveHour) + "  " + cell(l.Weekly) + "  " + cell(modelWindow(l, "fable"))
@@ -439,6 +463,9 @@ func (d *Dashboard) usageDetail(p *config.Profile) dialog {
 	info := "source: " + cmp.Or(src, r.Source)
 	if !r.At.IsZero() {
 		info += symDot + shortAgo(r.At, now) + " ago"
+	}
+	if r.HoldsReset {
+		lines = append(lines, "", t.accent().Render(symReset)+" Holds an unused limit reset"+t.dim().Render(symDot+"/limit-reset in Claude Code uses it"))
 	}
 	lines = append(lines, "", t.dim().Render(info))
 	if plan := p.Login.PlanName(); plan != "" {

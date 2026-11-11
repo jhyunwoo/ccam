@@ -1,24 +1,24 @@
 ---
 title: Bảng điều khiển
 description: "ccam trên terminal mở bảng điều khiển toàn màn hình gồm tài khoản, nhóm, quy tắc thư mục, tiện ích mở rộng và kiểm tra; mọi thay đổi đều hiện kế hoạch trước."
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: acb0270d360c
+sourceHash: "96e86408a237"
 ---
 
 `ccam` không kèm đối số sẽ mở một bảng điều khiển toàn màn hình khi đầu vào và đầu ra chuẩn là terminal; nếu không, nó in ra `ccam list`. Bảng điều khiển hiển thị mọi tài khoản cùng mức sử dụng và các nhóm của chúng, và làm được những gì các lệnh làm: khởi động, thêm, đăng nhập, thay đổi nhóm, đặt quy tắc thư mục, liệt kê các phiên nền, kiểm tra và sửa chữa. Khởi động một tài khoản, hoặc gắn vào một phiên nền, sẽ đóng bảng điều khiển; thêm tài khoản hoặc đăng nhập thì tạm nhường terminal trong chốc lát, rồi quay lại bảng điều khiển.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ Mỗi lần mở, bảng điều khiển hỏi GitHub ở chế độ nền xem 
 
 `U` hỏi trước, rồi cập nhật theo cách của [`ccam update`](/features/update): bản phát hành được kiểm tra với checksum SHA-256 của nó và thay thế ccam trong một bước. Bảng điều khiển bạn đang dùng vẫn là phiên bản cũ, nên hãy thoát rồi chạy lại `ccam`. Khi không thể cập nhật tại đây, ví dụ với một bản ccam được cài từ gói `.deb`, bảng điều khiển hiển thị cùng lời khuyên như `ccam update` và vẫn giữ lời đề nghị.
 
-Khung hình đầu tiên được vẽ chỉ từ `config.toml`, trong chưa đến 100 ms; mức sử dụng được điền vào khi từng tài khoản phản hồi. Mỗi giới hạn có thanh riêng: khoảng 5 giờ, khoảng hàng tuần cho mọi mô hình, và khoảng hàng tuần riêng của Fable; `-` nghĩa là tài khoản không có khoảng đó. Một tỷ lệ phần trăm chuyển sang màu vàng ở 80% và màu đỏ ở 100%. Nếu một lần tra cứu thất bại, các giá trị từ bộ nhớ đệm được hiển thị mờ. Một khoảng mà Claude Code báo là đã đầy hiển thị 100% cho đến khi được đặt lại. Một access token đã hết hạn hiển thị `⚠ token expired` mờ (Claude Code gia hạn nó ở lần khởi động tiếp theo, và `r` gia hạn nó ngay cho một tài khoản không đang chạy, như `ccam usage --refresh`), còn `⚠ login expired` nghĩa là tài khoản cần `ccam login`.
+Khung hình đầu tiên được vẽ chỉ từ `config.toml`, trong chưa đến 100 ms; mức sử dụng được điền vào khi từng tài khoản phản hồi. Mỗi giới hạn có cột riêng: khoảng 5 giờ, khoảng hàng tuần cho mọi mô hình, và khoảng hàng tuần riêng của Fable; `-` nghĩa là tài khoản không có khoảng đó. Mỗi cột hiển thị tỷ lệ phần trăm đã dùng và thời gian còn lại đến khi khoảng đó được đặt lại (`1h 40m`, `3d 6h`), đếm ngược trong lúc bảng điều khiển còn mở; terminal rộng khoảng 94 cột trở lên còn vẽ thêm một thanh trước tỷ lệ phần trăm. Một tỷ lệ phần trăm chuyển sang màu vàng ở 80% và màu đỏ ở 100%. `↻` đánh dấu tài khoản còn một lượt đặt lại giới hạn chưa dùng, có thể dùng bằng `/limit-reset` của Claude Code. ccam chỉ biết điều này từ những gì Claude Code đã lưu trong thư mục của tài khoản vào lần cuối nó chạy ở đó trong vòng ba ngày, nên một tài khoản không có dấu này vẫn có thể còn lượt đặt lại, và bảng điều khiển không biết được còn bao nhiêu lượt. Nếu một lần tra cứu thất bại, các giá trị từ bộ nhớ đệm được hiển thị mờ. Một khoảng mà Claude Code báo là đã đầy hiển thị 100% cho đến khi được đặt lại. Một access token đã hết hạn hiển thị `⚠ token expired` mờ (Claude Code gia hạn nó ở lần khởi động tiếp theo, và `r` gia hạn nó ngay cho một tài khoản không đang chạy, như `ccam usage --refresh`), còn `⚠ login expired` nghĩa là tài khoản cần `ccam login`.
 
 ## Các thẻ
 
 | Thẻ | Nội dung hiển thị | Phím |
 | --- | --- | --- |
-| Accounts | số, tên, email, thanh 5 giờ, hàng tuần và Fable, lần dùng gần nhất, nhóm; `✔` tài khoản mặc định, `▸` tài khoản của thư mục này, `•` đang chạy (kể cả Claude Code được khởi động không qua ccam: `claude` thông thường, một IDE, các phiên nền và daemon của chúng) | bên dưới |
+| Accounts | số, tên, email, mức sử dụng 5 giờ, hàng tuần và Fable cùng thời gian đến mỗi lần đặt lại, lần dùng gần nhất, nhóm; `✔` tài khoản mặc định, `▸` tài khoản của thư mục này, `•` đang chạy (kể cả Claude Code được khởi động không qua ccam: `claude` thông thường, một IDE, các phiên nền và daemon của chúng), `↻` còn một lượt đặt lại giới hạn chưa dùng | bên dưới |
 | Agents | những gì [`ccam agents`](/features/agents) liệt kê: các phiên nền và các phiên đang mở của mọi tài khoản, cùng trạng thái, thư mục và thời điểm bắt đầu của chúng (bên dưới) | `enter` gắn vào (như `ccam attach`), `x` dừng, `r` tải lại |
 | Groups | từng nhóm, những gì nhóm dùng chung và các tài khoản của nhóm, cùng các tài khoản không thuộc nhóm nào | `enter` sửa, `n` tạo mới, `e` đổi tên, `x` xóa |
 | Folders | các quy tắc [`ccam folder`](/features/folder) và quy tắc áp dụng ở đây, kể cả khi bạn đến thư mục qua một liên kết tượng trưng (quy tắc mới được lưu với các liên kết đã được phân giải) | `n` dùng một tài khoản ở đây, `enter` thay đổi, `x` xóa |
@@ -57,7 +57,7 @@ Khung hình đầu tiên được vẽ chỉ từ `config.toml`, trong chưa đ�
 | `↑`/`↓`, `k`/`j` | Di chuyển |
 | `n` | Khởi động tài khoản mà [`ccam next --auto`](/features/next) sẽ chọn |
 | `o` | Khởi động với tùy chọn: `--continue`, `--resume`, các đối số khác, hoặc chạy thử |
-| `u` | Chi tiết mức sử dụng: khoảng 5 giờ, hàng tuần và theo mô hình, cùng thời điểm đặt lại và nguồn của các con số |
+| `u` | Chi tiết mức sử dụng: khoảng 5 giờ, hàng tuần và theo mô hình, cùng thời điểm đặt lại, tài khoản có còn lượt đặt lại giới hạn chưa dùng hay không, và nguồn của các con số |
 | `a` | Thêm một tài khoản (trình hướng dẫn bên dưới) |
 | `l` | Đăng nhập lại |
 | `s` | Chọn các nhóm của tài khoản |

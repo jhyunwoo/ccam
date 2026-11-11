@@ -1,24 +1,24 @@
 ---
 title: Dashibodi
 description: ccam kwenye terminal hufungua dashibodi ya skrini nzima ya akaunti, vikundi, kanuni za folda, viendelezi na ukaguzi; kila badiliko huonyesha mpango wake kwanza.
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: "acb0270d360c"
+sourceHash: "96e86408a237"
 ---
 
 `ccam` bila hoja hufungua dashibodi ya skrini nzima wakati ingizo na matokeo ya kawaida ni terminal; vinginevyo huchapisha `ccam list`. Dashibodi huonyesha kila akaunti pamoja na matumizi yake na vikundi vyake, na hufanya kile ambacho amri hufanya: kuanzisha, kuongeza, kuingia, kubadilisha vikundi, kuweka kanuni za folda, kuorodhesha vipindi vya chinichini, kukagua na kurekebisha. Kuanzisha, au kuunganishwa na kipindi cha chinichini, huifunga; kuongeza akaunti au kuingia hukabidhi terminal kwa muda mfupi, kisha hurudi kwenye dashibodi.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ Kila inapofunguliwa, dashibodi huuliza GitHub chinichini kama kuna toleo jipya z
 
 `U` huuliza kwanza, kisha husasisha kama [`ccam update`](/features/update) inavyofanya: toleo hukaguliwa dhidi ya checksum zake za SHA-256 na huchukua nafasi ya ccam kwa hatua moja. Dashibodi uliyomo bado ni toleo la zamani, kwa hiyo toka kisha uanzishe `ccam` tena. Sasisho lisipoweza kufanywa hapa, kwa mfano kwa nakala ya ccam iliyosakinishwa kutoka kifurushi cha `.deb`, dashibodi huonyesha ushauri ule ule kama `ccam update` na huendelea kulitoa toleo hilo.
 
-Fremu ya kwanza huchorwa kutoka `config.toml` pekee, kwa muda mfupi sana chini ya 100 ms; matumizi hujazwa kadiri kila akaunti inavyojibu. Kila kikomo kina upau wake: dirisha la saa 5, dirisha la wiki kwa model zote, na dirisha la wiki la Fable lenyewe; `-` inamaanisha akaunti haina dirisha hilo. Asilimia hugeuka manjano kwenye 80% na nyekundu kwenye 100%. Utafutaji ukishindwa, thamani kutoka kwenye akiba (cache) huonyeshwa kwa rangi hafifu. Dirisha ambalo Claude Code iliripoti kuwa limejaa huonyesha 100% hadi liwekwe upya. Tokeni ya ufikiaji iliyoisha muda huonyesha `⚠ token expired` hafifu (Claude Code huifanya upya katika uanzishaji unaofuata, na `r` huifanya upya sasa hivi kwa akaunti isiyoendeshwa, kama `ccam usage --refresh` inavyofanya), ilhali `⚠ login expired` inamaanisha akaunti inahitaji `ccam login`.
+Fremu ya kwanza huchorwa kutoka `config.toml` pekee, kwa muda mfupi sana chini ya 100 ms; matumizi hujazwa kadiri kila akaunti inavyojibu. Kila kikomo kina safu wima yake: dirisha la saa 5, dirisha la wiki kwa model zote, na dirisha la wiki la Fable lenyewe; `-` inamaanisha akaunti haina dirisha hilo. Safu wima huonyesha asilimia iliyotumika na muda uliobaki hadi dirisha liwekwe upya (`1h 40m`, `3d 6h`), na muda huo hupungua wakati dashibodi inabaki wazi; terminal yenye upana wa takriban safu wima 94 au zaidi pia huchora upau mbele ya asilimia. Asilimia hugeuka manjano kwenye 80% na nyekundu kwenye 100%. `↻` huonyesha akaunti yenye uwekaji upya wa kikomo ambao haujatumika, ambao `/limit-reset` ya Claude Code inaweza kuutumia. ccam hujua hili tu kutokana na kile Claude Code ilichohifadhi kwenye folda ya akaunti mara ya mwisho ilipoendeshwa humo ndani ya siku tatu, kwa hiyo akaunti isiyo na alama hiyo bado inaweza kuwa nao, na dashibodi haiwezi kujua ni ngapi. Utafutaji ukishindwa, thamani kutoka kwenye akiba (cache) huonyeshwa kwa rangi hafifu. Dirisha ambalo Claude Code iliripoti kuwa limejaa huonyesha 100% hadi liwekwe upya. Tokeni ya ufikiaji iliyoisha muda huonyesha `⚠ token expired` hafifu (Claude Code huifanya upya katika uanzishaji unaofuata, na `r` huifanya upya sasa hivi kwa akaunti isiyoendeshwa, kama `ccam usage --refresh` inavyofanya), ilhali `⚠ login expired` inamaanisha akaunti inahitaji `ccam login`.
 
 ## Vichupo
 
 | Kichupo | Kinachoonyesha | Vitufe |
 | --- | --- | --- |
-| Accounts | namba, jina, barua pepe, pau za saa 5, za wiki na za Fable, matumizi ya mwisho, vikundi; `✔` akaunti chaguo-msingi, `▸` akaunti ya folda hii, `•` inaendeshwa (pia Claude Code iliyoanzishwa bila ccam: `claude` ya kawaida, IDE, vipindi vya chinichini na daemon yao) | hapa chini |
+| Accounts | namba, jina, barua pepe, matumizi ya saa 5, ya wiki na ya Fable pamoja na muda hadi kila kuwekwa upya, matumizi ya mwisho, vikundi; `✔` akaunti chaguo-msingi, `▸` akaunti ya folda hii, `•` inaendeshwa (pia Claude Code iliyoanzishwa bila ccam: `claude` ya kawaida, IDE, vipindi vya chinichini na daemon yao), `↻` ina uwekaji upya wa kikomo ambao haujatumika | hapa chini |
 | Agents | kile ambacho [`ccam agents`](/features/agents) huorodhesha: vipindi vya chinichini na vipindi vilivyo wazi vya kila akaunti, pamoja na hali yake, folda na muda wa kuanza (hapa chini) | `enter` unganisha (kama `ccam attach`), `x` simamisha, `r` pakia upya |
 | Groups | kila kikundi, kile kinachoshiriki na akaunti zake, pamoja na akaunti zisizo katika kikundi chochote | `enter` hariri, `n` kipya, `e` badilisha jina, `x` ondoa |
 | Folders | kanuni za [`ccam folder`](/features/folder) na ile inayotumika hapa, hata ulipofika kwenye folda kupitia symbolic link (kanuni mpya huhifadhiwa kwa njia halisi, viungo vikiwa vimefuatwa) | `n` tumia akaunti hapa, `enter` badilisha, `x` ondoa |
@@ -57,7 +57,7 @@ Fremu ya kwanza huchorwa kutoka `config.toml` pekee, kwa muda mfupi sana chini y
 | `↑`/`↓`, `k`/`j` | Sogea |
 | `n` | Anzisha akaunti ambayo [`ccam next --auto`](/features/next) ingechagua |
 | `o` | Anzisha kwa chaguo: `--continue`, `--resume`, hoja nyingine, au jaribio (dry run) |
-| `u` | Maelezo ya matumizi: madirisha ya saa 5, ya wiki na ya model pamoja na nyakati zake za kuwekwa upya na mahali namba zinapotoka |
+| `u` | Maelezo ya matumizi: madirisha ya saa 5, ya wiki na ya model pamoja na nyakati zake za kuwekwa upya, kama akaunti ina uwekaji upya wa kikomo ambao haujatumika, na mahali namba zinapotoka |
 | `a` | Ongeza akaunti (mchawi ulio hapa chini) |
 | `l` | Ingia tena |
 | `s` | Chagua vikundi vya akaunti |

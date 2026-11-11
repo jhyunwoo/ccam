@@ -1,24 +1,24 @@
 ---
 title: 대시보드
 description: 터미널에서 ccam을 실행하면 계정, 그룹, 폴더 규칙, 확장, 점검을 보여 주는 전체 화면 대시보드가 열리며, 모든 변경은 계획을 먼저 보여 줍니다.
-updated: 2026-11-05
+updated: 2026-11-11
 order: 15
 translation: machine
-sourceHash: "acb0270d360c"
+sourceHash: "96e86408a237"
 ---
 
 표준 입력과 출력이 터미널이면 인자 없는 `ccam`은 전체 화면 대시보드를 엽니다. 터미널이 아니면 `ccam list`를 출력합니다. 대시보드는 모든 계정을 사용량, 그룹과 함께 보여 주며, 명령으로 하는 일을 그대로 할 수 있습니다. 실행, 추가, 로그인, 그룹 변경, 폴더 규칙 지정, 백그라운드 세션 목록 보기, 점검과 복구가 모두 됩니다. 실행하거나 백그라운드 세션에 연결하면 대시보드가 닫히고, 계정을 추가하거나 로그인할 때는 잠시 터미널을 넘겨준 뒤 대시보드로 돌아옵니다.
 
 ```console
- ccam v0.10.0 · 3 accounts · 2 groups     ✔ default · ▸ this folder · • running
+ ccam v0.14.0 · 3 accounts · 2 groups      ✔ default · ▸ this folder · • running
 
   Accounts   Agents   Groups   Folders   Extensions   Health    auto_switch off
  Your Claude accounts and their usage limits; enter launches the selected one.
 
-    # Account      5-hour       Weekly       Fable        Last  Groups
-   1. personal ✔   ████▍░  72%  ██▌░░░  41%  █████▎  88%  -     default
- ❯ 2. work      ▸• █▌░░░░  25%  ██████ 100%  ▋░░░░░  10%  -     default team
-   3. side         ✘ not logged in                        -     no group
+    # Account       5-hour        Weekly        Fable         Last  Groups
+   1. personal ✔  ↻  72% 1h 40m    41% 3d 6h     88% 3d 6h    -     default
+ ❯ 2. work      ▸•   25% 4h 12m   100% 22m       10% 5d 2h    -     default team
+   3. side          ✘ not logged in                           -     no group
 
  enter to launch · n for most room · r to refresh · a to add · ? for shortcuts
 ```
@@ -33,13 +33,13 @@ sourceHash: "acb0270d360c"
 
 `U`는 먼저 확인을 받은 뒤 [`ccam update`](/features/update)와 같은 방식으로 업데이트합니다. 릴리스를 SHA-256 체크섬과 대조한 뒤 한 번에 ccam을 교체합니다. 지금 보고 있는 대시보드는 여전히 이전 버전이므로, 종료한 뒤 `ccam`을 다시 실행하세요. `.deb` 패키지로 설치한 ccam 사본처럼 여기서 업데이트할 수 없을 때는 `ccam update`와 같은 안내를 보여 주고 제안은 그대로 남겨 둡니다.
 
-첫 화면은 `config.toml`만 읽어 100 ms보다 훨씬 짧은 시간에 그리며, 사용량은 계정마다 응답이 오는 대로 채워집니다. 한도마다 막대가 따로 있습니다. 5시간 구간, 모든 모델에 대한 주간 구간, Fable 전용 주간 구간이며, `-`는 그 계정에 해당 구간이 없다는 뜻입니다. 비율은 80%에서 노란색, 100%에서 빨간색으로 바뀝니다. 조회에 실패하면 캐시된 값을 흐리게 표시합니다. Claude Code가 가득 찼다고 알린 구간은 초기화될 때까지 100%로 표시됩니다. 액세스 토큰이 만료되면 흐린 `⚠ token expired`가 표시되고(다음에 시작할 때 Claude Code가 갱신하며, 실행 중이 아닌 계정은 `ccam usage --refresh`처럼 `r`로 지금 갱신할 수 있습니다), `⚠ login expired`는 그 계정에 `ccam login`이 필요하다는 뜻입니다.
+첫 화면은 `config.toml`만 읽어 100 ms보다 훨씬 짧은 시간에 그리며, 사용량은 계정마다 응답이 오는 대로 채워집니다. 한도마다 열이 따로 있습니다. 5시간 구간, 모든 모델에 대한 주간 구간, Fable 전용 주간 구간이며, `-`는 그 계정에 해당 구간이 없다는 뜻입니다. 각 열은 사용한 비율과 구간이 초기화되기까지 남은 시간(`1h 40m`, `3d 6h`)을 보여 주며, 대시보드를 열어 두는 동안 시간이 줄어듭니다. 터미널 너비가 약 94열 이상이면 비율 앞에 막대도 그립니다. 비율은 80%에서 노란색, 100%에서 빨간색으로 바뀝니다. `↻`는 쓰지 않은 한도 초기화가 남아 있는 계정을 표시하며, 이는 Claude Code의 `/limit-reset`으로 쓸 수 있습니다. ccam은 최근 3일 안에 Claude Code가 그 계정 폴더에서 마지막으로 실행될 때 저장한 내용으로만 이를 알 수 있으므로, 표시가 없는 계정에도 남아 있을 수 있고 대시보드는 몇 개가 남았는지 알 수 없습니다. 조회에 실패하면 캐시된 값을 흐리게 표시합니다. Claude Code가 가득 찼다고 알린 구간은 초기화될 때까지 100%로 표시됩니다. 액세스 토큰이 만료되면 흐린 `⚠ token expired`가 표시되고(다음에 시작할 때 Claude Code가 갱신하며, 실행 중이 아닌 계정은 `ccam usage --refresh`처럼 `r`로 지금 갱신할 수 있습니다), `⚠ login expired`는 그 계정에 `ccam login`이 필요하다는 뜻입니다.
 
 ## 탭
 
 | 탭 | 보여 주는 내용 | 키 |
 | --- | --- | --- |
-| Accounts | 번호, 이름, 이메일, 5시간·주간·Fable 막대, 마지막 사용, 그룹. `✔`는 기본 계정, `▸`는 이 폴더의 계정, `•`는 실행 중(ccam 없이 시작한 Claude Code도 포함: 일반 `claude`, IDE, 백그라운드 세션과 그 데몬) | 아래 참고 |
+| Accounts | 번호, 이름, 이메일, 5시간·주간·Fable 사용량과 각각 초기화까지 남은 시간, 마지막 사용, 그룹. `✔`는 기본 계정, `▸`는 이 폴더의 계정, `•`는 실행 중(ccam 없이 시작한 Claude Code도 포함: 일반 `claude`, IDE, 백그라운드 세션과 그 데몬), `↻`는 쓰지 않은 한도 초기화가 남아 있음 | 아래 참고 |
 | Agents | [`ccam agents`](/features/agents)가 보여 주는 내용: 모든 계정의 백그라운드 세션과 열려 있는 세션, 그리고 각각의 상태, 폴더, 시작 시각(아래 참고) | `enter` 연결(`ccam attach`처럼), `x` 멈추기, `r` 다시 불러오기 |
 | Groups | 각 그룹, 그룹이 공유하는 항목과 계정, 어느 그룹에도 속하지 않은 계정 | `enter` 편집, `n` 새로 만들기, `e` 이름 바꾸기, `x` 삭제 |
 | Folders | [`ccam folder`](/features/folder) 규칙과 여기에 적용되는 규칙. 심볼릭 링크를 거쳐 폴더에 들어온 경우도 포함(새 규칙은 링크를 푼 경로로 저장) | `n` 여기서 쓸 계정 지정, `enter` 변경, `x` 삭제 |
@@ -57,7 +57,7 @@ sourceHash: "acb0270d360c"
 | `↑`/`↓`, `k`/`j` | 이동 |
 | `n` | [`ccam next --auto`](/features/next)가 고를 계정으로 시작 |
 | `o` | 옵션을 주고 시작: `--continue`, `--resume`, 그 밖의 인자, 또는 시험 실행 |
-| `u` | 사용량 자세히 보기: 5시간, 주간, 모델별 구간과 초기화 시각, 수치의 출처 |
+| `u` | 사용량 자세히 보기: 5시간, 주간, 모델별 구간과 초기화 시각, 쓰지 않은 한도 초기화가 남아 있는지, 수치의 출처 |
 | `a` | 계정 추가(아래 마법사) |
 | `l` | 다시 로그인 |
 | `s` | 계정의 그룹 고르기 |
