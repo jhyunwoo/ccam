@@ -1,5 +1,11 @@
 [
   {
+    "tag": "v0.14.0",
+    "date": "2026-11-11",
+    "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.14.0",
+    "notes": "<p>The dashboard (<code>ccam</code> on a terminal) now shows how long each limit has until it resets. Every 5-hour, weekly and Fable column reads like <code>72% 1h 40m</code> and counts down while the dashboard is open. A terminal of about 94 columns or more still draws the bars too; a narrower one shows the time in their place.</p>\n<p>An account that holds an unused limit reset, which Claude Code&#39;s <code>/limit-reset</code> can use, is marked <code>↻</code>, and its usage details (<code>u</code>) say so. ccam learns this from what Claude Code saved in the account&#39;s folder the last time it ran there within three days, so an account without the mark may still hold one, and the count is not shown. <code>ccam usage</code>, its JSON output and how accounts are chosen have not changed.</p>\n<h3>New</h3>\n<ul>\n<li>The dashboard shows the time until each 5-hour, weekly and Fable window resets</li>\n<li>The dashboard marks an account that holds an unused limit reset (<code>↻</code>)</li>\n</ul>\n"
+  },
+  {
     "tag": "v0.13.6",
     "date": "2026-11-05",
     "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.13.6",
