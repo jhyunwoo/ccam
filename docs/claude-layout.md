@@ -306,11 +306,20 @@ When the server refuses a request at a usage limit, Claude Code appends an assis
   `rateLimitType` (`five_hour`, `seven_day`, `seven_day_opus`, `seven_day_sonnet`, `seven_day_overage_included`,
   `overage`), `overageStatus`, `overageDisabledReason` (`org_level_disabled`, `out_of_credits` seen), `isUsingOverage`.
   `quotaLimits` repeats it with `unifiedRateLimitFallbackAvailable`.
-- A model that needs usage credits (the Fable allowance on a Fable model) is another apiError,
-  `model_requires_usage_credits`, without `rate_limit_info`.
+- A model that needs usage credits is another apiError, `model_requires_usage_credits`. When a Fable model's included
+  weekly allowance is used up (2.1.322; real rows of 2026-11-11 and 2026-11-12), the row has the keys of the limit
+  row above: `error: "rate_limit"`, `apiErrorStatus: 429`, and `rate_limit_info` with `status: "rejected"`,
+  `rateLimitType: "seven_day_overage_included"` and `resetsAt` (when the usage endpoint's Fable week resets), but no
+  `quotaLimits`; the text is `You're out of usage credits. Run /usage-credits to keep using Fable 5.2 or /model to
+  switch models.` (or just `You're out of usage credits. /model to switch models.`). The binary leaves `rateLimitType`
+  out when the response named none. Claude Code calls this window the "Fable limit".
+  2.1.325 also writes the same allowance as the limit row above (`usage_limit_reached`, with `quotaLimits`), text
+  `You've hit your Fable limit · resets Nov 22, 3am (Asia/Seoul)` (three subagents' rows of 2026-11-16); the usage
+  endpoint then showed that account's Fable week at 100%, with the same reset as the rows' `resetsAt`.
 
-ccam reads only this row (`transcript.LastLimit`): `hook stop-failure` records the window as full until `resetsAt`
-(`state/usage/<name>.limit.json`) for `five_hour`, `seven_day`, `seven_day_opus` and `seven_day_sonnet`.
+ccam reads only these rows (`transcript.LastLimit`): `hook stop-failure` records the window as full until `resetsAt`
+(`state/usage/<name>.limit.json`) for `five_hour`, `seven_day`, `seven_day_opus`, `seven_day_sonnet` and
+`seven_day_overage_included` (the Fable week; a `model_requires_usage_credits` row counts only with this window).
 The row's `<synthetic>` usage is not a reply, so `transcript.Size` and `transcript.Model` skip it.
 
 ### The StopFailure hook
@@ -390,6 +399,12 @@ Claude Code writes it after its own read (`validUntil` is the earlier of three d
 `accountUuid` is `oauthAccount.accountUuid`, `checkedAt` is not in the future and less than three days old, and
 now is before `validUntil`. `profile.HoldsReset` follows the same rules; the dashboard marks such an account `↻`.
 It is yes or unknown: no count, and nothing for an account Claude Code has not run on in three days.
+
+A reset used refills the window before its reset time, which stays as it was: after the owner used resets (seen
+2026-11-17), three accounts whose weekly limits ccam had recorded showed those weeks at 17%, 61% and 19% in the usage
+endpoint, with the same `resets_at` as the limit rows. ccam's limit record would keep them at 100% until then, so a lookup of the usage
+endpoint (ccam's, or Claude Code's with `usage_source = "claude"`) made five minutes or more after the recorded limit
+that shows the window below 100% lifts that window (`usage.liftDelay`); the status line does not.
 
 ### Rows after a limit (2.1.310)
 

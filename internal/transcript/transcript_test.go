@@ -107,6 +107,46 @@ func TestLastLimitReadsTheRefusedRequest(t *testing.T) {
 	}
 }
 
+// A Fable model whose included weekly allowance is used up is refused with
+// apiError "model_requires_usage_credits" and the Fable week in its
+// rate_limit_info (2.1.322, keys and values of a real row of 2026-11-12):
+// a limit like the others. A model that needs usage credits for another
+// reason (no window, or the credits themselves) is not.
+func TestLastLimitReadsTheFableAllowance(t *testing.T) {
+	base := fixture(t, "limit-2.1.322-fable.jsonl")
+	path := filepath.Join(t.TempDir(), "c.jsonl")
+	write(t, path, base, time.Now())
+	at := time.Date(2026, 11, 12, 3, 50, 53, 19e6, time.UTC)
+	l, ok := LastLimit(path, time.Time{})
+	if !ok || l.Window != "seven_day_overage_included" || !l.ResetsAt.Equal(time.Unix(1794927600, 0)) || !l.At.Equal(at) ||
+		l.Model != "claude-fable-5-2" || !strings.HasPrefix(l.Text, "You're out of usage credits.") {
+		t.Fatalf("%+v %v", l, ok)
+	}
+	if PromptedAfter(path, at) {
+		t.Fatal("PromptedAfter must find the row")
+	}
+	lines := strings.Split(strings.TrimSpace(base), "\n")
+	row := lines[len(lines)-1]
+	for name, other := range map[string]string{
+		"credits":   strings.Replace(row, `"rateLimitType":"seven_day_overage_included"`, `"rateLimitType":"overage"`, 1),
+		"no window": strings.Replace(row, `"rateLimitType":"seven_day_overage_included",`, ``, 1),
+		"no info":   strings.Replace(row, `"apiErrorParams":{"rate_limit_info":{`, `"apiErrorParams":{"other":{`, 1),
+	} {
+		if other == row {
+			t.Fatalf("%s: the fixture changed", name)
+		}
+		write(t, path, strings.Join(lines[:len(lines)-1], "\n")+"\n"+other+"\n", time.Now())
+		if l, ok := LastLimit(path, time.Time{}); ok {
+			t.Errorf("%s: %+v", name, l)
+		}
+	}
+	// A subagent's (SubagentLimit) the same.
+	write(t, path, strings.ReplaceAll(base, `"isSidechain":false`, `"isSidechain":true`), time.Now())
+	if l, ok := SubagentLimit(path, time.Time{}); !ok || l.Window != "seven_day_overage_included" {
+		t.Fatalf("subagent: %+v %v", l, ok)
+	}
+}
+
 // Only the main thread's refusal at a usage limit counts: not a subagent's,
 // not another API error, not a row of another shape.
 func TestLastLimitSkipsOtherRows(t *testing.T) {

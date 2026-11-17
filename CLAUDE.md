@@ -81,7 +81,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - 파일 쓰기는 fsutil.AtomicWrite, 데이터 이전은 share.Build → Apply 순서
 - 토큰 파일(.credentials.json)은 어떤 경우에도 공유 그룹에 링크하지 않는다 (share.Layout 허용 목록)
 - 메모(state/handoff)는 세션마다 한 파일(`<계정>/<세션 id>.json`)이다. relay는 자기 `CCAM_RELAY`(`2:<pid>`)와 자식이 맞는 메모로만 hop하고, 훅은 이 형식의 relay 자식에게만 TERM을 보낸다
-- 한도 표시(state/usage/<이름>.limit.json)는 Claude Code가 기록한 한도 행에서만 쓰고, 모든 사용량 출처 위에 reset까지 100%로 덮는다
+- 한도 표시(state/usage/<이름>.limit.json)는 Claude Code가 기록한 한도 행에서만 쓰고, 모든 사용량 출처 위에 reset까지 100%로 덮는다. 예외는 한도 5분(usage.liftDelay) 뒤에 잰 사용량 엔드포인트 값(live·claude 저장값, 상태 줄은 아님)이 그 창을 100% 아래로 보일 때뿐이다(리셋권 /limit-reset 등으로 일찍 풀림). Fable 허용량(seven_day_overage_included)은 Fable 모델 창으로 기록한다
 - auto_switch(기본 끔, Windows는 무시)는 Claude Code가 한도 행을 기록한 뒤에만, 한 pool 안에서만(같은 Team·Enterprise 조직의 좌석끼리, 또는 개인 요금제끼리) 세션을 옮긴다. 다른 조직으로는 옮기지 않고(cross_org는 적용하지 않음), 같은 Claude 계정의 다른 폴더로도 옮기지 않는다
 - 프로그램 출력(도움말, 메시지, 오류, 질문, TUI, install.sh·install.ps1)은 모두 영어다. 한글은 절대 출력하지 않는다. 코드·주석·커밋도 영어. internal/e2e/english_test.go의 TestSourceHasNoHangul(cmd/·internal/의 테스트 외 Go 소스와 install.sh·install.ps1·scripts/*.sh에 한글 금지, 이스케이프 포함)과 TestOutputHasNoHangul(빌드한 바이너리의 모든 도움말과 주요 명령 출력 검사)이 강제한다
 
