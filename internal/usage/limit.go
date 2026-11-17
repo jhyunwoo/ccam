@@ -118,7 +118,7 @@ func (f *Fetcher) withLimit(a Account, r Report) Report {
 	if !ok {
 		return r
 	}
-	lifted := f.lifted(a.Name, rec.At)
+	lifted := lifted(r.lookup, rec.At)
 	var l Limits
 	if r.Limits != nil {
 		l = *r.Limits
@@ -162,20 +162,15 @@ func modelWindow(scoped []Scoped, family string) int {
 	return slices.IndexFunc(scoped, func(s Scoped) bool { return strings.Contains(strings.ToLower(s.Name), family) })
 }
 
-// lifted tells which windows of account name the newest lookup of the
-// usage endpoint (ccam's or Claude Code's, as saved) shows below 100%, when
-// it was made liftDelay or more after the limit at limitAt. The status line
-// does not count: its time is when the command ran, so a percentage another
-// session showed before the limit may come with a later time.
-func (f *Fetcher) lifted(name string, limitAt time.Time) func(window string) bool {
-	var last *cached
-	for _, src := range []string{"live", "claude"} {
-		if c, ok := f.readCache(name, src); ok && (last == nil || c.At.After(last.At)) {
-			last = &c
-		}
-	}
+// lifted tells which windows last, the lookup of the usage endpoint
+// (ccam's or Claude Code's) the report's values come from, shows below
+// 100%, when it was made liftDelay or more after the limit at limitAt. The
+// status line does not count: its time is when the command ran, so a
+// percentage another session showed before the limit may come with a later
+// time.
+func lifted(last cached, limitAt time.Time) func(window string) bool {
 	return func(window string) bool {
-		if last == nil || last.At.Before(limitAt.Add(liftDelay)) {
+		if last.Limits == nil || last.At.Before(limitAt.Add(liftDelay)) {
 			return false
 		}
 		var w Window

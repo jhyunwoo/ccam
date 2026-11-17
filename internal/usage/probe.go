@@ -108,7 +108,7 @@ func (f *Fetcher) fetchClaude(ctx context.Context, a Account, opt Options) Repor
 	r := Report{Name: a.Name, Slot: a.Slot}
 	if !opt.NoCache {
 		if c, ok := f.readCache(a.Name, "claude"); ok && fresh(c.At, f.Now()) {
-			r.Status, r.Limits, r.Source, r.At = StatusOK, c.Limits, "claude", c.At
+			r.Status, r.Limits, r.Source, r.At, r.lookup = StatusOK, c.Limits, "claude", c.At, c
 			return r
 		}
 	}
@@ -153,6 +153,7 @@ func (f *Fetcher) fetchClaude(ctx context.Context, a Account, opt Options) Repor
 		return f.fallback(a, r, StatusError, "Claude Code reports no plan limits for this login")
 	}
 	r.Status, r.Limits, r.Source, r.At = StatusOK, &l, "claude", f.Now()
-	f.writeCache(a.Name, "claude", cached{At: r.At, Limits: &l})
+	r.lookup = cached{At: r.At, Limits: &l}
+	f.writeCache(a.Name, "claude", r.lookup)
 	return r
 }
