@@ -1,10 +1,10 @@
 ---
 title: Beralih ke akun berikutnya
 description: ccam next membuka Claude Code sebagai akun lain; --auto memilih ruang terbanyak, --continue membawa percakapan, dan --fallback mengulang tugas -p.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next` membuka Claude Code sebagai akun lain tanpa Anda perlu menyebutkan namanya. Gunakan saat sebuah akun mencapai batas penggunaannya. Ada empat cara untuk berpindah:
@@ -86,7 +86,7 @@ Akun dinilai berdasarkan jendela 5 jam dan mingguannya, dan, jika `--model` ada 
 2. **Lewat batas**: di bawah 100% tetapi sama dengan atau di atas `auto_max_usage`. Hanya dipakai jika tidak ada akun yang punya ruang; akun yang akan diambil `headroom` di antara mereka didahulukan.
 3. **Penuh**: sebuah jendela di 100%, atau penggunaan 5 jam yang tidak diketahui. Tidak pernah dipilih.
 
-Sebuah jendela dihitung 100% sampai di-reset jika Claude Code menolak permintaan di sana: hook [plugin ccam](#inside-claude-code) mencatatnya (`~/.local/state/ccam/usage/<name>.limit.json`), apa pun kata angka yang tersimpan. Jadi akun yang baru saja mencapai batasnya tidak dipilih lagi sebelum di-reset, bahkan jika angkanya sudah lama.
+Sebuah jendela dihitung 100% sampai di-reset jika Claude Code menolak permintaan di sana: hook [plugin ccam](#inside-claude-code) mencatatnya (`~/.local/state/ccam/usage/<name>.limit.json`), apa pun kata angka yang tersimpan. Jadi akun yang baru saja mencapai batasnya tidak dipilih lagi sebelum di-reset, bahkan jika angkanya sudah lama. Hanya pencarian penggunaan yang dilakukan 5 menit atau lebih setelah batas tercapai dan menunjukkan jendela itu di bawah 100% yang mengakhirinya lebih cepat, seperti setelah reset batas (`/limit-reset` di Claude Code).
 
 Pengaturan untuk semua akun ditaruh di bagian atas `config.toml`, di atas `[[group]]`, `[[profile]]`, atau `[[folder]]` pertama. Pengaturan di bawah salah satunya menjadi milik tabel itu: ccam memperingatkannya di setiap peluncuran, dan perintah yang menyimpan konfigurasi menolak sampai pengaturan itu dipindahkan.
 
@@ -179,7 +179,7 @@ ccam memindahkan sesi hanya jika semua hal berikut terpenuhi:
 
 1. ccam memulainya di terminal dan tetap berjalan di sampingnya. `auto_switch` mengaktifkan [relay](#relay), sehingga ini terpenuhi untuk sesi interaktif yang Anda mulai setelah mengaturnya. Sesi yang dimulai sebelumnya, atau di bawah ccam versi lama, mendapat notifikasi yang diakhiri dengan ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` Sesi tanpa pengawasan (proses `-p` dan sesi latar belakang), `claude remote-control`, dan Claude Code yang dimulai tanpa ccam tidak pernah dipindahkan.
 2. Akun itu mengaktifkan [plugin ccam](/docs/install#claude-code-plugin) dan menjalankan Claude Code 2.1.214 atau yang lebih baru, yang meneruskan ID prosesnya ke hook (`CLAUDE_PID`).
-3. Claude Code menulis permintaan yang ditolak ke percakapan, beserta waktu reset-nya, untuk batas 5 jam, mingguan, Opus, atau Sonnet akun itu. Batas pengeluaran, kredit penggunaan yang habis, penghentian yang ditetapkan oleh organisasi, jatah Fable (`You've reached your Fable limit.`), pembatasan dari server, dan batas laju kunci API tidak pernah memindahkan sesi. Batas subagen atau agen workflow ikut dihitung, bahkan saat percakapan utama hanya menunggunya; jika itu batas mingguan Opus atau Sonnet, sesi hanya dipindahkan jika percakapan itu sendiri berjalan pada model tersebut.
+3. Claude Code menulis permintaan yang ditolak ke percakapan, beserta waktu reset-nya, untuk batas 5 jam, mingguan, Opus, Sonnet, atau Fable akun itu. Saat model Fable sudah menghabiskan jatah mingguannya, Claude Code menampilkan `You've hit your Fable limit` atau `You're out of usage credits`, dan permintaan yang ditolak menyebut jendela mingguan Fable: itulah batas Fable, dan akun berikutnya harus punya ruang di jendela mingguan Fable miliknya sendiri. Batas pengeluaran, kredit penggunaan yang habis pada permintaan lain mana pun, penghentian yang ditetapkan oleh organisasi, pembatasan dari server, dan batas laju kunci API tidak pernah memindahkan sesi. Batas subagen atau agen workflow ikut dihitung, bahkan saat percakapan utama hanya menunggunya; jika itu batas mingguan Opus, Sonnet, atau Fable, sesi hanya dipindahkan jika percakapan itu sendiri berjalan pada model tersebut.
 4. ccam mengetahui paket akun itu, dari `.claude.json`-nya atau dari apa yang dicatat `ccam login`. Jika tidak, notifikasi diakhiri dengan `ccam does not know personal's plan, so auto_switch leaves this session.`
 5. Sesi tidak terhubung ke Remote Control. Sebagai akun lain, sesi itu tidak akan tersambung kembali ke aplikasi yang Anda pakai untuk mengendalikannya, jadi sesi itu tetap di tempat, dan notifikasi memberitahukannya.
 6. Batasnya di-reset lebih dari 15 menit dari sekarang. Untuk waktu tunggu yang lebih singkat, ccam menyerahkan sesi itu kepada Claude Code: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

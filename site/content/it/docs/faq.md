@@ -2,10 +2,10 @@
 title: Domande frequenti
 metaTitle: "Domande frequenti: più account Claude Code"
 description: Risposte su ccam, account Claude Code, limiti di utilizzo, condivisione, privacy e sistemi supportati.
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: 64cd522eb711
+sourceHash: "9b13b37391f2"
 ---
 
 ## ccam è uno strumento ufficiale di Anthropic?
@@ -24,7 +24,7 @@ Non oltre il limite di un account: ogni account mantiene i propri limiti e si fe
 
 ## ccam può cambiare account da solo quando una sessione raggiunge il limite?
 
-Solo se lo attivi. Con `auto_switch = true` in cima a `~/.config/ccam/config.toml` (Linux e macOS; disattivato per impostazione predefinita e sperimentale), quando Claude Code ferma una sessione interattiva (una avviata da ccam) a un limite di 5 ore, settimanale, Opus o Sonnet, ccam chiude la sessione e continua la conversazione come un altro dei tuoi account con margine disponibile: un altro posto della stessa organizzazione Team o Enterprise, o un altro piano personale (Pro, Max). Non cambia mai account prima del limite, non controlla mai il tuo utilizzo in background e non sposta mai il lavoro fuori da un'organizzazione Team o Enterprise né dentro una di esse.
+Solo se lo attivi. Con `auto_switch = true` in cima a `~/.config/ccam/config.toml` (Linux e macOS; disattivato per impostazione predefinita e sperimentale), quando Claude Code ferma una sessione interattiva (una avviata da ccam) a un limite di 5 ore, settimanale, Opus, Sonnet o Fable, ccam chiude la sessione e continua la conversazione come un altro dei tuoi account con margine disponibile: un altro posto della stessa organizzazione Team o Enterprise, o un altro piano personale (Pro, Max). Non cambia mai account prima del limite, non controlla mai il tuo utilizzo in background e non sposta mai il lavoro fuori da un'organizzazione Team o Enterprise né dentro una di esse.
 
 Sui posti sposta il tuo lavoro da un posto all'altro, cosa che può violare i termini di Anthropic (vedi Posti nei piani Team ed Enterprise qui sopra). Per i piani personali, i termini di Anthropic non affrontano chiaramente la questione: i Consumer Terms vietano di accedere ai Servizi "through automated or non-human means" (con mezzi automatizzati o non umani) salvo esplicita autorizzazione di Anthropic, e uno spostamento invia un messaggio per tuo conto. Attivarlo è una tua decisione.
 

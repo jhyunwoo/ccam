@@ -1,10 +1,10 @@
 ---
 title: 用量限制
 description: ccam usage 一次顯示每個帳號的 5 小時和每週限制，ccam statusline 則在 Claude Code 中顯示帳號名稱和用量。
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: "54b296f7da35"
+sourceHash: "9afbad92c84c"
 ---
 
 `ccam usage` 會顯示每個帳號在各項限制中已使用了多少：5 小時限制、每週限制，以及各模型自己的每週限制（例如 Fable）。每項限制都有一個長條，並附上距離重設的時間。在開始一項長時間的工作之前，或 Claude Code 告訴你快要達到限制時，可以用它查看哪個帳號還有剩餘額度。`ccam statusline` 是 Claude Code 的狀態列指令：它會在 Claude Code 中顯示帳號名稱和用量，並為 `ccam usage` 儲存這些數字。若想查看用量背後的 token 數和預估費用，`ccam ccusage` 會對每個帳號的對話執行 [ccusage](https://ccusage.com)（[見下文](#tokens-and-costs-ccam-ccusage)）。
@@ -40,7 +40,7 @@ $ ccam usage
 
 每個帳號先有一行，顯示編號、名稱和數字的新舊程度；`(cached)` 代表數字來自已儲存的檔案，而不是端點。下面每項限制佔一行，顯示 20 格的長條、百分比和距離區間重設的時間：`5-hour`、`Weekly`（所有模型），接著是各模型自己的每週區間，例如 `Fable`。帳號沒有的區間會顯示 `-`。百分比在 80% 時變成黃色，在 100% 時變成紅色。
 
-如果 Claude Code 因為某個區間已滿而拒絕了請求，該區間在重設前都會顯示 100%，不論已儲存的數字是多少（請參閱[上限記錄](#the-limit-record)）。在終端機中，所有帳號會先一起顯示為 `fetching…`，並在各帳號回應時繪製它的各行。
+如果 Claude Code 因為某個區間已滿而拒絕了請求，該區間在重設前都會顯示 100%，除非在達到上限至少 5 分鐘後進行的查詢顯示它再次有餘裕（請參閱[上限記錄](#the-limit-record)）。在終端機中，所有帳號會先一起顯示為 `fetching…`，並在各帳號回應時繪製它的各行。
 
 最後一行只在你有多個帳號時才會出現，它會列出 [`ccam next --auto`](/features/next) 會選擇的帳號。它遵循相同的規則：
 
@@ -138,7 +138,9 @@ ccam 會先讀取自己的選項：`-a`（`--account`）接受帳號名稱或編
 
 ### 上限記錄
 
-當 Claude Code 因用量上限而停止某一輪時，[ccam 外掛](/docs/install#claude-code-plugin)的 hook 會從對話中讀取被拒絕的請求：哪個區間已滿（5 小時、每週、Opus 或 Sonnet），以及它何時重設。它會把這些寫入 `~/.local/state/ccam/usage/<name>.limit.json`。ccam 會把這份記錄套用在它從每個來源得知的其他所有內容之上（`Fetch`）：記錄中的每個區間在重設前都算作 100%，不論已儲存的數字多舊或多低，所以 `ccam next --auto`、`ccam pick`、`--fallback` 和 [`auto_switch`](/features/next#auto-switch) 在那之前都不會再次選擇該帳號。
+當 Claude Code 因用量上限而停止某一輪時，[ccam 外掛](/docs/install#claude-code-plugin)的 hook 會從對話中讀取被拒絕的請求：哪個區間已滿（5 小時、每週、Opus、Sonnet 或 Fable），以及它何時重設。它會把這些寫入 `~/.local/state/ccam/usage/<name>.limit.json`。ccam 會把這份記錄套用在它從每個來源得知的其他所有內容之上（`Fetch`）：記錄中的每個區間在重設前都算作 100%，不論已儲存的數字多舊或多低，所以 `ccam next --auto`、`ccam pick`、`--fallback` 和 [`auto_switch`](/features/next#auto-switch) 在那之前都不會再次選擇該帳號。
+
+上限可能在重設時間之前就結束，例如當你使用限制重設（Claude Code 中的 `/limit-reset`）時。因此，在達到上限 5 分鐘或更久之後對用量端點進行的查詢（不論來自 ccam 還是 Claude Code），如果顯示該區間低於 100%，就會在該區間上優先於上限記錄。狀態列不算在內。這 5 分鐘是為了避免剛被拒絕的帳號依據尚未顯示該上限的數字再次被選中。
 
 沒有其他已知資訊時，帳號顯示的就只有這份記錄（加上 `-v` 時為 `source: the usage limit Claude Code reported`）。無人看管的工作階段（`-p` 執行和背景工作階段）不會寫入記錄，組織設定的停用（例如用量用完，或群組的上限設為 $0）也不會，因為管理員隨時可以解除它。`ccam login` 登入另一個 Claude 帳號時會捨棄這份記錄；刪除該檔案也能清除它。
 

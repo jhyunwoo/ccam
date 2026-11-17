@@ -1,10 +1,10 @@
 ---
 title: Giới hạn sử dụng
 description: "ccam usage hiển thị giới hạn 5 giờ và hàng tuần của mọi tài khoản cùng lúc, và ccam statusline đưa tên tài khoản cùng mức sử dụng vào Claude Code."
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: 54b296f7da35
+sourceHash: "9afbad92c84c"
 ---
 
 `ccam usage` cho biết, với mọi tài khoản, mỗi giới hạn đã được dùng bao nhiêu: giới hạn 5 giờ, giới hạn hàng tuần và giới hạn hàng tuần riêng của từng mô hình (như Fable). Mỗi giới hạn có một thanh và thời gian đến lần đặt lại. Hãy dùng nó trước khi bắt đầu một tác vụ dài, hoặc khi Claude Code báo rằng sắp chạm giới hạn, để xem tài khoản nào còn hạn mức. `ccam statusline` là lệnh dòng trạng thái cho Claude Code: nó hiển thị tên tài khoản và mức sử dụng bên trong Claude Code và lưu các con số cho `ccam usage`. Để xem số token và chi phí ước tính đằng sau mức sử dụng đó, `ccam ccusage` chạy [ccusage](https://ccusage.com) trên các cuộc hội thoại của mọi tài khoản ([bên dưới](#tokens-and-costs-ccam-ccusage)).
@@ -40,7 +40,7 @@ $ ccam usage
 
 Mỗi tài khoản có một dòng gồm số thứ tự, tên và độ cũ của các con số; `(cached)` nghĩa là chúng lấy từ một tệp đã lưu, không phải từ endpoint. Bên dưới, mỗi giới hạn có một dòng với thanh 20 ô, tỷ lệ phần trăm và thời gian đến khi khoảng đó được đặt lại: `5-hour`, `Weekly` (mọi mô hình), rồi đến khoảng hàng tuần riêng của từng mô hình, như `Fable`. Khoảng mà tài khoản không có thì hiển thị `-`. Tỷ lệ phần trăm chuyển sang màu vàng ở 80% và màu đỏ ở 100%.
 
-Nếu Claude Code đã từ chối một yêu cầu vì một khoảng đã đầy, khoảng đó hiển thị 100% cho đến khi được đặt lại, bất kể các con số đã lưu nói gì (xem [bản ghi giới hạn](#the-limit-record)). Trên terminal, mọi tài khoản xuất hiện ngay cùng lúc dưới dạng `fetching…`, và các dòng của từng tài khoản được vẽ khi nó phản hồi.
+Nếu Claude Code đã từ chối một yêu cầu vì một khoảng đã đầy, khoảng đó hiển thị 100% cho đến khi được đặt lại, trừ khi một lượt tra cứu ít nhất 5 phút sau khi chạm giới hạn cho thấy khoảng đó lại còn hạn mức (xem [bản ghi giới hạn](#the-limit-record)). Trên terminal, mọi tài khoản xuất hiện ngay cùng lúc dưới dạng `fetching…`, và các dòng của từng tài khoản được vẽ khi nó phản hồi.
 
 Dòng cuối, chỉ xuất hiện khi bạn có nhiều hơn một tài khoản, nêu tên tài khoản mà [`ccam next --auto`](/features/next) sẽ chọn. Nó tuân theo cùng các quy tắc:
 
@@ -138,7 +138,9 @@ Endpoint có hai định dạng phản hồi. Định dạng mới hơn có mộ
 
 ### Bản ghi giới hạn
 
-Khi Claude Code dừng một lượt ở giới hạn sử dụng, hook của [plugin ccam](/docs/install#claude-code-plugin) đọc yêu cầu bị từ chối từ cuộc hội thoại: khoảng nào đã đầy (5 giờ, hàng tuần, Opus hoặc Sonnet) và khi nào nó được đặt lại. Nó ghi điều đó vào `~/.local/state/ccam/usage/<name>.limit.json`. ccam áp dụng bản ghi chồng lên mọi thứ khác nó biết, từ mọi nguồn (`Fetch`): mỗi khoảng trong đó được tính là 100% cho đến khi được đặt lại, bất kể các con số đã lưu cũ hay thấp đến đâu, nên `ccam next --auto`, `ccam pick`, `--fallback` và [`auto_switch`](/features/next#auto-switch) không chọn lại tài khoản trước lúc đó.
+Khi Claude Code dừng một lượt ở giới hạn sử dụng, hook của [plugin ccam](/docs/install#claude-code-plugin) đọc yêu cầu bị từ chối từ cuộc hội thoại: khoảng nào đã đầy (5 giờ, hàng tuần, Opus, Sonnet hoặc Fable) và khi nào nó được đặt lại. Nó ghi điều đó vào `~/.local/state/ccam/usage/<name>.limit.json`. ccam áp dụng bản ghi chồng lên mọi thứ khác nó biết, từ mọi nguồn (`Fetch`): mỗi khoảng trong đó được tính là 100% cho đến khi được đặt lại, bất kể các con số đã lưu cũ hay thấp đến đâu, nên `ccam next --auto`, `ccam pick`, `--fallback` và [`auto_switch`](/features/next#auto-switch) không chọn lại tài khoản trước lúc đó.
+
+Một giới hạn có thể kết thúc trước thời điểm đặt lại, chẳng hạn khi bạn dùng một lượt đặt lại giới hạn (`/limit-reset` trong Claude Code). Vì vậy một lượt tra cứu endpoint mức sử dụng, của ccam hay của Claude Code, được thực hiện từ 5 phút trở lên sau khi chạm giới hạn và cho thấy khoảng đó dưới 100% sẽ được ưu tiên hơn bản ghi cho khoảng đó. Dòng trạng thái không được tính. 5 phút này giữ cho một tài khoản vừa bị từ chối không bị chọn lại dựa trên những con số chưa cho thấy giới hạn.
 
 Khi không biết gì khác, chỉ riêng bản ghi là thứ tài khoản hiển thị (`source: the usage limit Claude Code reported` với `-v`). Các phiên không có người theo dõi (các lần chạy `-p` và các phiên nền) không ghi bản ghi nào, việc dừng do tổ chức đặt ra cũng vậy (ví dụ khi tổ chức hết mức sử dụng hoặc giới hạn của một nhóm là $0), điều mà quản trị viên của nó có thể gỡ bất cứ lúc nào. `ccam login` vào một tài khoản Claude khác sẽ bỏ bản ghi; xóa tệp cũng xóa được nó.
 

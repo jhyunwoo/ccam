@@ -1,10 +1,10 @@
 ---
 title: Kullanım limitleri ve hesap değiştirme
 description: Tüm Claude Code hesaplarının 5 saatlik ve haftalık kullanımını ccam usage ile görün, en çok pay kalan hesabı ccam next --auto ile açın.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 5
 translation: machine
-sourceHash: "06bd349073e3"
+sourceHash: "c2a0018db4a3"
 ---
 
 `ccam usage`, her hesap için her limitin ne kadarının kullanıldığını gösterir: 5 saatlik limit, haftalık limit ve her modelin kendi haftalık limiti (Fable gibi). `ccam next --auto` en çok pay kalan hesabı açar, `--continue` ise mevcut konuşmayı o hesaba taşır.
@@ -36,7 +36,7 @@ ccam, her hesabın kendi giriş bilgilerini kullanarak tüm hesaplar için aynı
 
 Bu uç nokta herkese açık olarak belgelenmemiştir ve değişebilir. Bir istek başarısız olduğunda ccam bilinen son sayıları gösterir ve bunları önbellekten alınmış olarak işaretler. Bu sayılar kaydedildikten sonra sıfırlanmış bir pencere %0 gösterir. Yanıt biçimi değiştiyse `ccam doctor` bunu size bildirir.
 
-Claude Code bir oturumu kullanım limitinde durdurduğunda [ccam eklentisi](/docs/install#claude-code-plugin) hangi pencerenin dolduğunu ve ne zaman sıfırlanacağını kaydeder. O zamana kadar o pencere, diğer sayılar ne derse desin %100 gösterir; böylece `ccam next --auto` ve `--fallback` hesabı çok erken yeniden seçmez.
+Claude Code bir oturumu kullanım limitinde durdurduğunda [ccam eklentisi](/docs/install#claude-code-plugin) hangi pencerenin dolduğunu ve ne zaman sıfırlanacağını kaydeder. O zamana kadar o pencere, diğer sayılar ne derse desin %100 gösterir; böylece `ccam next --auto` ve `--fallback` hesabı çok erken yeniden seçmez. Bunu daha erken yalnızca limitten en az 5 dakika sonra yapılan ve o pencerede pay kaldığını gösteren bir kullanım sorgusu sona erdirir; örneğin bir limit sıfırlamasından sonra (Claude Code'da `/limit-reset`).
 
 60 saniyeden daha kısa süre önce alınan sayılar yeniden kullanılır. Seçenekler:
 

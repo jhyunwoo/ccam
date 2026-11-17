@@ -1,10 +1,10 @@
 ---
 title: 다음 계정으로 전환
 description: ccam next는 다른 계정으로 Claude Code를 엽니다. --auto는 여유가 가장 많은 계정을 고르고, --continue는 대화를 넘겨받으며, --fallback은 -p 작업을 재실행합니다.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next`는 계정 이름을 지정하지 않아도 다른 계정으로 Claude Code를 엽니다. 계정이 사용량 한도에 도달했을 때 쓰면 됩니다. 전환하는 방법은 네 가지입니다.
@@ -86,7 +86,7 @@ ccam으로 실행할 때마다 그 시각이 `~/.local/state/ccam/last-used/<nam
 2. **초과**: 100% 미만이지만 `auto_max_usage` 이상인 계정. 여유 있는 계정이 하나도 없을 때만 쓰며, 이 중 `headroom`이 고를 계정을 먼저 고릅니다.
 3. **가득 참**: 100%인 구간이 있거나 5시간 사용량을 알 수 없는 계정. 절대 고르지 않습니다.
 
-Claude Code가 어떤 구간에서 요청을 거부했으면, 저장된 수치와 상관없이 그 구간은 초기화될 때까지 100%로 칩니다. [ccam 플러그인](#inside-claude-code)의 훅이 이를 기록합니다(`~/.local/state/ccam/usage/<name>.limit.json`). 그래서 방금 한도에 도달한 계정은 수치가 오래되었더라도 초기화 전에 다시 고르지 않습니다.
+Claude Code가 어떤 구간에서 요청을 거부했으면, 저장된 수치와 상관없이 그 구간은 초기화될 때까지 100%로 칩니다. [ccam 플러그인](#inside-claude-code)의 훅이 이를 기록합니다(`~/.local/state/ccam/usage/<name>.limit.json`). 그래서 방금 한도에 도달한 계정은 수치가 오래되었더라도 초기화 전에 다시 고르지 않습니다. 한도에 도달하고 5분 이상 지나서 한 사용량 조회가 그 구간을 100% 아래로 보여 줄 때만, 한도 초기화(Claude Code의 `/limit-reset`) 뒤처럼 그보다 일찍 끝납니다.
 
 모든 계정에 적용되는 설정은 `config.toml`의 맨 위, 첫 `[[group]]`, `[[profile]]`, `[[folder]]`보다 위에 둡니다. 이들 아래에 둔 설정은 그 테이블에 속하므로, ccam은 실행할 때마다 그 설정에 대해 경고하고, 설정을 저장하는 명령은 옮길 때까지 거부합니다.
 
@@ -187,7 +187,7 @@ ccam은 다음 조건을 모두 만족할 때만 세션을 옮깁니다:
 
 1. ccam이 터미널에서 시작했고 ccam이 함께 계속 실행 중인 세션입니다. `auto_switch`는 [릴레이](#relay)를 켜므로, 설정한 뒤에 시작한 대화형 세션은 이 조건을 만족합니다. 그 전에 시작했거나 이전 ccam으로 시작한 세션에는 ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.``로 끝나는 알림이 갑니다. 아무도 지켜보지 않는 세션(`-p` 실행과 백그라운드 세션), `claude remote-control`, ccam 없이 시작한 Claude Code는 절대 옮기지 않습니다.
 2. 그 계정에 [ccam 플러그인](/docs/install#claude-code-plugin)이 켜져 있고, 훅에 자기 프로세스 ID(`CLAUDE_PID`)를 넘겨주는 Claude Code 2.1.214 이상을 씁니다.
-3. Claude Code가 그 계정의 5시간, 주간, Opus 또는 Sonnet 한도에 대해 거부된 요청을 초기화 시각과 함께 대화에 기록했습니다. 지출 한도, 사용 크레딧 소진, 조직의 차단, Fable 할당량(`You've reached your Fable limit.`), 서버의 요청 제한, API 키의 속도 제한은 절대 세션을 옮기지 않습니다. 하위 에이전트나 워크플로 에이전트의 한도는 메인 대화가 그 에이전트를 기다리기만 하는 중이어도 여기에 포함되며, 그 한도가 주간 Opus 또는 Sonnet 한도이면 대화 자체가 그 모델로 실행될 때만 세션을 옮깁니다.
+3. Claude Code가 그 계정의 5시간, 주간, Opus, Sonnet 또는 Fable 한도에 대해 거부된 요청을 초기화 시각과 함께 대화에 기록했습니다. Fable 모델이 주간 할당량을 다 쓰면 Claude Code는 `You've hit your Fable limit` 또는 `You're out of usage credits`라고 알리고, 거부된 요청에는 Fable 주간 구간이 적힙니다. 이것이 Fable 한도이며, 다음 계정은 자기 Fable 주간 구간에 여유가 있어야 합니다. 지출 한도, 다른 요청에서의 사용 크레딧 소진, 조직의 차단, 서버의 요청 제한, API 키의 속도 제한은 절대 세션을 옮기지 않습니다. 하위 에이전트나 워크플로 에이전트의 한도는 메인 대화가 그 에이전트를 기다리기만 하는 중이어도 여기에 포함되며, 그 한도가 주간 Opus, Sonnet 또는 Fable 한도이면 대화 자체가 그 모델로 실행될 때만 세션을 옮깁니다.
 4. ccam이 계정의 요금제를 압니다. 계정의 `.claude.json`이나 `ccam login`이 기록한 내용에서 알아냅니다. 모르면 알림이 `ccam does not know personal's plan, so auto_switch leaves this session.`으로 끝납니다.
 5. 세션이 Remote Control에 연결되어 있지 않습니다. 다른 계정으로 옮기면 세션을 조작하던 앱에 다시 연결되지 않으므로 세션은 그대로 남고, 알림이 그렇다고 알려 줍니다.
 6. 한도가 지금부터 15분보다 뒤에 초기화됩니다. 그보다 짧게 기다리면 되는 경우 ccam은 세션을 Claude Code에 맡깁니다: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

@@ -1,10 +1,10 @@
 ---
 title: Iyakokin amfani
 description: ccam usage yana nuna iyakokin awa 5 da na mako na kowane asusu a lokaci ɗaya, kuma ccam statusline yana saka sunan asusun da amfaninsa a Claude Code.
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: 54b296f7da35
+sourceHash: "9afbad92c84c"
 ---
 
 `ccam usage` yana nuna, ga kowane asusu, nawa aka yi amfani da shi daga kowace iyaka: iyakar awa 5, iyakar mako da iyakar mako ta kowane model (kamar Fable). Kowace iyaka tana samun sanda da lokacin da ya rage kafin ta sake saitawa. Yi amfani da shi kafin ka fara dogon aiki, ko idan Claude Code ya gaya maka iyaka ta kusa, don ganin asusun da ke da sauran sarari. `ccam statusline` shi ne umarnin layin matsayi (status line) na Claude Code: yana nuna sunan asusun da amfaninsa a cikin Claude Code kuma yana ajiye lambobin don `ccam usage`. Don token da ƙiyasin kuɗin da ke bayan amfanin, `ccam ccusage` yana gudanar da [ccusage](https://ccusage.com) a kan tattaunawar kowane asusu ([a ƙasa](#tokens-and-costs-ccam-ccusage)).
@@ -40,7 +40,7 @@ $ ccam usage
 
 Kowane asusu yana samun layi mai lambarsa, sunansa da tsawon lokacin da lambobinsa suka yi; `(cached)` yana nufin sun fito daga fayil da aka ajiye, ba daga endpoint ba. A ƙarƙashinsa, layi ɗaya ga kowace iyaka yana nuna sanda mai ƙofofi 20, kashi da lokacin da ya rage kafin taga ta sake saitawa: `5-hour`, `Weekly` (dukkan model), sannan taga ta mako ta kowane model, kamar `Fable`. Tagar da asusun ba shi da ita tana nuna `-`. Kashi yana zama rawaya a 80% kuma ja a 100%.
 
-Idan Claude Code ya ƙi buƙata saboda wata taga ta cika, wannan tagar tana nuna 100% har sai ta sake saitawa, ko me lambobin da aka ajiye suka ce (duba [rikodin iyaka](#the-limit-record)). A terminal kowane asusu yana bayyana nan take a matsayin `fetching…`, kuma ana zana layukansa yayin da ya amsa.
+Idan Claude Code ya ƙi buƙata saboda wata taga ta cika, wannan tagar tana nuna 100% har sai ta sake saitawa, sai dai idan neman da aka yi aƙalla minti 5 bayan iyakar ya sake nuna sarari a cikinta (duba [rikodin iyaka](#the-limit-record)). A terminal kowane asusu yana bayyana nan take a matsayin `fetching…`, kuma ana zana layukansa yayin da ya amsa.
 
 Layin ƙarshe, wanda ke bayyana ne kawai idan kana da asusu fiye da ɗaya, yana ambaton asusun da [`ccam next --auto`](/features/next) zai zaɓa. Yana bin ƙa'idodi iri ɗaya:
 
@@ -139,7 +139,9 @@ Endpoint ɗin yana da tsarin amsa biyu. Sabon yana da array na `limits` mai shig
 
 ### Rikodin iyaka
 
-Idan Claude Code ya dakatar da juyi a iyakar amfani, hook na [plugin ɗin ccam](/docs/install#claude-code-plugin) yana karanta buƙatar da aka ƙi daga tattaunawar: wace taga ce ta cika (awa 5, mako, Opus ko Sonnet) da lokacin da za ta sake saitawa. Yana rubuta hakan a `~/.local/state/ccam/usage/<name>.limit.json`. ccam yana ɗora rikodin a kan duk abin da ya sani, daga kowane tushe (`Fetch`): kowace taga a cikinsa ana ƙirga ta a matsayin 100% har zuwa sake saitinta, ko yaya tsufa ko ƙarancin lambobin da aka ajiye suke, don haka `ccam next --auto`, `ccam pick`, `--fallback` da [`auto_switch`](/features/next#auto-switch) ba sa sake zaɓar asusun kafin lokacin.
+Idan Claude Code ya dakatar da juyi a iyakar amfani, hook na [plugin ɗin ccam](/docs/install#claude-code-plugin) yana karanta buƙatar da aka ƙi daga tattaunawar: wace taga ce ta cika (awa 5, mako, Opus, Sonnet ko Fable) da lokacin da za ta sake saitawa. Yana rubuta hakan a `~/.local/state/ccam/usage/<name>.limit.json`. ccam yana ɗora rikodin a kan duk abin da ya sani, daga kowane tushe (`Fetch`): kowace taga a cikinsa ana ƙirga ta a matsayin 100% har zuwa sake saitinta, ko yaya tsufa ko ƙarancin lambobin da aka ajiye suke, don haka `ccam next --auto`, `ccam pick`, `--fallback` da [`auto_switch`](/features/next#auto-switch) ba sa sake zaɓar asusun kafin lokacin.
+
+Iyaka na iya ƙarewa kafin lokacin sake saitinta, misali idan ka yi amfani da sake saitin iyaka (`/limit-reset` a cikin Claude Code). Don haka neman endpoint na amfani, na ccam ko na Claude Code, da aka yi minti 5 ko fiye bayan iyakar kuma ya nuna wannan tagar ƙasa da 100%, yana rinjayar rikodin don wannan tagar. Layin matsayi ba ya ƙirguwa. Minti 5 ɗin suna hana a sake zaɓar asusun da aka ƙi yanzu bisa lambobin da ba su nuna iyakar ba tukuna.
 
 Idan ba a san wani abu dabam ba, rikodin kaɗai ne abin da asusun ke nunawa (`source: the usage limit Claude Code reported` da `-v`). Zaman da babu mai kula da su (gudun `-p` da zaman bayan fage) ba sa rubuta rikodi, haka ma dakatarwar da ƙungiya ta saita (misali, idan amfaninta ya ƙare ko iyakar wani rukuni $0 ce), wadda admins ɗinta za su iya ɗagewa a kowane lokaci. `ccam login` cikin wani asusun Claude dabam yana cire rikodin; goge fayil ɗin ma yana share shi.
 

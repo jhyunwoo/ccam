@@ -1,10 +1,10 @@
 ---
 title: 次のアカウントへの切り替え
 description: ccam nextは別のアカウントでClaude Codeを開きます。--autoは余裕が最も多いものを選び、--continueは会話を持ち越し、--fallbackは-pのジョブを再実行します。
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next`は、アカウント名を指定しなくても、別のアカウントとしてClaude Codeを開きます。アカウントが使用量の上限に達したときに使います。切り替える方法は4つあります。
@@ -86,7 +86,7 @@ ccamを通じて起動するたびに、その時刻が`~/.local/state/ccam/last
 2. **超過**: 100%未満だが`auto_max_usage`以上。余裕のあるアカウントがないときだけ使い、その中で`headroom`が選ぶものが先になります。
 3. **満杯**: 100%の枠がある、または5時間の使用量が不明。選ばれることはありません。
 
-Claude Codeがある時間枠でリクエストを拒否した場合、その枠はリセットまで100%と数えます。[ccamプラグイン](#inside-claude-code)のフックがそれを記録し（`~/.local/state/ccam/usage/<name>.limit.json`）、保存済みの数値にかかわらず適用されます。そのため、上限に達したばかりのアカウントは、数値が古くても、リセット前に再び選ばれることはありません。
+Claude Codeがある時間枠でリクエストを拒否した場合、その枠はリセットまで100%と数えます。[ccamプラグイン](#inside-claude-code)のフックがそれを記録し（`~/.local/state/ccam/usage/<name>.limit.json`）、保存済みの数値にかかわらず適用されます。そのため、上限に達したばかりのアカウントは、数値が古くても、リセット前に再び選ばれることはありません。リセットより早くこの扱いが終わるのは、上限から5分以上たってから行った使用量の問い合わせで、その枠が100%未満と示された場合だけです（Claude Codeの`/limit-reset`による上限リセットの後など）。
 
 すべてのアカウントに共通の設定は、`config.toml`の先頭、最初の`[[group]]`、`[[profile]]`、`[[folder]]`より上に書きます。それらの下に書いた設定はそのテーブルに属するので、ccamは起動のたびにそれについて警告し、設定を保存するコマンドは、それが移されるまで拒否します。
 
@@ -187,7 +187,7 @@ ccamがセッションを移すのは、次のすべてが成り立つときだ�
 
 1. ccamがターミナルでそのセッションを起動し、それと並んで動き続けていること。`auto_switch`は[リレー](#relay)を有効にするので、設定した後に起動した対話型のセッションはこれを満たします。設定する前に、または古いccamのもとで起動したセッションには、``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.``で終わる通知が表示されます。無人のセッション（`-p`の実行とバックグラウンドセッション）、`claude remote-control`、ccamを使わずに起動したClaude Codeが移されることはありません。
 2. そのアカウントで[ccamプラグイン](/docs/install#claude-code-plugin)がオンになっており、フックにプロセスIDを渡す（`CLAUDE_PID`）Claude Code 2.1.214以降を実行していること。
-3. Claude Codeが、拒否されたリクエストを、リセットの時刻とともに会話に書き込んでいること。対象はそのアカウントの5時間、週間、Opus、Sonnetの上限です。支出の上限、使用量クレジットの使い切り、組織が設定した停止、Fableの割り当て（`You've reached your Fable limit.`）、サーバーのスロットリング、APIキーのレート制限で、セッションが移されることはありません。サブエージェントやワークフローのエージェントの上限は、メインの会話がそれを待っているだけでも対象になります。それが週間のOpusまたはSonnetの上限の場合、セッションが移されるのは、会話そのものがそのモデルで動いているときだけです。
+3. Claude Codeが、拒否されたリクエストを、リセットの時刻とともに会話に書き込んでいること。対象はそのアカウントの5時間、週間、Opus、Sonnet、Fableの上限です。Fableのモデルが週間の割り当てを使い切ると、Claude Codeは`You've hit your Fable limit`または`You're out of usage credits`と表示し、拒否されたリクエストにはFableの週間の枠が示されます。これがFableの上限で、次のアカウントには自身のFableの週間の枠に余裕が必要です。支出の上限、ほかのリクエストでの使用量クレジットの使い切り、組織が設定した停止、サーバーのスロットリング、APIキーのレート制限で、セッションが移されることはありません。サブエージェントやワークフローのエージェントの上限は、メインの会話がそれを待っているだけでも対象になります。それが週間のOpus、Sonnet、Fableのいずれかの上限の場合、セッションが移されるのは、会話そのものがそのモデルで動いているときだけです。
 4. ccamがそのアカウントのプランを、`.claude.json`から、または`ccam login`が記録した内容から知っていること。知らない場合、通知は`ccam does not know personal's plan, so auto_switch leaves this session.`で終わります。
 5. セッションがRemote Controlに接続されていないこと。別のアカウントになると、操作に使っているアプリに再接続しないので、セッションはそのまま残り、通知がそのことを伝えます。
 6. 上限のリセットが今から15分より先であること。待ち時間がそれより短い場合、ccamはセッションをClaude Codeに任せます: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

@@ -1,7 +1,7 @@
 ---
 title: Usage limits
 description: ccam usage shows the 5-hour and weekly limits of every account at once, and ccam statusline puts the account name and usage in Claude Code.
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: source
 ---
@@ -39,7 +39,7 @@ $ ccam usage
 
 Each account gets a line with its number, its name and how old its numbers are; `(cached)` means they come from a saved file, not from the endpoint. Under it, one line per limit shows a 20-cell bar, the percentage and the time until the window resets: `5-hour`, `Weekly` (all models), then each model's own weekly window, such as `Fable`. A window the account does not have shows `-`. A percentage turns yellow at 80% and red at 100%.
 
-If Claude Code refused a request because a window was full, that window shows 100% until it resets, whatever the saved numbers say (see [the limit record](#the-limit-record)). On a terminal every account appears at once as `fetching…`, and its lines are drawn as it answers.
+If Claude Code refused a request because a window was full, that window shows 100% until it resets, unless a lookup at least 5 minutes after the limit shows room in it again (see [the limit record](#the-limit-record)). On a terminal every account appears at once as `fetching…`, and its lines are drawn as it answers.
 
 The last line, shown only when you have more than one account, names the account [`ccam next --auto`](/features/next) would choose. It follows the same rules:
 
@@ -137,7 +137,9 @@ The endpoint has two response formats. The newer one has a `limits` array with `
 
 ### The limit record
 
-When Claude Code stops a turn at a usage limit, the [ccam plugin](/docs/install#claude-code-plugin)'s hook reads the refused request from the conversation: which window was full (5-hour, weekly, Opus or Sonnet) and when it resets. It writes that to `~/.local/state/ccam/usage/<name>.limit.json`. ccam applies the record on top of whatever else it knows, from every source (`Fetch`): each window in it counts as 100% until its reset, however old or low the saved numbers are, so `ccam next --auto`, `ccam pick`, `--fallback` and [`auto_switch`](/features/next#auto-switch) do not choose the account again before then.
+When Claude Code stops a turn at a usage limit, the [ccam plugin](/docs/install#claude-code-plugin)'s hook reads the refused request from the conversation: which window was full (5-hour, weekly, Opus, Sonnet or Fable) and when it resets. It writes that to `~/.local/state/ccam/usage/<name>.limit.json`. ccam applies the record on top of whatever else it knows, from every source (`Fetch`): each window in it counts as 100% until its reset, however old or low the saved numbers are, so `ccam next --auto`, `ccam pick`, `--fallback` and [`auto_switch`](/features/next#auto-switch) do not choose the account again before then.
+
+A limit can end before its reset time, for example when you use a limit reset (`/limit-reset` in Claude Code). So a lookup of the usage endpoint, ccam's or Claude Code's, made 5 minutes or more after the limit and showing that window below 100% wins over the record for that window. The status line does not count. The 5 minutes keep an account that was just refused from being chosen again on numbers that do not show the limit yet.
 
 With nothing else known, the record alone is what the account shows (`source: the usage limit Claude Code reported` with `-v`). Unattended sessions (`-p` runs and background sessions) write no record, nor does a stop set by an organization (for example, when it is out of usage or a group's limit is $0), which its admins can lift at any time. `ccam login` into another Claude account drops the record; deleting the file clears it too.
 

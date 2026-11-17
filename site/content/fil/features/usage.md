@@ -1,10 +1,10 @@
 ---
 title: Mga usage limit
 description: Ipinapakita ng ccam usage ang 5-oras at lingguhang limit ng bawat account nang sabay; inilalagay ng ccam statusline ang account at usage nito sa Claude Code.
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: "54b296f7da35"
+sourceHash: "9afbad92c84c"
 ---
 
 Ipinapakita ng `ccam usage`, para sa bawat account, kung gaano kalaki na ang nagamit sa bawat limit: ang 5-oras na limit, ang lingguhang limit at ang sariling lingguhang limit ng bawat model (gaya ng Fable). May bar ang bawat limit at ang oras bago ito mag-reset. Gamitin ito bago ka magsimula ng mahabang gawain, o kapag sinabi ng Claude Code na malapit na ang isang limit, para makita kung aling account ang may natitira pa. Ang `ccam statusline` ay ang status line command para sa Claude Code: ipinapakita nito ang pangalan ng account at usage sa loob ng Claude Code at sine-save ang mga numero para sa `ccam usage`. Para sa mga token at tinatayang gastos sa likod ng usage, pinapatakbo ng `ccam ccusage` ang [ccusage](https://ccusage.com) sa mga usapan ng bawat account ([sa ibaba](#tokens-and-costs-ccam-ccusage)).
@@ -40,7 +40,7 @@ $ ccam usage
 
 Bawat account ay may linyang may numero nito, pangalan nito at kung gaano na katagal ang mga numero nito; ang ibig sabihin ng `(cached)` ay galing ang mga ito sa naka-save na file, hindi sa endpoint. Sa ilalim nito, ipinapakita ng isang linya bawat limit ang 20-cell na bar, ang porsiyento at ang oras bago mag-reset ang window: `5-hour`, `Weekly` (lahat ng model), at pagkatapos ang sariling lingguhang window ng bawat model, gaya ng `Fable`. Nagpapakita ng `-` ang window na wala sa account. Nagiging dilaw ang porsiyento sa 80% at pula sa 100%.
 
-Kung tinanggihan ng Claude Code ang isang request dahil puno ang isang window, nagpapakita ang window na iyon ng 100% hanggang mag-reset ito, anuman ang sabihin ng mga naka-save na numero (tingnan ang [tala ng limit](#the-limit-record)). Sa terminal, lumalabas agad ang bawat account bilang `fetching…`, at iginuguhit ang mga linya nito habang sumasagot ito.
+Kung tinanggihan ng Claude Code ang isang request dahil puno ang isang window, nagpapakita ang window na iyon ng 100% hanggang mag-reset ito, maliban kung may lookup na ginawa nang hindi bababa sa 5 minuto pagkatapos ng limit na nagpapakitang may natitira ulit dito (tingnan ang [tala ng limit](#the-limit-record)). Sa terminal, lumalabas agad ang bawat account bilang `fetching…`, at iginuguhit ang mga linya nito habang sumasagot ito.
 
 Pinapangalanan ng huling linya, na lumalabas lang kapag mahigit sa isa ang account mo, ang account na pipiliin ng [`ccam next --auto`](/features/next). Sinusunod nito ang parehong mga patakaran:
 
@@ -138,7 +138,9 @@ May dalawang format ng response ang endpoint. May array na `limits` ang mas bago
 
 ### Ang tala ng limit
 
-Kapag pinahinto ng Claude Code ang isang turn sa usage limit, binabasa ng hook ng [ccam plugin](/docs/install#claude-code-plugin) ang tinanggihang request mula sa usapan: kung aling window ang puno (5-oras, lingguhan, Opus o Sonnet) at kung kailan ito magre-reset. Isinusulat nito iyon sa `~/.local/state/ccam/usage/<name>.limit.json`. Ipinapatong ng ccam ang tala sa ibabaw ng anumang iba pang alam nito, mula sa bawat source (`Fetch`): itinuturing na 100% ang bawat window na nasa tala hanggang sa reset nito, gaano man kaluma o kababa ang mga naka-save na numero, kaya hindi pinipili ulit ng `ccam next --auto`, `ccam pick`, `--fallback` at [`auto_switch`](/features/next#auto-switch) ang account bago iyon.
+Kapag pinahinto ng Claude Code ang isang turn sa usage limit, binabasa ng hook ng [ccam plugin](/docs/install#claude-code-plugin) ang tinanggihang request mula sa usapan: kung aling window ang puno (5-oras, lingguhan, Opus, Sonnet o Fable) at kung kailan ito magre-reset. Isinusulat nito iyon sa `~/.local/state/ccam/usage/<name>.limit.json`. Ipinapatong ng ccam ang tala sa ibabaw ng anumang iba pang alam nito, mula sa bawat source (`Fetch`): itinuturing na 100% ang bawat window na nasa tala hanggang sa reset nito, gaano man kaluma o kababa ang mga naka-save na numero, kaya hindi pinipili ulit ng `ccam next --auto`, `ccam pick`, `--fallback` at [`auto_switch`](/features/next#auto-switch) ang account bago iyon.
+
+Maaaring matapos ang isang limit bago ang oras ng reset nito, halimbawa kapag gumamit ka ng limit reset (`/limit-reset` sa Claude Code). Kaya nangingibabaw sa tala para sa window na iyon ang isang lookup sa usage endpoint, ng ccam man o ng Claude Code, na ginawa 5 minuto o higit pa pagkatapos ng limit at nagpapakitang nasa ilalim ng 100% ang window na iyon. Hindi ibinibilang ang status line. Pinipigilan ng 5 minuto na mapili ulit ang account na ngayon lang tinanggihan ang request, batay sa mga numerong hindi pa nagpapakita ng limit.
 
 Kapag wala nang ibang alam, ang tala lang ang ipinapakita ng account (`source: the usage limit Claude Code reported` kasama ang `-v`). Walang talang isinusulat ang mga session na walang nagbabantay (mga `-p` run at background session), gayundin ang pagpapahintong itinakda ng isang organisasyon (halimbawa, kapag naubos na ang usage nito o $0 ang limit ng isang group), na puwedeng alisin ng mga admin nito anumang oras. Inaalis ng `ccam login` sa ibang Claude account ang tala; nabubura rin ito kapag binura ang file.
 

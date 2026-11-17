@@ -1,10 +1,10 @@
 ---
 title: पुढच्या खात्यावर जाणे
 description: ccam next दुसऱ्या खात्याने Claude Code उघडते; --auto सर्वाधिक जागेचे खाते निवडते, --continue संभाषण पुढे नेते, --fallback -p jobs पुन्हा चालवते.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next` तुम्ही नाव न देता दुसऱ्या खात्याने Claude Code उघडते. एखादे खाते वापर मर्यादेला पोहोचल्यावर ते वापरा. खाते बदलण्याचे चार मार्ग आहेत:
@@ -86,7 +86,7 @@ ccam मार्फत प्रत्येक वेळी सुरू क�
 2. **मर्यादेवर**: 100% खाली, पण `auto_max_usage` वर किंवा त्याहून जास्त. कोणत्याही खात्यात जागा नसेल तेव्हाच वापरली जातात; त्यांच्यापैकी `headroom` जे खाते घेईल ते आधी येते.
 3. **भरलेली**: एखादी window 100% वर, किंवा अज्ञात 5 तासांचा वापर. कधीच निवडली जात नाहीत.
 
-Claude Code ने एखाद्या window मध्ये request नाकारली असेल, तर ती window तिच्या reset पर्यंत 100% मोजली जाते: [ccam plugin](#inside-claude-code) चा hook ती नोंदवतो (`~/.local/state/ccam/usage/<name>.limit.json`), साठवलेले आकडे काहीही सांगोत. त्यामुळे नुकतीच मर्यादा गाठलेले खाते त्याच्या reset पूर्वी पुन्हा निवडले जात नाही, त्याचे आकडे जुने असले तरीही.
+Claude Code ने एखाद्या window मध्ये request नाकारली असेल, तर ती window तिच्या reset पर्यंत 100% मोजली जाते: [ccam plugin](#inside-claude-code) चा hook ती नोंदवतो (`~/.local/state/ccam/usage/<name>.limit.json`), साठवलेले आकडे काहीही सांगोत. त्यामुळे नुकतीच मर्यादा गाठलेले खाते त्याच्या reset पूर्वी पुन्हा निवडले जात नाही, त्याचे आकडे जुने असले तरीही. फक्त मर्यादेनंतर 5 मिनिटे किंवा त्याहून अधिक वेळाने केलेल्या वापराच्या शोधात ती window 100% च्या खाली दिसली, तरच हे आधी संपते, जसे limit reset नंतर (Claude Code चा `/limit-reset`).
 
 सर्व खात्यांसाठीच्या सेटिंग्ज `config.toml` च्या सुरुवातीला, पहिल्या `[[group]]`, `[[profile]]` किंवा `[[folder]]` च्या वर येतात. त्यांपैकी एखाद्याच्या खाली असलेली सेटिंग त्या table ची ठरते: ccam प्रत्येक launch ला तिच्याबद्दल इशारा देते, आणि config सेव्ह करणाऱ्या कमांड्स ती हलवेपर्यंत नकार देतात.
 
@@ -187,7 +187,7 @@ ccam सत्र फक्त तेव्हाच हलवते जेव�
 
 1. ccam ने ते terminal मध्ये सुरू केले आहे आणि त्याच्यासोबत चालू आहे. `auto_switch` [relay](#relay) चालू करते, त्यामुळे ते सेट केल्यानंतर तुम्ही सुरू केलेल्या interactive सत्रांसाठी हे खरे असते. आधी, किंवा जुन्या ccam खाली सुरू झालेल्या सत्राला अशी सूचना मिळते जिच्या शेवटी ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` असते. कोणीही समोर नसताना चालणारी सत्रे (`-p` runs आणि background सत्रे), `claude remote-control` आणि ccam शिवाय सुरू केलेले Claude Code कधीच हलवले जात नाहीत.
 2. खात्यात [ccam plugin](/docs/install#claude-code-plugin) चालू आहे आणि ते Claude Code 2.1.214 किंवा नंतरचे चालवते, जे hook ला आपला process ID देते (`CLAUDE_PID`).
-3. Claude Code ने नाकारलेली request, ती reset होण्याच्या वेळेसह, त्या खात्याच्या 5 तासांच्या, साप्ताहिक, Opus किंवा Sonnet मर्यादेसाठी संभाषणात लिहिली आहे. खर्चाची मर्यादा, usage credits संपणे, organization ने लावलेला थांबा, Fable ची मुभा (`You've reached your Fable limit.`), सर्व्हरचे throttling आणि API key ची rate limit यांमुळे सत्र कधीच हलत नाही. subagent किंवा workflow agent ची मर्यादा मात्र गणली जाते, मुख्य संभाषण फक्त त्याची वाट पाहत असले तरीही; ती Opus किंवा Sonnet ची साप्ताहिक मर्यादा असेल, तर संभाषण स्वतः त्याच model वर चालत असेल तरच सत्र हलते.
+3. Claude Code ने नाकारलेली request, ती reset होण्याच्या वेळेसह, त्या खात्याच्या 5 तासांच्या, साप्ताहिक, Opus, Sonnet किंवा Fable मर्यादेसाठी संभाषणात लिहिली आहे. Fable model ने आपली साप्ताहिक मुभा संपवली की Claude Code `You've hit your Fable limit` किंवा `You're out of usage credits` असे सांगते, आणि नाकारलेल्या request मध्ये Fable ची साप्ताहिक window नमूद असते: हीच Fable मर्यादा आहे, आणि पुढच्या खात्याच्या स्वतःच्या Fable साप्ताहिक window मध्ये जागा असली पाहिजे. खर्चाची मर्यादा, इतर कोणत्याही request वर usage credits संपणे, organization ने लावलेला थांबा, सर्व्हरचे throttling आणि API key ची rate limit यांमुळे सत्र कधीच हलत नाही. subagent किंवा workflow agent ची मर्यादा मात्र गणली जाते, मुख्य संभाषण फक्त त्याची वाट पाहत असले तरीही; ती Opus, Sonnet किंवा Fable ची साप्ताहिक मर्यादा असेल, तर संभाषण स्वतः त्याच model वर चालत असेल तरच सत्र हलते.
 4. ccam ला खात्याचा plan माहीत आहे, त्याच्या `.claude.json` मधून किंवा `ccam login` ने नोंदवलेल्या माहितीतून. नसेल, तर सूचनेच्या शेवटी `ccam does not know personal's plan, so auto_switch leaves this session.` असते.
 5. सत्र Remote Control ला जोडलेले नाही. दुसऱ्या खात्याने ते तुम्ही ज्या app मधून चालवता त्याला पुन्हा जोडले जाणार नाही, त्यामुळे ते तसेच राहते, आणि सूचना तसे सांगते.
 6. मर्यादा आतापासून 15 मिनिटांपेक्षा जास्त वेळाने reset होते. यापेक्षा कमी वाट पाहायची असेल तर ccam सत्र Claude Code वर सोडते: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

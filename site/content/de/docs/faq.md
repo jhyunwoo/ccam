@@ -2,10 +2,10 @@
 title: Häufig gestellte Fragen
 metaTitle: "ccam-FAQ: mehrere Claude Code-Konten"
 description: Antworten zu ccam, Claude Code-Konten, Nutzungslimits, Teilen, Datenschutz und unterstützten Systemen.
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: "64cd522eb711"
+sourceHash: "9b13b37391f2"
 ---
 
 ## Ist ccam ein offizielles Tool von Anthropic?
@@ -24,7 +24,7 @@ Nicht über das eigene Limit eines Kontos hinaus: Jedes Konto behält seine Limi
 
 ## Kann ccam von selbst das Konto wechseln, wenn eine Sitzung ihr Limit erreicht?
 
-Nur wenn du es einschaltest. Mit `auto_switch = true` am Anfang von `~/.config/ccam/config.toml` (Linux und macOS; standardmäßig aus und experimentell) gilt: Wenn Claude Code eine interaktive Sitzung (eine, die ccam gestartet hat) an einem 5-Stunden-, Wochen-, Opus- oder Sonnet-Limit stoppt, beendet ccam die Sitzung und setzt das Gespräch als ein anderes deiner Konten mit freiem Kontingent fort: einen anderen Platz derselben Team- oder Enterprise-Organisation oder einen anderen privaten Tarif (Pro, Max). Es wechselt nie vor dem Limit, überwacht deine Nutzung nie im Hintergrund und verschiebt Arbeit nie aus einer Team- oder Enterprise-Organisation heraus oder in eine hinein.
+Nur wenn du es einschaltest. Mit `auto_switch = true` am Anfang von `~/.config/ccam/config.toml` (Linux und macOS; standardmäßig aus und experimentell) gilt: Wenn Claude Code eine interaktive Sitzung (eine, die ccam gestartet hat) an einem 5-Stunden-, Wochen-, Opus-, Sonnet- oder Fable-Limit stoppt, beendet ccam die Sitzung und setzt das Gespräch als ein anderes deiner Konten mit freiem Kontingent fort: einen anderen Platz derselben Team- oder Enterprise-Organisation oder einen anderen privaten Tarif (Pro, Max). Es wechselt nie vor dem Limit, überwacht deine Nutzung nie im Hintergrund und verschiebt Arbeit nie aus einer Team- oder Enterprise-Organisation heraus oder in eine hinein.
 
 Bei Plätzen verschiebt es deine Arbeit von einem Platz auf einen anderen, was gegen die Bedingungen von Anthropic verstoßen kann (siehe Team- und Enterprise-Plätze oben). Für private Tarife regeln die Bedingungen von Anthropic die Frage nicht eindeutig: Die Consumer Terms verbieten, auf die Dienste „through automated or non-human means“ (über automatisierte oder nicht-menschliche Mittel) zuzugreifen, sofern Anthropic es nicht ausdrücklich erlaubt, und ein Wechsel sendet eine Nachricht in deinem Namen. Ob du es einschaltest, ist deine Entscheidung.
 

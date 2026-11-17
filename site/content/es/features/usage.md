@@ -1,10 +1,10 @@
 ---
 title: Límites de uso
 description: ccam usage muestra a la vez los límites de 5 horas y semanal de todas las cuentas, y ccam statusline pone el nombre de la cuenta y su uso en Claude Code.
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: "54b296f7da35"
+sourceHash: "9afbad92c84c"
 ---
 
 `ccam usage` muestra, para cada cuenta, cuánto se ha usado de cada límite: el límite de 5 horas, el límite semanal y el límite semanal propio de cada modelo (como Fable). Cada límite tiene una barra y el tiempo que falta para que se restablezca. Úsalo antes de empezar una tarea larga, o cuando Claude Code te avise de que un límite está cerca, para ver qué cuenta tiene margen. `ccam statusline` es el comando de línea de estado para Claude Code: muestra el nombre de la cuenta y su uso dentro de Claude Code y guarda las cifras para `ccam usage`. Para los tokens y costes estimados que hay detrás del uso, `ccam ccusage` ejecuta [ccusage](https://ccusage.com) sobre las conversaciones de todas las cuentas ([más abajo](#tokens-and-costs-ccam-ccusage)).
@@ -40,7 +40,7 @@ $ ccam usage
 
 Cada cuenta tiene una línea con su número, su nombre y la antigüedad de sus cifras; `(cached)` significa que vienen de un archivo guardado, no del endpoint. Debajo, una línea por límite muestra una barra de 20 celdas, el porcentaje y el tiempo hasta que se restablece la ventana: `5-hour`, `Weekly` (todos los modelos) y luego la ventana semanal propia de cada modelo, como `Fable`. Una ventana que la cuenta no tiene muestra `-`. Un porcentaje se vuelve amarillo al 80 % y rojo al 100 %.
 
-Si Claude Code rechazó una solicitud porque una ventana estaba llena, esa ventana muestra 100 % hasta que se restablece, digan lo que digan las cifras guardadas (consulta [el registro de límite](#the-limit-record)). En una terminal todas las cuentas aparecen de inmediato como `fetching…`, y sus líneas se dibujan a medida que responden.
+Si Claude Code rechazó una solicitud porque una ventana estaba llena, esa ventana muestra 100 % hasta que se restablece, a menos que una consulta hecha al menos 5 minutos después del límite vuelva a mostrar margen en ella (consulta [el registro de límite](#the-limit-record)). En una terminal todas las cuentas aparecen de inmediato como `fetching…`, y sus líneas se dibujan a medida que responden.
 
 La última línea, que solo aparece si tienes más de una cuenta, nombra la cuenta que elegiría [`ccam next --auto`](/features/next). Sigue las mismas reglas:
 
@@ -138,7 +138,9 @@ El endpoint tiene dos formatos de respuesta. El más nuevo tiene un arreglo `lim
 
 ### El registro de límite
 
-Cuando Claude Code detiene un turno en un límite de uso, el hook del [plugin de ccam](/docs/install#claude-code-plugin) lee de la conversación la solicitud rechazada: qué ventana estaba llena (5 horas, semanal, Opus o Sonnet) y cuándo se restablece. Lo escribe en `~/.local/state/ccam/usage/<name>.limit.json`. ccam aplica el registro por encima de todo lo demás que sabe, de cualquier fuente (`Fetch`): cada ventana que contiene cuenta como 100 % hasta su restablecimiento, por antiguas o bajas que sean las cifras guardadas, así que `ccam next --auto`, `ccam pick`, `--fallback` y [`auto_switch`](/features/next#auto-switch) no vuelven a elegir la cuenta antes de entonces.
+Cuando Claude Code detiene un turno en un límite de uso, el hook del [plugin de ccam](/docs/install#claude-code-plugin) lee de la conversación la solicitud rechazada: qué ventana estaba llena (5 horas, semanal, Opus, Sonnet o Fable) y cuándo se restablece. Lo escribe en `~/.local/state/ccam/usage/<name>.limit.json`. ccam aplica el registro por encima de todo lo demás que sabe, de cualquier fuente (`Fetch`): cada ventana que contiene cuenta como 100 % hasta su restablecimiento, por antiguas o bajas que sean las cifras guardadas, así que `ccam next --auto`, `ccam pick`, `--fallback` y [`auto_switch`](/features/next#auto-switch) no vuelven a elegir la cuenta antes de entonces.
+
+Un límite puede terminar antes de su hora de restablecimiento, por ejemplo cuando usas un restablecimiento de límite (`/limit-reset` en Claude Code). Por eso, una consulta al endpoint de uso, de ccam o de Claude Code, hecha 5 minutos o más después del límite y que muestre esa ventana por debajo del 100 %, tiene prioridad sobre el registro para esa ventana. La línea de estado no cuenta. Los 5 minutos evitan que una cuenta a la que se acaba de rechazar una solicitud se vuelva a elegir con cifras que todavía no muestran el límite.
 
 Si no se sabe nada más, el registro es lo único que muestra la cuenta (`source: the usage limit Claude Code reported` con `-v`). Las sesiones desatendidas (ejecuciones `-p` y sesiones en segundo plano) no escriben ningún registro, ni tampoco una detención establecida por una organización (por ejemplo, cuando se queda sin uso disponible o el límite de un grupo es $0), que sus administradores pueden levantar en cualquier momento. `ccam login` en otra cuenta de Claude descarta el registro; eliminar el archivo también lo borra.
 

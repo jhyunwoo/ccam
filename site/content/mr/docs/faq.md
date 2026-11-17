@@ -2,10 +2,10 @@
 title: वारंवार विचारले जाणारे प्रश्न
 metaTitle: "ccam FAQ: अनेक Claude Code खाती"
 description: ccam, Claude Code खाती, वापर मर्यादा, शेअरिंग, गोपनीयता आणि समर्थित सिस्टिम्सबद्दल उत्तरे.
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: 64cd522eb711
+sourceHash: "9b13b37391f2"
 ---
 
 ## ccam हे Anthropic चे अधिकृत टूल आहे का?
@@ -24,7 +24,7 @@ sourceHash: 64cd522eb711
 
 ## सत्र मर्यादेवर पोहोचल्यावर ccam स्वतःहून खाते बदलू शकते का?
 
-फक्त तुम्ही ते चालू केले तर. `~/.config/ccam/config.toml` च्या सुरुवातीला `auto_switch = true` असेल (Linux आणि macOS; डीफॉल्टनुसार बंद आणि experimental), तर Claude Code interactive सत्र (ccam ने सुरू केलेले) 5 तासांच्या, साप्ताहिक, Opus किंवा Sonnet मर्यादेवर थांबवते, तेव्हा ccam ते सत्र संपवते आणि जागा असलेल्या तुमच्या दुसऱ्या खात्याने संभाषण पुढे चालू ठेवते: त्याच Team किंवा Enterprise organization ची दुसरी सीट, किंवा दुसरा वैयक्तिक प्लॅन (Pro, Max). ते मर्यादेच्या आधी कधीच बदलत नाही, background मध्ये तुमच्या वापरावर कधीच लक्ष ठेवत नाही, आणि काम कधीही Team किंवा Enterprise organization मधून बाहेर किंवा तिच्यात आत हलवत नाही.
+फक्त तुम्ही ते चालू केले तर. `~/.config/ccam/config.toml` च्या सुरुवातीला `auto_switch = true` असेल (Linux आणि macOS; डीफॉल्टनुसार बंद आणि experimental), तर Claude Code interactive सत्र (ccam ने सुरू केलेले) 5 तासांच्या, साप्ताहिक, Opus, Sonnet किंवा Fable मर्यादेवर थांबवते, तेव्हा ccam ते सत्र संपवते आणि जागा असलेल्या तुमच्या दुसऱ्या खात्याने संभाषण पुढे चालू ठेवते: त्याच Team किंवा Enterprise organization ची दुसरी सीट, किंवा दुसरा वैयक्तिक प्लॅन (Pro, Max). ते मर्यादेच्या आधी कधीच बदलत नाही, background मध्ये तुमच्या वापरावर कधीच लक्ष ठेवत नाही, आणि काम कधीही Team किंवा Enterprise organization मधून बाहेर किंवा तिच्यात आत हलवत नाही.
 
 सीट्सवर ते तुमचे काम एका सीटवरून दुसऱ्या सीटवर हलवते, ज्यामुळे Anthropic च्या अटींचे उल्लंघन होऊ शकते (वरचे Team आणि Enterprise सीट्स पाहा). वैयक्तिक प्लॅनसाठी Anthropic च्या अटी याबद्दल स्पष्ट काही सांगत नाहीत: Consumer Terms Anthropic ने स्पष्टपणे परवानगी दिल्याशिवाय Services "through automated or non-human means" (स्वयंचलित किंवा मानवेतर मार्गाने) वापरण्यास मनाई करतात, आणि एक बदल तुमच्या वतीने एक संदेश पाठवतो. ते चालू करायचे की नाही हा तुमचा निर्णय आहे.
 

@@ -1,10 +1,10 @@
 ---
 title: Paglipat sa susunod na account
 description: Sa ccam next, bubukas ang Claude Code bilang ibang account; --auto para sa pinakamaluwag, --continue para dalhin ang usapan, --fallback para ulitin ang -p job.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 Binubuksan ng `ccam next` ang Claude Code bilang ibang account nang hindi mo ito pinapangalanan. Gamitin ito kapag naabot ng isang account ang usage limit nito. May apat na paraan para lumipat:
@@ -86,7 +86,7 @@ Hinuhusgahan ang isang account ayon sa 5-oras at lingguhang window nito, at, kap
 2. **Lampas**: mas mababa sa 100% pero nasa o lampas sa `auto_max_usage`. Ginagamit lang kapag walang account na may natitira; nauuna ang kukunin ng `headroom` sa kanila.
 3. **Puno**: may window na nasa 100%, o hindi alam ang 5-oras na usage. Hindi kailanman pinipili.
 
-Itinuturing na 100% ang isang window hanggang sa reset nito kapag tinanggihan doon ng Claude Code ang isang request: itinatala ito ng hook ng [ccam plugin](#inside-claude-code) (`~/.local/state/ccam/usage/<name>.limit.json`), anuman ang sabihin ng mga naka-save na numero. Kaya hindi pinipili ulit bago ang reset nito ang account na kaaabot lang sa limit nito, kahit luma na ang mga numero nito.
+Itinuturing na 100% ang isang window hanggang sa reset nito kapag tinanggihan doon ng Claude Code ang isang request: itinatala ito ng hook ng [ccam plugin](#inside-claude-code) (`~/.local/state/ccam/usage/<name>.limit.json`), anuman ang sabihin ng mga naka-save na numero. Kaya hindi pinipili ulit bago ang reset nito ang account na kaaabot lang sa limit nito, kahit luma na ang mga numero nito. Isang usage lookup lang na ginawa 5 minuto o higit pa pagkatapos ng limit at nagpapakitang nasa ilalim ng 100% ang window ang tumatapos dito nang mas maaga, gaya ng pagkatapos ng isang limit reset (`/limit-reset` sa Claude Code).
 
 Inilalagay ang mga setting para sa lahat ng account sa itaas ng `config.toml`, bago ang unang `[[group]]`, `[[profile]]` o `[[folder]]`. Ang setting na nasa ibaba ng isa sa mga iyon ay pag-aari ng table na iyon: nagbababala tungkol dito ang ccam sa bawat pagsisimula, at tumatanggi ang mga command na nagse-save ng config hanggang mailipat ito.
 
@@ -187,7 +187,7 @@ Inililipat lang ng ccam ang isang session kapag totoo ang lahat ng ito:
 
 1. Sinimulan ito ng ccam sa isang terminal at patuloy na tumatakbo ang ccam kasabay nito. Binubuksan ng `auto_switch` ang [relay](#relay), kaya totoo ito para sa mga interactive session na sinimulan mo pagkatapos itong itakda. Ang session na nagsimula bago iyon, o sa ilalim ng mas lumang ccam, ay nakakakuha ng notification na nagtatapos sa ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` Hindi kailanman inililipat ang mga session na walang nagbabantay (mga `-p` run at background session), ang `claude remote-control` at ang Claude Code na sinimulan nang walang ccam.
 2. Naka-on sa account ang [ccam plugin](/docs/install#claude-code-plugin) at Claude Code 2.1.214 o mas bago ang pinapatakbo nito, na nagpapasa ng process ID nito sa hook (`CLAUDE_PID`).
-3. Naisulat ng Claude Code sa usapan ang tinanggihang request, kasama ang oras ng reset nito, para sa 5-oras, lingguhan, Opus o Sonnet na limit ng account na iyon. Hindi kailanman naglilipat ng session ang spend limit, ang pagkaubos ng mga usage credit, ang pagpapahintong itinakda ng isang organisasyon, ang Fable allowance (`You've reached your Fable limit.`), ang throttle ng server at ang rate limit ng isang API key. Ibinibilang ang limit ng isang subagent o workflow agent, kahit naghihintay lang dito ang pangunahing usapan; kapag lingguhang Opus o Sonnet limit iyon, ililipat lang ang session kung ang usapan mismo ang tumatakbo sa model na iyon.
+3. Naisulat ng Claude Code sa usapan ang tinanggihang request, kasama ang oras ng reset nito, para sa 5-oras, lingguhan, Opus, Sonnet o Fable na limit ng account na iyon. Kapag naubos na ng isang Fable model ang lingguhang allowance nito, sinasabi ng Claude Code ang `You've hit your Fable limit` o `You're out of usage credits`, at binabanggit ng tinanggihang request ang linggo ng Fable: iyon ang Fable limit, at dapat may natitira pa ang susunod na account sa sarili nitong linggo ng Fable. Hindi kailanman naglilipat ng session ang spend limit, ang pagkaubos ng mga usage credit sa anumang ibang request, ang pagpapahintong itinakda ng isang organisasyon, ang throttle ng server at ang rate limit ng isang API key. Ibinibilang ang limit ng isang subagent o workflow agent, kahit naghihintay lang dito ang pangunahing usapan; kapag lingguhang Opus, Sonnet o Fable limit iyon, ililipat lang ang session kung ang usapan mismo ang tumatakbo sa model na iyon.
 4. Alam ng ccam ang plan ng account, mula sa `.claude.json` nito o sa itinala ng `ccam login`. Kung hindi, nagtatapos ang notification sa `ccam does not know personal's plan, so auto_switch leaves this session.`
 5. Hindi nakakonekta sa Remote Control ang session. Bilang ibang account, hindi na ito muling kokonekta sa app na ginagamit mo para patakbuhin ito, kaya nananatili ito, at sinasabi iyon ng notification.
 6. Magre-reset ang limit nang lampas 15 minuto mula ngayon. Para sa mas maikling paghihintay, ipinapaubaya ng ccam ang session sa Claude Code: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

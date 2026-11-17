@@ -1,10 +1,10 @@
 ---
 title: "Limites d'utilisation et changement de compte"
 description: "Consultez l'utilisation sur 5 heures et hebdomadaire de chaque compte Claude Code avec ccam usage, et ouvrez celui qui a le plus de marge avec ccam next --auto."
-updated: 2026-11-05
+updated: 2026-11-17
 order: 5
 translation: machine
-sourceHash: "06bd349073e3"
+sourceHash: "c2a0018db4a3"
 ---
 
 `ccam usage` indique, pour chaque compte, quelle part de chaque limite est utilisée : la limite sur 5 heures, la limite hebdomadaire et la limite hebdomadaire propre à chaque modèle (comme Fable). `ccam next --auto` ouvre le compte qui a le plus de marge, et `--continue` reprend la conversation en cours.
@@ -36,7 +36,7 @@ ccam interroge le point de terminaison d'utilisation d'Anthropic pour tous les c
 
 Ce point de terminaison n'est pas documenté publiquement et peut changer. Quand une requête échoue, ccam affiche les derniers chiffres connus et les signale comme provenant du cache. Une fenêtre réinitialisée depuis l'enregistrement de ces chiffres affiche 0 %. `ccam doctor` vous prévient si le format de la réponse a changé.
 
-Quand Claude Code arrête une session à une limite d'utilisation, le [plugin ccam](/docs/install#claude-code-plugin) enregistre quelle fenêtre était pleine et quand elle se réinitialise. Jusque-là, cette fenêtre affiche 100 % quels que soient les autres chiffres : `ccam next --auto` et `--fallback` ne choisissent donc pas ce compte de nouveau trop tôt.
+Quand Claude Code arrête une session à une limite d'utilisation, le [plugin ccam](/docs/install#claude-code-plugin) enregistre quelle fenêtre était pleine et quand elle se réinitialise. Jusque-là, cette fenêtre affiche 100 % quels que soient les autres chiffres : `ccam next --auto` et `--fallback` ne choisissent donc pas ce compte de nouveau trop tôt. Seule une consultation de l'utilisation faite 5 minutes ou plus après la limite et qui montre de la marge dans cette fenêtre, comme après une réinitialisation de limite (`/limit-reset` dans Claude Code), y met fin plus tôt.
 
 Les chiffres récupérés il y a moins de 60 secondes sont réutilisés. Options :
 

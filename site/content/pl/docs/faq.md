@@ -2,10 +2,10 @@
 title: Najczęściej zadawane pytania
 metaTitle: "FAQ ccam: kilka kont Claude Code"
 description: Odpowiedzi o ccam, kontach Claude Code, limitach użycia, współdzieleniu, prywatności i obsługiwanych systemach.
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: "64cd522eb711"
+sourceHash: "9b13b37391f2"
 ---
 
 ## Czy ccam to oficjalne narzędzie Anthropic?
@@ -24,7 +24,7 @@ Nie ponad własny limit żadnego konta: każde konto ma swoje limity i zatrzymuj
 
 ## Czy ccam może sam przełączyć konto, gdy sesja osiągnie limit?
 
-Tylko jeśli to włączysz. Z `auto_switch = true` na górze `~/.config/ccam/config.toml` (Linux i macOS; domyślnie wyłączone i eksperymentalne), gdy Claude Code zatrzyma sesję interaktywną (uruchomioną przez ccam) na limicie 5-godzinnym, tygodniowym, Opus lub Sonnet, ccam kończy sesję i kontynuuje rozmowę jako inne twoje konto, które ma jeszcze zapas: inne miejsce w tej samej organizacji Team lub Enterprise albo inny plan prywatny (Pro, Max). Nigdy nie przełącza przed osiągnięciem limitu, nigdy nie śledzi twojego użycia w tle i nigdy nie przenosi pracy poza organizację Team lub Enterprise ani do niej.
+Tylko jeśli to włączysz. Z `auto_switch = true` na górze `~/.config/ccam/config.toml` (Linux i macOS; domyślnie wyłączone i eksperymentalne), gdy Claude Code zatrzyma sesję interaktywną (uruchomioną przez ccam) na limicie 5-godzinnym, tygodniowym, Opus, Sonnet lub Fable, ccam kończy sesję i kontynuuje rozmowę jako inne twoje konto, które ma jeszcze zapas: inne miejsce w tej samej organizacji Team lub Enterprise albo inny plan prywatny (Pro, Max). Nigdy nie przełącza przed osiągnięciem limitu, nigdy nie śledzi twojego użycia w tle i nigdy nie przenosi pracy poza organizację Team lub Enterprise ani do niej.
 
 W przypadku miejsc przenosi twoją pracę z jednego miejsca na inne, co może naruszać warunki Anthropic (zobacz Miejsca w planach Team i Enterprise powyżej). W przypadku planów prywatnych warunki Anthropic nie odnoszą się do tego jednoznacznie: Consumer Terms zabraniają korzystania z usług „through automated or non-human means” (w sposób zautomatyzowany lub inny niż przez człowieka), chyba że Anthropic wyraźnie na to pozwoli, a przeniesienie wysyła jedną wiadomość w twoim imieniu. Czy to włączyć, decydujesz ty.
 

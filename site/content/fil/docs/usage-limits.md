@@ -1,10 +1,10 @@
 ---
 title: Mga usage limit at paglipat ng account
 description: Tingnan ang 5-oras at lingguhang usage ng bawat Claude Code account gamit ang ccam usage, at buksan ang may pinakamaraming natitira gamit ang ccam next --auto.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 5
 translation: machine
-sourceHash: "06bd349073e3"
+sourceHash: "c2a0018db4a3"
 ---
 
 Ipinapakita ng `ccam usage`, para sa bawat account, kung gaano kalaki na ang nagamit sa bawat limit: ang 5-oras na limit, ang lingguhang limit at ang sariling lingguhang limit ng bawat model (gaya ng Fable). Binubuksan ng `ccam next --auto` ang account na may pinakamaraming natitira, at dinadala ng `--continue` ang kasalukuyang usapan.
@@ -36,7 +36,7 @@ Sabay-sabay na nagtatanong ang ccam sa usage endpoint ng Anthropic para sa bawat
 
 Hindi pampublikong dokumentado ang endpoint na ito at puwede itong magbago. Kapag pumalya ang isang request, ipinapakita ng ccam ang huling alam na mga numero at minamarkahan ang mga ito bilang cached. Ang window na nag-reset na mula nang i-save ang mga numerong iyon ay nagpapakita ng 0%. Sasabihin sa iyo ng `ccam doctor` kung nagbago ang format ng response.
 
-Kapag pinahinto ng Claude Code ang isang session sa usage limit, itinatala ng [ccam plugin](/docs/install#claude-code-plugin) kung aling window ang puno at kung kailan ito magre-reset. Hanggang doon, 100% ang ipinapakita ng window na iyon anuman ang sabihin ng ibang mga numero, kaya hindi pinipili ulit nang masyadong maaga ng `ccam next --auto` at `--fallback` ang account.
+Kapag pinahinto ng Claude Code ang isang session sa usage limit, itinatala ng [ccam plugin](/docs/install#claude-code-plugin) kung aling window ang puno at kung kailan ito magre-reset. Hanggang doon, 100% ang ipinapakita ng window na iyon anuman ang sabihin ng ibang mga numero, kaya hindi pinipili ulit nang masyadong maaga ng `ccam next --auto` at `--fallback` ang account. Isang usage lookup lang na ginawa 5 minuto o higit pa pagkatapos ng limit at nagpapakitang may natitira sa window na iyon, gaya ng pagkatapos ng isang limit reset (`/limit-reset` sa Claude Code), ang tumatapos dito nang mas maaga.
 
 Muling ginagamit ang mga numerong kinuha wala pang 60 segundo ang nakalipas. Mga option:
 

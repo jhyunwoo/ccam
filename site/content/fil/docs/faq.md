@@ -2,10 +2,10 @@
 title: Mga madalas itanong
 metaTitle: "ccam FAQ: maraming Claude Code account"
 description: Mga sagot tungkol sa ccam, mga Claude Code account, usage limit, sharing, privacy at mga suportadong system.
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: 64cd522eb711
+sourceHash: "9b13b37391f2"
 ---
 
 ## Opisyal bang tool ng Anthropic ang ccam?
@@ -24,7 +24,7 @@ Hindi lampas sa sariling limit ng anumang account: may sariling mga limit ang ba
 
 ## Kaya bang kusang magpalit ng account ang ccam kapag naabot ng isang session ang limit nito?
 
-Kapag binuksan mo lang ito. Kapag may `auto_switch = true` sa itaas ng `~/.config/ccam/config.toml` (Linux at macOS; naka-off bilang default at eksperimental), kapag pinahinto ng Claude Code ang isang interactive session (na sinimulan ng ccam) sa 5-oras, lingguhan, Opus o Sonnet na limit, tinatapos ng ccam ang session at ipinagpapatuloy ang usapan bilang iba mo pang account na may natitira: ibang seat ng parehong Team o Enterprise na organisasyon, o ibang personal na plan (Pro, Max). Hindi ito kailanman lumilipat bago ang limit, hindi kailanman binabantayan ang usage mo sa background, at hindi kailanman inilalabas ang trabaho mula sa isang Team o Enterprise na organisasyon o ipinapasok dito.
+Kapag binuksan mo lang ito. Kapag may `auto_switch = true` sa itaas ng `~/.config/ccam/config.toml` (Linux at macOS; naka-off bilang default at eksperimental), kapag pinahinto ng Claude Code ang isang interactive session (na sinimulan ng ccam) sa 5-oras, lingguhan, Opus, Sonnet o Fable na limit, tinatapos ng ccam ang session at ipinagpapatuloy ang usapan bilang iba mo pang account na may natitira: ibang seat ng parehong Team o Enterprise na organisasyon, o ibang personal na plan (Pro, Max). Hindi ito kailanman lumilipat bago ang limit, hindi kailanman binabantayan ang usage mo sa background, at hindi kailanman inilalabas ang trabaho mula sa isang Team o Enterprise na organisasyon o ipinapasok dito.
 
 Sa mga seat, inililipat nito ang trabaho mo mula sa isang seat papunta sa iba, na maaaring lumabag sa terms ng Anthropic (tingnan ang Mga seat ng Team at Enterprise sa itaas). Para sa mga personal na plan, hindi ito malinaw na tinutugunan ng terms ng Anthropic: ipinagbabawal ng Consumer Terms ang pag-access sa Services "through automated or non-human means" (sa pamamagitan ng awtomatiko o hindi-tao na paraan) maliban kung tahasang pinapayagan ito ng Anthropic, at nagpapadala ang paglipat ng isang mensahe sa ngalan mo. Ikaw ang magpapasya kung bubuksan ito.
 

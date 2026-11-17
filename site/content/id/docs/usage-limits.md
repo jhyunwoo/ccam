@@ -1,10 +1,10 @@
 ---
 title: Batas penggunaan dan perpindahan akun
 description: Lihat penggunaan 5 jam dan mingguan setiap akun Claude Code dengan ccam usage, lalu buka akun dengan sisa kuota terbanyak lewat ccam next --auto.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 5
 translation: machine
-sourceHash: "06bd349073e3"
+sourceHash: "c2a0018db4a3"
 ---
 
 `ccam usage` menampilkan, untuk setiap akun, seberapa banyak setiap batas yang sudah digunakan: batas 5 jam, batas mingguan, dan batas mingguan khusus setiap model (seperti Fable). `ccam next --auto` membuka akun dengan sisa kuota terbanyak, dan `--continue` membawa percakapan saat ini ke akun tersebut.
@@ -36,7 +36,7 @@ ccam menanyakan endpoint penggunaan Anthropic untuk semua akun secara bersamaan,
 
 Endpoint ini tidak didokumentasikan secara publik dan dapat berubah. Jika permintaan gagal, ccam menampilkan angka terakhir yang diketahui dan menandainya sebagai cache. Jendela yang sudah direset sejak angka-angka itu disimpan menampilkan 0%. `ccam doctor` memberi tahu Anda jika format responsnya berubah.
 
-Saat Claude Code menghentikan sebuah sesi karena batas penggunaan, [plugin ccam](/docs/install#claude-code-plugin) mencatat jendela mana yang penuh dan kapan jendela itu direset. Sampai saat itu, jendela tersebut menampilkan 100% apa pun kata angka lainnya, sehingga `ccam next --auto` dan `--fallback` tidak memilih akun itu lagi terlalu cepat.
+Saat Claude Code menghentikan sebuah sesi karena batas penggunaan, [plugin ccam](/docs/install#claude-code-plugin) mencatat jendela mana yang penuh dan kapan jendela itu direset. Sampai saat itu, jendela tersebut menampilkan 100% apa pun kata angka lainnya, sehingga `ccam next --auto` dan `--fallback` tidak memilih akun itu lagi terlalu cepat. Hanya pencarian penggunaan yang dilakukan 5 menit atau lebih setelah batas tercapai dan menunjukkan ruang di jendela itu, seperti setelah reset batas (`/limit-reset` di Claude Code), yang mengakhirinya lebih cepat.
 
 Angka yang diambil kurang dari 60 detik yang lalu akan dipakai ulang. Opsi:
 

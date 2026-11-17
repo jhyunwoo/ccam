@@ -2,10 +2,10 @@
 title: よくある質問
 metaTitle: "ccamのよくある質問：Claude Codeの複数アカウント"
 description: ccam、Claude Codeのアカウント、使用量の上限、共有、プライバシー、対応システムについての回答です。
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: 64cd522eb711
+sourceHash: "9b13b37391f2"
 ---
 
 ## ccamはAnthropicの公式ツールですか？
@@ -24,7 +24,7 @@ sourceHash: 64cd522eb711
 
 ## セッションが上限に達したとき、ccamは自動でアカウントを切り替えられますか？
 
-有効にした場合だけです。`~/.config/ccam/config.toml`の先頭で`auto_switch = true`を設定すると（LinuxとmacOS。デフォルトではオフで、実験的な機能です）、対話型のセッション（ccamが起動したもの）をClaude Codeが5時間、週間、Opus、Sonnetのいずれかの上限で止めたとき、ccamはセッションを終了させ、余裕のあるあなたの別のアカウントで会話を続けます。移す先は、同じTeamまたはEnterpriseの組織の別のシートか、別の個人プラン（Pro、Max）です。上限に達する前に切り替えることはなく、バックグラウンドで使用量を監視することもなく、TeamまたはEnterpriseの組織の外へ、あるいは組織の中へ作業を移すことも決してありません。
+有効にした場合だけです。`~/.config/ccam/config.toml`の先頭で`auto_switch = true`を設定すると（LinuxとmacOS。デフォルトではオフで、実験的な機能です）、対話型のセッション（ccamが起動したもの）をClaude Codeが5時間、週間、Opus、Sonnet、Fableのいずれかの上限で止めたとき、ccamはセッションを終了させ、余裕のあるあなたの別のアカウントで会話を続けます。移す先は、同じTeamまたはEnterpriseの組織の別のシートか、別の個人プラン（Pro、Max）です。上限に達する前に切り替えることはなく、バックグラウンドで使用量を監視することもなく、TeamまたはEnterpriseの組織の外へ、あるいは組織の中へ作業を移すことも決してありません。
 
 シートの場合は作業をあるシートから別のシートに移すことになり、Anthropicの規約に違反するおそれがあります（上の「TeamとEnterpriseのシート」を参照）。個人プランについては、Anthropicの規約はこれを明確には扱っていません。消費者向け利用規約は、Anthropicが明示的に許可しない限り「through automated or non-human means」（自動化された手段または人間以外の手段によって）サービスにアクセスすることを禁じており、移動の際にはあなたの代わりにメッセージが1つ送られます。有効にするかどうかはあなたの判断です。
 

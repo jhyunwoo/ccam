@@ -1,10 +1,10 @@
 ---
 title: Kullanım limitleri
 description: ccam usage tüm hesapların 5 saatlik ve haftalık limitlerini aynı anda gösterir, ccam statusline ise hesap adını ve kullanımı Claude Code içine yerleştirir.
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: 54b296f7da35
+sourceHash: "9afbad92c84c"
 ---
 
 `ccam usage`, her hesap için her limitin ne kadarının kullanıldığını gösterir: 5 saatlik limit, haftalık limit ve her modelin kendi haftalık limiti (Fable gibi). Her limit bir çubuk ve sıfırlanmasına kalan süreyi alır. Uzun bir işe başlamadan önce veya Claude Code bir limitin yaklaştığını söylediğinde, hangi hesapta pay kaldığını görmek için kullanın. `ccam statusline`, Claude Code için durum satırı komutudur: hesap adını ve kullanımı Claude Code içinde gösterir ve sayıları `ccam usage` için kaydeder. Kullanımın ardındaki tokenlar ve tahmini maliyetler için `ccam ccusage`, [ccusage](https://ccusage.com) aracını her hesabın konuşmaları üzerinde çalıştırır ([aşağıda](#tokens-and-costs-ccam-ccusage)).
@@ -40,7 +40,7 @@ $ ccam usage
 
 Her hesap; numarası, adı ve sayılarının ne kadar eski olduğunu gösteren bir satır alır; `(cached)` sayıların uç noktadan değil, kayıtlı bir dosyadan geldiği anlamına gelir. Altında her limit için bir satır, 20 hücrelik bir çubuk, yüzdeyi ve pencerenin sıfırlanmasına kalan süreyi gösterir: `5-hour`, `Weekly` (tüm modeller), ardından her modelin kendi haftalık penceresi, örneğin `Fable`. Hesabın sahip olmadığı bir pencere `-` gösterir. Yüzde %80'de sarıya, %100'de kırmızıya döner.
 
-Claude Code bir pencere dolu olduğu için bir isteği reddettiyse o pencere, kayıtlı sayılar ne derse desin, sıfırlanana kadar %100 gösterir (bkz. [limit kaydı](#the-limit-record)). Terminalde her hesap hemen `fetching…` olarak görünür ve satırları hesap yanıt verdikçe çizilir.
+Claude Code bir pencere dolu olduğu için bir isteği reddettiyse o pencere, limitten en az 5 dakika sonra yapılan bir sorgu onda yeniden pay olduğunu göstermedikçe, sıfırlanana kadar %100 gösterir (bkz. [limit kaydı](#the-limit-record)). Terminalde her hesap hemen `fetching…` olarak görünür ve satırları hesap yanıt verdikçe çizilir.
 
 Yalnızca birden fazla hesabınız olduğunda görünen son satır, [`ccam next --auto`](/features/next) komutunun seçeceği hesabı adlandırır. Aynı kuralları izler:
 
@@ -138,7 +138,9 @@ Uç noktanın iki yanıt biçimi vardır. Yenisinde `session` (5 saatlik), `week
 
 ### Limit kaydı
 
-Claude Code bir turu kullanım limitinde durdurduğunda [ccam eklentisinin](/docs/install#claude-code-plugin) hook'u reddedilen isteği konuşmadan okur: hangi pencerenin dolduğunu (5 saatlik, haftalık, Opus veya Sonnet) ve ne zaman sıfırlanacağını. Bunu `~/.local/state/ccam/usage/<name>.limit.json` dosyasına yazar. ccam kaydı, her kaynaktan bildiği diğer her şeyin üzerine uygular (`Fetch`): içindeki her pencere, kayıtlı sayılar ne kadar eski veya düşük olursa olsun, sıfırlanana kadar %100 sayılır; böylece `ccam next --auto`, `ccam pick`, `--fallback` ve [`auto_switch`](/features/next#auto-switch) hesabı o zamandan önce yeniden seçmez.
+Claude Code bir turu kullanım limitinde durdurduğunda [ccam eklentisinin](/docs/install#claude-code-plugin) hook'u reddedilen isteği konuşmadan okur: hangi pencerenin dolduğunu (5 saatlik, haftalık, Opus, Sonnet veya Fable) ve ne zaman sıfırlanacağını. Bunu `~/.local/state/ccam/usage/<name>.limit.json` dosyasına yazar. ccam kaydı, her kaynaktan bildiği diğer her şeyin üzerine uygular (`Fetch`): içindeki her pencere, kayıtlı sayılar ne kadar eski veya düşük olursa olsun, sıfırlanana kadar %100 sayılır; böylece `ccam next --auto`, `ccam pick`, `--fallback` ve [`auto_switch`](/features/next#auto-switch) hesabı o zamandan önce yeniden seçmez.
+
+Bir limit, sıfırlanma zamanından önce sona erebilir; örneğin bir limit sıfırlaması kullandığınızda (Claude Code'da `/limit-reset`). Bu yüzden kullanım uç noktasına ccam'in ya da Claude Code'un limitten en az 5 dakika sonra yaptığı ve o pencereyi %100'ün altında gösteren bir sorgu, o pencere için kayda üstün gelir. Durum satırı sayılmaz. Bu 5 dakika, az önce reddedilmiş bir hesabın henüz limiti göstermeyen sayılara göre yeniden seçilmesini önler.
 
 Başka hiçbir şey bilinmiyorsa hesabın gösterdiği yalnızca kayıttır (`-v` ile `source: the usage limit Claude Code reported`). Gözetimsiz oturumlar (`-p` çalıştırmaları ve arka plan oturumları) kayıt yazmaz; yöneticilerinin her an kaldırabileceği, bir kuruluşun koyduğu durdurma (örneğin kullanımı bittiğinde ya da bir grubun limiti $0 olduğunda) da yazmaz. Başka bir Claude hesabına yapılan `ccam login` kaydı siler; dosyayı silmek de onu temizler.
 

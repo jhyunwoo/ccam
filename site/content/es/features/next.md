@@ -1,10 +1,10 @@
 ---
 title: Cambiar a la siguiente cuenta
 description: ccam next abre Claude Code con otra cuenta; --auto elige la de más margen, --continue lleva consigo la conversación y --fallback reejecuta trabajos -p.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next` abre Claude Code con otra cuenta sin que tengas que nombrarla. Úsalo cuando una cuenta llegue a su límite de uso. Hay cuatro formas de cambiar:
@@ -86,7 +86,7 @@ Una cuenta se juzga por sus ventanas de 5 horas y semanal y, cuando `--model` es
 2. **Por encima**: por debajo del 100 %, pero en `auto_max_usage` o por encima. Solo se usan cuando ninguna cuenta tiene margen; va primero la que `headroom` tomaría entre ellas.
 3. **Llenas**: una ventana al 100 %, o un uso de 5 horas desconocido. Nunca se eligen.
 
-Una ventana cuenta como 100 % hasta su restablecimiento cuando Claude Code rechazó una solicitud en ella: el hook del [plugin de ccam](#inside-claude-code) lo registra (`~/.local/state/ccam/usage/<name>.limit.json`), digan lo que digan las cifras guardadas. Así, una cuenta que acaba de llegar a su límite no se vuelve a elegir antes de su restablecimiento, aunque sus cifras sean antiguas.
+Una ventana cuenta como 100 % hasta su restablecimiento cuando Claude Code rechazó una solicitud en ella: el hook del [plugin de ccam](#inside-claude-code) lo registra (`~/.local/state/ccam/usage/<name>.limit.json`), digan lo que digan las cifras guardadas. Así, una cuenta que acaba de llegar a su límite no se vuelve a elegir antes de su restablecimiento, aunque sus cifras sean antiguas. Solo una consulta de uso hecha 5 minutos o más después del límite que muestre la ventana por debajo del 100 % pone fin a eso antes, como tras un restablecimiento de límite (`/limit-reset` en Claude Code).
 
 Los ajustes para todas las cuentas van al principio de `config.toml`, antes del primer `[[group]]`, `[[profile]]` o `[[folder]]`. Un ajuste debajo de uno de ellos pertenece a esa tabla: ccam avisa de ello en cada inicio, y los comandos que guardan la configuración se niegan hasta que se mueva.
 
@@ -187,7 +187,7 @@ ccam mueve una sesión solo cuando se cumplen todas estas condiciones:
 
 1. ccam la inició en una terminal y sigue ejecutándose junto a ella. `auto_switch` activa el [relevo](#relay), así que esto se cumple para las sesiones interactivas que inicias después de activarlo. Una sesión iniciada antes, o con un ccam anterior, recibe una notificación que termina con ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` Las sesiones desatendidas (ejecuciones `-p` y sesiones en segundo plano), `claude remote-control` y Claude Code iniciado sin ccam nunca se mueven.
 2. La cuenta tiene activado el [plugin de ccam](/docs/install#claude-code-plugin) y ejecuta Claude Code 2.1.214 o posterior, que pasa el ID de su proceso al hook (`CLAUDE_PID`).
-3. Claude Code escribió la solicitud rechazada en la conversación, con la hora a la que se restablece, para el límite de 5 horas, semanal, de Opus o de Sonnet de esa cuenta. Un límite de gasto, el agotamiento de los créditos de uso, una detención establecida por una organización, la asignación de Fable (`You've reached your Fable limit.`), una limitación del servidor y el límite de solicitudes de una clave de API nunca mueven una sesión. El límite de un subagente o de un agente de un flujo de trabajo sí cuenta, aunque la conversación principal solo lo esté esperando; cuando es un límite semanal de Opus o de Sonnet, la sesión se mueve solo si la propia conversación se ejecuta con ese modelo.
+3. Claude Code escribió la solicitud rechazada en la conversación, con la hora a la que se restablece, para el límite de 5 horas, semanal, de Opus, de Sonnet o de Fable de esa cuenta. Cuando un modelo Fable ha agotado su asignación semanal, Claude Code dice `You've hit your Fable limit` o `You're out of usage credits`, y la solicitud rechazada nombra la semana de Fable: ese es el límite de Fable, y la siguiente cuenta debe tener margen en su propia semana de Fable. Un límite de gasto, el agotamiento de los créditos de uso en cualquier otra solicitud, una detención establecida por una organización, una limitación del servidor y el límite de solicitudes de una clave de API nunca mueven una sesión. El límite de un subagente o de un agente de un flujo de trabajo sí cuenta, aunque la conversación principal solo lo esté esperando; cuando es un límite semanal de Opus, de Sonnet o de Fable, la sesión se mueve solo si la propia conversación se ejecuta con ese modelo.
 4. ccam conoce el plan de la cuenta, por su `.claude.json` o por lo que registró `ccam login`. Si no, la notificación termina con `ccam does not know personal's plan, so auto_switch leaves this session.`
 5. La sesión no está conectada a Remote Control. Con otra cuenta no volvería a conectarse a la app desde la que la manejas, así que se queda, y la notificación lo indica.
 6. El límite se restablece dentro de más de 15 minutos. Para una espera más corta, ccam deja la sesión a Claude Code: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

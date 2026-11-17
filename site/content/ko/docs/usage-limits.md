@@ -1,10 +1,10 @@
 ---
 title: 사용량 한도와 계정 전환
 description: ccam usage로 모든 Claude Code 계정의 5시간·주간 사용량을 확인하고, ccam next --auto로 여유가 가장 많은 계정을 엽니다.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 5
 translation: machine
-sourceHash: "06bd349073e3"
+sourceHash: "c2a0018db4a3"
 ---
 
 `ccam usage`는 모든 계정에 대해 각 한도를 얼마나 썼는지 보여 줍니다. 5시간 한도, 주간 한도, 그리고 모델별 주간 한도(Fable 등)입니다. `ccam next --auto`는 여유가 가장 많은 계정을 열고, `--continue`는 지금 대화를 그 계정에서 이어 갑니다.
@@ -36,7 +36,7 @@ ccam은 각 계정의 로그인 정보로 Anthropic의 사용량 엔드포인트
 
 이 엔드포인트는 공개 문서가 없고, 바뀔 수도 있습니다. 요청이 실패하면 ccam은 마지막으로 받은 수치를 보여 주고 캐시된 값임을 표시합니다. 그 수치를 저장한 뒤 초기화된 구간은 0%로 표시합니다. 응답 형식이 바뀌면 `ccam doctor`가 알려 줍니다.
 
-Claude Code가 사용량 한도에서 세션을 멈추면 [ccam 플러그인](/docs/install#claude-code-plugin)이 어느 구간이 가득 찼고 언제 초기화되는지 기록합니다. 그때까지 그 구간은 다른 수치와 상관없이 100%로 표시되므로, `ccam next --auto`와 `--fallback`이 그 계정을 너무 일찍 다시 고르지 않습니다.
+Claude Code가 사용량 한도에서 세션을 멈추면 [ccam 플러그인](/docs/install#claude-code-plugin)이 어느 구간이 가득 찼고 언제 초기화되는지 기록합니다. 그때까지 그 구간은 다른 수치와 상관없이 100%로 표시되므로, `ccam next --auto`와 `--fallback`이 그 계정을 너무 일찍 다시 고르지 않습니다. 한도 초기화(Claude Code의 `/limit-reset`) 뒤처럼, 한도에 도달하고 5분 이상 지나서 한 사용량 조회가 그 구간에 여유가 있다고 보여 줄 때만 그보다 일찍 끝납니다.
 
 가져온 지 60초가 안 된 수치는 다시 요청하지 않고 그대로 씁니다. 사용할 수 있는 옵션은 다음과 같습니다.
 

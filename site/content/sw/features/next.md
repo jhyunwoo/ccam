@@ -1,10 +1,10 @@
 ---
 title: Kubadili kwenda akaunti inayofuata
 description: ccam next hufungua Claude Code kama akaunti nyingine; --auto huchagua nafasi kubwa zaidi, --continue huhamisha mazungumzo, --fallback hurudia kazi za -p.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next` hufungua Claude Code kama akaunti nyingine bila wewe kuitaja. Itumie akaunti inapofikia kikomo chake cha matumizi. Kuna njia nne za kubadili:
@@ -86,7 +86,7 @@ Akaunti hupimwa kwa vipindi vyake vya saa 5 na vya wiki, na, `--model` ikiwa mio
 2. **Juu**: chini ya 100% lakini kwenye au juu ya `auto_max_usage`. Hutumiwa tu wakati hakuna akaunti yenye nafasi; ile ambayo `headroom` ingeichukua kati yao huja kwanza.
 3. **Imejaa**: kipindi kiko 100%, au matumizi ya saa 5 hayajulikani. Haichaguliwi kamwe.
 
-Claude Code ilipokataa ombi katika kipindi cha muda, kipindi hicho huhesabiwa kama 100% hadi kianze upya: hook ya [plugin ya ccam](#inside-claude-code) hukirekodi (`~/.local/state/ccam/usage/<name>.limit.json`), bila kujali namba zilizohifadhiwa zinasema nini. Kwa hiyo akaunti iliyofikia kikomo chake sasa hivi haichaguliwi tena kabla ya kuanza upya, hata namba zake zikiwa za zamani.
+Claude Code ilipokataa ombi katika kipindi cha muda, kipindi hicho huhesabiwa kama 100% hadi kianze upya: hook ya [plugin ya ccam](#inside-claude-code) hukirekodi (`~/.local/state/ccam/usage/<name>.limit.json`), bila kujali namba zilizohifadhiwa zinasema nini. Kwa hiyo akaunti iliyofikia kikomo chake sasa hivi haichaguliwi tena kabla ya kuanza upya, hata namba zake zikiwa za zamani. Hali hiyo huisha mapema tu ikiwa utafutaji wa matumizi uliofanywa dakika 5 au zaidi baada ya kikomo unaonyesha kipindi hicho chini ya 100%, kama baada ya uwekaji upya wa kikomo (`/limit-reset` ya Claude Code).
 
 Mipangilio ya akaunti zote huwekwa juu kabisa ya `config.toml`, kabla ya `[[group]]`, `[[profile]]` au `[[folder]]` ya kwanza. Mpangilio ulio chini ya mojawapo ni wa jedwali hilo: ccam huonya kuuhusu kila inapoanzishwa, na amri zinazohifadhi usanidi hukataa hadi uhamishwe.
 
@@ -187,7 +187,7 @@ ccam huhamisha kipindi pale tu yote haya yanapotimia:
 
 1. ccam ilikianzisha katika terminal na huendelea kuendeshwa kando yake. `auto_switch` huwasha [relay](#relay), kwa hiyo hili hutimia kwa vipindi shirikishi unavyoanzisha baada ya kuiweka. Kipindi kilichoanzishwa kabla, au chini ya ccam ya zamani, hupata arifa inayoishia na ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` Vipindi visivyo na mtu anayevifuatilia (uendeshaji wa `-p` na vipindi vya chinichini), `claude remote-control` na Claude Code iliyoanzishwa bila ccam kamwe havihamishwi.
 2. Akaunti ina [plugin ya ccam](/docs/install#claude-code-plugin) ikiwa imewashwa na huendesha Claude Code 2.1.214 au baadaye, ambayo hupitisha ID ya mchakato wake kwa hook (`CLAUDE_PID`).
-3. Claude Code iliandika ombi lililokataliwa ndani ya mazungumzo, pamoja na muda linapoanza upya, kwa kikomo cha saa 5, cha wiki, cha Opus au cha Sonnet cha akaunti hiyo. Kikomo cha matumizi ya fedha, credits za matumizi kuisha, usimamishaji uliowekwa na shirika, kiasi cha Fable (`You've reached your Fable limit.`), kizuizi cha seva na kikomo cha kasi cha API key kamwe havihamishi kipindi. Kikomo cha subagent au cha agent wa workflow huhesabiwa, hata wakati mazungumzo makuu yanamsubiri tu; kinapokuwa kikomo cha wiki cha Opus au cha Sonnet, kipindi huhamishwa tu ikiwa mazungumzo yenyewe yanaendeshwa kwenye modeli hiyo.
+3. Claude Code iliandika ombi lililokataliwa ndani ya mazungumzo, pamoja na muda linapoanza upya, kwa kikomo cha saa 5, cha wiki, cha Opus, cha Sonnet au cha Fable cha akaunti hiyo. Modeli ya Fable inapomaliza kiasi chake cha wiki, Claude Code husema `You've hit your Fable limit` au `You're out of usage credits`, na ombi lililokataliwa hutaja kipindi cha wiki cha Fable: hicho ndicho kikomo cha Fable, na akaunti inayofuata lazima iwe na nafasi katika kipindi chake chenyewe cha wiki cha Fable. Kikomo cha matumizi ya fedha, credits za matumizi kuisha kwenye ombi lingine lolote, usimamishaji uliowekwa na shirika, kizuizi cha seva na kikomo cha kasi cha API key kamwe havihamishi kipindi. Kikomo cha subagent au cha agent wa workflow huhesabiwa, hata wakati mazungumzo makuu yanamsubiri tu; kinapokuwa kikomo cha wiki cha Opus, cha Sonnet au cha Fable, kipindi huhamishwa tu ikiwa mazungumzo yenyewe yanaendeshwa kwenye modeli hiyo.
 4. ccam inajua mpango wa akaunti, kutoka `.claude.json` yake au kutoka kile ambacho `ccam login` ilirekodi. Isipojua, arifa huishia na `ccam does not know personal's plan, so auto_switch leaves this session.`
 5. Kipindi hakijaunganishwa na Remote Control. Kama akaunti nyingine kisingeunganishwa tena na programu unayokiendesha kutoka kwayo, kwa hiyo hubaki, na arifa husema hivyo.
 6. Kikomo huanza upya zaidi ya dakika 15 kuanzia sasa. Kwa kusubiri kufupi zaidi ccam huiachia Claude Code kipindi: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

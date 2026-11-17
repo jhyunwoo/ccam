@@ -2,10 +2,10 @@
 title: "Questions fréquentes"
 metaTitle: "FAQ ccam : plusieurs comptes Claude Code"
 description: "Réponses sur ccam, les comptes Claude Code, les limites d'utilisation, le partage, la confidentialité et les systèmes pris en charge."
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: 64cd522eb711
+sourceHash: "9b13b37391f2"
 ---
 
 ## ccam est-il un outil officiel d'Anthropic ?
@@ -24,7 +24,7 @@ Pas au-delà de la limite propre à chaque compte : chaque compte conserve ses l
 
 ## ccam peut-il changer de compte de lui-même quand une session atteint sa limite ?
 
-Seulement si vous l'activez. Avec `auto_switch = true` en haut de `~/.config/ccam/config.toml` (Linux et macOS ; désactivé par défaut et expérimental), quand Claude Code arrête une session interactive (lancée par ccam) à une limite de 5 heures, hebdomadaire, Opus ou Sonnet, ccam met fin à la session et poursuit la conversation sous un autre de vos comptes qui a de la marge : un autre siège de la même organisation Team ou Enterprise, ou une autre offre personnelle (Pro, Max). Il ne change jamais de compte avant la limite, ne surveille jamais votre utilisation en arrière-plan, et ne fait jamais sortir le travail d'une organisation Team ou Enterprise ni ne l'y fait entrer.
+Seulement si vous l'activez. Avec `auto_switch = true` en haut de `~/.config/ccam/config.toml` (Linux et macOS ; désactivé par défaut et expérimental), quand Claude Code arrête une session interactive (lancée par ccam) à une limite de 5 heures, hebdomadaire, Opus, Sonnet ou Fable, ccam met fin à la session et poursuit la conversation sous un autre de vos comptes qui a de la marge : un autre siège de la même organisation Team ou Enterprise, ou une autre offre personnelle (Pro, Max). Il ne change jamais de compte avant la limite, ne surveille jamais votre utilisation en arrière-plan, et ne fait jamais sortir le travail d'une organisation Team ou Enterprise ni ne l'y fait entrer.
 
 Sur des sièges, il fait passer votre travail d'un siège à l'autre, ce qui peut enfreindre les conditions d'Anthropic (voir Sièges Team et Enterprise ci-dessus). Pour les offres personnelles, les conditions d'Anthropic ne traitent pas clairement la question : les Consumer Terms interdisent d'accéder aux Services « through automated or non-human means » (par des moyens automatisés ou non humains) sauf autorisation explicite d'Anthropic, et un changement envoie un message en votre nom. C'est à vous de décider de l'activer.
 

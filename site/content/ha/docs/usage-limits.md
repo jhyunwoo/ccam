@@ -1,10 +1,10 @@
 ---
 title: Iyakokin amfani da sauya asusai
 description: Ga amfanin awa 5 da na mako na kowane asusun Claude Code da ccam usage, sannan ka buɗe asusun da ya fi sarari da ccam next --auto.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 5
 translation: machine
-sourceHash: "06bd349073e3"
+sourceHash: "c2a0018db4a3"
 ---
 
 `ccam usage` yana nuna, ga kowane asusu, nawa aka yi amfani da shi daga kowace iyaka: iyakar awa 5, iyakar mako da iyakar mako ta kowane model (kamar Fable). `ccam next --auto` yana buɗe asusun da ya fi sauran sarari, kuma `--continue` yana ɗauko tattaunawar yanzu zuwa can.
@@ -36,7 +36,7 @@ ccam yana tambayar endpoint na amfani na Anthropic game da kowane asusu a lokaci
 
 Ba a rubuta bayanin wannan endpoint a bainar jama'a ba, kuma yana iya canzawa. Idan buƙata ta gaza, ccam yana nuna lambobin ƙarshe da aka sani kuma yana yi musu alama a matsayin cache. Taga (window) da ya sake saita tun bayan da aka ajiye waɗannan lambobin yana nuna 0%. `ccam doctor` yana gaya maka idan tsarin amsar ya canza.
 
-Idan Claude Code ya dakatar da zama a iyakar amfani, [plugin ɗin ccam](/docs/install#claude-code-plugin) yana rubuta wace taga ce ta cika da lokacin da za ta sake saitawa. Har zuwa lokacin wannan taga tana nuna 100% ko me sauran lambobin suka ce, don haka `ccam next --auto` da `--fallback` ba sa sake zaɓar asusun da wuri.
+Idan Claude Code ya dakatar da zama a iyakar amfani, [plugin ɗin ccam](/docs/install#claude-code-plugin) yana rubuta wace taga ce ta cika da lokacin da za ta sake saitawa. Har zuwa lokacin wannan taga tana nuna 100% ko me sauran lambobin suka ce, don haka `ccam next --auto` da `--fallback` ba sa sake zaɓar asusun da wuri. Neman amfani ne kawai da aka yi minti 5 ko fiye bayan iyakar, wanda ya nuna sarari a wannan tagar, kamar bayan sake saitin iyaka (`/limit-reset` a cikin Claude Code), ke kawo ƙarshen hakan da wuri.
 
 Ana sake amfani da lambobin da aka samo ƙasa da daƙiƙa 60 da suka wuce. Zaɓuɓɓuka:
 

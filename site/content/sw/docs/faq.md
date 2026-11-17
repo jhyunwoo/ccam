@@ -2,10 +2,10 @@
 title: Maswali yanayoulizwa mara kwa mara
 metaTitle: "Maswali kuhusu ccam: akaunti kadhaa za Claude Code"
 description: Majibu kuhusu ccam, akaunti za Claude Code, vikomo vya matumizi, kushiriki, faragha na mifumo inayotumika.
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: "64cd522eb711"
+sourceHash: "9b13b37391f2"
 ---
 
 ## Je, ccam ni zana rasmi ya Anthropic?
@@ -24,7 +24,7 @@ Si zaidi ya kikomo cha akaunti yoyote: kila akaunti huhifadhi vikomo vyake na hu
 
 ## Je, ccam inaweza kubadili akaunti yenyewe kipindi kinapofikia kikomo chake?
 
-Ni pale tu unapoiwasha. Kwa `auto_switch = true` juu kabisa ya `~/.config/ccam/config.toml` (Linux na macOS; imezimwa kwa chaguo-msingi na ni ya majaribio), Claude Code inaposimamisha kipindi shirikishi (kilichoanzishwa na ccam) kwenye kikomo cha saa 5, cha wiki, cha Opus au cha Sonnet, ccam humaliza kipindi na huendeleza mazungumzo kama akaunti nyingine kati ya akaunti zako yenye nafasi: kiti kingine cha shirika lile lile la Team au Enterprise, au mpango mwingine wa binafsi (Pro, Max). Kamwe haibadili kabla ya kikomo, kamwe haifuatilii matumizi yako chinichini, na kamwe haihamishi kazi kutoka kwenye shirika la Team au Enterprise wala kuingia ndani ya moja.
+Ni pale tu unapoiwasha. Kwa `auto_switch = true` juu kabisa ya `~/.config/ccam/config.toml` (Linux na macOS; imezimwa kwa chaguo-msingi na ni ya majaribio), Claude Code inaposimamisha kipindi shirikishi (kilichoanzishwa na ccam) kwenye kikomo cha saa 5, cha wiki, cha Opus, cha Sonnet au cha Fable, ccam humaliza kipindi na huendeleza mazungumzo kama akaunti nyingine kati ya akaunti zako yenye nafasi: kiti kingine cha shirika lile lile la Team au Enterprise, au mpango mwingine wa binafsi (Pro, Max). Kamwe haibadili kabla ya kikomo, kamwe haifuatilii matumizi yako chinichini, na kamwe haihamishi kazi kutoka kwenye shirika la Team au Enterprise wala kuingia ndani ya moja.
 
 Kwenye viti huhamisha kazi yako kutoka kiti kimoja kwenda kingine, jambo ambalo linaweza kukiuka masharti ya Anthropic (tazama Viti vya Team na Enterprise hapo juu). Kwa mipango ya binafsi, masharti ya Anthropic hayalizungumzii jambo hili waziwazi: Consumer Terms hukataza kufikia Huduma "through automated or non-human means" (kwa njia za kiotomatiki au zisizo za binadamu) isipokuwa Anthropic iruhusu waziwazi, na uhamisho hutuma ujumbe mmoja kwa niaba yako. Kuiwasha ni uamuzi wako.
 

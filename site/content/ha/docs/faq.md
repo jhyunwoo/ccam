@@ -2,10 +2,10 @@
 title: Tambayoyin da ake yawan yi
 metaTitle: "Tambayoyi game da ccam: asusun Claude Code da dama"
 description: Amsoshi game da ccam, asusun Claude Code, iyakokin amfani, rabawa, sirri da tsarukan da ake tallafawa.
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: 64cd522eb711
+sourceHash: "9b13b37391f2"
 ---
 
 ## Shin ccam kayan aikin Anthropic ne na hukuma?
@@ -24,7 +24,7 @@ Ba ya wuce iyakar kowane asusu: kowane asusu yana riƙe iyakokinsa kuma yana tsa
 
 ## Shin ccam zai iya sauya asusu da kansa idan zama ya kai iyakarsa?
 
-Sai idan ka kunna shi. Da `auto_switch = true` a saman `~/.config/ccam/config.toml` (Linux da macOS; a kashe ta tsohuwa kuma na gwaji ne), idan Claude Code ya dakatar da zaman mu'amala (wanda ccam ya fara) a iyakar awa 5, ta mako, ta Opus ko ta Sonnet, ccam yana kawo ƙarshen zaman kuma yana ci gaba da tattaunawar a matsayin wani daga cikin asusanka mai sarari: wata kujerar ƙungiyar Team ko Enterprise iri ɗaya, ko wani tsarin kai (Pro, Max). Ba ya taɓa sauyawa kafin iyakar, ba ya taɓa sa ido kan amfaninka a bayan fage, kuma ba ya taɓa fitar da aiki daga ƙungiyar Team ko Enterprise ko shigar da shi cikinta.
+Sai idan ka kunna shi. Da `auto_switch = true` a saman `~/.config/ccam/config.toml` (Linux da macOS; a kashe ta tsohuwa kuma na gwaji ne), idan Claude Code ya dakatar da zaman mu'amala (wanda ccam ya fara) a iyakar awa 5, ta mako, ta Opus, ta Sonnet ko ta Fable, ccam yana kawo ƙarshen zaman kuma yana ci gaba da tattaunawar a matsayin wani daga cikin asusanka mai sarari: wata kujerar ƙungiyar Team ko Enterprise iri ɗaya, ko wani tsarin kai (Pro, Max). Ba ya taɓa sauyawa kafin iyakar, ba ya taɓa sa ido kan amfaninka a bayan fage, kuma ba ya taɓa fitar da aiki daga ƙungiyar Team ko Enterprise ko shigar da shi cikinta.
 
 A kan kujeru yana motsa aikinka daga wata kujera zuwa wata, abin da na iya saɓa wa sharuɗɗan Anthropic (duba Kujeru na Team da Enterprise a sama). Ga tsare-tsaren kai, sharuɗɗan Anthropic ba su yi magana a fili kan batun ba: Consumer Terms sun hana samun damar Services "through automated or non-human means" (ta hanyoyin atomatik ko waɗanda ba na ɗan Adam ba) sai dai idan Anthropic ta ba da izini a fili, kuma motsi yana aika saƙo ɗaya a madadinka. Kunna shi ya rage naka.
 

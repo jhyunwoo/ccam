@@ -1,10 +1,10 @@
 ---
 title: Vikomo vya matumizi na kubadili akaunti
 description: Ona matumizi ya saa 5 na ya wiki ya kila akaunti ya Claude Code kwa ccam usage, na ufungue akaunti yenye nafasi kubwa zaidi kwa ccam next --auto.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 5
 translation: machine
-sourceHash: "06bd349073e3"
+sourceHash: "c2a0018db4a3"
 ---
 
 `ccam usage` huonyesha, kwa kila akaunti, kiasi kilichotumika cha kila kikomo: kikomo cha saa 5, kikomo cha wiki na kikomo cha wiki cha kila model (kama Fable). `ccam next --auto` hufungua akaunti yenye nafasi kubwa zaidi, na `--continue` huhamisha mazungumzo ya sasa.
@@ -36,7 +36,7 @@ ccam huuliza endpoint ya matumizi ya Anthropic kwa ajili ya kila akaunti kwa wak
 
 Endpoint hii haijaandikiwa nyaraka hadharani na inaweza kubadilika. Ombi linaposhindwa, ccam huonyesha namba za mwisho zinazojulikana na kuziwekea alama kuwa ni za cache. Kipindi cha muda kilichoanza upya tangu namba hizo zihifadhiwe huonyesha 0%. `ccam doctor` hukujulisha ikiwa muundo wa jibu umebadilika.
 
-Claude Code inaposimamisha kipindi kwenye kikomo cha matumizi, [plugin ya ccam](/docs/install#claude-code-plugin) hurekodi ni kipindi kipi cha muda kilichojaa na lini kinaanza upya. Hadi wakati huo kipindi hicho huonyesha 100% bila kujali namba nyingine zinasema nini, kwa hiyo `ccam next --auto` na `--fallback` hazichagui akaunti hiyo tena mapema mno.
+Claude Code inaposimamisha kipindi kwenye kikomo cha matumizi, [plugin ya ccam](/docs/install#claude-code-plugin) hurekodi ni kipindi kipi cha muda kilichojaa na lini kinaanza upya. Hadi wakati huo kipindi hicho huonyesha 100% bila kujali namba nyingine zinasema nini, kwa hiyo `ccam next --auto` na `--fallback` hazichagui akaunti hiyo tena mapema mno. Hali hiyo huisha mapema tu ikiwa utafutaji wa matumizi uliofanywa dakika 5 au zaidi baada ya kikomo unaonyesha nafasi katika kipindi hicho, kama baada ya uwekaji upya wa kikomo (`/limit-reset` ya Claude Code).
 
 Namba zilizopatikana chini ya sekunde 60 zilizopita hutumiwa tena. Chaguo:
 

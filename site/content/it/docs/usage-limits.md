@@ -1,10 +1,10 @@
 ---
 title: Limiti di utilizzo e cambio di account
 description: Visualizza l'utilizzo su 5 ore e settimanale di ogni account Claude Code con ccam usage e apri quello con più margine con ccam next --auto.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 5
 translation: machine
-sourceHash: "06bd349073e3"
+sourceHash: "c2a0018db4a3"
 ---
 
 `ccam usage` mostra, per ogni account, quanta parte di ciascun limite è stata usata: il limite su 5 ore, il limite settimanale e il limite settimanale proprio di ogni modello (come Fable). `ccam next --auto` apre l'account con più margine, e `--continue` porta con sé la conversazione corrente.
@@ -36,7 +36,7 @@ ccam interroga l'endpoint di utilizzo di Anthropic per tutti gli account contemp
 
 Questo endpoint non è documentato pubblicamente e potrebbe cambiare. Quando una richiesta non va a buon fine, ccam mostra gli ultimi numeri noti e li segna come presi dalla cache. Una finestra che si è azzerata dopo il salvataggio di quei numeri mostra 0%. `ccam doctor` ti avvisa se il formato della risposta è cambiato.
 
-Quando Claude Code ferma una sessione a un limite di utilizzo, il [plugin di ccam](/docs/install#claude-code-plugin) registra quale finestra era piena e quando si azzera. Fino ad allora quella finestra mostra 100% qualunque cosa dicano gli altri numeri, così `ccam next --auto` e `--fallback` non scelgono di nuovo l'account troppo presto.
+Quando Claude Code ferma una sessione a un limite di utilizzo, il [plugin di ccam](/docs/install#claude-code-plugin) registra quale finestra era piena e quando si azzera. Fino ad allora quella finestra mostra 100% qualunque cosa dicano gli altri numeri, così `ccam next --auto` e `--fallback` non scelgono di nuovo l'account troppo presto. Solo una consultazione dell'utilizzo fatta 5 minuti o più dopo il limite che mostri margine in quella finestra, come dopo un azzeramento del limite (`/limit-reset` di Claude Code), ne anticipa la fine.
 
 I numeri ottenuti meno di 60 secondi prima vengono riutilizzati. Opzioni:
 
