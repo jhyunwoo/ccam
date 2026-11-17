@@ -2,10 +2,10 @@
 title: 常見問題
 metaTitle: "ccam 常見問題：Claude Code 多帳號"
 description: 關於 ccam、Claude Code 多帳號、用量限制、共用、隱私和支援的作業系統的常見問題解答。
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: "64cd522eb711"
+sourceHash: "9b13b37391f2"
 ---
 
 ## ccam 是 Anthropic 的官方工具嗎？
@@ -24,7 +24,7 @@ sourceHash: "64cd522eb711"
 
 ## ccam 能在工作階段達到上限時自行切換帳號嗎？
 
-只有在你開啟這項功能時才會。在 `~/.config/ccam/config.toml` 的最上方設定 `auto_switch = true`（Linux 和 macOS；預設關閉，屬於實驗性功能）後，當 Claude Code 因 5 小時、每週、Opus 或 Sonnet 上限而停止一個互動式工作階段（由 ccam 啟動的工作階段）時，ccam 會結束該工作階段，並以你另一個還有餘裕的帳號接續對話：同一個 Team 或 Enterprise 組織的另一個席位，或另一個個人方案（Pro、Max）。它絕不會在達到上限之前切換，絕不會在背景監看你的用量，也絕不會把工作移出 Team 或 Enterprise 組織或移入其中。
+只有在你開啟這項功能時才會。在 `~/.config/ccam/config.toml` 的最上方設定 `auto_switch = true`（Linux 和 macOS；預設關閉，屬於實驗性功能）後，當 Claude Code 因 5 小時、每週、Opus、Sonnet 或 Fable 上限而停止一個互動式工作階段（由 ccam 啟動的工作階段）時，ccam 會結束該工作階段，並以你另一個還有餘裕的帳號接續對話：同一個 Team 或 Enterprise 組織的另一個席位，或另一個個人方案（Pro、Max）。它絕不會在達到上限之前切換，絕不會在背景監看你的用量，也絕不會把工作移出 Team 或 Enterprise 組織或移入其中。
 
 在席位之間，它會把你的工作從一個席位移到另一個席位，這可能會違反 Anthropic 的條款（請參閱上方的 Team 和 Enterprise 席位）。至於個人方案，Anthropic 的條款並沒有明確規範：消費者條款禁止「through automated or non-human means」（透過自動化或非人為的方式）存取服務，除非 Anthropic 明確允許，而一次移動會代替你送出一則訊息。要不要開啟由你決定。
 

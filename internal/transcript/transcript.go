@@ -270,11 +270,25 @@ type Limit struct {
 // conversation at path, if it was hit at since or later: the row Claude
 // Code (2.1.304-2.1.306) writes for a request it refused, an assistant
 // message with isApiErrorMessage, apiError "usage_limit_reached" and the
-// server's rate_limit_info at status "rejected". A subagent's row
-// (isSidechain) and other API errors, such as a model that requires usage
-// credits, do not count, and neither does a limit a person's prompt came
-// after: that prompt began a turn of its own.
+// server's rate_limit_info at status "rejected". A Fable model whose
+// included weekly allowance is used up is refused the same way with apiError
+// "model_requires_usage_credits" and the window seven_day_overage_included
+// (2.1.322): that counts too. A subagent's row (isSidechain) and other API
+// errors, such as a model that requires usage credits for no window, do not
+// count, and neither does a limit a person's prompt came after: that prompt
+// began a turn of its own.
 func LastLimit(path string, since time.Time) (Limit, bool) { return lastLimit(path, since, false) }
+
+// fableAllowance is the window of a Fable model's included weekly allowance,
+// whose refusal is a "model_requires_usage_credits" error.
+const fableAllowance = "seven_day_overage_included"
+
+// limitRow reports whether line may be a row of a refused request at a
+// usage limit (LastLimit), before it is parsed.
+func limitRow(line []byte) bool {
+	return bytes.Contains(line, []byte(`"usage_limit_reached"`)) ||
+		bytes.Contains(line, []byte(`"model_requires_usage_credits"`)) && bytes.Contains(line, []byte(`"`+fableAllowance+`"`))
+}
 
 // SubagentLimit is LastLimit for the conversation of a subagent at path
 // (SubagentPath), whose rows are all isSidechain: Claude Code writes a
@@ -288,7 +302,7 @@ func lastLimit(path string, since time.Time, side bool) (Limit, bool) {
 	lines := tail(path)
 	for i := len(lines) - 1; i >= 0; i-- {
 		l := lines[i]
-		if !bytes.Contains(l, []byte(`"usage_limit_reached"`)) {
+		if !limitRow(l) {
 			if prompt(l) {
 				return Limit{}, false
 			}
@@ -315,7 +329,10 @@ func lastLimit(path string, since time.Time, side bool) (Limit, bool) {
 			} `json:"message"`
 		}
 		if json.Unmarshal(l, &row) != nil || row.Type != "assistant" || row.Sidechain != side || !row.APIError ||
-			row.Kind != "usage_limit_reached" || row.Params.Info == nil || row.Params.Info.Status != "rejected" {
+			row.Params.Info == nil || row.Params.Info.Status != "rejected" {
+			continue
+		}
+		if row.Kind != "usage_limit_reached" && (row.Kind != "model_requires_usage_credits" || row.Params.Info.Window != fableAllowance) {
 			continue
 		}
 		if row.At.Before(since) {
@@ -382,7 +399,7 @@ func PromptedAfter(path string, at time.Time) bool {
 		if prompt(l) {
 			return true
 		}
-		if !bytes.Contains(l, []byte(`"usage_limit_reached"`)) {
+		if !limitRow(l) {
 			continue
 		}
 		var row struct {

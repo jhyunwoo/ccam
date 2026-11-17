@@ -1,10 +1,10 @@
 ---
 title: Nutzungslimits
 description: ccam usage zeigt die 5-Stunden- und Wochenlimits aller Konten auf einmal, und ccam statusline bringt Kontoname und Nutzung in Claude Code.
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: "54b296f7da35"
+sourceHash: "9afbad92c84c"
 ---
 
 `ccam usage` zeigt für jedes Konto, wie viel von jedem Limit verbraucht ist: vom 5-Stunden-Limit, vom Wochenlimit und vom eigenen Wochenlimit jedes Modells (etwa Fable). Jedes Limit bekommt einen Balken und die Zeit bis zum Zurücksetzen. Verwende es, bevor du eine lange Aufgabe beginnst oder wenn Claude Code meldet, dass ein Limit nahe ist, um zu sehen, welches Konto noch Spielraum hat. `ccam statusline` ist der Statuszeilenbefehl für Claude Code: Er zeigt Kontoname und Nutzung in Claude Code an und speichert die Zahlen für `ccam usage`. Für die Tokens und geschätzten Kosten hinter der Nutzung führt `ccam ccusage` [ccusage](https://ccusage.com) über die Gespräche aller Konten aus ([unten](#tokens-and-costs-ccam-ccusage)).
@@ -40,7 +40,7 @@ $ ccam usage
 
 Jedes Konto bekommt eine Zeile mit seiner Nummer, seinem Namen und dem Alter seiner Zahlen; `(cached)` bedeutet, dass sie aus einer gespeicherten Datei stammen, nicht vom Endpunkt. Darunter zeigt eine Zeile pro Limit einen Balken aus 20 Zellen, den Prozentwert und die Zeit bis zum Zurücksetzen des Zeitfensters: `5-hour`, `Weekly` (alle Modelle), dann das eigene Wochenfenster jedes Modells, etwa `Fable`. Ein Zeitfenster, das das Konto nicht hat, zeigt `-`. Ein Prozentwert wird bei 80 % gelb und bei 100 % rot.
 
-Hat Claude Code eine Anfrage abgelehnt, weil ein Zeitfenster voll war, zeigt dieses Fenster bis zu seinem Zurücksetzen 100 %, egal was die gespeicherten Zahlen sagen (siehe [den Limit-Eintrag](#the-limit-record)). In einem Terminal erscheint jedes Konto sofort als `fetching…`, und seine Zeilen werden gezeichnet, sobald es antwortet.
+Hat Claude Code eine Anfrage abgelehnt, weil ein Zeitfenster voll war, zeigt dieses Fenster bis zu seinem Zurücksetzen 100 %, es sei denn, eine Abfrage mindestens 5 Minuten nach dem Limit zeigt darin wieder Spielraum (siehe [den Limit-Eintrag](#the-limit-record)). In einem Terminal erscheint jedes Konto sofort als `fetching…`, und seine Zeilen werden gezeichnet, sobald es antwortet.
 
 Die letzte Zeile, die nur erscheint, wenn du mehr als ein Konto hast, nennt das Konto, das [`ccam next --auto`](/features/next) wählen würde. Sie folgt denselben Regeln:
 
@@ -138,7 +138,9 @@ Der Endpunkt hat zwei Antwortformate. Das neuere hat ein Array `limits` mit den 
 
 ### Der Limit-Eintrag
 
-Wenn Claude Code einen Durchgang an einem Nutzungslimit stoppt, liest der Hook des [ccam-Plugins](/docs/install#claude-code-plugin) die abgelehnte Anfrage aus der Unterhaltung: welches Zeitfenster voll war (5 Stunden, Woche, Opus oder Sonnet) und wann es zurückgesetzt wird. Das schreibt er nach `~/.local/state/ccam/usage/<name>.limit.json`. ccam legt den Eintrag über alles, was es sonst weiß, aus jeder Quelle (`Fetch`): Jedes darin genannte Zeitfenster zählt bis zu seinem Zurücksetzen als 100 %, egal wie alt oder niedrig die gespeicherten Zahlen sind, sodass `ccam next --auto`, `ccam pick`, `--fallback` und [`auto_switch`](/features/next#auto-switch) das Konto bis dahin nicht wieder wählen.
+Wenn Claude Code einen Durchgang an einem Nutzungslimit stoppt, liest der Hook des [ccam-Plugins](/docs/install#claude-code-plugin) die abgelehnte Anfrage aus der Unterhaltung: welches Zeitfenster voll war (5 Stunden, Woche, Opus, Sonnet oder Fable) und wann es zurückgesetzt wird. Das schreibt er nach `~/.local/state/ccam/usage/<name>.limit.json`. ccam legt den Eintrag über alles, was es sonst weiß, aus jeder Quelle (`Fetch`): Jedes darin genannte Zeitfenster zählt bis zu seinem Zurücksetzen als 100 %, egal wie alt oder niedrig die gespeicherten Zahlen sind, sodass `ccam next --auto`, `ccam pick`, `--fallback` und [`auto_switch`](/features/next#auto-switch) das Konto bis dahin nicht wieder wählen.
+
+Ein Limit kann vor dem Zeitpunkt seines Zurücksetzens enden, zum Beispiel wenn du eine Limit-Zurücksetzung einlöst (`/limit-reset` in Claude Code). Deshalb hat eine Abfrage des Nutzungs-Endpunkts, ob von ccam oder von Claude Code, die mindestens 5 Minuten nach dem Limit erfolgt und dieses Zeitfenster unter 100 % zeigt, für dieses Fenster Vorrang vor dem Eintrag. Die Statuszeile zählt nicht. Die 5 Minuten verhindern, dass ein gerade abgelehntes Konto anhand von Zahlen, die das Limit noch nicht zeigen, wieder gewählt wird.
 
 Ist sonst nichts bekannt, zeigt das Konto allein den Eintrag (`source: the usage limit Claude Code reported` mit `-v`). Unbeaufsichtigte Sitzungen (`-p`-Läufe und Hintergrundsitzungen) schreiben keinen Eintrag, ebenso wenig ein Stopp durch eine Organisation (zum Beispiel, wenn ihre Nutzung aufgebraucht ist oder das Limit einer Gruppe $0 beträgt), den ihre Admins jederzeit aufheben können. `ccam login` in ein anderes Claude-Konto verwirft den Eintrag; die Datei zu löschen, entfernt ihn ebenfalls.
 

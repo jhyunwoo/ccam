@@ -1,10 +1,10 @@
 ---
 title: 切换到下一个账号
 description: ccam next 以另一个账号打开 Claude Code；--auto 选择余量最多的账号，--continue 把对话带到新账号，--fallback 重新运行 -p 任务。
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next` 无需你指定账号名，就能以另一个账号打开 Claude Code。当某个账号达到用量限制时使用它。有四种切换方式：
@@ -86,7 +86,7 @@ Claude Code 自己的选项，例如 `--dangerously-skip-permissions` 或 `--mod
 2. **超出**：低于 100%，但达到或超过 `auto_max_usage`。只在没有账号有余量时使用；其中 `headroom` 会选的账号排在最前。
 3. **已满**：某个时间窗口已达 100%，或 5 小时用量未知。从不选择。
 
-当 Claude Code 在某个时间窗口拒绝了请求时，该时间窗口在重置前一律按 100% 计算：[ccam 插件](#inside-claude-code)的钩子会记录它（`~/.local/state/ccam/usage/<name>.limit.json`），无论保存的数字是多少。因此刚刚达到限制的账号在重置前不会再次被选中，即使它的数字已经过时。
+当 Claude Code 在某个时间窗口拒绝了请求时，该时间窗口在重置前一律按 100% 计算：[ccam 插件](#inside-claude-code)的钩子会记录它（`~/.local/state/ccam/usage/<name>.limit.json`），无论保存的数字是多少。因此刚刚达到限制的账号在重置前不会再次被选中，即使它的数字已经过时。只有在达到限制 5 分钟或更久之后进行的用量查询显示该时间窗口低于 100% 时，它才会提前结束，例如在限额重置（Claude Code 中的 `/limit-reset`）之后。
 
 对所有账号生效的设置写在 `config.toml` 的顶部，位于第一个 `[[group]]`、`[[profile]]` 或 `[[folder]]` 之上。写在其中某个表下面的设置属于该表：ccam 会在每次启动时对它发出警告，而保存配置的命令在它被移走之前会拒绝执行。
 
@@ -187,7 +187,7 @@ ccam: personal hit its 5-hour limit; continuing this conversation as side
 
 1. 会话由 ccam 在终端中启动，并且 ccam 在它旁边持续运行。`auto_switch` 会开启[接力](#relay)，所以对设置之后启动的交互式会话来说这一条成立。在此之前启动的会话，或在旧版 ccam 下启动的会话，会收到一条以 ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` 结尾的通知。无人值守的会话（`-p` 运行和后台会话）、`claude remote-control` 以及不通过 ccam 启动的 Claude Code 永远不会被移动。
 2. 该账号已开启 [ccam 插件](/docs/install#claude-code-plugin)，并运行 Claude Code 2.1.214 或更高版本，这些版本会把自己的进程 ID 传给钩子（`CLAUDE_PID`）。
-3. Claude Code 已把被拒绝的请求连同重置时间写入对话，且针对的是该账号的 5 小时、每周、Opus 或 Sonnet 限制。支出限制、用量积分耗尽、组织设置的停用、Fable 额度（`You've reached your Fable limit.`）、服务器限流以及 API 密钥的速率限制，都永远不会让会话移动。子代理或工作流代理的限制也算在内，即使主对话只是在等待它；如果那是每周的 Opus 或 Sonnet 限制，只有当对话本身使用该模型运行时，会话才会移动。
+3. Claude Code 已把被拒绝的请求连同重置时间写入对话，且针对的是该账号的 5 小时、每周、Opus、Sonnet 或 Fable 限制。当某个 Fable 模型用完了它的每周额度时，Claude Code 会显示 `You've hit your Fable limit` 或 `You're out of usage credits`，并且被拒绝的请求会指明 Fable 的每周时间窗口：这就是 Fable 限制，下一个账号必须在它自己的 Fable 每周时间窗口中还有余量。支出限制、其他任何请求中的用量积分耗尽、组织设置的停用、服务器限流以及 API 密钥的速率限制，都永远不会让会话移动。子代理或工作流代理的限制也算在内，即使主对话只是在等待它；如果那是每周的 Opus、Sonnet 或 Fable 限制，只有当对话本身使用该模型运行时，会话才会移动。
 4. ccam 知道该账号的套餐，来自它的 `.claude.json` 或 `ccam login` 记录的信息。否则通知会以 `ccam does not know personal's plan, so auto_switch leaves this session.` 结尾。
 5. 会话没有连接到 Remote Control。换成另一个账号后，它不会重新连接到你用来操控它的应用，所以会话保持不动，通知会说明这一点。
 6. 限制在 15 分钟以后才重置。等待时间更短时，ccam 会把会话留给 Claude Code：`ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

@@ -1,10 +1,10 @@
 ---
 title: Limity użycia
 description: ccam usage pokazuje naraz 5-godzinne i tygodniowe limity każdego konta, a ccam statusline wyświetla w Claude Code nazwę konta i jego użycie.
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: "54b296f7da35"
+sourceHash: "9afbad92c84c"
 ---
 
 `ccam usage` pokazuje dla każdego konta, jaka część każdego limitu jest wykorzystana: 5-godzinnego limitu, tygodniowego limitu i własnego tygodniowego limitu każdego modelu (takiego jak Fable). Każdy limit ma pasek i czas do jego resetu. Używaj go przed rozpoczęciem długiego zadania albo gdy Claude Code informuje, że limit jest blisko, żeby zobaczyć, które konto ma jeszcze zapas. `ccam statusline` to polecenie paska stanu dla Claude Code: pokazuje nazwę konta i użycie w Claude Code i zapisuje liczby dla `ccam usage`. Tokeny i szacowane koszty stojące za tym użyciem pokazuje `ccam ccusage`, które uruchamia [ccusage](https://ccusage.com) na rozmowach każdego konta ([niżej](#tokens-and-costs-ccam-ccusage)).
@@ -40,7 +40,7 @@ $ ccam usage
 
 Każde konto ma wiersz ze swoim numerem, nazwą i informacją, jak stare są jego liczby; `(cached)` oznacza, że pochodzą z zapisanego pliku, a nie z endpointu. Pod nim każdy limit ma własny wiersz z 20-polowym paskiem, procentem i czasem do resetu okna: `5-hour`, `Weekly` (wszystkie modele), a potem własne tygodniowe okno każdego modelu, takie jak `Fable`. Okno, którego konto nie ma, pokazuje `-`. Procent zmienia kolor na żółty przy 80% i na czerwony przy 100%.
 
-Jeśli Claude Code odrzucił żądanie, bo okno było pełne, to okno pokazuje 100% aż do resetu, bez względu na zapisane liczby (zobacz [zapis limitu](#the-limit-record)). W terminalu każde konto pojawia się od razu jako `fetching…`, a jego wiersze są rysowane, gdy odpowie.
+Jeśli Claude Code odrzucił żądanie, bo okno było pełne, to okno pokazuje 100% aż do resetu, chyba że sprawdzenie wykonane co najmniej 5 minut po limicie znów pokaże w nim zapas (zobacz [zapis limitu](#the-limit-record)). W terminalu każde konto pojawia się od razu jako `fetching…`, a jego wiersze są rysowane, gdy odpowie.
 
 Ostatni wiersz, widoczny tylko wtedy, gdy masz więcej niż jedno konto, wskazuje konto, które wybrałby [`ccam next --auto`](/features/next). Stosuje te same zasady:
 
@@ -136,7 +136,9 @@ Endpoint ma dwa formaty odpowiedzi. Nowszy ma tablicę `limits` z wpisami `sessi
 
 ### Zapis limitu
 
-Gdy Claude Code zatrzyma turę na limicie użycia, hook [pluginu ccam](/docs/install#claude-code-plugin) odczytuje z rozmowy odrzucone żądanie: które okno było pełne (5-godzinne, tygodniowe, Opus lub Sonnet) i kiedy się resetuje. Zapisuje to w `~/.local/state/ccam/usage/<name>.limit.json`. ccam nakłada ten zapis na wszystko inne, co wie, z każdego źródła (`Fetch`): każde okno w zapisie liczy się jako 100% aż do resetu, bez względu na to, jak stare lub niskie są zapisane liczby, więc `ccam next --auto`, `ccam pick`, `--fallback` i [`auto_switch`](/features/next#auto-switch) nie wybiorą tego konta wcześniej.
+Gdy Claude Code zatrzyma turę na limicie użycia, hook [pluginu ccam](/docs/install#claude-code-plugin) odczytuje z rozmowy odrzucone żądanie: które okno było pełne (5-godzinne, tygodniowe, Opus, Sonnet lub Fable) i kiedy się resetuje. Zapisuje to w `~/.local/state/ccam/usage/<name>.limit.json`. ccam nakłada ten zapis na wszystko inne, co wie, z każdego źródła (`Fetch`): każde okno w zapisie liczy się jako 100% aż do resetu, bez względu na to, jak stare lub niskie są zapisane liczby, więc `ccam next --auto`, `ccam pick`, `--fallback` i [`auto_switch`](/features/next#auto-switch) nie wybiorą tego konta wcześniej.
+
+Limit może skończyć się przed czasem resetu, na przykład gdy użyjesz resetu limitu (`/limit-reset` w Claude Code). Dlatego sprawdzenie endpointu użycia, przez ccam lub przez Claude Code, wykonane co najmniej 5 minut po limicie i pokazujące to okno poniżej 100% ma pierwszeństwo przed zapisem dla tego okna. Pasek stanu się nie liczy. Te 5 minut chroni przed ponownym wybraniem konta, które właśnie zostało odrzucone, na podstawie liczb, które jeszcze nie pokazują limitu.
 
 Gdy nic innego nie wiadomo, konto pokazuje sam zapis (`source: the usage limit Claude Code reported` z `-v`). Sesje nienadzorowane (przebiegi `-p` i sesje w tle) nie tworzą zapisu, podobnie jak zatrzymanie ustawione przez organizację (na przykład gdy skończyło się jej użycie albo limit grupy wynosi $0), które jej administratorzy mogą w każdej chwili cofnąć. `ccam login` na inne konto Claude usuwa zapis; usunięcie pliku także go czyści.
 

@@ -1,7 +1,7 @@
 ---
 title: Switching to the next account
 description: ccam next opens Claude Code as another account; --auto picks the most room, --continue carries the conversation over, and --fallback reruns -p jobs.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: source
 ---
@@ -85,7 +85,7 @@ An account is judged by its 5-hour and weekly windows, and, when `--model` is am
 2. **Over**: below 100% but at or over `auto_max_usage`. Used only when no account has room; the one `headroom` would take among them comes first.
 3. **Full**: a window at 100%, or unknown 5-hour usage. Never chosen.
 
-A window counts as 100% until its reset when Claude Code refused a request there: the [ccam plugin](#inside-claude-code)'s hook records it (`~/.local/state/ccam/usage/<name>.limit.json`), whatever the saved numbers say. So an account that has just hit its limit is not chosen again before its reset, even when its numbers are old.
+A window counts as 100% until its reset when Claude Code refused a request there: the [ccam plugin](#inside-claude-code)'s hook records it (`~/.local/state/ccam/usage/<name>.limit.json`), whatever the saved numbers say. So an account that has just hit its limit is not chosen again before its reset, even when its numbers are old. Only a usage lookup made 5 minutes or more after the limit that shows the window below 100% ends it sooner, as after a limit reset (`/limit-reset` in Claude Code).
 
 Settings for all accounts go at the top of `config.toml`, above the first `[[group]]`, `[[profile]]` or `[[folder]]`. A setting below one of them belongs to that table: ccam warns about it at every launch, and commands that save the config refuse until it is moved.
 
@@ -186,7 +186,7 @@ ccam moves a session only when all of these hold:
 
 1. ccam started it in a terminal and keeps running alongside it. `auto_switch` turns the [relay](#relay) on, so this holds for the interactive sessions you start after setting it. A session started before, or under an older ccam, gets a notification that ends ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` Unattended sessions (`-p` runs and background sessions), `claude remote-control` and Claude Code started without ccam are never moved.
 2. The account has the [ccam plugin](/docs/install#claude-code-plugin) turned on and runs Claude Code 2.1.214 or later, which passes its process ID to the hook (`CLAUDE_PID`).
-3. Claude Code wrote the refused request into the conversation, with the time it resets, for that account's 5-hour, weekly, Opus or Sonnet limit. A spend limit, usage credits running out, a stop set by an organization, the Fable allowance (`You've reached your Fable limit.`), a server throttle and an API key's rate limit never move a session. A subagent's or workflow agent's limit counts, even while the main conversation only waits for it; when that is a weekly Opus or Sonnet limit, the session moves only if the conversation itself runs on that model.
+3. Claude Code wrote the refused request into the conversation, with the time it resets, for that account's 5-hour, weekly, Opus, Sonnet or Fable limit. When a Fable model has used up its weekly allowance, Claude Code says `You've hit your Fable limit` or `You're out of usage credits`, and the refused request names the Fable week: that is the Fable limit, and the next account must have room in its own Fable week. A spend limit, usage credits running out on any other request, a stop set by an organization, a server throttle and an API key's rate limit never move a session. A subagent's or workflow agent's limit counts, even while the main conversation only waits for it; when that is a weekly Opus, Sonnet or Fable limit, the session moves only if the conversation itself runs on that model.
 4. ccam knows the account's plan, from its `.claude.json` or from what `ccam login` recorded. If not, the notification ends `ccam does not know personal's plan, so auto_switch leaves this session.`
 5. The session is not connected to Remote Control. As another account it would not reconnect to the app you drive it from, so it stays, and the notification says so.
 6. The limit resets more than 15 minutes from now. For a shorter wait ccam leaves the session to Claude Code: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

@@ -1,10 +1,10 @@
 ---
 title: Chuyển sang tài khoản tiếp theo
 description: "ccam next mở Claude Code bằng tài khoản khác; --auto chọn tài khoản còn nhiều hạn mức nhất, --continue chuyển hội thoại sang, --fallback chạy lại tác vụ -p."
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next` mở Claude Code bằng một tài khoản khác mà bạn không cần nêu tên. Hãy dùng nó khi một tài khoản chạm giới hạn sử dụng. Có bốn cách để chuyển đổi:
@@ -86,7 +86,7 @@ Một tài khoản được đánh giá theo khoảng 5 giờ và khoảng hàng
 2. **Vượt ngưỡng**: dưới 100% nhưng bằng hoặc vượt `auto_max_usage`. Chỉ được dùng khi không tài khoản nào còn hạn mức; tài khoản mà `headroom` sẽ chọn trong số đó được ưu tiên.
 3. **Đầy**: có một khoảng ở mức 100%, hoặc chưa rõ mức sử dụng 5 giờ. Không bao giờ được chọn.
 
-Một khoảng được tính là 100% cho đến khi được đặt lại khi Claude Code đã từ chối một yêu cầu ở đó: hook của [plugin ccam](#inside-claude-code) ghi lại điều này (`~/.local/state/ccam/usage/<name>.limit.json`), bất kể các con số đã lưu nói gì. Vì vậy một tài khoản vừa chạm giới hạn sẽ không được chọn lại trước khi đặt lại, kể cả khi các con số của nó đã cũ.
+Một khoảng được tính là 100% cho đến khi được đặt lại khi Claude Code đã từ chối một yêu cầu ở đó: hook của [plugin ccam](#inside-claude-code) ghi lại điều này (`~/.local/state/ccam/usage/<name>.limit.json`), bất kể các con số đã lưu nói gì. Vì vậy một tài khoản vừa chạm giới hạn sẽ không được chọn lại trước khi đặt lại, kể cả khi các con số của nó đã cũ. Chỉ một lượt tra cứu mức sử dụng được thực hiện từ 5 phút trở lên sau khi chạm giới hạn và cho thấy khoảng đó dưới 100% mới kết thúc việc này sớm hơn, như sau một lượt đặt lại giới hạn (`/limit-reset` trong Claude Code).
 
 Cài đặt cho mọi tài khoản đặt ở đầu `config.toml`, phía trên `[[group]]`, `[[profile]]` hoặc `[[folder]]` đầu tiên. Một cài đặt nằm dưới một trong số đó thuộc về bảng đó: ccam cảnh báo về nó mỗi lần khởi động, và các lệnh lưu cấu hình sẽ từ chối cho đến khi nó được dời lên.
 
@@ -187,7 +187,7 @@ ccam chỉ chuyển một phiên khi tất cả các điều kiện sau đều �
 
 1. ccam đã khởi động phiên đó trong một terminal và tiếp tục chạy song song với nó. `auto_switch` bật [relay](#relay), nên điều này đúng với các phiên tương tác bạn khởi động sau khi đặt nó. Một phiên khởi động trước đó, hoặc dưới một ccam cũ hơn, nhận một thông báo kết thúc bằng ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` Các phiên không có người theo dõi (các lần chạy `-p` và các phiên nền), `claude remote-control` và Claude Code khởi động không qua ccam không bao giờ bị chuyển.
 2. Tài khoản đã bật [plugin ccam](/docs/install#claude-code-plugin) và chạy Claude Code 2.1.214 trở lên, phiên bản truyền ID tiến trình của nó cho hook (`CLAUDE_PID`).
-3. Claude Code đã ghi yêu cầu bị từ chối vào cuộc hội thoại, kèm thời điểm đặt lại, cho giới hạn 5 giờ, hàng tuần, Opus hoặc Sonnet của tài khoản đó. Giới hạn chi tiêu, việc hết tín dụng sử dụng, việc tổ chức dừng tài khoản, hạn mức Fable (`You've reached your Fable limit.`), việc máy chủ điều tiết và giới hạn tốc độ của API key không bao giờ làm một phiên bị chuyển. Giới hạn của một subagent hoặc agent của workflow vẫn được tính, kể cả khi cuộc hội thoại chính chỉ đang chờ nó; khi đó là giới hạn hàng tuần của Opus hoặc Sonnet, phiên chỉ được chuyển nếu chính cuộc hội thoại chạy trên mô hình đó.
+3. Claude Code đã ghi yêu cầu bị từ chối vào cuộc hội thoại, kèm thời điểm đặt lại, cho giới hạn 5 giờ, hàng tuần, Opus, Sonnet hoặc Fable của tài khoản đó. Khi một mô hình Fable đã dùng hết hạn mức hàng tuần, Claude Code báo `You've hit your Fable limit` hoặc `You're out of usage credits`, và yêu cầu bị từ chối nêu khoảng hàng tuần của Fable: đó là giới hạn Fable, và tài khoản tiếp theo phải còn hạn mức trong khoảng hàng tuần Fable của chính nó. Giới hạn chi tiêu, việc hết tín dụng sử dụng ở bất kỳ yêu cầu nào khác, việc tổ chức dừng tài khoản, việc máy chủ điều tiết và giới hạn tốc độ của API key không bao giờ làm một phiên bị chuyển. Giới hạn của một subagent hoặc agent của workflow vẫn được tính, kể cả khi cuộc hội thoại chính chỉ đang chờ nó; khi đó là giới hạn hàng tuần của Opus, Sonnet hoặc Fable, phiên chỉ được chuyển nếu chính cuộc hội thoại chạy trên mô hình đó.
 4. ccam biết gói của tài khoản, từ `.claude.json` của nó hoặc từ những gì `ccam login` đã ghi lại. Nếu không, thông báo kết thúc bằng `ccam does not know personal's plan, so auto_switch leaves this session.`
 5. Phiên không được kết nối với Remote Control. Dưới một tài khoản khác, nó sẽ không kết nối lại với ứng dụng mà bạn dùng để điều khiển nó, nên nó ở lại, và thông báo nói rõ điều đó.
 6. Giới hạn được đặt lại sau hơn 15 phút kể từ bây giờ. Với thời gian chờ ngắn hơn, ccam để phiên lại cho Claude Code: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

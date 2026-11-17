@@ -304,6 +304,9 @@ func autoSwitch(e *env, in hookInput, t handoff.Ticket, lim transcript.Limit, st
 	}
 	now := clock()
 	f := limitFacts{on: cfg.AutoSwitch && runtime.GOOS != "windows", kind: handoff.Classify(cmp.Or(in.LastMessage, lim.Text))}
+	if usage.WindowModel(lim.Window) != "" {
+		f.kind = handoff.Model // a model's week, also the Fable allowance's "You're out of usage credits"
+	}
 	if !lim.ResetsAt.IsZero() {
 		f.resetsIn = lim.ResetsAt.Sub(now)
 	}
@@ -331,8 +334,8 @@ func autoSwitch(e *env, in hookInput, t handoff.Ticket, lim transcript.Limit, st
 		return false, stayNote(s, f, t.Account, handoff.WindowLabel(lim.Window), hit)
 	}
 	p := usage.Policy{MaxUsage: cfg.AutoMaxUsage, Strategy: cfg.AutoStrategy, Model: lim.Model}
-	if fam, ok := strings.CutPrefix(lim.Window, "seven_day_"); ok {
-		p.Model = fam // the Opus or Sonnet week: the next account's must have room
+	if fam := usage.WindowModel(lim.Window); fam != "" {
+		p.Model = fam // the Opus, Sonnet or Fable week: the next account's must have room
 	}
 	if p.Check() != nil {
 		return false, ""
@@ -389,11 +392,11 @@ func autoSwitch(e *env, in hookInput, t handoff.Ticket, lim transcript.Limit, st
 // subagentHolds reports whether a subagent's limit at window holds up the
 // main conversation, whose last reply came from model: a window of the
 // whole account does, the week of a model (seven_day_opus,
-// seven_day_sonnet) only when the conversation runs on that model, and
-// otherwise goes on as it is.
+// seven_day_sonnet, seven_day_overage_included for Fable) only when the
+// conversation runs on that model, and otherwise goes on as it is.
 func subagentHolds(window, model string) bool {
-	family, ok := strings.CutPrefix(window, "seven_day_")
-	return !ok || strings.Contains(model, family)
+	family := usage.WindowModel(window)
+	return family == "" || strings.Contains(model, family)
 }
 
 // moving reports whether the note t says that this session's Claude Code

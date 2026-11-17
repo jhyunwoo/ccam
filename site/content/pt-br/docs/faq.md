@@ -2,10 +2,10 @@
 title: Perguntas frequentes
 metaTitle: "Perguntas frequentes: várias contas do Claude Code"
 description: Respostas sobre o ccam, contas do Claude Code, limites de uso, compartilhamento, privacidade e sistemas suportados.
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: "64cd522eb711"
+sourceHash: "9b13b37391f2"
 ---
 
 ## O ccam é uma ferramenta oficial da Anthropic?
@@ -24,7 +24,7 @@ Não além do limite de nenhuma conta: cada conta mantém os próprios limites e
 
 ## O ccam pode trocar de conta sozinho quando uma sessão atinge o limite?
 
-Só se você ativar isso. Com `auto_switch = true` no início do `~/.config/ccam/config.toml` (Linux e macOS; desativado por padrão e experimental), quando o Claude Code interrompe uma sessão interativa (uma que o ccam iniciou) em um limite de 5 horas, semanal, do Opus ou do Sonnet, o ccam encerra a sessão e continua a conversa como outra das suas contas com espaço: outro assento da mesma organização Team ou Enterprise, ou outro plano pessoal (Pro, Max). Ele nunca troca antes do limite, nunca acompanha o seu uso em segundo plano e nunca move trabalho para fora de uma organização Team ou Enterprise nem para dentro de uma.
+Só se você ativar isso. Com `auto_switch = true` no início do `~/.config/ccam/config.toml` (Linux e macOS; desativado por padrão e experimental), quando o Claude Code interrompe uma sessão interativa (uma que o ccam iniciou) em um limite de 5 horas, semanal, do Opus, do Sonnet ou do Fable, o ccam encerra a sessão e continua a conversa como outra das suas contas com espaço: outro assento da mesma organização Team ou Enterprise, ou outro plano pessoal (Pro, Max). Ele nunca troca antes do limite, nunca acompanha o seu uso em segundo plano e nunca move trabalho para fora de uma organização Team ou Enterprise nem para dentro de uma.
 
 Em assentos, ele move o seu trabalho de um assento para outro, o que pode violar os termos da Anthropic (veja Assentos dos planos Team e Enterprise acima). Para planos pessoais, os termos da Anthropic não tratam disso com clareza: os Termos do Consumidor proíbem acessar os Serviços "through automated or non-human means" (por meios automatizados ou não humanos), a menos que a Anthropic permita isso explicitamente, e uma troca envia uma mensagem em seu nome. Ativá-lo é uma decisão sua.
 

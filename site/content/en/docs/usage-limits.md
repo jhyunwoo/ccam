@@ -1,7 +1,7 @@
 ---
 title: Usage limits and switching accounts
 description: See the 5-hour and weekly usage of every Claude Code account with ccam usage, and open the account with the most room with ccam next --auto.
-updated: 2026-11-05
+updated: 2026-11-17
 published: 2026-10-19
 order: 5
 translation: source
@@ -36,7 +36,7 @@ ccam asks Anthropic's usage endpoint for every account at the same time, using e
 
 This endpoint is not publicly documented and may change. When a request fails, ccam shows the last known numbers and marks them as cached. A window that has reset since those numbers were saved shows 0%. `ccam doctor` tells you if the response format has changed.
 
-When Claude Code stops a session at a usage limit, the [ccam plugin](/docs/install#claude-code-plugin) records which window was full and when it resets. Until then that window shows 100% whatever the other numbers say, so `ccam next --auto` and `--fallback` do not pick the account again too early.
+When Claude Code stops a session at a usage limit, the [ccam plugin](/docs/install#claude-code-plugin) records which window was full and when it resets. Until then that window shows 100% whatever the other numbers say, so `ccam next --auto` and `--fallback` do not pick the account again too early. Only a usage lookup made 5 minutes or more after the limit that shows room in that window, as after a limit reset (`/limit-reset` in Claude Code), ends it sooner.
 
 Numbers fetched less than 60 seconds ago are reused. Options:
 

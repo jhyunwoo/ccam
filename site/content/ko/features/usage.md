@@ -1,10 +1,10 @@
 ---
 title: 사용량 한도
 description: ccam usage는 모든 계정의 5시간 한도와 주간 한도를 한 번에 보여 주고, ccam statusline은 Claude Code 안에 계정 이름과 사용량을 표시합니다.
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: "54b296f7da35"
+sourceHash: "9afbad92c84c"
 ---
 
 `ccam usage`는 모든 계정에 대해 각 한도를 얼마나 썼는지 보여 줍니다. 5시간 한도, 주간 한도, 그리고 모델별 주간 한도(Fable 등)입니다. 한도마다 막대 하나와 초기화까지 남은 시간이 표시됩니다. 긴 작업을 시작하기 전이나 Claude Code가 한도가 가까워졌다고 알릴 때 실행해, 어느 계정에 여유가 남았는지 확인하세요. `ccam statusline`은 Claude Code의 상태 표시줄 명령입니다. Claude Code 안에 계정 이름과 사용량을 표시하고, `ccam usage`가 쓸 수 있도록 수치를 저장합니다. 사용량 뒤에 있는 토큰과 추정 비용은 `ccam ccusage`가 모든 계정의 대화에 [ccusage](https://ccusage.com)를 실행해 보여 줍니다([아래](#tokens-and-costs-ccam-ccusage)).
@@ -40,7 +40,7 @@ $ ccam usage
 
 각 계정은 번호, 이름, 수치를 가져온 시점을 적은 줄로 시작합니다. `(cached)`는 엔드포인트가 아니라 저장된 파일에서 가져온 수치라는 뜻입니다. 그 아래에는 한도마다 한 줄씩 20칸 막대, 비율, 구간이 초기화되기까지 남은 시간이 표시됩니다. 순서는 `5-hour`, `Weekly`(모든 모델), 그다음 `Fable`처럼 모델마다 따로 있는 주간 구간입니다. 계정에 없는 구간은 `-`로 표시됩니다. 비율은 80%에서 노란색, 100%에서 빨간색으로 바뀝니다.
 
-구간이 가득 차서 Claude Code가 요청을 거부했다면, 그 구간은 저장된 수치와 상관없이 초기화될 때까지 100%로 표시됩니다([한도 기록](#the-limit-record) 참고). 터미널에서는 모든 계정이 먼저 `fetching…`으로 한꺼번에 나타나고, 계정이 응답하는 대로 그 줄들을 그립니다.
+구간이 가득 차서 Claude Code가 요청을 거부했다면, 한도에 도달하고 적어도 5분 뒤에 한 조회에서 그 구간에 다시 여유가 보이지 않는 한, 그 구간은 초기화될 때까지 100%로 표시됩니다([한도 기록](#the-limit-record) 참고). 터미널에서는 모든 계정이 먼저 `fetching…`으로 한꺼번에 나타나고, 계정이 응답하는 대로 그 줄들을 그립니다.
 
 마지막 줄은 계정이 둘 이상일 때만 나타나며, [`ccam next --auto`](/features/next)가 고를 계정을 알려 줍니다. 같은 규칙을 따릅니다.
 
@@ -138,7 +138,9 @@ ccam은 먼저 자신의 옵션을 읽습니다. `-a`(`--account`)는 계정 이
 
 ### 한도 기록
 
-Claude Code가 사용량 한도에서 턴을 멈추면 [ccam 플러그인](/docs/install#claude-code-plugin)의 훅이 대화에서 거부된 요청을 읽어, 어느 구간(5시간, 주간, Opus, Sonnet)이 가득 찼고 언제 초기화되는지 알아냅니다. 이를 `~/.local/state/ccam/usage/<name>.limit.json`에 기록합니다. ccam은 모든 출처에서 알아낸 내용보다 이 기록을 우선 적용합니다(`Fetch`). 기록에 있는 구간은 저장된 수치가 아무리 오래되었거나 낮아도 초기화될 때까지 100%로 치므로, `ccam next --auto`, `ccam pick`, `--fallback`, [`auto_switch`](/features/next#auto-switch)는 그 전에 그 계정을 다시 고르지 않습니다.
+Claude Code가 사용량 한도에서 턴을 멈추면 [ccam 플러그인](/docs/install#claude-code-plugin)의 훅이 대화에서 거부된 요청을 읽어, 어느 구간(5시간, 주간, Opus, Sonnet, Fable)이 가득 찼고 언제 초기화되는지 알아냅니다. 이를 `~/.local/state/ccam/usage/<name>.limit.json`에 기록합니다. ccam은 모든 출처에서 알아낸 내용보다 이 기록을 우선 적용합니다(`Fetch`). 기록에 있는 구간은 저장된 수치가 아무리 오래되었거나 낮아도 초기화될 때까지 100%로 치므로, `ccam next --auto`, `ccam pick`, `--fallback`, [`auto_switch`](/features/next#auto-switch)는 그 전에 그 계정을 다시 고르지 않습니다.
+
+한도는 초기화 시각 전에 끝날 수도 있습니다. 예를 들어 한도 초기화(Claude Code의 `/limit-reset`)를 쓸 때입니다. 그래서 한도에 도달하고 5분 이상 지나서 사용량 엔드포인트를 조회한 결과(ccam의 조회든 Claude Code의 조회든)가 그 구간을 100% 아래로 보여 주면, 그 구간에서는 이 결과가 기록보다 우선합니다. 상태 표시줄 값은 여기에 포함되지 않습니다. 5분을 두는 것은 방금 거부된 계정이 아직 한도를 반영하지 않은 수치 때문에 다시 선택되지 않게 하기 위해서입니다.
 
 다른 정보가 없으면 계정은 기록만으로 표시됩니다(`-v`를 주면 `source: the usage limit Claude Code reported`). 아무도 지켜보지 않는 세션(`-p` 실행과 백그라운드 세션)은 기록을 남기지 않으며, 관리자가 언제든 풀 수 있는 조직의 차단(예: 사용량이 소진되었거나 그룹 한도가 $0인 경우)도 기록하지 않습니다. 다른 Claude 계정으로 `ccam login`하면 기록이 지워지며, 파일을 지워도 기록이 사라집니다.
 

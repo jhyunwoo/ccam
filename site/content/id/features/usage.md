@@ -1,10 +1,10 @@
 ---
 title: Batas penggunaan
 description: ccam usage menampilkan batas 5 jam dan mingguan semua akun sekaligus, dan ccam statusline menampilkan nama akun dan penggunaannya di Claude Code.
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: "54b296f7da35"
+sourceHash: "9afbad92c84c"
 ---
 
 `ccam usage` menampilkan, untuk setiap akun, seberapa banyak setiap batas yang sudah digunakan: batas 5 jam, batas mingguan, dan batas mingguan khusus setiap model (seperti Fable). Setiap batas mendapat satu bilah beserta waktu hingga direset. Gunakan sebelum memulai tugas panjang, atau saat Claude Code memberi tahu bahwa batas sudah dekat, untuk melihat akun mana yang masih punya ruang. `ccam statusline` adalah perintah status line untuk Claude Code: perintah ini menampilkan nama akun dan penggunaan di dalam Claude Code serta menyimpan angkanya untuk `ccam usage`. Untuk token dan perkiraan biaya di balik penggunaan itu, `ccam ccusage` menjalankan [ccusage](https://ccusage.com) atas percakapan semua akun ([lihat di bawah](#tokens-and-costs-ccam-ccusage)).
@@ -40,7 +40,7 @@ $ ccam usage
 
 Setiap akun mendapat satu baris berisi nomornya, namanya, dan umur angka-angkanya; `(cached)` berarti angkanya berasal dari file yang tersimpan, bukan dari endpoint. Di bawahnya, satu baris per batas menampilkan bilah 20 sel, persentase, dan waktu hingga jendela direset: `5-hour`, `Weekly` (semua model), lalu jendela mingguan khusus setiap model, seperti `Fable`. Jendela yang tidak dimiliki akun menampilkan `-`. Persentase berubah kuning pada 80% dan merah pada 100%.
 
-Jika Claude Code menolak permintaan karena sebuah jendela sudah penuh, jendela itu menampilkan 100% sampai di-reset, apa pun kata angka yang tersimpan (lihat [catatan batas](#the-limit-record)). Di terminal, setiap akun langsung muncul sebagai `fetching…`, dan baris-barisnya digambar begitu akun itu menjawab.
+Jika Claude Code menolak permintaan karena sebuah jendela sudah penuh, jendela itu menampilkan 100% sampai di-reset, kecuali pencarian yang dilakukan setidaknya 5 menit setelah batas tercapai menunjukkan ruang lagi di jendela itu (lihat [catatan batas](#the-limit-record)). Di terminal, setiap akun langsung muncul sebagai `fetching…`, dan baris-barisnya digambar begitu akun itu menjawab.
 
 Baris terakhir, yang hanya muncul jika Anda memiliki lebih dari satu akun, menyebut akun yang akan dipilih [`ccam next --auto`](/features/next). Baris itu mengikuti aturan yang sama:
 
@@ -138,7 +138,9 @@ Endpoint memiliki dua format respons. Yang lebih baru memiliki array `limits` de
 
 ### Catatan batas
 
-Saat Claude Code menghentikan sebuah giliran di batas penggunaan, hook dari [plugin ccam](/docs/install#claude-code-plugin) membaca permintaan yang ditolak dari percakapan: jendela mana yang penuh (5 jam, mingguan, Opus, atau Sonnet) dan kapan jendela itu direset. Hook menulisnya ke `~/.local/state/ccam/usage/<name>.limit.json`. ccam menerapkan catatan itu di atas apa pun yang diketahuinya, dari setiap sumber (`Fetch`): setiap jendela di dalamnya dihitung 100% sampai di-reset, seberapa pun lama atau rendahnya angka yang tersimpan, sehingga `ccam next --auto`, `ccam pick`, `--fallback`, dan [`auto_switch`](/features/next#auto-switch) tidak memilih akun itu lagi sebelum saat itu.
+Saat Claude Code menghentikan sebuah giliran di batas penggunaan, hook dari [plugin ccam](/docs/install#claude-code-plugin) membaca permintaan yang ditolak dari percakapan: jendela mana yang penuh (5 jam, mingguan, Opus, Sonnet, atau Fable) dan kapan jendela itu direset. Hook menulisnya ke `~/.local/state/ccam/usage/<name>.limit.json`. ccam menerapkan catatan itu di atas apa pun yang diketahuinya, dari setiap sumber (`Fetch`): setiap jendela di dalamnya dihitung 100% sampai di-reset, seberapa pun lama atau rendahnya angka yang tersimpan, sehingga `ccam next --auto`, `ccam pick`, `--fallback`, dan [`auto_switch`](/features/next#auto-switch) tidak memilih akun itu lagi sebelum saat itu.
+
+Sebuah batas bisa berakhir sebelum waktu reset-nya, misalnya saat Anda memakai reset batas (`/limit-reset` di Claude Code). Karena itu, pencarian ke endpoint penggunaan, baik oleh ccam maupun oleh Claude Code, yang dilakukan 5 menit atau lebih setelah batas tercapai dan menunjukkan jendela itu di bawah 100%, mengalahkan catatan untuk jendela itu. Status line tidak dihitung. Jeda 5 menit itu mencegah akun yang baru saja ditolak dipilih lagi berdasarkan angka yang belum menunjukkan batasnya.
 
 Jika tidak ada hal lain yang diketahui, catatan itu saja yang ditampilkan untuk akun tersebut (`source: the usage limit Claude Code reported` dengan `-v`). Sesi tanpa pengawasan (proses `-p` dan sesi latar belakang) tidak menulis catatan, begitu pula penghentian yang ditetapkan oleh organisasi (misalnya saat organisasi kehabisan penggunaan atau batas sebuah grup diatur ke $0), yang bisa dicabut adminnya kapan saja. `ccam login` ke akun Claude lain membuang catatan itu; menghapus file itu juga menghapusnya.
 

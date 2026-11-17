@@ -1,10 +1,10 @@
 ---
 title: Sonraki hesaba geçme
 description: ccam next, Claude Code'u başka bir hesapla açar; --auto en çok payı kalanı seçer, --continue konuşmayı taşır, --fallback -p işlerini yeniden çalıştırır.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next`, Claude Code'u adını vermenize gerek kalmadan başka bir hesapla açar. Bir hesap kullanım limitine ulaştığında kullanın. Geçiş yapmanın dört yolu vardır:
@@ -86,7 +86,7 @@ Bir hesap 5 saatlik ve haftalık pencerelerine göre, Claude Code argümanları 
 2. **Eşiği aşan**: %100'ün altında ama `auto_max_usage` değerinde veya üstünde. Yalnızca hiçbir hesapta pay yoksa kullanılır; aralarından `headroom` stratejisinin alacağı hesap önce gelir.
 3. **Dolu**: %100'de bir pencere ya da bilinmeyen 5 saatlik kullanım. Hiçbir zaman seçilmez.
 
-Claude Code orada bir isteği reddettiğinde bir pencere, sıfırlanana kadar %100 sayılır: [ccam eklentisinin](#inside-claude-code) hook'u bunu, kayıtlı sayılar ne derse desin, kaydeder (`~/.local/state/ccam/usage/<name>.limit.json`). Böylece limitine yeni ulaşmış bir hesap, sayıları eski olsa bile, sıfırlanmadan önce yeniden seçilmez.
+Claude Code orada bir isteği reddettiğinde bir pencere, sıfırlanana kadar %100 sayılır: [ccam eklentisinin](#inside-claude-code) hook'u bunu, kayıtlı sayılar ne derse desin, kaydeder (`~/.local/state/ccam/usage/<name>.limit.json`). Böylece limitine yeni ulaşmış bir hesap, sayıları eski olsa bile, sıfırlanmadan önce yeniden seçilmez. Bunu daha erken yalnızca limitten en az 5 dakika sonra yapılan ve pencereyi %100'ün altında gösteren bir kullanım sorgusu sona erdirir; örneğin bir limit sıfırlamasından sonra (Claude Code'da `/limit-reset`).
 
 Tüm hesaplar için ayarlar `config.toml` dosyasının en üstüne, ilk `[[group]]`, `[[profile]]` veya `[[folder]]` satırının üstüne yazılır. Bunlardan birinin altındaki bir ayar o tabloya aittir: ccam her başlatmada bu konuda uyarır ve yapılandırmayı kaydeden komutlar ayar taşınana kadar çalışmayı reddeder.
 
@@ -187,7 +187,7 @@ ccam bir oturumu yalnızca şunların hepsi geçerli olduğunda taşır:
 
 1. Oturumu ccam bir terminalde başlatmıştır ve yanında çalışmaya devam eder. `auto_switch` [aktarıcıyı](#relay) açar; bu yüzden bu koşul, ayarı yaptıktan sonra başlattığınız etkileşimli oturumlar için geçerlidir. Daha önce ya da daha eski bir ccam altında başlatılmış bir oturum, ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` ile biten bir bildirim alır. Gözetimsiz oturumlar (`-p` çalıştırmaları ve arka plan oturumları), `claude remote-control` ve ccam olmadan başlatılan Claude Code asla taşınmaz.
 2. Hesapta [ccam eklentisi](/docs/install#claude-code-plugin) açıktır ve hesap, süreç kimliğini hook'a ileten (`CLAUDE_PID`) Claude Code 2.1.214 veya sonrasını çalıştırır.
-3. Claude Code reddedilen isteği, sıfırlanma zamanıyla birlikte, o hesabın 5 saatlik, haftalık, Opus veya Sonnet limiti için konuşmaya yazmıştır. Bir harcama limiti, kullanım kredilerinin bitmesi, bir kuruluşun koyduğu durdurma, Fable kotası (`You've reached your Fable limit.`), bir sunucu kısıtlaması ve bir API anahtarının hız sınırı bir oturumu asla taşımaz. Bir alt ajanın veya iş akışı ajanının limiti, ana konuşma yalnızca onu bekliyor olsa bile sayılır; bu haftalık bir Opus veya Sonnet limitiyse oturum yalnızca konuşmanın kendisi o modelde çalışıyorsa taşınır.
+3. Claude Code reddedilen isteği, sıfırlanma zamanıyla birlikte, o hesabın 5 saatlik, haftalık, Opus, Sonnet veya Fable limiti için konuşmaya yazmıştır. Bir Fable modeli haftalık kotasını tükettiğinde Claude Code `You've hit your Fable limit` veya `You're out of usage credits` der ve reddedilen istek Fable haftalık penceresini belirtir: bu Fable limitidir ve sonraki hesabın kendi Fable haftalık penceresinde payı olmalıdır. Bir harcama limiti, başka herhangi bir istekte kullanım kredilerinin bitmesi, bir kuruluşun koyduğu durdurma, bir sunucu kısıtlaması ve bir API anahtarının hız sınırı bir oturumu asla taşımaz. Bir alt ajanın veya iş akışı ajanının limiti, ana konuşma yalnızca onu bekliyor olsa bile sayılır; bu haftalık bir Opus, Sonnet veya Fable limitiyse oturum yalnızca konuşmanın kendisi o modelde çalışıyorsa taşınır.
 4. ccam hesabın planını, `.claude.json` dosyasından ya da `ccam login` komutunun kaydettiklerinden bilir. Bilmiyorsa bildirim `ccam does not know personal's plan, so auto_switch leaves this session.` ile biter.
 5. Oturum Remote Control'e bağlı değildir. Başka bir hesap olarak, onu yönettiğiniz uygulamaya yeniden bağlanmazdı; bu yüzden oturum kalır ve bildirim bunu söyler.
 6. Limit şu andan itibaren 15 dakikadan daha uzun sürede sıfırlanır. Daha kısa bir bekleme için ccam oturumu Claude Code'a bırakır: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

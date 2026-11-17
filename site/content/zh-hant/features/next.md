@@ -1,10 +1,10 @@
 ---
 title: 切換到下一個帳號
 description: ccam next 會以另一個帳號開啟 Claude Code；--auto 選擇剩餘額度最多的帳號，--continue 把對話帶過去，--fallback 會重新執行 -p 工作。
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next` 不需要你指定名稱，就能以另一個帳號開啟 Claude Code。當某個帳號達到用量限制時使用它。切換的方式有四種：
@@ -86,7 +86,7 @@ Claude Code 自己的選項，例如 `--dangerously-skip-permissions` 或 `--mod
 2. **超過**：低於 100%，但達到或超過 `auto_max_usage`。只有在沒有帳號有餘裕時才會使用；其中 `headroom` 會選的帳號優先。
 3. **已滿**：有區間達到 100%，或 5 小時用量未知。絕不會被選中。
 
-當 Claude Code 在某個區間拒絕了請求時，該區間在重設前都算作 100%：[ccam 外掛](#inside-claude-code)的 hook 會記錄它（`~/.local/state/ccam/usage/<name>.limit.json`），不論已儲存的數字是多少。因此剛達到上限的帳號在重設前不會再次被選中，即使它的數字已經過時也一樣。
+當 Claude Code 在某個區間拒絕了請求時，該區間在重設前都算作 100%：[ccam 外掛](#inside-claude-code)的 hook 會記錄它（`~/.local/state/ccam/usage/<name>.limit.json`），不論已儲存的數字是多少。因此剛達到上限的帳號在重設前不會再次被選中，即使它的數字已經過時也一樣。只有在達到上限 5 分鐘或更久之後進行的用量查詢顯示該區間低於 100% 時，它才會提前結束，例如在限制重設（Claude Code 中的 `/limit-reset`）之後。
 
 適用於所有帳號的設定要放在 `config.toml` 的最上方，位於第一個 `[[group]]`、`[[profile]]` 或 `[[folder]]` 之前。放在其中某個表格下方的設定會屬於該表格：ccam 會在每次啟動時對它發出警告，而會儲存設定的指令在它被移走之前都會拒絕執行。
 
@@ -187,7 +187,7 @@ ccam: personal hit its 5-hour limit; continuing this conversation as side
 
 1. 工作階段是 ccam 在終端機中啟動的，而且 ccam 在它旁邊持續執行。`auto_switch` 會開啟[接力](#relay)，所以設定之後你啟動的互動式工作階段都符合這一點。在那之前或在較舊 ccam 下啟動的工作階段，會收到結尾為 ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` 的通知。無人看管的工作階段（`-p` 執行和背景工作階段）、`claude remote-control`，以及不透過 ccam 啟動的 Claude Code 絕不會被移動。
 2. 帳號已開啟 [ccam 外掛](/docs/install#claude-code-plugin)，並執行 Claude Code 2.1.214 或更新版本，這些版本會把自己的行程 ID 傳給 hook（`CLAUDE_PID`）。
-3. Claude Code 已把被拒絕的請求連同重設時間寫入對話，而且針對的是該帳號的 5 小時、每週、Opus 或 Sonnet 上限。支出上限、用量點數用完、組織設定的停用、Fable 額度（`You've reached your Fable limit.`）、伺服器節流以及 API 金鑰的速率限制，絕不會讓工作階段移動。子代理或工作流程代理的上限也算在內，即使主對話只是在等待它；如果那是每週的 Opus 或 Sonnet 上限，只有當對話本身以該模型執行時，工作階段才會移動。
+3. Claude Code 已把被拒絕的請求連同重設時間寫入對話，而且針對的是該帳號的 5 小時、每週、Opus、Sonnet 或 Fable 上限。當某個 Fable 模型用完了它的每週額度時，Claude Code 會顯示 `You've hit your Fable limit` 或 `You're out of usage credits`，而被拒絕的請求會指明 Fable 的每週區間：這就是 Fable 上限，下一個帳號必須在它自己的 Fable 每週區間中還有餘裕。支出上限、其他任何請求的用量點數用完、組織設定的停用、伺服器節流以及 API 金鑰的速率限制，絕不會讓工作階段移動。子代理或工作流程代理的上限也算在內，即使主對話只是在等待它；如果那是每週的 Opus、Sonnet 或 Fable 上限，只有當對話本身以該模型執行時，工作階段才會移動。
 4. ccam 從帳號的 `.claude.json` 或 `ccam login` 的記錄知道該帳號的方案。若不知道，通知的結尾會是 `ccam does not know personal's plan, so auto_switch leaves this session.`
 5. 工作階段沒有連接到 Remote Control。換成另一個帳號後，它不會重新連接到你用來操作它的應用程式，所以它會留在原處，通知也會說明這一點。
 6. 上限在 15 分鐘以後才會重設。等待時間較短時，ccam 會把工作階段交給 Claude Code：`ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

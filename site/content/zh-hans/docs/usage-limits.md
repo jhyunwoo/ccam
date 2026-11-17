@@ -1,10 +1,10 @@
 ---
 title: 用量限制与切换账号
 description: 用 ccam usage 查看每个 Claude Code 账号的 5 小时用量和每周用量，并用 ccam next --auto 打开余量最多的账号。
-updated: 2026-11-05
+updated: 2026-11-17
 order: 5
 translation: machine
-sourceHash: "06bd349073e3"
+sourceHash: "c2a0018db4a3"
 ---
 
 `ccam usage` 显示每个账号的各项限额已用掉多少：5 小时限额、每周限额，以及各模型自己的每周限额（例如 Fable）。`ccam next --auto` 打开余量最多的账号，`--continue` 会把当前对话带过去。
@@ -36,7 +36,7 @@ ccam 使用每个账号自己的登录，同时向 Anthropic 的用量接口查�
 
 这个接口没有公开文档，可能会发生变化。请求失败时，ccam 会显示最后一次获得的数字，并将其标记为缓存。在这些数字保存之后已经重置的时间窗口会显示 0%。如果响应格式发生了变化，`ccam doctor` 会告诉你。
 
-当 Claude Code 因用量限制停止某个会话时，[ccam 插件](/docs/install#claude-code-plugin)会记录哪个时间窗口已满以及它何时重置。在那之前，无论其他数字是多少，该时间窗口都显示 100%，所以 `ccam next --auto` 和 `--fallback` 不会过早地再次选中这个账号。
+当 Claude Code 因用量限制停止某个会话时，[ccam 插件](/docs/install#claude-code-plugin)会记录哪个时间窗口已满以及它何时重置。在那之前，无论其他数字是多少，该时间窗口都显示 100%，所以 `ccam next --auto` 和 `--fallback` 不会过早地再次选中这个账号。只有在达到限制 5 分钟或更久之后进行的用量查询显示该时间窗口有余量时，例如在限额重置（Claude Code 中的 `/limit-reset`）之后，它才会提前结束。
 
 60 秒内获取的数字会被复用。选项：
 

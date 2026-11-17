@@ -1,10 +1,10 @@
 ---
 title: "Limites d'utilisation"
 description: "ccam usage affiche d'un coup les limites sur 5 heures et hebdomadaires de chaque compte, et ccam statusline met le compte et l'utilisation dans Claude Code."
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: "54b296f7da35"
+sourceHash: "9afbad92c84c"
 ---
 
 `ccam usage` indique, pour chaque compte, quelle part de chaque limite est utilisée : la limite sur 5 heures, la limite hebdomadaire et la limite hebdomadaire propre à chaque modèle (comme Fable). Chaque limite reçoit une barre et le temps restant avant sa réinitialisation. Utilisez-le avant de commencer une longue tâche, ou quand Claude Code vous signale qu'une limite approche, pour voir quel compte a encore de la marge. `ccam statusline` est la commande de ligne d'état pour Claude Code : elle affiche le nom du compte et l'utilisation dans Claude Code et enregistre les chiffres pour `ccam usage`. Pour les jetons et les coûts estimés derrière cette utilisation, `ccam ccusage` exécute [ccusage](https://ccusage.com) sur les conversations de tous les comptes ([voir plus bas](#tokens-and-costs-ccam-ccusage)).
@@ -40,7 +40,7 @@ $ ccam usage
 
 Chaque compte a une ligne avec son numéro, son nom et l'ancienneté de ses chiffres ; `(cached)` signifie qu'ils proviennent d'un fichier enregistré et non du point de terminaison. En dessous, une ligne par limite affiche une barre de 20 cases, le pourcentage et le temps restant avant la réinitialisation de la fenêtre : `5-hour`, `Weekly` (tous les modèles), puis la fenêtre hebdomadaire propre à chaque modèle, comme `Fable`. Une fenêtre que le compte n'a pas affiche `-`. Un pourcentage passe au jaune à 80 % et au rouge à 100 %.
 
-Si Claude Code a refusé une requête parce qu'une fenêtre était pleine, cette fenêtre affiche 100 % jusqu'à sa réinitialisation, quels que soient les chiffres enregistrés (voir [le relevé de limite](#the-limit-record)). Dans un terminal, tous les comptes apparaissent immédiatement sous la forme `fetching…`, et leurs lignes sont dessinées à mesure qu'ils répondent.
+Si Claude Code a refusé une requête parce qu'une fenêtre était pleine, cette fenêtre affiche 100 % jusqu'à sa réinitialisation, sauf si une consultation faite au moins 5 minutes après la limite y montre de nouveau de la marge (voir [le relevé de limite](#the-limit-record)). Dans un terminal, tous les comptes apparaissent immédiatement sous la forme `fetching…`, et leurs lignes sont dessinées à mesure qu'ils répondent.
 
 La dernière ligne, affichée seulement si vous avez plus d'un compte, nomme le compte que [`ccam next --auto`](/features/next) choisirait. Elle suit les mêmes règles :
 
@@ -138,7 +138,9 @@ Le point de terminaison a deux formats de réponse. Le plus récent a un tableau
 
 ### Le relevé de limite
 
-Quand Claude Code arrête un tour à une limite d'utilisation, le hook du [plugin ccam](/docs/install#claude-code-plugin) lit la requête refusée dans la conversation : quelle fenêtre était pleine (5 heures, hebdomadaire, Opus ou Sonnet) et quand elle se réinitialise. Il l'écrit dans `~/.local/state/ccam/usage/<name>.limit.json`. ccam applique ce relevé par-dessus tout ce qu'il sait par ailleurs, quelle qu'en soit la source (`Fetch`) : chaque fenêtre qu'il contient compte pour 100 % jusqu'à sa réinitialisation, aussi anciens ou bas que soient les chiffres enregistrés, si bien que `ccam next --auto`, `ccam pick`, `--fallback` et [`auto_switch`](/features/next#auto-switch) ne choisissent pas de nouveau ce compte d'ici là.
+Quand Claude Code arrête un tour à une limite d'utilisation, le hook du [plugin ccam](/docs/install#claude-code-plugin) lit la requête refusée dans la conversation : quelle fenêtre était pleine (5 heures, hebdomadaire, Opus, Sonnet ou Fable) et quand elle se réinitialise. Il l'écrit dans `~/.local/state/ccam/usage/<name>.limit.json`. ccam applique ce relevé par-dessus tout ce qu'il sait par ailleurs, quelle qu'en soit la source (`Fetch`) : chaque fenêtre qu'il contient compte pour 100 % jusqu'à sa réinitialisation, aussi anciens ou bas que soient les chiffres enregistrés, si bien que `ccam next --auto`, `ccam pick`, `--fallback` et [`auto_switch`](/features/next#auto-switch) ne choisissent pas de nouveau ce compte d'ici là.
+
+Une limite peut prendre fin avant son heure de réinitialisation, par exemple quand vous utilisez une réinitialisation de limite (`/limit-reset` dans Claude Code). Ainsi, une consultation du point de terminaison d'utilisation, par ccam ou par Claude Code, faite 5 minutes ou plus après la limite et qui montre cette fenêtre sous les 100 % prend le pas sur le relevé pour cette fenêtre. La ligne d'état ne compte pas. Les 5 minutes évitent qu'un compte dont une requête vient d'être refusée soit choisi de nouveau sur la foi de chiffres qui ne montrent pas encore la limite.
 
 Quand rien d'autre n'est connu, le relevé seul est ce que le compte affiche (`source: the usage limit Claude Code reported` avec `-v`). Les sessions sans surveillance (exécutions `-p` et sessions en arrière-plan) n'écrivent pas de relevé, pas plus qu'une suspension décidée par une organisation (par exemple quand elle n'a plus d'utilisation disponible ou que la limite d'un groupe est de 0 $), que ses administrateurs peuvent lever à tout moment. `ccam login` vers un autre compte Claude supprime le relevé ; supprimer le fichier l'efface aussi.
 

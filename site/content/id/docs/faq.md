@@ -2,10 +2,10 @@
 title: Pertanyaan yang sering diajukan
 metaTitle: "FAQ ccam: beberapa akun Claude Code"
 description: Jawaban seputar ccam, akun Claude Code, batas penggunaan, pembagian, privasi, dan sistem yang didukung.
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: "64cd522eb711"
+sourceHash: "9b13b37391f2"
 ---
 
 ## Apakah ccam alat resmi dari Anthropic?
@@ -24,7 +24,7 @@ Tidak melewati batas milik akun mana pun: setiap akun tetap memiliki batasnya da
 
 ## Bisakah ccam berpindah akun dengan sendirinya saat sebuah sesi mencapai batasnya?
 
-Hanya jika Anda mengaktifkannya. Dengan `auto_switch = true` di bagian atas `~/.config/ccam/config.toml` (Linux dan macOS; nonaktif secara default dan masih eksperimental), saat Claude Code menghentikan sesi interaktif (yang dimulai oleh ccam) di batas 5 jam, mingguan, Opus, atau Sonnet, ccam mengakhiri sesi itu dan melanjutkan percakapan sebagai akun Anda yang lain yang punya ruang: kursi lain dari organisasi Team atau Enterprise yang sama, atau paket pribadi lain (Pro, Max). ccam tidak pernah berpindah sebelum batas tercapai, tidak pernah memantau penggunaan Anda di latar belakang, dan tidak pernah memindahkan pekerjaan keluar dari organisasi Team atau Enterprise ataupun ke dalamnya.
+Hanya jika Anda mengaktifkannya. Dengan `auto_switch = true` di bagian atas `~/.config/ccam/config.toml` (Linux dan macOS; nonaktif secara default dan masih eksperimental), saat Claude Code menghentikan sesi interaktif (yang dimulai oleh ccam) di batas 5 jam, mingguan, Opus, Sonnet, atau Fable, ccam mengakhiri sesi itu dan melanjutkan percakapan sebagai akun Anda yang lain yang punya ruang: kursi lain dari organisasi Team atau Enterprise yang sama, atau paket pribadi lain (Pro, Max). ccam tidak pernah berpindah sebelum batas tercapai, tidak pernah memantau penggunaan Anda di latar belakang, dan tidak pernah memindahkan pekerjaan keluar dari organisasi Team atau Enterprise ataupun ke dalamnya.
 
 Pada kursi, ccam memindahkan pekerjaan Anda dari satu kursi ke kursi lain, yang dapat melanggar ketentuan Anthropic (lihat Kursi Team dan Enterprise di atas). Untuk paket pribadi, ketentuan Anthropic tidak membahasnya dengan jelas: Ketentuan Konsumen melarang mengakses Layanan "through automated or non-human means" (melalui cara otomatis atau non-manusia) kecuali Anthropic secara tegas mengizinkannya, dan sebuah perpindahan mengirim satu pesan atas nama Anda. Mengaktifkannya adalah keputusan Anda.
 

@@ -1,10 +1,10 @@
 ---
 title: Giới hạn sử dụng và chuyển đổi tài khoản
 description: "Xem mức sử dụng 5 giờ và hàng tuần của mọi tài khoản Claude Code bằng ccam usage, và mở tài khoản còn nhiều hạn mức nhất bằng ccam next --auto."
-updated: 2026-11-05
+updated: 2026-11-17
 order: 5
 translation: machine
-sourceHash: "06bd349073e3"
+sourceHash: "c2a0018db4a3"
 ---
 
 `ccam usage` cho biết, với mọi tài khoản, mỗi giới hạn đã được dùng bao nhiêu: giới hạn 5 giờ, giới hạn hàng tuần và giới hạn hàng tuần riêng của từng mô hình (như Fable). `ccam next --auto` mở tài khoản còn nhiều hạn mức nhất, và `--continue` mang cuộc hội thoại hiện tại sang tài khoản đó.
@@ -36,7 +36,7 @@ ccam hỏi endpoint mức sử dụng của Anthropic cho mọi tài khoản cù
 
 Endpoint này không được công bố tài liệu chính thức và có thể thay đổi. Khi một yêu cầu thất bại, ccam hiển thị các con số đã biết gần nhất và đánh dấu chúng là dữ liệu từ bộ nhớ đệm. Một khoảng giới hạn đã được đặt lại kể từ khi các con số đó được lưu sẽ hiển thị 0%. `ccam doctor` sẽ báo cho bạn nếu định dạng phản hồi đã thay đổi.
 
-Khi Claude Code dừng một phiên ở giới hạn sử dụng, [plugin ccam](/docs/install#claude-code-plugin) ghi lại khoảng nào đã đầy và khi nào nó được đặt lại. Cho đến lúc đó, khoảng đó hiển thị 100% bất kể các con số khác nói gì, nên `ccam next --auto` và `--fallback` không chọn lại tài khoản đó quá sớm.
+Khi Claude Code dừng một phiên ở giới hạn sử dụng, [plugin ccam](/docs/install#claude-code-plugin) ghi lại khoảng nào đã đầy và khi nào nó được đặt lại. Cho đến lúc đó, khoảng đó hiển thị 100% bất kể các con số khác nói gì, nên `ccam next --auto` và `--fallback` không chọn lại tài khoản đó quá sớm. Chỉ một lượt tra cứu mức sử dụng được thực hiện từ 5 phút trở lên sau khi chạm giới hạn và cho thấy khoảng đó còn hạn mức, như sau một lượt đặt lại giới hạn (`/limit-reset` trong Claude Code), mới kết thúc việc này sớm hơn.
 
 Các con số được lấy cách đây chưa đến 60 giây sẽ được dùng lại. Các tùy chọn:
 

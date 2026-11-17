@@ -76,6 +76,10 @@ type Report struct {
 	// HoldsReset means the account holds an unused limit reset, as Claude
 	// Code last saw it (profile.HoldsReset); the dashboard fills it in.
 	HoldsReset bool `json:"holds_reset,omitempty"`
+	// lookup is the newest lookup of the usage endpoint (live or claude)
+	// the values come from, without a status line's on top (no Limits when
+	// none); withLimit reads it, and Fetch drops it.
+	lookup cached
 }
 
 type Options struct {
@@ -155,7 +159,9 @@ func (f *Fetcher) FetchAll(ctx context.Context, accts []Account, opt Options, on
 // window Claude Code has reported full (SaveLimit) counts as full until its
 // reset, whatever the values say.
 func (f *Fetcher) Fetch(ctx context.Context, a Account, opt Options) Report {
-	return f.withLimit(a, f.fetch(ctx, a, opt))
+	r := f.withLimit(a, f.fetch(ctx, a, opt))
+	r.lookup = cached{}
+	return r
 }
 
 func (f *Fetcher) fetch(ctx context.Context, a Account, opt Options) Report {
@@ -189,7 +195,7 @@ func (f *Fetcher) fetch(ctx context.Context, a Account, opt Options) Report {
 	}
 	if !opt.NoCache {
 		if c, ok := f.readCache(a.Name, "live"); ok && fresh(c.At, f.Now()) {
-			r.Status, r.Limits, r.Source, r.At = StatusOK, c.Limits, "live", c.At
+			r.Status, r.Limits, r.Source, r.At, r.lookup = StatusOK, c.Limits, "live", c.At, c
 			return r
 		}
 	}
@@ -245,7 +251,8 @@ func (f *Fetcher) fetch(ctx context.Context, a Account, opt Options) Report {
 		return f.fallback(a, r, status, err.Error())
 	}
 	r.Status, r.Limits, r.Source, r.At = StatusOK, &limits, "live", f.Now()
-	f.writeCache(a.Name, "live", cached{At: r.At, Limits: &limits})
+	r.lookup = cached{At: r.At, Limits: &limits}
+	f.writeCache(a.Name, "live", r.lookup)
 	return r
 }
 
@@ -311,15 +318,16 @@ func (f *Fetcher) fallback(a Account, r Report, status Status, errMsg string) Re
 		r.Limits, r.At, r.Source = line.Limits, line.At, "statusline"
 		return r
 	}
-	r.Limits, r.At, r.Source = base.Limits, base.At, "cache"
+	r.Limits, r.At, r.Source, r.lookup = base.Limits, base.At, "cache", base
 	if haveLine && line.At.After(base.At) {
+		merged := *base.Limits // the lookup stays as it was
 		if line.Limits.FiveHour.Known {
-			r.Limits.FiveHour = line.Limits.FiveHour
+			merged.FiveHour = line.Limits.FiveHour
 		}
 		if line.Limits.Weekly.Known {
-			r.Limits.Weekly = line.Limits.Weekly
+			merged.Weekly = line.Limits.Weekly
 		}
-		r.At, r.Source = line.At, "statusline"
+		r.Limits, r.At, r.Source = &merged, line.At, "statusline"
 	}
 	return r
 }

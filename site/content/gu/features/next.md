@@ -1,10 +1,10 @@
 ---
 title: આગલા એકાઉન્ટ પર સ્વિચ કરવું
 description: ccam next બીજા એકાઉન્ટ તરીકે Claude Code ખોલે છે; --auto સૌથી વધુ જગ્યાવાળું લે છે, --continue વાતચીત આગળ લઈ જાય છે, --fallback -p jobs ફરી ચલાવે છે.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next` તમે નામ આપ્યા વગર Claude Code ને બીજા એકાઉન્ટ તરીકે ખોલે છે. જ્યારે કોઈ એકાઉન્ટ તેની વપરાશ મર્યાદાએ પહોંચે ત્યારે તેને વાપરો. સ્વિચ કરવાની ચાર રીતો છે:
@@ -86,7 +86,7 @@ ccam દ્વારા થતી દરેક શરૂઆત સમયને `
 2. **ઉપર**: 100% થી નીચે પણ `auto_max_usage` પર કે તેથી વધુ. કોઈ એકાઉન્ટમાં જગ્યા ન હોય ત્યારે જ વપરાય છે; તેમાંથી `headroom` જે લે તે પહેલાં આવે છે.
 3. **ભરેલું**: 100% પરની કોઈ વિન્ડો, અથવા અજાણ્યો 5 કલાકનો વપરાશ. ક્યારેય પસંદ થતું નથી.
 
-જ્યારે Claude Code એ કોઈ વિન્ડોમાં request નકારી હોય, ત્યારે તે વિન્ડો તેના રીસેટ સુધી 100% ગણાય છે: [ccam plugin](#inside-claude-code) નો hook તેની નોંધ કરે છે (`~/.local/state/ccam/usage/<name>.limit.json`), સેવ કરેલા આંકડા ભલે ગમે તે કહે. તેથી હમણાં જ મર્યાદાએ પહોંચેલું એકાઉન્ટ તેના રીસેટ પહેલાં ફરી પસંદ થતું નથી, તેના આંકડા જૂના હોય ત્યારે પણ.
+જ્યારે Claude Code એ કોઈ વિન્ડોમાં request નકારી હોય, ત્યારે તે વિન્ડો તેના રીસેટ સુધી 100% ગણાય છે: [ccam plugin](#inside-claude-code) નો hook તેની નોંધ કરે છે (`~/.local/state/ccam/usage/<name>.limit.json`), સેવ કરેલા આંકડા ભલે ગમે તે કહે. તેથી હમણાં જ મર્યાદાએ પહોંચેલું એકાઉન્ટ તેના રીસેટ પહેલાં ફરી પસંદ થતું નથી, તેના આંકડા જૂના હોય ત્યારે પણ. ફક્ત મર્યાદાના 5 મિનિટ કે તેથી વધુ સમય પછી કરેલો વપરાશ lookup, જે એ વિન્ડોને 100% થી નીચે બતાવે, 100% ની આ ગણતરી વહેલી પૂરી કરે છે, જેમ કે મર્યાદા રીસેટ (Claude Code માં `/limit-reset`) પછી.
 
 બધાં એકાઉન્ટ માટેનાં સેટિંગ્સ `config.toml` માં સૌથી ઉપર, પહેલા `[[group]]`, `[[profile]]` કે `[[folder]]` ની ઉપર આવે છે. તેમાંના કોઈની નીચેનું સેટિંગ તે table નું ગણાય છે: ccam દરેક શરૂઆતે તેના વિશે ચેતવણી આપે છે, અને config સેવ કરતા કમાન્ડ તેને ખસેડવામાં ન આવે ત્યાં સુધી ઇનકાર કરે છે.
 
@@ -187,7 +187,7 @@ ccam સેશન ત્યારે જ ખસેડે છે જ્યાર�
 
 1. ccam એ તેને ટર્મિનલમાં શરૂ કર્યું હોય અને તેની સાથે ચાલતું રહેતું હોય. `auto_switch` [relay](#relay) ચાલુ કરે છે, તેથી તે સેટ કર્યા પછી તમે શરૂ કરો તે interactive સેશન માટે આ સાચું છે. પહેલાં શરૂ થયેલા, કે જૂના ccam હેઠળ શરૂ થયેલા, સેશનને એવી સૂચના મળે છે જે ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` થી પૂરી થાય છે. કોઈ સામે બેઠું ન હોય તેવાં સેશન (`-p` runs અને બૅકગ્રાઉન્ડ સેશન), `claude remote-control` અને ccam વગર શરૂ થયેલું Claude Code ક્યારેય ખસેડાતાં નથી.
 2. એકાઉન્ટમાં [ccam plugin](/docs/install#claude-code-plugin) ચાલુ હોય અને તે Claude Code 2.1.214 કે પછીનું ચલાવતું હોય, જે hook ને તેની process ID આપે છે (`CLAUDE_PID`).
-3. Claude Code એ એ એકાઉન્ટની 5 કલાકની, સાપ્તાહિક, Opus કે Sonnet મર્યાદા માટે, રીસેટના સમય સાથે, નકારેલી request વાતચીતમાં લખી હોય. spend limit, usage credits ખૂટી જવી, સંસ્થાએ લગાવેલો અટકાવ, Fable નો ભાગ (`You've reached your Fable limit.`), સર્વરનું throttling અને API key ની rate limit ક્યારેય સેશન ખસેડતાં નથી. subagent કે વર્કફ્લો agent ની મર્યાદા ગણાય છે, ભલે મુખ્ય વાતચીત ફક્ત તેની રાહ જોતી હોય; તે Opus કે Sonnet ની સાપ્તાહિક મર્યાદા હોય, તો વાતચીત પોતે એ જ મૉડલ પર ચાલતી હોય ત્યારે જ સેશન ખસે છે.
+3. Claude Code એ એ એકાઉન્ટની 5 કલાકની, સાપ્તાહિક, Opus, Sonnet કે Fable મર્યાદા માટે, રીસેટના સમય સાથે, નકારેલી request વાતચીતમાં લખી હોય. જ્યારે કોઈ Fable મૉડલ તેનો સાપ્તાહિક ભાગ વાપરી નાખે, ત્યારે Claude Code `You've hit your Fable limit` કે `You're out of usage credits` કહે છે, અને નકારેલી request Fable ની સાપ્તાહિક વિન્ડો દર્શાવે છે: એ Fable મર્યાદા છે, અને આગલા એકાઉન્ટ પાસે તેની પોતાની Fable સાપ્તાહિક વિન્ડોમાં જગ્યા હોવી જોઈએ. spend limit, બીજી કોઈ પણ request પર usage credits ખૂટી જવી, સંસ્થાએ લગાવેલો અટકાવ, સર્વરનું throttling અને API key ની rate limit ક્યારેય સેશન ખસેડતાં નથી. subagent કે વર્કફ્લો agent ની મર્યાદા ગણાય છે, ભલે મુખ્ય વાતચીત ફક્ત તેની રાહ જોતી હોય; તે Opus, Sonnet કે Fable ની સાપ્તાહિક મર્યાદા હોય, તો વાતચીત પોતે એ જ મૉડલ પર ચાલતી હોય ત્યારે જ સેશન ખસે છે.
 4. ccam એકાઉન્ટનો પ્લાન જાણતું હોય, તેની `.claude.json` પરથી કે `ccam login` એ નોંધ્યું હોય તે પરથી. નહીં તો સૂચના `ccam does not know personal's plan, so auto_switch leaves this session.` થી પૂરી થાય છે.
 5. સેશન Remote Control સાથે જોડાયેલું ન હોય. બીજા એકાઉન્ટ તરીકે તે જે app થી તમે તેને ચલાવો છો તેની સાથે ફરી જોડાય નહીં, તેથી તે રહે છે, અને સૂચના તે જણાવે છે.
 6. મર્યાદા હમણાંથી 15 મિનિટથી વધુ સમય પછી રીસેટ થતી હોય. ઓછી રાહ માટે ccam સેશન Claude Code પર છોડે છે: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

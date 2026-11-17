@@ -1,10 +1,10 @@
 ---
 title: Sauyawa zuwa asusu na gaba
 description: ccam next yana buɗe Claude Code a matsayin wani asusu; --auto yana zaɓar mafi sarari, --continue yana kai tattaunawar gaba, --fallback yana maimaita ayyukan -p.
-updated: 2026-11-05
+updated: 2026-11-17
 order: 8
 translation: machine
-sourceHash: "a320c160caef"
+sourceHash: "e4fcd23c0830"
 ---
 
 `ccam next` yana buɗe Claude Code a matsayin wani asusu ba tare da ka ambaci sunansa ba. Yi amfani da shi idan asusu ya kai iyakar amfaninsa. Akwai hanyoyi huɗu na sauyawa:
@@ -87,7 +87,7 @@ Ana auna asusu da tagoginsa na awa 5 da na mako, kuma, idan `--model` yana cikin
 2. **Sama**: ƙasa da 100% amma a ko sama da `auto_max_usage`. Ana amfani da su ne kawai idan babu asusun da ke da sarari; wanda `headroom` zai ɗauka a cikinsu ne yake fara zuwa.
 3. **Cike**: taga a 100%, ko amfanin awa 5 da ba a sani ba. Ba a taɓa zaɓar su ba.
 
-Ana ƙirga taga a matsayin 100% har zuwa sake saitinta idan Claude Code ya ƙi buƙata a can: hook na [plugin ɗin ccam](#inside-claude-code) yana rubuta hakan (`~/.local/state/ccam/usage/<name>.limit.json`), ko me lambobin da aka ajiye suka ce. Don haka asusun da ya kai iyakarsa yanzu ba a sake zaɓar sa kafin sake saitinsa, ko da lambobinsa sun tsufa.
+Ana ƙirga taga a matsayin 100% har zuwa sake saitinta idan Claude Code ya ƙi buƙata a can: hook na [plugin ɗin ccam](#inside-claude-code) yana rubuta hakan (`~/.local/state/ccam/usage/<name>.limit.json`), ko me lambobin da aka ajiye suka ce. Don haka asusun da ya kai iyakarsa yanzu ba a sake zaɓar sa kafin sake saitinsa, ko da lambobinsa sun tsufa. Neman amfani ne kawai da aka yi minti 5 ko fiye bayan iyakar, wanda ya nuna tagar ƙasa da 100%, ke kawo ƙarshen hakan da wuri, kamar bayan sake saitin iyaka (`/limit-reset` a cikin Claude Code).
 
 Saituna na dukkan asusai suna zuwa a saman `config.toml`, kafin `[[group]]`, `[[profile]]` ko `[[folder]]` na farko. Saitin da ke ƙarƙashin ɗaya daga cikinsu na wannan tebur (table) ne: ccam yana gargaɗi game da shi a kowane farawa, kuma umarnan da ke ajiye config suna ƙi har sai an matsar da shi.
 
@@ -188,7 +188,7 @@ ccam yana motsa zama ne kawai idan duk waɗannan sun cika:
 
 1. ccam ne ya fara shi a terminal kuma yana ci gaba da aiki tare da shi. `auto_switch` yana kunna [relay](#relay), don haka wannan yana cika ga zaman mu'amala da ka fara bayan ka saita shi. Zaman da aka fara kafin haka, ko ƙarƙashin tsohon ccam, yana samun sanarwa da ke ƙarewa da ``This session started before auto_switch was on or under an older ccam, so ccam cannot move it: type /exit, then run `ccam next --continue`.`` Ba a taɓa motsa zaman da babu mai kula da su (gudun `-p` da zaman bayan fage), `claude remote-control` da Claude Code da aka fara ba ta ccam ba.
 2. Asusun yana da [plugin ɗin ccam](/docs/install#claude-code-plugin) a kunne kuma yana gudanar da Claude Code 2.1.214 ko sabo, wanda ke miƙa process ID ɗinsa ga hook ɗin (`CLAUDE_PID`).
-3. Claude Code ya rubuta buƙatar da aka ƙi a cikin tattaunawar, tare da lokacin sake saitinta, don iyakar awa 5, ta mako, ta Opus ko ta Sonnet na wannan asusun. Iyakar kashe kuɗi, ƙarewar credits na amfani, dakatarwar da ƙungiya ta saita, kason Fable (`You've reached your Fable limit.`), takaita gudu daga sabar (throttle) da iyakar saurin (rate limit) na API key ba sa taɓa motsa zama. Iyakar subagent ko ta agent na workflow tana ƙirguwa, ko da babban tattaunawar tana jiran sa ne kawai; idan iyakar Opus ko Sonnet ta mako ce, zaman yana motsawa ne kawai idan tattaunawar kanta tana gudana a kan wannan model ɗin.
+3. Claude Code ya rubuta buƙatar da aka ƙi a cikin tattaunawar, tare da lokacin sake saitinta, don iyakar awa 5, ta mako, ta Opus, ta Sonnet ko ta Fable na wannan asusun. Idan wani model na Fable ya cinye kasonsa na mako, Claude Code yana cewa `You've hit your Fable limit` ko `You're out of usage credits`, kuma buƙatar da aka ƙi tana ambaton taga ta mako ta Fable: wannan ita ce iyakar Fable, kuma dole ne asusu na gaba ya kasance da sarari a cikin tasa taga ta mako ta Fable. Iyakar kashe kuɗi, ƙarewar credits na amfani a kan kowace buƙata dabam, dakatarwar da ƙungiya ta saita, takaita gudu daga sabar (throttle) da iyakar saurin (rate limit) na API key ba sa taɓa motsa zama. Iyakar subagent ko ta agent na workflow tana ƙirguwa, ko da babban tattaunawar tana jiran sa ne kawai; idan iyakar Opus, Sonnet ko Fable ta mako ce, zaman yana motsawa ne kawai idan tattaunawar kanta tana gudana a kan wannan model ɗin.
 4. ccam ya san tsarin (plan) asusun, daga `.claude.json` ɗinsa ko daga abin da `ccam login` ya rubuta. Idan bai sani ba, sanarwar tana ƙarewa da `ccam does not know personal's plan, so auto_switch leaves this session.`
 5. Zaman ba a haɗa shi da Remote Control ba. A matsayin wani asusu ba zai sake haɗuwa da manhajar da kake sarrafa shi daga gare ta ba, don haka yana zama, kuma sanarwar tana faɗin haka.
 6. Iyakar tana sake saitawa fiye da minti 15 daga yanzu. Don jira mafi guntu ccam yana barin zaman ga Claude Code: `ccam: personal hit its 5-hour limit, which resets in 9m; ccam leaves this session to wait for it.`

@@ -17,7 +17,8 @@ func window(p float64, reset time.Time) Window {
 }
 
 // A window Claude Code refused a request in counts as full until its reset,
-// whatever the saved numbers say and however they were found.
+// whatever numbers measured up to then say and however they were found
+// (a lookup at the limit's own time is not after it).
 func TestLimitRecordCountsAsFull(t *testing.T) {
 	ctx := context.Background()
 	now := time.Now().Truncate(time.Second)
@@ -109,6 +110,129 @@ func TestLimitRecordCountsAsFull(t *testing.T) {
 			}
 		}
 	})
+}
+
+// A lookup of the usage endpoint made liftDelay or more after the limit
+// that shows the window below 100% means the limit was lifted before its
+// reset (Claude Code's /limit-reset): the record no longer counts for that
+// window. Numbers measured before then, and the status line, do not lift it.
+func TestLimitRecordLiftedByALaterLookup(t *testing.T) {
+	ctx := context.Background()
+	now := time.Now().Truncate(time.Second)
+	limitAt := now.Add(-26 * time.Hour)
+	weekReset := now.Add(18 * time.Hour)
+	week := func(p float64) *Limits {
+		return &Limits{FiveHour: window(0, time.Time{}), Weekly: window(p, weekReset),
+			Scoped: []Scoped{{Name: "Fable", Window: window(34, weekReset)}}}
+	}
+	setup := func(t *testing.T) (*env, Account) {
+		e := newEnv(t)
+		e.f.Now = func() time.Time { return now }
+		if err := SaveLimit(e.f.StateDir, "a", "seven_day", weekReset, limitAt); err != nil {
+			t.Fatal(err)
+		}
+		return e, e.account("a", "boom", future)
+	}
+	weekly := func(t *testing.T, r Report, want float64, limited bool) {
+		t.Helper()
+		if r.Limits == nil || r.Limits.Weekly.Percent != want || !r.Limits.Weekly.ResetsAt.Equal(weekReset) {
+			t.Fatalf("weekly: %+v", r.Limits)
+		}
+		if got := len(r.LimitedWindows) > 0; got != limited {
+			t.Fatalf("limited %v: %+v", got, r)
+		}
+	}
+	for _, src := range []string{"live", "claude"} {
+		t.Run(src+" after the limit", func(t *testing.T) {
+			e, a := setup(t)
+			e.f.writeCache("a", src, cached{At: limitAt.Add(liftDelay), Limits: week(17)})
+			for _, opt := range []Options{{Source: "cache"}, {}} {
+				r := e.f.Fetch(ctx, a, opt)
+				weekly(t, r, 17, false)
+				if (Policy{}).Full(&r) {
+					t.Fatal("chosen as full")
+				}
+			}
+		})
+	}
+	t.Run("before, at or right after the limit", func(t *testing.T) {
+		for _, at := range []time.Time{limitAt.Add(-time.Hour), limitAt, limitAt.Add(liftDelay - time.Second)} {
+			e, a := setup(t)
+			e.f.writeCache("a", "live", cached{At: at, Limits: week(17)})
+			weekly(t, e.f.Fetch(ctx, a, Options{Source: "cache"}), 100, true)
+		}
+	})
+	t.Run("still full after the limit", func(t *testing.T) {
+		e, a := setup(t)
+		e.f.writeCache("a", "live", cached{At: now.Add(-time.Hour), Limits: week(100)})
+		weekly(t, e.f.Fetch(ctx, a, Options{Source: "cache"}), 100, true)
+	})
+	t.Run("status line only", func(t *testing.T) {
+		// Its time is when the command ran, not when Claude Code measured.
+		e, a := setup(t)
+		e.f.writeCache("a", "live", cached{At: limitAt.Add(-time.Hour), Limits: week(90)})
+		SaveStatusLine(e.f.StateDir, "a", Limits{FiveHour: window(5, now.Add(time.Hour)), Weekly: window(17, weekReset)}, now.Add(-time.Minute))
+		weekly(t, e.f.Fetch(ctx, a, Options{Source: "cache"}), 100, true)
+	})
+	t.Run("a later lookup lifts it under a newer status line", func(t *testing.T) {
+		e, a := setup(t)
+		e.f.writeCache("a", "live", cached{At: limitAt.Add(time.Hour), Limits: week(17)})
+		SaveStatusLine(e.f.StateDir, "a", Limits{FiveHour: window(5, now.Add(time.Hour)), Weekly: window(20, weekReset)}, now.Add(-time.Minute))
+		r := e.f.Fetch(ctx, a, Options{Source: "cache"})
+		weekly(t, r, 20, false)
+	})
+	t.Run("the newest lookup decides", func(t *testing.T) {
+		e, a := setup(t)
+		e.f.writeCache("a", "live", cached{At: limitAt.Add(time.Hour), Limits: week(17)})
+		e.f.writeCache("a", "claude", cached{At: limitAt.Add(2 * time.Hour), Limits: week(100)})
+		weekly(t, e.f.Fetch(ctx, a, Options{Source: "cache"}), 100, true)
+	})
+	t.Run("a new limit after the lookup", func(t *testing.T) {
+		e, a := setup(t)
+		e.f.writeCache("a", "live", cached{At: limitAt.Add(time.Hour), Limits: week(17)})
+		SaveLimit(e.f.StateDir, "a", "seven_day", weekReset, now.Add(-time.Minute))
+		weekly(t, e.f.Fetch(ctx, a, Options{Source: "cache"}), 100, true)
+	})
+	t.Run("only the windows the lookup shows below 100%", func(t *testing.T) {
+		e, a := setup(t)
+		SaveLimit(e.f.StateDir, "a", "five_hour", now.Add(time.Hour), limitAt)
+		l := week(17)
+		l.FiveHour = window(100, now.Add(time.Hour))
+		e.f.writeCache("a", "live", cached{At: limitAt.Add(time.Hour), Limits: l})
+		r := e.f.Fetch(ctx, a, Options{Source: "cache"})
+		weekly(t, r, 17, true)
+		if r.Limits.FiveHour.Percent != 100 || len(r.LimitedWindows) != 1 || r.LimitedWindows[0] != "5-hour" {
+			t.Fatalf("%+v", r)
+		}
+	})
+}
+
+// The Fable allowance (seven_day_overage_included, Claude Code's "Fable
+// limit") is the Fable week: its record fills that window only, so a Fable
+// conversation goes elsewhere and an Opus one may still come.
+func TestLimitRecordFillsTheFableWeek(t *testing.T) {
+	e := newEnv(t)
+	now := time.Now().Truncate(time.Second)
+	e.f.Now = func() time.Time { return now }
+	a := e.account("a", "boom", future)
+	e.f.writeCache("a", "live", cached{At: now.Add(-time.Hour), Limits: &Limits{FiveHour: window(10, now.Add(time.Hour)),
+		Weekly: window(40, now.Add(48*time.Hour)), Scoped: []Scoped{{Name: "Fable", Window: window(97, now.Add(48*time.Hour))}}}})
+	if err := SaveLimit(e.f.StateDir, "a", "seven_day_overage_included", now.Add(48*time.Hour), now.Add(-time.Minute)); err != nil {
+		t.Fatal(err)
+	}
+	r := e.f.Fetch(context.Background(), a, Options{Source: "cache"})
+	s := r.Limits.Scoped
+	if len(s) != 1 || s[0].Window.Percent != 100 || r.Limits.Weekly.Percent != 40 || len(r.LimitedWindows) != 1 || r.LimitedWindows[0] != "Fable" {
+		t.Fatalf("%+v %+v", r.Limits, r.LimitedWindows)
+	}
+	if !(Policy{Model: "claude-fable-5-2"}).Full(&r) || (Policy{Model: "claude-opus-5-5"}).Full(&r) || (Policy{}).Full(&r) {
+		t.Fatal("full by model")
+	}
+	for w, fam := range map[string]string{"seven_day_overage_included": "fable", "seven_day_opus": "opus", "seven_day_sonnet": "sonnet", "seven_day": "", "five_hour": "", "overage": ""} {
+		if got := WindowModel(w); got != fam {
+			t.Errorf("WindowModel(%s) = %q, want %q", w, got, fam)
+		}
+	}
 }
 
 // Opus and Sonnet records fill the model's own window: the one whose name
@@ -214,12 +338,14 @@ func TestLimitOverALookupSaysSo(t *testing.T) {
 	e := newEnv(t)
 	now := time.Now().Truncate(time.Second)
 	e.f.Now = func() time.Time { return now }
-	a := e.account("a", "ok-new-format.json", future)
+	a := e.account("a", "boom", future)
+	// Looked up a minute before the limit.
+	e.f.writeCache("a", "live", cached{At: now.Add(-6 * time.Minute), Limits: &Limits{FiveHour: window(72, now.Add(time.Hour))}})
 	if err := SaveLimit(e.f.StateDir, "a", "five_hour", now.Add(2*time.Hour), now.Add(-5*time.Minute)); err != nil {
 		t.Fatal(err)
 	}
-	r := e.f.Fetch(context.Background(), a, Options{NoCache: true})
-	if r.Source != "live" || !r.Limited.Equal(now.Add(-5*time.Minute)) {
+	r := e.f.Fetch(context.Background(), a, Options{Source: "cache"})
+	if r.Source != "cache" || !r.Limited.Equal(now.Add(-5*time.Minute)) {
 		t.Fatalf("%+v", r)
 	}
 	out := fmt.Sprint(Table([]*Report{&r}, RenderOptions{Verbose: true, Now: now}))

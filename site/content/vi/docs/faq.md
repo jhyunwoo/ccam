@@ -2,10 +2,10 @@
 title: Câu hỏi thường gặp
 metaTitle: "ccam FAQ: dùng nhiều tài khoản Claude Code"
 description: "Giải đáp về ccam, tài khoản Claude Code, giới hạn sử dụng, việc dùng chung, quyền riêng tư và các hệ điều hành được hỗ trợ."
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: 64cd522eb711
+sourceHash: "9b13b37391f2"
 ---
 
 ## ccam có phải là công cụ chính thức của Anthropic không?
@@ -24,7 +24,7 @@ Không vượt qua giới hạn riêng của bất kỳ tài khoản nào: mỗi
 
 ## ccam có thể tự đổi tài khoản khi một phiên chạm giới hạn không?
 
-Chỉ khi bạn bật tính năng đó. Với `auto_switch = true` ở đầu `~/.config/ccam/config.toml` (Linux và macOS; mặc định tắt và đang thử nghiệm), khi Claude Code dừng một phiên tương tác (phiên do ccam khởi động) ở giới hạn 5 giờ, hàng tuần, Opus hoặc Sonnet, ccam kết thúc phiên và tiếp tục cuộc hội thoại dưới một tài khoản khác của bạn còn hạn mức: một seat khác của cùng tổ chức Team hoặc Enterprise, hoặc một gói cá nhân khác (Pro, Max). Nó không bao giờ đổi trước khi chạm giới hạn, không bao giờ theo dõi mức sử dụng của bạn ở chế độ nền, và không bao giờ chuyển công việc ra khỏi hay vào trong một tổ chức Team hoặc Enterprise.
+Chỉ khi bạn bật tính năng đó. Với `auto_switch = true` ở đầu `~/.config/ccam/config.toml` (Linux và macOS; mặc định tắt và đang thử nghiệm), khi Claude Code dừng một phiên tương tác (phiên do ccam khởi động) ở giới hạn 5 giờ, hàng tuần, Opus, Sonnet hoặc Fable, ccam kết thúc phiên và tiếp tục cuộc hội thoại dưới một tài khoản khác của bạn còn hạn mức: một seat khác của cùng tổ chức Team hoặc Enterprise, hoặc một gói cá nhân khác (Pro, Max). Nó không bao giờ đổi trước khi chạm giới hạn, không bao giờ theo dõi mức sử dụng của bạn ở chế độ nền, và không bao giờ chuyển công việc ra khỏi hay vào trong một tổ chức Team hoặc Enterprise.
 
 Với các seat, nó chuyển công việc của bạn từ seat này sang seat khác, điều này có thể vi phạm điều khoản của Anthropic (xem phần Seat của gói Team và Enterprise ở trên). Với các gói cá nhân, điều khoản của Anthropic không đề cập rõ ràng đến việc này: Consumer Terms cấm truy cập Dịch vụ "through automated or non-human means" (bằng phương tiện tự động hoặc phi con người) trừ khi Anthropic cho phép rõ ràng, và một lần chuyển sẽ gửi một tin nhắn thay cho bạn. Bật nó hay không là quyết định của bạn.
 

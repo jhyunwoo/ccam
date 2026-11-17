@@ -158,8 +158,13 @@ func hookStopFailure(e *env, in hookInput, account string) error {
 	lim, row := waitLimit(read, path, start, in.LastMessage)
 	switch {
 	case row:
-		// Again, now with the window and when it resets.
+		// Again, now with the window and when it resets. A model's week is
+		// that model's limit, whatever the message: Claude Code says "You're
+		// out of usage credits" when a Fable model's allowance is used up.
 		kind = cmp.Or(kind, "usage")
+		if usage.WindowModel(lim.Window) != "" {
+			kind = "model"
+		}
 		if err := note(kind); err != nil {
 			return err
 		}

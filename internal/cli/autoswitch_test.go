@@ -811,6 +811,8 @@ func TestSubagentHolds(t *testing.T) {
 		{"seven_day_sonnet", "claude-sonnet-5-5", true},
 		{"seven_day_sonnet", "claude-opus-5-5", false},
 		{"seven_day_opus", "", false}, // no reply to tell by
+		{"seven_day_overage_included", "claude-fable-5-2", true},
+		{"seven_day_overage_included", "claude-opus-5-5", false},
 	} {
 		if got := subagentHolds(c.window, c.model); got != c.holds {
 			t.Errorf("%s, %q: %v", c.window, c.model, got)
@@ -901,5 +903,146 @@ func TestAutoSwitchHookSubagent(t *testing.T) {
 	appendRows(t, conv, `{"type":"user","timestamp":`+strconv.Quote(time.Now().UTC().Format(time.RFC3339Nano))+`,"message":{"role":"user","content":"(go on)"},"origin":{"kind":"human"}}`)
 	if out := hook(msg); !strings.Contains(out, "`ccam next --continue`") || len(calls) != 0 || note().Stopped {
 		t.Fatalf("prompted after the limit: %q %v", out, calls)
+	}
+}
+
+// fableConversation writes a conversation on Fable 5.2 that stopped when
+// its included weekly allowance ran out at at (the 2.1.322 fixture), with
+// that week resetting at reset.
+func fableConversation(t *testing.T, path string, at, reset time.Time, edits ...string) {
+	t.Helper()
+	data, err := os.ReadFile("../transcript/testdata/limit-2.1.322-fable.jsonl")
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := strings.NewReplacer("2026-11-12T03:50:53.019Z", at.UTC().Format(time.RFC3339Nano), "1794927600", strconv.FormatInt(reset.Unix(), 10)).Replace(string(data))
+	if strings.Count(s, strconv.FormatInt(reset.Unix(), 10)) != 1 {
+		t.Fatal("the fixture changed; update fableConversation")
+	}
+	for i := 0; i+1 < len(edits); i += 2 {
+		s = strings.ReplaceAll(s, edits[i], edits[i+1])
+	}
+	os.MkdirAll(filepath.Dir(path), 0o700)
+	if err := os.WriteFile(path, []byte(s), 0o600); err != nil {
+		t.Fatal(err)
+	}
+}
+
+// saveFable saves account name's usage, with its Fable week, as a lookup
+// just now left it.
+func saveFable(t *testing.T, c *testCLI, name string, fiveHour, fable int) {
+	t.Helper()
+	path := filepath.Join(c.p.State, "usage", name+".json")
+	os.MkdirAll(filepath.Dir(path), 0o700)
+	data := fmt.Sprintf(`{"at":%q,"limits":{"five_hour":{"percent":%d,"resets_at":"2030-01-01T00:00:00Z","known":true},`+
+		`"weekly":{"percent":10,"resets_at":"2030-01-05T00:00:00Z","known":true},`+
+		`"scoped":[{"name":"Fable","window":{"percent":%d,"resets_at":"2030-01-05T00:00:00Z","known":true}}]}}`,
+		time.Now().UTC().Format(time.RFC3339Nano), fiveHour, fable)
+	if err := os.WriteFile(path, []byte(data), 0o600); err != nil {
+		t.Fatal(err)
+	}
+}
+
+// A Fable conversation whose account used up its Fable allowance (Claude
+// Code: "You're out of usage credits", window seven_day_overage_included)
+// moves like one at an Opus limit: to an account with room in its Fable
+// week. Usage credits themselves (overage) are no window, and stay put.
+func TestAutoSwitchHookFableAllowance(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("auto_switch is ignored on Windows")
+	}
+	hookEnv(t)
+	c := newTestCLI(t, map[string]int{"personal": 90, "work": 40, "side": 10})
+	var calls []terminated
+	old := launcher.Terminate
+	launcher.Terminate = func(claude, relay, child int, start string) error {
+		calls = append(calls, terminated{claude, relay, child, start})
+		return nil
+	}
+	t.Cleanup(func() { launcher.Terminate = old })
+	pid, _ := claudeChild(t)
+	t.Setenv("CCAM_PROFILE", "personal")
+	t.Setenv("CCAM_RELAY", "2:"+strconv.Itoa(os.Getpid()))
+	t.Setenv("CLAUDE_PID", strconv.Itoa(pid))
+	cwd, _ := os.Getwd()
+	cwd, _ = filepath.EvalSymlinks(cwd) // as Claude Code records the folders trusted
+	conv := filepath.Join(transcript.ProjectDir(c.p.ProfileDir("personal"), cwd), "s1.jsonl")
+	reset := time.Now().Add(48 * time.Hour).Truncate(time.Second)
+	msg := "You're out of usage credits. Run /usage-credits to keep using Fable 5.2 or /model to switch models." // the fixture's
+	// fresh sets the scene: side has the most room of its 5 hours, but its
+	// Fable week is used up; work has room in both.
+	fresh := func() {
+		t.Helper()
+		calls = nil
+		for _, d := range []string{"handoff", "picks", "usage"} {
+			os.RemoveAll(filepath.Join(c.p.State, d))
+		}
+		cfg := c.cfg()
+		cfg.AutoSwitch, cfg.Profiles[0].Login = true, nil
+		if err := cfg.Save(c.p.ConfigFile()); err != nil {
+			t.Fatal(err)
+		}
+		logInTrusting(t, c.p.ProfileDir("personal"), "u1", "p1", "claude_max", cwd)
+		logInTrusting(t, c.p.ProfileDir("work"), "u2", "w1", "claude_max", cwd)
+		logInTrusting(t, c.p.ProfileDir("side"), "u3", "s1", "claude_max", cwd)
+		saveFable(t, c, "work", 40, 30)
+		saveFable(t, c, "side", 10, 100)
+	}
+	hook := func(message string) string {
+		t.Helper()
+		in := hookJSON(t, map[string]string{"error": "rate_limit", "last_assistant_message": message, "session_id": "s1", "transcript_path": conv, "cwd": cwd})
+		out, errOut, code := c.run(in, "hook", "stop-failure")
+		if code != 0 {
+			t.Fatalf("%d %s", code, errOut)
+		}
+		return out
+	}
+	note := func() *handoff.Ticket {
+		t.Helper()
+		n, ok := handoff.LoadFile(c.p.State, handoff.Path(c.p.State, "personal", "s1"))
+		if !ok {
+			t.Fatal("no note")
+		}
+		return n
+	}
+
+	fresh()
+	fableConversation(t, conv, time.Now().Add(-time.Second), reset)
+	if out := hook(msg); out != "" || len(calls) != 1 {
+		t.Fatalf("%q %v", out, calls)
+	}
+	if n := note(); n.Chosen != "work" || !n.Stopped || n.Window != "seven_day_overage_included" || n.Limit != "model" || !n.ResetsAt.Equal(reset) {
+		t.Fatalf("%+v", n)
+	}
+	data, _ := os.ReadFile(filepath.Join(c.p.State, "usage", "personal.limit.json"))
+	if !strings.Contains(string(data), `"seven_day_overage_included"`) {
+		t.Fatalf("no record of the Fable week: %s", data)
+	}
+
+	// Claude Code 2.1.325 also writes it as a usage limit (seen in a
+	// subagent's conversation, 2026-11-16): "You've hit your Fable limit".
+	fresh()
+	hit := "You've hit your Fable limit · resets Nov 22, 3am (Asia/Seoul)"
+	fableConversation(t, conv, time.Now().Add(-time.Second), reset, `"model_requires_usage_credits"`, `"usage_limit_reached"`, msg, hit)
+	if out := hook(hit); out != "" || len(calls) != 1 {
+		t.Fatalf("usage_limit_reached: %q %v", out, calls)
+	}
+	if n := note(); n.Chosen != "work" || n.Window != "seven_day_overage_included" || n.Limit != "model" {
+		t.Fatalf("usage_limit_reached: %+v", n)
+	}
+
+	// Usage credits are no window: the usual notification.
+	fresh()
+	fableConversation(t, conv, time.Now().Add(-time.Second), reset, `"rateLimitType":"seven_day_overage_included"`, `"rateLimitType":"overage"`)
+	if out := hook(msg); !strings.Contains(out, "`ccam next --continue`") || len(calls) != 0 || note().Stopped {
+		t.Fatalf("overage: %q %v", out, calls)
+	}
+
+	// An Opus conversation at its 5-hour limit does not look at the Fable
+	// week: side's is full, but it has the most room.
+	fresh()
+	limitConversation(t, conv, time.Now().Add(-time.Second), reset)
+	if out := hook("You've hit your session limit · resets 3:30am (Asia/Seoul)"); out != "" || len(calls) != 1 || note().Chosen != "side" {
+		t.Fatalf("Opus: %q %v %+v", out, calls, note())
 	}
 }

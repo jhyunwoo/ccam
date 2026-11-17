@@ -1,10 +1,10 @@
 ---
 title: Vikomo vya matumizi
 description: ccam usage huonyesha vikomo vya saa 5 na vya wiki vya kila akaunti kwa pamoja, na ccam statusline huweka jina la akaunti na matumizi yake katika Claude Code.
-updated: 2026-11-01
+updated: 2026-11-17
 order: 7
 translation: machine
-sourceHash: "54b296f7da35"
+sourceHash: "9afbad92c84c"
 ---
 
 `ccam usage` huonyesha, kwa kila akaunti, kiasi kilichotumika cha kila kikomo: kikomo cha saa 5, kikomo cha wiki na kikomo cha wiki cha kila model (kama Fable). Kila kikomo hupata upau na muda hadi kianze upya. Itumie kabla ya kuanza kazi ndefu, au Claude Code inapokuambia kikomo kiko karibu, ili kuona ni akaunti ipi bado ina nafasi. `ccam statusline` ni amri ya mstari wa hali (status line) kwa Claude Code: huonyesha jina la akaunti na matumizi ndani ya Claude Code na huhifadhi namba kwa ajili ya `ccam usage`. Kwa tokeni na gharama zinazokadiriwa zilizo nyuma ya matumizi hayo, `ccam ccusage` huendesha [ccusage](https://ccusage.com) kwenye mazungumzo ya kila akaunti ([tazama hapa chini](#tokens-and-costs-ccam-ccusage)).
@@ -40,7 +40,7 @@ $ ccam usage
 
 Kila akaunti hupata mstari wenye namba yake, jina lake na umri wa namba zake; `(cached)` inamaanisha zinatoka kwenye faili iliyohifadhiwa, si kwenye endpoint. Chini yake, mstari mmoja kwa kila kikomo huonyesha upau wa visanduku 20, asilimia na muda hadi kipindi kianze upya: `5-hour`, `Weekly` (model zote), kisha kipindi cha wiki cha kila model yenyewe, kama `Fable`. Kipindi ambacho akaunti haina huonyesha `-`. Asilimia hugeuka manjano kwenye 80% na nyekundu kwenye 100%.
 
-Ikiwa Claude Code ilikataa ombi kwa sababu kipindi kilikuwa kimejaa, kipindi hicho huonyesha 100% hadi kianze upya, bila kujali namba zilizohifadhiwa zinasema nini (tazama [rekodi ya kikomo](#the-limit-record)). Kwenye terminal kila akaunti huonekana mara moja kama `fetching…`, na mistari yake huchorwa inapojibu.
+Ikiwa Claude Code ilikataa ombi kwa sababu kipindi kilikuwa kimejaa, kipindi hicho huonyesha 100% hadi kianze upya, isipokuwa utafutaji uliofanywa angalau dakika 5 baada ya kikomo uonyeshe nafasi ndani yake tena (tazama [rekodi ya kikomo](#the-limit-record)). Kwenye terminal kila akaunti huonekana mara moja kama `fetching…`, na mistari yake huchorwa inapojibu.
 
 Mstari wa mwisho, unaoonyeshwa tu ukiwa na zaidi ya akaunti moja, hutaja akaunti ambayo [`ccam next --auto`](/features/next) ingechagua. Hufuata kanuni zile zile:
 
@@ -138,7 +138,9 @@ Endpoint ina miundo miwili ya majibu. Mpya zaidi una safu ya `limits` yenye vipe
 
 ### Rekodi ya kikomo
 
-Claude Code inaposimamisha zamu kwenye kikomo cha matumizi, hook ya [plugin ya ccam](/docs/install#claude-code-plugin) husoma ombi lililokataliwa kutoka kwenye mazungumzo: ni kipindi kipi kilichojaa (saa 5, wiki, Opus au Sonnet) na lini kinaanza upya. Huandika hilo kwenye `~/.local/state/ccam/usage/<name>.limit.json`. ccam huweka rekodi hiyo juu ya kila kitu kingine inachojua, kutoka kila chanzo (`Fetch`): kila kipindi kilichomo huhesabiwa kama 100% hadi kianze upya, bila kujali namba zilizohifadhiwa ni za zamani au za chini kiasi gani, kwa hiyo `ccam next --auto`, `ccam pick`, `--fallback` na [`auto_switch`](/features/next#auto-switch) hazichagui akaunti hiyo tena kabla ya hapo.
+Claude Code inaposimamisha zamu kwenye kikomo cha matumizi, hook ya [plugin ya ccam](/docs/install#claude-code-plugin) husoma ombi lililokataliwa kutoka kwenye mazungumzo: ni kipindi kipi kilichojaa (saa 5, wiki, Opus, Sonnet au Fable) na lini kinaanza upya. Huandika hilo kwenye `~/.local/state/ccam/usage/<name>.limit.json`. ccam huweka rekodi hiyo juu ya kila kitu kingine inachojua, kutoka kila chanzo (`Fetch`): kila kipindi kilichomo huhesabiwa kama 100% hadi kianze upya, bila kujali namba zilizohifadhiwa ni za zamani au za chini kiasi gani, kwa hiyo `ccam next --auto`, `ccam pick`, `--fallback` na [`auto_switch`](/features/next#auto-switch) hazichagui akaunti hiyo tena kabla ya hapo.
+
+Kikomo kinaweza kuisha kabla ya muda wake wa kuanza upya, kwa mfano unapotumia uwekaji upya wa kikomo (`/limit-reset` ya Claude Code). Kwa hiyo utafutaji wa endpoint ya matumizi, wa ccam au wa Claude Code, uliofanywa dakika 5 au zaidi baada ya kikomo na unaoonyesha kipindi hicho chini ya 100% hushinda rekodi kwa kipindi hicho. Mstari wa hali hauhesabiwi. Dakika hizo 5 huzuia akaunti iliyokataliwa sasa hivi isichaguliwe tena kwa namba ambazo bado hazionyeshi kikomo.
 
 Kama hakuna kingine kinachojulikana, akaunti huonyesha rekodi hiyo pekee (`source: the usage limit Claude Code reported` kwa `-v`). Vipindi visivyo na mtu anayevifuatilia (uendeshaji wa `-p` na vipindi vya chinichini) haviandiki rekodi, wala usimamishaji uliowekwa na shirika (kwa mfano, matumizi yake yanapoisha au kikomo cha kikundi kikiwa $0), ambao wasimamizi wake wanaweza kuuondoa wakati wowote. `ccam login` kwenye akaunti nyingine ya Claude huondoa rekodi; kufuta faili pia huifuta.
 

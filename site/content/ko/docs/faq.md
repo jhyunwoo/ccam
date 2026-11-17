@@ -2,10 +2,10 @@
 title: 자주 묻는 질문
 metaTitle: "ccam FAQ: Claude Code 여러 계정 쓰기"
 description: ccam, Claude Code 계정, 사용량 한도, 공유, 개인정보, 지원 시스템에 관한 질문과 답변입니다.
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: "64cd522eb711"
+sourceHash: "9b13b37391f2"
 ---
 
 ## ccam은 Anthropic 공식 도구인가요?
@@ -24,7 +24,7 @@ sourceHash: "64cd522eb711"
 
 ## ccam이 세션이 한도에 걸렸을 때 스스로 계정을 바꿀 수 있나요?
 
-직접 켰을 때만 그렇습니다. `~/.config/ccam/config.toml` 맨 위에 `auto_switch = true`를 두면(Linux와 macOS 전용, 기본값은 꺼짐, 실험적 기능), Claude Code가 대화형 세션(ccam이 시작한 세션)을 5시간, 주간, Opus 또는 Sonnet 한도에서 멈출 때 ccam이 그 세션을 끝내고 여유가 있는 사용자의 다른 계정에서 대화를 이어 갑니다. 옮겨 가는 곳은 같은 Team이나 Enterprise 조직의 다른 시트, 또는 다른 개인 요금제(Pro, Max)입니다. 한도 전에 전환하는 일은 절대 없고, 백그라운드에서 사용량을 지켜보지도 않으며, Team이나 Enterprise 조직 밖으로 또는 그 안으로 작업을 옮기지도 않습니다.
+직접 켰을 때만 그렇습니다. `~/.config/ccam/config.toml` 맨 위에 `auto_switch = true`를 두면(Linux와 macOS 전용, 기본값은 꺼짐, 실험적 기능), Claude Code가 대화형 세션(ccam이 시작한 세션)을 5시간, 주간, Opus, Sonnet 또는 Fable 한도에서 멈출 때 ccam이 그 세션을 끝내고 여유가 있는 사용자의 다른 계정에서 대화를 이어 갑니다. 옮겨 가는 곳은 같은 Team이나 Enterprise 조직의 다른 시트, 또는 다른 개인 요금제(Pro, Max)입니다. 한도 전에 전환하는 일은 절대 없고, 백그라운드에서 사용량을 지켜보지도 않으며, Team이나 Enterprise 조직 밖으로 또는 그 안으로 작업을 옮기지도 않습니다.
 
 시트에서는 한 시트에서 다른 시트로 작업을 옮기므로 Anthropic의 약관을 위반할 수 있습니다(위의 Team·Enterprise 시트 안내 참고). 개인 요금제에 대해서는 Anthropic의 약관이 이를 분명히 정하지 않습니다. Consumer Terms는 Anthropic이 명시적으로 허용하지 않는 한 "through automated or non-human means"(자동화된 수단이나 사람이 아닌 수단으로) 서비스에 접근하는 것을 금지하며, 한 번 옮길 때마다 ccam이 메시지 하나를 사용자 대신 보냅니다. 켤지는 사용자가 판단할 일입니다.
 

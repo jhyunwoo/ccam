@@ -2,10 +2,10 @@
 title: Sık sorulan sorular
 metaTitle: "ccam SSS: birden fazla Claude Code hesabı"
 description: ccam, Claude Code hesapları, kullanım limitleri, paylaşım, gizlilik ve desteklenen sistemler hakkında yanıtlar.
-updated: 2026-10-28
+updated: 2026-11-17
 order: 6
 translation: machine
-sourceHash: 64cd522eb711
+sourceHash: "9b13b37391f2"
 ---
 
 ## ccam resmi bir Anthropic aracı mı?
@@ -24,7 +24,7 @@ Hiçbir hesabın kendi limitinin ötesine geçirmez: her hesap kendi limitlerini
 
 ## ccam, bir oturum limitine ulaştığında hesapları kendiliğinden değiştirebilir mi?
 
-Yalnızca siz açarsanız. `~/.config/ccam/config.toml` dosyasının en üstünde `auto_switch = true` olduğunda (Linux ve macOS; varsayılan olarak kapalı ve deneysel), Claude Code etkileşimli bir oturumu (ccam'in başlattığı bir oturumu) 5 saatlik, haftalık, Opus veya Sonnet limitinde durdurduğunda ccam oturumu sonlandırır ve konuşmayı payı kalan başka bir hesabınızla sürdürür: aynı Team veya Enterprise kuruluşunun başka bir koltuğu ya da başka bir kişisel plan (Pro, Max). Limitten önce asla geçiş yapmaz, kullanımınızı arka planda asla izlemez ve işi asla bir Team veya Enterprise kuruluşunun dışına ya da içine taşımaz.
+Yalnızca siz açarsanız. `~/.config/ccam/config.toml` dosyasının en üstünde `auto_switch = true` olduğunda (Linux ve macOS; varsayılan olarak kapalı ve deneysel), Claude Code etkileşimli bir oturumu (ccam'in başlattığı bir oturumu) 5 saatlik, haftalık, Opus, Sonnet veya Fable limitinde durdurduğunda ccam oturumu sonlandırır ve konuşmayı payı kalan başka bir hesabınızla sürdürür: aynı Team veya Enterprise kuruluşunun başka bir koltuğu ya da başka bir kişisel plan (Pro, Max). Limitten önce asla geçiş yapmaz, kullanımınızı arka planda asla izlemez ve işi asla bir Team veya Enterprise kuruluşunun dışına ya da içine taşımaz.
 
 Koltuklarda işinizi bir koltuktan diğerine taşır; bu Anthropic'in koşullarını ihlal edebilir (bkz. yukarıdaki Team ve Enterprise koltukları). Kişisel planlar için Anthropic'in koşulları bu konuyu açıkça ele almaz: Tüketici Koşulları, Anthropic açıkça izin vermedikçe Hizmetlere "through automated or non-human means" (otomatik veya insan dışı yollarla) erişmeyi yasaklar ve bir taşıma sizin adınıza bir mesaj gönderir. Açıp açmamak sizin kararınızdır.
 
