@@ -28,6 +28,12 @@ import (
 	"github.com/jhyunwoo/ccam/internal/usage"
 )
 
+// dashFPS is how many times a second the dashboard is drawn. Bubble Tea
+// draws on a clock even when nothing changed, 60 times a second by default,
+// which kept an idle dashboard waking about 290 times a second; at 20 a key
+// still shows within about 50 ms and the first frame within 100 ms.
+const dashFPS = 20
+
 // interactive reports whether both ends are a terminal.
 func interactive(e *env) bool { return isTerminal(e.stdin) && isTerminal(e.stdout) }
 
@@ -51,7 +57,7 @@ func runHome(e *env) error {
 		renew := newRenewals()
 		dash := tui.NewDashboard(backend{e: &quiet, renew: renew}, cfg, cwd, version())
 		dash.KeepInstalled(installed)
-		prog := tea.NewProgram(dash, tea.WithInput(os.Stdin), tea.WithOutput(os.Stdout))
+		prog := tea.NewProgram(dash, tea.WithInput(os.Stdin), tea.WithOutput(os.Stdout), tea.WithFPS(dashFPS))
 		// The times to a reset count down while the dashboard is left open.
 		clock, closed := time.NewTicker(time.Minute), make(chan struct{})
 		go func() {
