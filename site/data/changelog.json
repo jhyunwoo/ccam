@@ -1,5 +1,11 @@
 [
   {
+    "tag": "v0.14.1",
+    "date": "2026-11-17",
+    "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.14.1",
+    "notes": "<p>Two fixes for usage limits.</p>\n<p>After a limit reset (<code>/limit-reset</code> in Claude Code), ccam kept showing the window at 100% until its old reset time, because the limit Claude Code had reported won over every other number. <code>ccam usage</code>, the dashboard, <code>ccam next --auto</code>, <code>ccam pick</code> and <code>auto_switch</code> then took accounts with room for full ones. Now a lookup of the usage endpoint (ccam&#39;s, or Claude Code&#39;s with <code>usage_source = &quot;claude&quot;</code>) made 5 minutes or more after the limit, which shows that window below 100%, wins over the record for that window. The status line does not count, and the 5 minutes keep an account that was just refused from being chosen again on numbers that do not show the limit yet.</p>\n<p>When a Fable model used up its weekly allowance, Claude Code stopped the session (<code>You&#39;ve hit your Fable limit</code> or <code>You&#39;re out of usage credits</code>), but ccam did not count it as a usage limit, so <code>auto_switch</code> left a Fable session where it was. Now the plugin&#39;s hook records the Fable week as full, and <code>auto_switch</code> moves the conversation to an account with room in its own Fable week. A conversation on another model can still go to an account whose Fable week is full. Usage credits running out on any other request still never move a session.</p>\n<p>The plugin&#39;s hook runs the ccam you have installed, so both fixes take effect once you update ccam (<code>ccam update</code>); the Claude Code plugin has not changed.</p>\n<h3>Fixed</h3>\n<ul>\n<li>A usage lookup made 5 minutes or more after a limit that shows the window below 100% wins over the limit record, so the usage after a limit reset shows again</li>\n<li>The Fable allowance counts as the Fable week&#39;s limit: the plugin records it, and <code>auto_switch</code> moves a Fable session to an account with room in its Fable week</li>\n</ul>\n"
+  },
+  {
     "tag": "v0.14.0",
     "date": "2026-11-11",
     "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.14.0",
