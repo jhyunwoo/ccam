@@ -1,5 +1,11 @@
 [
   {
+    "tag": "v0.14.2",
+    "date": "2026-11-17",
+    "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.14.2",
+    "notes": "<p>One fix for the dashboard.</p>\n<p>The dashboard (<code>ccam</code> on a terminal) used CPU while it sat open with nothing to do. One left open for 4 hours had used 3.7% of a core and woken about 290 times a second, because its screen was drawn 60 times a second whether or not anything had changed. It now draws 20 times a second and wakes about a third as often; a key still shows on screen within about 50 ms.</p>\n<p>Starting Claude Code through ccam (<code>ccam &lt;account&gt;</code>, a shortcut, <code>ccam next</code>) has not changed: ccam takes a few milliseconds before Claude Code starts. When a start feels slow, that is Claude Code&#39;s own start, which grows with the plugins and MCP servers it loads and with how busy the machine is. <code>ccam next --auto</code> also looks up every account&#39;s usage first when its 60-second cache is older, which takes under a second.</p>\n<h3>Fixed</h3>\n<ul>\n<li>An idle dashboard wakes about a third as often: it draws 20 times a second instead of 60</li>\n</ul>\n"
+  },
+  {
     "tag": "v0.14.1",
     "date": "2026-11-17",
     "url": "https://github.com/jhyunwoo/ccam/releases/tag/v0.14.1",
