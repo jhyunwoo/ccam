@@ -238,7 +238,7 @@ var Reserved = map[string]bool{
 	"usage": true, "u": true, "share": true, "mcp": true, "login": true, "logout": true,
 	"rename": true, "remove": true, "rm": true, "import": true, "migrate": true, "doctor": true,
 	"shims": true, "shortcut": true, "completion": true, "help": true, "version": true, "statusline": true,
-	"update": true, "uninstall": true, "folder": true, "pick": true, "ext": true, "group": true, "groups": true, "hook": true, "agents": true, "attach": true, "ccusage": true,
+	"update": true, "uninstall": true, "folder": true, "pick": true, "ext": true, "group": true, "groups": true, "hook": true, "agent": true, "agents": true, "attach": true, "ccusage": true,
 }
 
 // isName reports whether s matches ^[a-z0-9][a-z0-9_-]{0,31}$, the rule for

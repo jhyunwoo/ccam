@@ -66,8 +66,8 @@ func ProjectDir(configDir, cwd string) string {
 // that are neither, such as cost-state and last-prompt when a session
 // ends, so the file's time says less. A session that only ran local
 // commands (/mcp, /usage, /status), or an empty file, has no conversation
-// and is skipped.
-func Latest(projectDir string) (path string, at time.Time, ok bool) {
+// and is skipped, as is every file skip reports (skip may be nil).
+func Latest(projectDir string, skip func(path string) bool) (path string, at time.Time, ok bool) {
 	entries, err := os.ReadDir(projectDir)
 	if err != nil {
 		return "", time.Time{}, false
@@ -81,8 +81,12 @@ func Latest(projectDir string) (path string, at time.Time, ok bool) {
 		if e.IsDir() || !strings.HasSuffix(e.Name(), ".jsonl") {
 			continue
 		}
+		path := filepath.Join(projectDir, e.Name())
+		if skip != nil && skip(path) {
+			continue
+		}
 		if info, err := e.Info(); err == nil && info.Size() > 0 {
-			files = append(files, file{filepath.Join(projectDir, e.Name()), info.ModTime()})
+			files = append(files, file{path, info.ModTime()})
 		}
 	}
 	// A row is written after it is made, so no message is newer than its

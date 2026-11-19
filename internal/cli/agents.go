@@ -55,7 +55,8 @@ func agentsCmd(e *env) *cobra.Command {
 			"together, with the account each belongs to. Background sessions belong to the\n" +
 			"account that started them; open one with `ccam attach <id>`.\n\n" +
 			"The dashboard (ccam on a terminal) shows the same list on its Agents tab, where\n" +
-			"enter attaches to a background session and x stops one.",
+			"enter attaches to a background session and x stops one. To run a task as another\n" +
+			"account, see `ccam agent`.",
 		Example: "  ccam agents\n  ccam agents --all     # also finished background sessions\n  ccam attach 49ec0028",
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {

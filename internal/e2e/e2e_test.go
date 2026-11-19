@@ -107,7 +107,7 @@ var exe = map[bool]string{true: ".exe"}[runtime.GOOS == "windows"]
 // which the developer's own may have exported: ccam's hooks and relay read
 // them, so no test inherits them.
 var sessionEnv = []string{"CCAM_PROFILE", "CCAM_RELAY", "CLAUDE_CONFIG_DIR", "CLAUDE_PID", "CLAUDE_EFFORT", "CLAUDE_PROJECT_DIR",
-	"CLAUDE_CODE_SESSION_ATTENDED", "CLAUDE_CODE_ENTRYPOINT", "CLAUDE_CODE_BRIDGE_SESSION_ID"}
+	"CLAUDE_CODE_SESSION_ATTENDED", "CLAUDE_CODE_ENTRYPOINT", "CLAUDE_CODE_BRIDGE_SESSION_ID", "CLAUDE_CODE_SESSION_ID", "CCAM_AGENT"}
 
 // harness is one isolated ccam installation.
 type harness struct {
