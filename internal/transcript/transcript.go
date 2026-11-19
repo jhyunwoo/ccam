@@ -9,6 +9,7 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"os"
 	"path/filepath"
@@ -371,20 +372,75 @@ func lastLimit(path string, since time.Time, side bool) (Limit, bool) {
 func PermissionMode(path string) string {
 	lines := tail(path)
 	for i := len(lines) - 1; i >= 0; i-- {
-		l := lines[i]
-		if !bytes.Contains(l, []byte(`"permissionMode"`)) {
-			continue
+		if mode, ok := modeRow(lines[i]); ok {
+			return mode
 		}
-		var e struct {
-			Type string `json:"type"`
-			Mode string `json:"permissionMode"`
+	}
+	return ""
+}
+
+// modeRow is the permission mode row l says the conversation is in: a
+// permission-mode row's, or that of a person's prompt.
+func modeRow(l []byte) (string, bool) {
+	if !bytes.Contains(l, []byte(`"permissionMode"`)) {
+		return "", false
+	}
+	var e struct {
+		Type string `json:"type"`
+		Mode string `json:"permissionMode"`
+	}
+	if json.Unmarshal(l, &e) != nil || e.Mode == "" {
+		return "", false
+	}
+	return e.Mode, e.Type == "permission-mode" || prompt(l)
+}
+
+// modeChunk is how much LastPermissionMode reads at a time, and maxRow the
+// longest row it keeps whole across reads: a longer one is a tool's output,
+// which says no mode.
+const (
+	modeChunk = 1 << 20
+	maxRow    = 16 << 20
+)
+
+// LastPermissionMode is PermissionMode over the whole conversation at path:
+// it reads back from the end until a row says the mode. A long turn can run
+// for many megabytes after the prompt that began it without such a row
+// (seen: 4 to 80 MB), and ccam agent asks in the middle of one. "" when no
+// row says it.
+func LastPermissionMode(path string) string {
+	f, err := os.Open(path)
+	if err != nil {
+		return ""
+	}
+	defer f.Close()
+	info, err := f.Stat()
+	if err != nil {
+		return ""
+	}
+	var cut []byte // the end of a row whose start is before the part read
+	for end := info.Size(); end > 0; {
+		start := max(end-modeChunk, 0)
+		buf := make([]byte, end-start, end-start+int64(len(cut)))
+		if _, err := f.ReadAt(buf, start); err != nil && !errors.Is(err, io.EOF) {
+			return ""
 		}
-		if json.Unmarshal(l, &e) != nil || e.Mode == "" {
-			continue
+		lines := bytes.Split(append(buf, cut...), []byte("\n"))
+		first := 0
+		if start > 0 {
+			// The first row may start before this part: read it whole with
+			// the part before, unless it is too long to be one with a mode.
+			cut, first = lines[0], 1
+			if len(cut) > maxRow {
+				cut = nil
+			}
 		}
-		if e.Type == "permission-mode" || prompt(l) {
-			return e.Mode
+		for i := len(lines) - 1; i >= first; i-- {
+			if mode, ok := modeRow(lines[i]); ok {
+				return mode
+			}
 		}
+		end = start
 	}
 	return ""
 }

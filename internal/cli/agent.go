@@ -178,12 +178,19 @@ func callerProfile(e *env, cfg *config.Config) *config.Profile {
 // callerMode is the permission mode of the Claude Code session that runs
 // ccam agent (CLAUDE_CODE_SESSION_ID), read from its conversation in the
 // caller's folder: under projects/ by its id, since the shell may have
-// left the folder the session started in. "" when there is none.
+// left the folder the session started in, and back as far as it takes, as
+// the session may be deep in a long turn. "" when there is none; within a
+// session ccam says so, as the agent then may not change anything.
 func callerMode(e *env, caller *config.Profile) string {
-	if path := callerTranscript(e, caller, os.Getenv("CLAUDE_CODE_SESSION_ID")); path != "" {
-		return transcript.PermissionMode(path)
+	id := os.Getenv("CLAUDE_CODE_SESSION_ID")
+	mode := ""
+	if path := callerTranscript(e, caller, id); path != "" {
+		mode = transcript.LastPermissionMode(path)
 	}
-	return ""
+	if mode == "" && id != "" {
+		fmt.Fprintln(e.stderr, "ccam: could not tell this session's permission mode, so the agent runs in the default mode, where it may not edit files or run commands")
+	}
+	return mode
 }
 
 func callerTranscript(e *env, caller *config.Profile, id string) string {

@@ -142,6 +142,10 @@ func TestAgentCarriesTheSessionModeAndEffort(t *testing.T) {
 	if _, args := agentRuns(t, log); argAfter(args[0], "--permission-mode") != "default" {
 		t.Fatalf("args: %v", args[0])
 	}
+	if r := h.runIn(sub, "", env, "ccam", "agent", "task"); !strings.Contains(r.stderr, "could not tell this session's permission mode") {
+		t.Fatalf("no word of the unknown mode: %+v", r)
+	}
+	agentRuns(t, log)
 	// A session ccam did not start is known by its config folder.
 	env[0], env[1] = "FAKE_AGENT_LOG="+log, "CLAUDE_CONFIG_DIR="+h.profileDir("c3")
 	env[2] = "CLAUDE_CODE_SESSION_ID=caller-session"
