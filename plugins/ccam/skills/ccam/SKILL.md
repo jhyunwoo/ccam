@@ -1,6 +1,6 @@
 ---
 name: ccam
-description: Use when the user has several Claude Code accounts managed by ccam and asks about usage limits, which account has room, switching accounts after a limit, running parallel `claude -p` workers on different accounts, or why a skill, command or MCP server is missing in one account. Triggers include "which account has room", "I hit my limit", "run these tasks on my other accounts", "spread the work over my accounts", "ccam".
+description: Use when the user has several Claude Code accounts managed by ccam and asks about usage limits, which account has room, switching accounts after a limit, handing parts of a task to agents that run as their other accounts (ccam agent), running parallel `claude -p` workers on different accounts, or why a skill, command or MCP server is missing in one account. Triggers include "which account has room", "I hit my limit", "use my other accounts for this", "save this account's usage", "run these tasks on my other accounts", "spread the work over my accounts", "ccam agent", "ccam".
 ---
 
 # Working with ccam
@@ -30,6 +30,23 @@ When a session stops at a usage limit, the ccam plugin notes it the same way, an
 `ccam next --continue --brief` starts a new conversation as the other account instead, which reads a summary ccam writes of this one without a model rather than all of it: that costs the other account much less, but details are left out. Suggest it for long conversations.
 
 With `auto_switch = true` in ccam's `config.toml` (Linux, macOS; off by default), ccam continues the conversation on another account by itself when Claude Code stops the session at a usage limit and another account like this one has room. The new session then starts with: "Your usage limit was reached and ccam moved this conversation to another account. Continue the task you were working on when the limit was reached; do not repeat work that is already complete." When you see that message, carry on from where the conversation stopped. A subagent that stops at the limit counts too, also while you wait for it; the new session then starts with: "A subagent hit your usage limit and ccam moved this conversation to another account. The subagents, workflows and background commands that were running then have stopped, and their results may be missing: run again what the task still needs, then continue it; do not repeat work that is already complete." Background shells, dev servers and agents started before the move have stopped; start again only what the task still needs.
+
+## Hand parts of a task to another account
+
+`ccam agent` runs a task with `claude -p` as another of the user's accounts, in this folder, and prints Claude's last reply: a subagent that uses that account's usage instead of this session's, so the task as a whole lasts longer. Use it when the user asks you to use their other accounts (in this conversation or in their CLAUDE.md); otherwise use your own subagents.
+
+```sh
+ccam agent "<the task, with everything the agent needs to know>"
+```
+
+- Start it with the Bash tool's `run_in_background: true`: an agent can take longer than a command in the foreground may run. You are told when it ends; its output then holds the agent's last reply and ccam's lines. Agents started together get different accounts.
+- The agent does not see this conversation. Write the task so it stands alone: the goal, the files, what to leave alone, and what to reply with (for example "reply with the files you changed and why").
+- It works in this session's permission mode and effort, never more. Agents that edit the same files at once overwrite each other's work: give each its own part, or its own git worktree (run it from there).
+- ccam's first line names the agent's session. `ccam agent --resume <id> "<follow-up>"` continues that conversation, with what the agent learned, also after it stopped.
+- When the agent's account reaches its usage limit, ccam continues its conversation as another account by itself.
+- Exit code 75 means no other account has room now: do the task yourself or tell the user; do not retry in a loop. `--wait` waits for an account to reset.
+- `--model opus` sets the agent's model; `--json` prints `{account, session_id, result, is_error, accounts}`.
+- An agent cannot start agents of its own. When this session moves to another account, agents it started stop with it; continue them with `--resume <id>`.
 
 ## Run work on other accounts
 

@@ -12,7 +12,7 @@
     {
       "name": "ccam",
       "source": "./plugins/ccam",
-      "description": "See every account's usage, get a notification and continue on another account at a usage limit (/ccam:switch, or automatically with auto_switch), pick an account with room for parallel workers, and diagnose extensions, with ccam.",
+      "description": "See every account's usage, get a notification and continue on another account at a usage limit (/ccam:switch, or automatically with auto_switch), hand parts of a task to agents on other accounts (ccam agent), pick an account with room for parallel workers, and diagnose extensions, with ccam.",
       "category": "productivity"
     }
   ]
