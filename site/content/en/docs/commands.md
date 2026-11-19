@@ -2,7 +2,7 @@
 title: Command reference
 metaTitle: ccam command reference
 description: Every ccam command and option, from ccam add and ccam <name> to ccam usage, ccam next and ccam doctor.
-updated: 2026-10-28
+updated: 2026-11-19
 published: 2026-10-19
 order: 3
 translation: source
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - `--wait` takes its value after `=` (`--wait=2h`); written with a space it is refused with a hint. When none can be chosen they exit with code 75, or, with `--wait`, wait for the first account to reset.
 - `ccam next --continue` carries a conversation over even between accounts that do not share history: Claude Code then copies it into the new account. With `--brief`, the new account starts a new conversation instead, from a summary ccam writes of the last one without a model ([`--brief`](/features/next#brief)).
 - Unlike `ccam <name>`, `ccam next` reads its own options, so Claude Code's options go after `--`; without it ccam stops with `unknown flag`.
+- `ccam agent` runs a task with `claude -p` in this folder as another account than the one it is called from, in the calling session's permission mode and effort, and prints Claude's last reply. At that account's limit the conversation goes on as another ([Subagents on other accounts](/features/agent)).
 - Inside Claude Code, the plugin's `/ccam:switch [account]` hands a conversation on, and `ccam hook` is what its hooks run.
 - With `auto_switch = true` in `config.toml` (Linux and macOS; off by default), the limit hook also ends an interactive session that ccam started and continues it on another account with room, but only one of the same kind: another seat of the same organization, or another personal plan ([`auto_switch`](/features/next#auto-switch)).
 
-See [Switching to the next account](/features/next), [Picking an account for scripts](/features/pick) and [Background sessions of every account](/features/agents).
+See [Switching to the next account](/features/next), [Picking an account for scripts](/features/pick), [Subagents on other accounts](/features/agent) and [Background sessions of every account](/features/agents).
 
 ## Maintenance
 

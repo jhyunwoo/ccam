@@ -16,6 +16,10 @@
     "usage": "ccam add [name]"
   },
   {
+    "key": "agent",
+    "usage": "ccam agent [--model <model>] [--resume <id>] [--json] [--] <task>"
+  },
+  {
     "key": "agents",
     "usage": "ccam agents [--all] [--json]"
   },
