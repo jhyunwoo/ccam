@@ -1,10 +1,10 @@
 ---
 title: ಖಾತೆಗಳ ನಿರ್ವಹಣೆ
 description: "ccam add, ccam login, ccam list, ccam rename, ccam remove, ccam import: Claude Code ಖಾತೆ ಸೇರಿಸಿ, ಲಾಗಿನ್ ಮಾಡಿ, ನೋಡಿ, ಮರುಹೆಸರಿಸಿ, ತೆಗೆಯಿರಿ, ಇಂಪೋರ್ಟ್ ಮಾಡಿ."
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 ಪ್ರತಿ ccam ಖಾತೆಯೂ ತನ್ನದೇ ಲಾಗಿನ್ ಇರುವ ಪ್ರತ್ಯೇಕ Claude Code ಕಾನ್ಫಿಗ್ ಫೋಲ್ಡರ್. ಖಾತೆಗಳನ್ನು ಸೇರಿಸಲು, ಅವುಗಳಿಗೆ ಸೈನ್ ಇನ್ ಮಾಡಲು, ಪಟ್ಟಿ ಮಾಡಲು, ಮರುಹೆಸರಿಸಲು ಮತ್ತು ತೆಗೆದುಹಾಕಲು ಈ ಕಮಾಂಡ್‌ಗಳನ್ನು ಬಳಸಿ. ಇವು ನಿಮ್ಮ ಬಳಿ ಈಗಾಗಲೇ ಇರುವ ಫೋಲ್ಡರ್‌ಗಳನ್ನೂ ನೋಂದಾಯಿಸುತ್ತವೆ.
@@ -79,7 +79,7 @@ $ ccam list
 
 `ccam login` (`--expired` ಹೊರತುಪಡಿಸಿ), `ccam use` ಮತ್ತು `ccam rename` ಗೆ ತಮ್ಮದೇ ಆಯ್ಕೆಗಳಿಲ್ಲ. `ccam completion` `bash`, `zsh` ಅಥವಾ `powershell` ತೆಗೆದುಕೊಳ್ಳುತ್ತದೆ; ಬೇರೆ ಯಾವುದೇ ಮೌಲ್ಯ `only bash, zsh and powershell are supported` ಎಂದು ವಿಫಲವಾಗುತ್ತದೆ.
 
-ಖಾತೆಯ ಹೆಸರುಗಳು `a-z`, `0-9`, `-` ಮತ್ತು `_` ಅಕ್ಷರಗಳಿಂದ ಕೂಡಿದ 1 ರಿಂದ 32 ಅಕ್ಷರಗಳಾಗಿರುತ್ತವೆ ಮತ್ತು ಅಕ್ಷರ ಅಥವಾ ಅಂಕಿಯಿಂದ ಆರಂಭವಾಗುತ್ತವೆ. ಹೆಸರು ಸಂಪೂರ್ಣವಾಗಿ ಅಂಕಿಗಳಾಗಿರಬಾರದು, ಏಕೆಂದರೆ `ccam 2` ಎಂದರೆ ಸ್ಲಾಟ್ 2. ಹೆಸರು ccam ಕಮಾಂಡ್ ಕೂಡ ಆಗಿರಬಾರದು (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), ಹೀಗಾಗಿ `ccam <name>` ಎಂದಿಗೂ ಅಸ್ಪಷ್ಟವಾಗುವುದಿಲ್ಲ. ಈ ಪಟ್ಟಿ `internal/config` ನಲ್ಲಿರುವ `config.Reserved`.
+ಖಾತೆಯ ಹೆಸರುಗಳು `a-z`, `0-9`, `-` ಮತ್ತು `_` ಅಕ್ಷರಗಳಿಂದ ಕೂಡಿದ 1 ರಿಂದ 32 ಅಕ್ಷರಗಳಾಗಿರುತ್ತವೆ ಮತ್ತು ಅಕ್ಷರ ಅಥವಾ ಅಂಕಿಯಿಂದ ಆರಂಭವಾಗುತ್ತವೆ. ಹೆಸರು ಸಂಪೂರ್ಣವಾಗಿ ಅಂಕಿಗಳಾಗಿರಬಾರದು, ಏಕೆಂದರೆ `ccam 2` ಎಂದರೆ ಸ್ಲಾಟ್ 2. ಹೆಸರು ccam ಕಮಾಂಡ್ ಕೂಡ ಆಗಿರಬಾರದು (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), ಹೀಗಾಗಿ `ccam <name>` ಎಂದಿಗೂ ಅಸ್ಪಷ್ಟವಾಗುವುದಿಲ್ಲ. ಈ ಪಟ್ಟಿ `internal/config` ನಲ್ಲಿರುವ `config.Reserved`.
 
 ## ಇದು ಹೇಗೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ
 

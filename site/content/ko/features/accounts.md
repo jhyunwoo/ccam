@@ -1,10 +1,10 @@
 ---
 title: 계정 관리
 description: ccam add, ccam login, ccam list, ccam rename, ccam remove, ccam import로 Claude Code 계정을 추가, 로그인, 확인, 이름 변경, 삭제하고 가져옵니다.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 ccam 계정은 각각 자체 로그인 정보를 가진 별도의 Claude Code 설정 폴더입니다. 다음 명령으로 계정을 추가하고, 로그인하고, 목록을 보고, 이름을 바꾸고, 삭제합니다. 이미 있는 폴더를 등록할 수도 있습니다.
@@ -79,7 +79,7 @@ $ ccam list
 
 `ccam login`(`--expired` 외), `ccam use`, `ccam rename`에는 자체 옵션이 없습니다. `ccam completion`은 `bash`, `zsh`, `powershell`을 받으며, 그 밖의 값은 `only bash, zsh and powershell are supported`로 실패합니다.
 
-계정 이름은 `a-z`, `0-9`, `-`, `_`로 이루어진 1~32자이며, 문자나 숫자로 시작해야 합니다. `ccam 2`는 슬롯 2를 뜻하므로 숫자로만 된 이름은 쓸 수 없습니다. ccam 명령 이름(`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`)도 쓸 수 없으므로, `ccam <name>`이 모호해지는 일은 없습니다. 이 목록은 `internal/config`의 `config.Reserved`입니다.
+계정 이름은 `a-z`, `0-9`, `-`, `_`로 이루어진 1~32자이며, 문자나 숫자로 시작해야 합니다. `ccam 2`는 슬롯 2를 뜻하므로 숫자로만 된 이름은 쓸 수 없습니다. ccam 명령 이름(`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`)도 쓸 수 없으므로, `ccam <name>`이 모호해지는 일은 없습니다. 이 목록은 `internal/config`의 `config.Reserved`입니다.
 
 ## 동작 방식
 

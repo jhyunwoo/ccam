@@ -2,10 +2,10 @@
 title: తరచుగా అడిగే ప్రశ్నలు
 metaTitle: "ccam FAQ: అనేక Claude Code ఖాతాలు"
 description: ccam, Claude Code ఖాతాలు, వినియోగ పరిమితులు, షేరింగ్, గోప్యత, మద్దతు ఉన్న సిస్టమ్‌ల గురించి సమాధానాలు.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## ccam అనేది Anthropic యొక్క అధికారిక టూలా?
@@ -16,7 +16,7 @@ sourceHash: "9b13b37391f2"
 
 అది ప్రతి ఖాతా నిబంధనలపై, work ఖాతాల విషయంలో మీ సంస్థ విధానంపై ఆధారపడి ఉంటుంది: Pro, Max కోసం Anthropic యొక్క [Consumer Terms](https://www.anthropic.com/legal/consumer-terms), Team, Enterprise కోసం దాని [Commercial Terms](https://www.anthropic.com/legal/commercial-terms), అన్నింటికీ దాని [Usage Policy](https://www.anthropic.com/legal/aup). అనేక ఖాతాలను ఉపయోగించే ముందు వాటిని తనిఖీ చేయండి. ccam ఏ ఖాతా పరిమితులనూ పెంచదు, కలపదు, దాచదు, ప్రతి ఖాతా ఇప్పటికీ తన సొంత పరిమితి వద్దే ఆగుతుంది. మీరు అడిగినప్పుడు, లేదా మీరు [`auto_switch`](/features/next#auto-switch) (Linux, macOS) ఆన్ చేసినప్పుడు పరిమితి వద్ద తనంతట తానే, అది మీ పనిని మీ మరో ఖాతాకు తరలిస్తుంది. దాన్ని ఉపయోగించే ముందు మీ ఖాతాలకు అది అనుమతించబడిందో తనిఖీ చేయండి; నిర్ణయం మీదే.
 
-**Team, Enterprise సీట్లు.** ఆటోమేటిక్ ఖాతా ఎంపిక (`ccam next`, `--fallback`, `ccam pick`, డాష్‌బోర్డ్‌లోని `n`, మీరు ఆన్ చేసినప్పుడు [`auto_switch`](/features/next#auto-switch)) ఒకే Claude Team లేదా Enterprise సంస్థలోని సీట్ల మధ్య కూడా మారుస్తుంది. Anthropic సహాయ కేంద్రం "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (Team ప్లాన్‌లోని ప్రతి సీటు పేరుతో నిర్దేశించిన ఒక వ్యక్తికి కేటాయించబడుతుంది, ఆ వ్యక్తి మాత్రమే దాన్ని ఉపయోగించవచ్చు) అని, "Users can't route their work through another user's account to use that user's remaining usage" (యూజర్లు మరో యూజర్‌కు మిగిలి ఉన్న వినియోగాన్ని వాడుకోవడానికి తమ పనిని ఆ యూజర్ ఖాతా ద్వారా మళ్లించకూడదు) అని చెబుతుంది ([Team ప్లాన్‌లు](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); [Enterprise ప్లాన్‌లకు](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0) కూడా ఇదే వర్తిస్తుంది). కాబట్టి సీట్ల మధ్య ఆటోమేటిక్ ఖాతా ఎంపికను ఉపయోగించడం Anthropic నిబంధనల ఉల్లంఘన కావచ్చు. అక్కడ దాన్ని ఉపయోగించాలా వద్దా అనేది మీ నిర్ణయం: దానిపై ఆధారపడే ముందు మీ సంస్థను, Anthropic ను సంప్రదించి నిర్ధారించుకోండి. వ్యక్తిగత ప్లాన్‌ల (Pro, Max) గురించి పై పేరా చెబుతుంది.
+**Team, Enterprise సీట్లు.** ఆటోమేటిక్ ఖాతా ఎంపిక (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), డాష్‌బోర్డ్‌లోని `n`, మీరు ఆన్ చేసినప్పుడు [`auto_switch`](/features/next#auto-switch)) ఒకే Claude Team లేదా Enterprise సంస్థలోని సీట్ల మధ్య కూడా మారుస్తుంది. Anthropic సహాయ కేంద్రం "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (Team ప్లాన్‌లోని ప్రతి సీటు పేరుతో నిర్దేశించిన ఒక వ్యక్తికి కేటాయించబడుతుంది, ఆ వ్యక్తి మాత్రమే దాన్ని ఉపయోగించవచ్చు) అని, "Users can't route their work through another user's account to use that user's remaining usage" (యూజర్లు మరో యూజర్‌కు మిగిలి ఉన్న వినియోగాన్ని వాడుకోవడానికి తమ పనిని ఆ యూజర్ ఖాతా ద్వారా మళ్లించకూడదు) అని చెబుతుంది ([Team ప్లాన్‌లు](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); [Enterprise ప్లాన్‌లకు](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0) కూడా ఇదే వర్తిస్తుంది). కాబట్టి సీట్ల మధ్య ఆటోమేటిక్ ఖాతా ఎంపికను ఉపయోగించడం Anthropic నిబంధనల ఉల్లంఘన కావచ్చు. అక్కడ దాన్ని ఉపయోగించాలా వద్దా అనేది మీ నిర్ణయం: దానిపై ఆధారపడే ముందు మీ సంస్థను, Anthropic ను సంప్రదించి నిర్ధారించుకోండి. వ్యక్తిగత ప్లాన్‌ల (Pro, Max) గురించి పై పేరా చెబుతుంది.
 
 ## ccam వినియోగ పరిమితులను దాటవేస్తుందా?
 

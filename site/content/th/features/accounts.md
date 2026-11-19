@@ -1,10 +1,10 @@
 ---
 title: การจัดการบัญชี
 description: "เพิ่ม เข้าสู่ระบบ แสดงรายการ เปลี่ยนชื่อ ลบ และนำเข้าบัญชี Claude Code ด้วย ccam add, ccam login, ccam list, ccam rename, ccam remove และ ccam import"
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 บัญชี ccam แต่ละบัญชีคือโฟลเดอร์การตั้งค่า Claude Code แยกกันที่มีการเข้าสู่ระบบของตัวเอง ใช้คำสั่งเหล่านี้เพื่อเพิ่มบัญชี ลงชื่อเข้าใช้ แสดงรายการ เปลี่ยนชื่อ และลบบัญชี คำสั่งเหล่านี้ยังลงทะเบียนโฟลเดอร์ที่คุณมีอยู่แล้วได้ด้วย
@@ -79,7 +79,7 @@ $ ccam list
 
 `ccam login` (นอกจาก `--expired`), `ccam use` และ `ccam rename` ไม่มีตัวเลือกของตัวเอง `ccam completion` รับ `bash`, `zsh` หรือ `powershell` ค่าอื่นจะล้มเหลวด้วย `only bash, zsh and powershell are supported`
 
-ชื่อบัญชียาว 1 ถึง 32 อักขระ ประกอบด้วย `a-z`, `0-9`, `-` และ `_` และต้องขึ้นต้นด้วยตัวอักษรหรือตัวเลข ชื่อต้องไม่เป็นตัวเลขล้วน เพราะ `ccam 2` หมายถึงสล็อต 2 และชื่อต้องไม่ซ้ำกับคำสั่งของ ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`) เพื่อให้ `ccam <name>` ไม่กำกวม รายการนี้คือ `config.Reserved` ใน `internal/config`
+ชื่อบัญชียาว 1 ถึง 32 อักขระ ประกอบด้วย `a-z`, `0-9`, `-` และ `_` และต้องขึ้นต้นด้วยตัวอักษรหรือตัวเลข ชื่อต้องไม่เป็นตัวเลขล้วน เพราะ `ccam 2` หมายถึงสล็อต 2 และชื่อต้องไม่ซ้ำกับคำสั่งของ ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`) เพื่อให้ `ccam <name>` ไม่กำกวม รายการนี้คือ `config.Reserved` ใน `internal/config`
 
 ## วิธีการทำงาน
 

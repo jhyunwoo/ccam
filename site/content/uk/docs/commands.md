@@ -2,10 +2,10 @@
 title: Довідник команд
 metaTitle: Довідник команд ccam
 description: Усі команди та параметри ccam, від ccam add і ccam <name> до ccam usage, ccam next і ccam doctor.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: "f4e7679d37de"
+sourceHash: "28e1ad1dcbad"
 ---
 
 Додайте `--dry-run` перед командою, щоб побачити, що вона зробила б, не виконуючи її, наприклад `ccam --dry-run work`. Це працює під час запуску Claude Code (`ccam <name>`, `ccam run`, `ccam next`, `ccam attach`, `ccam ccusage`) і з `group`, `migrate`, `folder`, `shortcut`, `pick`, `update`, `uninstall` та `doctor --fix`. Команди, які лише читають, як-от `list`, `usage`, `share` і `ext`, приймають його й однаково нічого не змінюють. Решта відхиляють його й не виконуються, зокрема `group rename`.
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - `--wait` приймає значення після `=` (`--wait=2h`); записаний через пробіл, він відхиляється з підказкою. Коли вибрати нікого, вони завершуються з кодом 75 або, з `--wait`, чекають на скидання першого облікового запису.
 - `ccam next --continue` переносить розмову навіть між обліковими записами, які не мають спільної історії: тоді Claude Code копіює її в новий обліковий запис. З `--brief` новий обліковий запис натомість починає нову розмову з підсумку попередньої, який ccam пише без моделі ([`--brief`](/features/next#brief)).
 - На відміну від `ccam <name>`, `ccam next` читає власні параметри, тож параметри Claude Code ставляться після `--`; без нього ccam зупиняється з `unknown flag`.
+- `ccam agent` виконує завдання через `claude -p` у цій теці від імені іншого облікового запису, ніж той, з якого його викликано, у режимі дозволів і з рівнем зусиль сеансу, що його викликав, і виводить останню відповідь Claude. Коли цей обліковий запис досягає ліміту, розмова триває від імені іншого ([Субагенти в інших облікових записах](/features/agent)).
 - Усередині Claude Code `/ccam:switch [account]` із плагіна передає розмову далі, а `ccam hook` — це те, що запускають його хуки.
 - З `auto_switch = true` у `config.toml` (Linux і macOS; типово вимкнено) хук ліміту ще й завершує інтерактивний сеанс, який запустив ccam, і продовжує його в іншому обліковому записі, де є запас, але лише того самого типу: іншому місці тієї самої організації або іншому особистому плані ([`auto_switch`](/features/next#auto-switch)).
 
-Див. [Перемикання на наступний обліковий запис](/features/next), [Вибір облікового запису для скриптів](/features/pick) і [Фонові сеанси всіх облікових записів](/features/agents).
+Див. [Перемикання на наступний обліковий запис](/features/next), [Вибір облікового запису для скриптів](/features/pick), [Субагенти в інших облікових записах](/features/agent) і [Фонові сеанси всіх облікових записів](/features/agents).
 
 ## Обслуговування
 

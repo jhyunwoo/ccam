@@ -2,10 +2,10 @@
 title: الأسئلة الشائعة
 metaTitle: "أسئلة شائعة عن ccam: عدة حسابات Claude Code"
 description: إجابات عن ccam وحسابات Claude Code وحدود الاستخدام والمشاركة والخصوصية والأنظمة المدعومة.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## هل ccam أداة رسمية من Anthropic؟
@@ -16,7 +16,7 @@ sourceHash: "9b13b37391f2"
 
 يعتمد ذلك على شروط كل حساب، وعلى سياسة مؤسستك بالنسبة إلى حسابات العمل: [شروط المستهلك](https://www.anthropic.com/legal/consumer-terms) لدى Anthropic لخطتي Pro وMax، و[شروطها التجارية](https://www.anthropic.com/legal/commercial-terms) لخطتي Team وEnterprise، و[سياسة الاستخدام](https://www.anthropic.com/legal/aup) لديها للجميع. راجعها قبل أن تستخدم عدة حسابات. لا يرفع ccam حدود الحساب ولا يدمجها ولا يخفيها، ويظل كل حساب يتوقف عند حدوده. وهو ينقل عملك إلى حساب آخر من حساباتك عندما تطلب ذلك، أو من تلقاء نفسه عند بلوغ حد عندما تشغّل [`auto_switch`](/features/next#auto-switch) (على Linux وmacOS). تحقّق هل يُسمح بذلك لحساباتك قبل أن تستخدمه؛ فالقرار لك.
 
-**مقاعد Team وEnterprise.** يبدّل الاختيار التلقائي للحساب (`ccam next` و`--fallback` و`ccam pick` والمفتاح `n` في لوحة التحكم، و[`auto_switch`](/features/next#auto-switch) عند تشغيله) أيضًا بين مقاعد المؤسسة نفسها في Claude Team أو Enterprise. يقول مركز المساعدة لدى Anthropic: "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (يُخصَّص كل مقعد في خطة Team لشخص واحد محدد بالاسم، ولا يجوز أن يستخدمه إلا ذلك الشخص) و"Users can't route their work through another user's account to use that user's remaining usage" (لا يجوز للمستخدمين تمرير عملهم عبر حساب مستخدم آخر للاستفادة من الاستخدام المتبقي لذلك المستخدم) ([خطط Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)؛ وبالمثل في [خطط Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). لذا فإن استخدام الاختيار التلقائي للحساب بين المقاعد قد يخالف شروط Anthropic. وقرار استخدامه هناك يعود إليك: تحقّق من ذلك مع مؤسستك ومع Anthropic قبل أن تعتمد عليه. أما الخطط الشخصية (Pro وMax) فتتناولها الفقرة أعلاه.
+**مقاعد Team وEnterprise.** يبدّل الاختيار التلقائي للحساب (`ccam next` و`--fallback` و`ccam pick` و[`ccam agent`](/features/agent) والمفتاح `n` في لوحة التحكم، و[`auto_switch`](/features/next#auto-switch) عند تشغيله) أيضًا بين مقاعد المؤسسة نفسها في Claude Team أو Enterprise. يقول مركز المساعدة لدى Anthropic: "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (يُخصَّص كل مقعد في خطة Team لشخص واحد محدد بالاسم، ولا يجوز أن يستخدمه إلا ذلك الشخص) و"Users can't route their work through another user's account to use that user's remaining usage" (لا يجوز للمستخدمين تمرير عملهم عبر حساب مستخدم آخر للاستفادة من الاستخدام المتبقي لذلك المستخدم) ([خطط Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)؛ وبالمثل في [خطط Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). لذا فإن استخدام الاختيار التلقائي للحساب بين المقاعد قد يخالف شروط Anthropic. وقرار استخدامه هناك يعود إليك: تحقّق من ذلك مع مؤسستك ومع Anthropic قبل أن تعتمد عليه. أما الخطط الشخصية (Pro وMax) فتتناولها الفقرة أعلاه.
 
 ## هل يتجاوز ccam حدود الاستخدام؟
 

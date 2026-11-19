@@ -2,10 +2,10 @@
 title: Pertanyaan yang sering diajukan
 metaTitle: "FAQ ccam: beberapa akun Claude Code"
 description: Jawaban seputar ccam, akun Claude Code, batas penggunaan, pembagian, privasi, dan sistem yang didukung.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## Apakah ccam alat resmi dari Anthropic?
@@ -16,7 +16,7 @@ Tidak. ccam adalah proyek open source tidak resmi dan tidak berafiliasi dengan a
 
 Itu bergantung pada ketentuan setiap akun dan, untuk akun kerja, kebijakan organisasi Anda: [Ketentuan Konsumen](https://www.anthropic.com/legal/consumer-terms) Anthropic untuk Pro dan Max, [Ketentuan Komersial](https://www.anthropic.com/legal/commercial-terms)-nya untuk Team dan Enterprise, dan [Kebijakan Penggunaan](https://www.anthropic.com/legal/aup)-nya untuk semuanya. Periksa hal tersebut sebelum Anda menggunakan beberapa akun. ccam tidak menaikkan, menggabungkan, atau menyembunyikan batas sebuah akun, dan setiap akun tetap berhenti di batasnya sendiri. ccam memindahkan pekerjaan Anda ke akun Anda yang lain saat Anda memintanya, atau dengan sendirinya saat mencapai batas jika Anda mengaktifkan [`auto_switch`](/features/next#auto-switch) (Linux dan macOS). Periksa apakah hal itu diizinkan untuk akun-akun Anda sebelum menggunakannya; keputusannya ada di tangan Anda.
 
-**Kursi Team dan Enterprise.** Pemilihan akun otomatis (`ccam next`, `--fallback`, `ccam pick`, tombol `n` di dasbor, dan [`auto_switch`](/features/next#auto-switch) bila Anda mengaktifkannya) juga berganti di antara kursi dalam organisasi Claude Team atau Enterprise yang sama. Pusat bantuan Anthropic menyatakan "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (setiap kursi pada paket Team diberikan kepada satu orang tertentu, dan hanya orang itu yang boleh menggunakannya) dan "Users can't route their work through another user's account to use that user's remaining usage" (pengguna tidak boleh menyalurkan pekerjaannya melalui akun pengguna lain untuk memakai sisa kuota pengguna tersebut) ([paket Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); begitu pula untuk [paket Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Karena itu, memakai pemilihan otomatis di antara kursi dapat melanggar ketentuan Anthropic. Apakah Anda memakainya di sana adalah keputusan Anda: tanyakan kepada organisasi Anda dan Anthropic sebelum Anda mengandalkannya. Paket pribadi (Pro, Max) dibahas dalam paragraf di atas.
+**Kursi Team dan Enterprise.** Pemilihan akun otomatis (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), tombol `n` di dasbor, dan [`auto_switch`](/features/next#auto-switch) bila Anda mengaktifkannya) juga berganti di antara kursi dalam organisasi Claude Team atau Enterprise yang sama. Pusat bantuan Anthropic menyatakan "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (setiap kursi pada paket Team diberikan kepada satu orang tertentu, dan hanya orang itu yang boleh menggunakannya) dan "Users can't route their work through another user's account to use that user's remaining usage" (pengguna tidak boleh menyalurkan pekerjaannya melalui akun pengguna lain untuk memakai sisa kuota pengguna tersebut) ([paket Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); begitu pula untuk [paket Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Karena itu, memakai pemilihan otomatis di antara kursi dapat melanggar ketentuan Anthropic. Apakah Anda memakainya di sana adalah keputusan Anda: tanyakan kepada organisasi Anda dan Anthropic sebelum Anda mengandalkannya. Paket pribadi (Pro, Max) dibahas dalam paragraf di atas.
 
 ## Apakah ccam mengakali batas penggunaan?
 

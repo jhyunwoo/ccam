@@ -2,10 +2,10 @@
 title: コマンドリファレンス
 metaTitle: "ccamコマンドリファレンス"
 description: ccam addやccam <name>から、ccam usage、ccam next、ccam doctorまで、ccamのすべてのコマンドとオプションを説明します。
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: f4e7679d37de
+sourceHash: 28e1ad1dcbad
 ---
 
 コマンドの前に`--dry-run`を付けると、実際には実行せずに何をするかを確認できます。たとえば`ccam --dry-run work`のように使います。これが使えるのは、Claude Codeを起動するとき（`ccam <name>`、`ccam run`、`ccam next`、`ccam attach`、`ccam ccusage`）と、`group`、`migrate`、`folder`、`shortcut`、`pick`、`update`、`uninstall`、`doctor --fix`です。`list`、`usage`、`share`、`ext`のように読み取るだけのコマンドは、このオプションを受け付けますが、どのみち何も変更しません。それ以外のコマンドは、`group rename`も含め、実行せずにこのオプションを拒否します。
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - `--wait`の値は`=`の後に書きます（`--wait=2h`）。スペースで区切って書くと、ヒントとともに拒否されます。選べるアカウントがない場合は終了コード75で終了するか、`--wait`を付けていれば最初のアカウントがリセットされるまで待ちます。
 - `ccam next --continue`は、履歴を共有していないアカウントの間でも会話を持ち越します。その場合はClaude Codeが会話を新しいアカウントにコピーします。`--brief`を付けると、新しいアカウントは代わりに新しい会話を始めます。その元になるのは、ccamがモデルを使わずに書く、前の会話の要約です（[`--brief`](/features/next#brief)）。
 - `ccam <name>`と違い、`ccam next`は自分のオプションを読むので、Claude Codeのオプションは`--`の後に置きます。付けないとccamは`unknown flag`で止まります。
+- `ccam agent`は、このフォルダーで、呼び出し元とは別のアカウントとして`claude -p`でタスクを実行します。権限モードとeffortは呼び出したセッションのものを使い、Claudeの最後の返答を表示します。そのアカウントが上限に達すると、会話は別のアカウントで続きます（[別のアカウントで動くサブエージェント](/features/agent)）。
 - Claude Codeの中では、プラグインの`/ccam:switch [account]`が会話を引き渡し、そのフックが実行するのが`ccam hook`です。
 - `config.toml`で`auto_switch = true`を設定すると（LinuxとmacOS。デフォルトではオフ）、上限のフックは、ccamが起動した対話型のセッションを終了させ、余裕のある別のアカウントで続けます。ただし移す先は同じ種類のアカウントだけで、同じ組織の別のシートか、別の個人プランです（[`auto_switch`](/features/next#auto-switch)）。
 
-[次のアカウントへの切り替え](/features/next)、[スクリプト用のアカウント選び](/features/pick)、[すべてのアカウントのバックグラウンドセッション](/features/agents)を参照してください。
+[次のアカウントへの切り替え](/features/next)、[スクリプト用のアカウント選び](/features/pick)、[別のアカウントで動くサブエージェント](/features/agent)、[すべてのアカウントのバックグラウンドセッション](/features/agents)を参照してください。
 
 ## メンテナンス
 

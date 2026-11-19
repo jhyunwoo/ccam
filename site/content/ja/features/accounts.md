@@ -1,10 +1,10 @@
 ---
 title: アカウントの管理
 description: ccam add、ccam login、ccam list、ccam rename、ccam remove、ccam importで、Claude Codeのアカウントを追加、ログイン、一覧、名前変更、削除、インポートします。
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 ccamの各アカウントは、独自のログインを持つ別々のClaude Codeの設定フォルダーです。ここで紹介するコマンドで、アカウントの追加、サインイン、一覧表示、名前変更、削除を行います。すでにあるフォルダーの登録もできます。
@@ -79,7 +79,7 @@ $ ccam list
 
 `ccam login`（`--expired`以外）、`ccam use`、`ccam rename`には独自のオプションはありません。`ccam completion`は`bash`、`zsh`、`powershell`のいずれかを受け取り、それ以外を指定すると`only bash, zsh and powershell are supported`で失敗します。
 
-アカウント名には、`a-z`、`0-9`、`-`、`_`を使って1～32文字で指定し、先頭は英字か数字にします。`ccam 2`はスロット2を意味するため、数字だけの名前は使えません。また、`ccam <name>`が曖昧にならないように、ccamのコマンド名（`add`、`list`、`ls`、`run`、`use`、`next`、`usage`、`u`、`share`、`mcp`、`login`、`logout`、`rename`、`remove`、`rm`、`import`、`migrate`、`doctor`、`shims`、`shortcut`、`completion`、`help`、`version`、`statusline`、`update`、`uninstall`、`folder`、`pick`、`ext`、`group`、`groups`、`hook`、`agents`、`attach`、`ccusage`）も使えません。この一覧は`internal/config`の`config.Reserved`です。
+アカウント名には、`a-z`、`0-9`、`-`、`_`を使って1～32文字で指定し、先頭は英字か数字にします。`ccam 2`はスロット2を意味するため、数字だけの名前は使えません。また、`ccam <name>`が曖昧にならないように、ccamのコマンド名（`add`、`list`、`ls`、`run`、`use`、`next`、`usage`、`u`、`share`、`mcp`、`login`、`logout`、`rename`、`remove`、`rm`、`import`、`migrate`、`doctor`、`shims`、`shortcut`、`completion`、`help`、`version`、`statusline`、`update`、`uninstall`、`folder`、`pick`、`ext`、`group`、`groups`、`hook`、`agent`、`agents`、`attach`、`ccusage`）も使えません。この一覧は`internal/config`の`config.Reserved`です。
 
 ## しくみ
 

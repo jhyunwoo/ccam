@@ -2,10 +2,10 @@
 title: 명령어 레퍼런스
 metaTitle: "ccam 명령어 레퍼런스"
 description: ccam add, ccam <name>부터 ccam usage, ccam next, ccam doctor까지 ccam의 모든 명령과 옵션을 정리했습니다.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: "f4e7679d37de"
+sourceHash: "28e1ad1dcbad"
 ---
 
 명령 앞에 `--dry-run`을 붙이면 실제로 실행하지 않고 무엇을 할지만 보여 줍니다(예: `ccam --dry-run work`). Claude Code를 시작할 때(`ccam <name>`, `ccam run`, `ccam next`, `ccam attach`, `ccam ccusage`)와 `group`, `migrate`, `folder`, `shortcut`, `pick`, `update`, `uninstall`, `doctor --fix`에서 쓸 수 있습니다. `list`, `usage`, `share`, `ext`처럼 읽기만 하는 명령은 이 옵션을 받아들이지만 어차피 아무것도 바꾸지 않습니다. 나머지 명령은 `group rename`을 포함해 실행하지 않고 이 옵션을 거부합니다.
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - `--wait`의 값은 `=` 뒤에 씁니다(`--wait=2h`). 띄어 쓰면 힌트와 함께 거부합니다. 고를 수 있는 계정이 없으면 종료 코드 75로 끝나며, `--wait`를 주면 첫 번째 계정이 초기화될 때까지 기다립니다.
 - `ccam next --continue`는 대화 내역을 공유하지 않는 계정 사이에서도 대화를 넘깁니다. 이때는 Claude Code가 대화를 새 계정으로 복사합니다. `--brief`를 주면 새 계정은 대신 새 대화를 시작하며, ccam이 모델 없이 마지막 대화를 정리한 요약에서 출발합니다([`--brief`](/features/next#brief)).
 - `ccam <name>`과 달리 `ccam next`는 자기 옵션을 직접 읽으므로 Claude Code의 옵션은 `--` 뒤에 둡니다. 그렇지 않으면 ccam은 `unknown flag` 오류를 내고 멈춥니다.
+- `ccam agent`는 이 폴더에서 호출한 계정이 아닌 다른 계정으로, 호출한 세션의 권한 모드와 추론 수준에 따라 `claude -p`로 작업을 실행하고 Claude의 마지막 응답을 출력합니다. 그 계정이 한도에 도달하면 다른 계정으로 대화를 이어 갑니다([다른 계정의 하위 에이전트](/features/agent)).
 - Claude Code 안에서는 플러그인의 `/ccam:switch [account]`가 대화를 넘기며, `ccam hook`은 플러그인의 훅이 실행하는 명령입니다.
 - `config.toml`에 `auto_switch = true`를 두면(Linux와 macOS 전용, 기본값은 꺼짐) 한도 훅이 ccam이 시작한 대화형 세션도 끝내고, 여유가 있는 다른 계정에서 대화를 이어 갑니다. 다만 같은 종류의 계정, 곧 같은 조직의 다른 시트나 다른 개인 요금제로만 옮깁니다([`auto_switch`](/features/next#auto-switch)).
 
-[다음 계정으로 전환](/features/next), [스크립트용 계정 고르기](/features/pick), [모든 계정의 백그라운드 세션](/features/agents)을 참고하세요.
+[다음 계정으로 전환](/features/next), [스크립트용 계정 고르기](/features/pick), [다른 계정의 하위 에이전트](/features/agent), [모든 계정의 백그라운드 세션](/features/agents)을 참고하세요.
 
 ## 유지 관리
 

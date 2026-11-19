@@ -155,6 +155,7 @@
     "shortcut": "Menampilkan, membuat, mengganti nama, atau menghapus perintah pintasan akun, seperti ccwork",
     "folder": "Memakai sebuah akun di suatu folder dan subfoldernya saat tidak ada nama akun yang disebutkan",
     "pick": "Mencetak akun dengan ruang terbanyak, untuk skrip dan worker paralel",
+    "agent": "Menjalankan tugas sebagai akun lain, seperti subagen yang memakai penggunaan akun itu",
     "ext": "Menampilkan skill, perintah, plugin, server MCP, dan hook yang dimuat setiap akun",
     "agents": "Menampilkan daftar agen latar belakang dan sesi terbuka semua akun",
     "attach": "Membuka sesi latar belakang sebagai akun yang memulainya",

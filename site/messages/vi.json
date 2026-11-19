@@ -155,6 +155,7 @@
     "shortcut": "Xem, tạo, đổi tên hoặc xóa lệnh tắt của một tài khoản, chẳng hạn ccwork",
     "folder": "Dùng một tài khoản trong một thư mục và các thư mục con của nó khi không nêu tên tài khoản",
     "pick": "In tài khoản còn nhiều hạn mức nhất, cho script và các worker chạy song song",
+    "agent": "Chạy một tác vụ dưới tài khoản khác, như một subagent dùng hạn mức của tài khoản đó",
     "ext": "Hiện các skill, lệnh, plugin, máy chủ MCP và hook mà mỗi tài khoản nạp",
     "agents": "Liệt kê các agent chạy nền và các phiên đang mở của mọi tài khoản",
     "attach": "Mở một phiên chạy nền bằng tài khoản đã khởi động nó",

@@ -2,10 +2,10 @@
 title: "কমান্ড রেফারেন্স"
 metaTitle: "ccam কমান্ড রেফারেন্স"
 description: "ccam add ও ccam <name> থেকে ccam usage, ccam next ও ccam doctor পর্যন্ত ccam-এর প্রতিটি কমান্ড ও অপশন।"
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: f4e7679d37de
+sourceHash: 28e1ad1dcbad
 ---
 
 কোনো কমান্ড আসলে না চালিয়ে সেটি কী করবে তা দেখতে কমান্ডের আগে `--dry-run` দিন, যেমন `ccam --dry-run work`। এটি Claude Code চালু করার সময় (`ccam <name>`, `ccam run`, `ccam next`, `ccam attach`, `ccam ccusage`) এবং `group`, `migrate`, `folder`, `shortcut`, `pick`, `update`, `uninstall` ও `doctor --fix`-এর সঙ্গে কাজ করে। যে কমান্ডগুলো শুধু পড়ে, যেমন `list`, `usage`, `share` ও `ext`, সেগুলো এটি গ্রহণ করে এবং এমনিতেও কিছু বদলায় না। বাকিগুলো চলার বদলে এটি প্রত্যাখ্যান করে, `group rename`-সহ।
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - `--wait` তার মান `=`-এর পরে নেয় (`--wait=2h`); ফাঁকা জায়গা দিয়ে লিখলে একটি ইঙ্গিতসহ তা প্রত্যাখ্যাত হয়। কিছুই বেছে নেওয়া না গেলে এগুলো কোড 75 দিয়ে বেরিয়ে যায়, অথবা `--wait` দিলে প্রথম অ্যাকাউন্টটি রিসেট হওয়া পর্যন্ত অপেক্ষা করে।
 - `ccam next --continue` ইতিহাস শেয়ার করে না এমন অ্যাকাউন্টগুলোর মধ্যেও কথোপকথন নিয়ে যায়: তখন Claude Code সেটি নতুন অ্যাকাউন্টে কপি করে। `--brief` দিলে নতুন অ্যাকাউন্ট এর বদলে একটি নতুন কথোপকথন শুরু করে, আগেরটির যে সারাংশ ccam কোনো মডেল ছাড়াই লেখে তা থেকে ([`--brief`](/features/next#brief))।
 - `ccam <name>`-এর মতো নয়, `ccam next` নিজের অপশন নিজেই পড়ে, তাই Claude Code-এর অপশন `--`-এর পরে বসে; তা না দিলে ccam `unknown flag` দেখিয়ে থেমে যায়।
+- `ccam agent` এই ফোল্ডারে `claude -p` দিয়ে একটি কাজ চালায়, যে অ্যাকাউন্ট থেকে ডাকা হয়েছে সেটি ছাড়া অন্য একটি অ্যাকাউন্ট হিসেবে, যে সেশন এটিকে ডেকেছে তার permission mode ও effort level-এ, এবং Claude-এর শেষ উত্তর প্রিন্ট করে। ওই অ্যাকাউন্টের সীমায় কথোপকথন অন্য একটি অ্যাকাউন্ট হিসেবে এগিয়ে যায় ([অন্য অ্যাকাউন্টে subagent](/features/agent))।
 - Claude Code-এর ভেতরে প্লাগইনের `/ccam:switch [account]` কথোপকথন অন্য অ্যাকাউন্টের হাতে তুলে দেয়, আর এর হুকগুলো যা চালায় তা হলো `ccam hook`।
 - `config.toml`-এ `auto_switch = true` থাকলে (Linux ও macOS; ডিফল্টভাবে বন্ধ) সীমার হুক ccam-এর চালু করা কোনো ইন্টারঅ্যাকটিভ সেশনও শেষ করে এবং সেটি জায়গা থাকা অন্য একটি অ্যাকাউন্টে চালিয়ে যায়, তবে শুধু একই ধরনের অ্যাকাউন্টে: একই প্রতিষ্ঠানের অন্য একটি সিট, বা অন্য একটি ব্যক্তিগত প্ল্যান ([`auto_switch`](/features/next#auto-switch))।
 
-দেখুন [পরের অ্যাকাউন্টে যাওয়া](/features/next), [স্ক্রিপ্টের জন্য অ্যাকাউন্ট বেছে নেওয়া](/features/pick) ও [প্রতিটি অ্যাকাউন্টের ব্যাকগ্রাউন্ড সেশন](/features/agents)।
+দেখুন [পরের অ্যাকাউন্টে যাওয়া](/features/next), [স্ক্রিপ্টের জন্য অ্যাকাউন্ট বেছে নেওয়া](/features/pick), [অন্য অ্যাকাউন্টে subagent](/features/agent) ও [প্রতিটি অ্যাকাউন্টের ব্যাকগ্রাউন্ড সেশন](/features/agents)।
 
 ## রক্ষণাবেক্ষণ
 

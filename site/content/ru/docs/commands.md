@@ -2,10 +2,10 @@
 title: Справочник команд
 metaTitle: Справочник команд ccam
 description: Все команды и параметры ccam, от ccam add и ccam <name> до ccam usage, ccam next и ccam doctor.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: "f4e7679d37de"
+sourceHash: "28e1ad1dcbad"
 ---
 
 Поставьте `--dry-run` перед командой, чтобы увидеть, что она сделает, ничего не выполняя, например `ccam --dry-run work`. Это работает при запуске Claude Code (`ccam <name>`, `ccam run`, `ccam next`, `ccam attach`, `ccam ccusage`) и с `group`, `migrate`, `folder`, `shortcut`, `pick`, `update`, `uninstall` и `doctor --fix`. Команды, которые только читают, например `list`, `usage`, `share` и `ext`, принимают этот флаг и в любом случае ничего не меняют. Остальные отклоняют его и не выполняются, в том числе `group rename`.
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - `--wait` принимает значение после `=` (`--wait=2h`); если записать его через пробел, он отклоняется с подсказкой. Когда выбрать некого, они завершаются с кодом 75 или, с `--wait`, ждут сброса первого аккаунта.
 - `ccam next --continue` переносит разговор даже между аккаунтами без общей истории: тогда Claude Code копирует его в новый аккаунт. С `--brief` новый аккаунт вместо этого начинает новый разговор со сводки последнего, которую ccam пишет без модели ([`--brief`](/features/next#brief)).
 - В отличие от `ccam <name>`, `ccam next` сам разбирает свои опции, поэтому опции Claude Code указываются после `--`; без него ccam останавливается с `unknown flag`.
+- `ccam agent` выполняет задачу через `claude -p` в этой папке от имени другого аккаунта, а не того, из которого он вызван, в режиме разрешений и с уровнем усилий вызывающей сессии, и выводит последний ответ Claude. При лимите этого аккаунта разговор продолжается от имени другого ([Субагенты на других аккаунтах](/features/agent)).
 - Внутри Claude Code команда плагина `/ccam:switch [account]` передаёт разговор дальше, а `ccam hook` — то, что запускают его хуки.
 - С `auto_switch = true` в `config.toml` (Linux и macOS; по умолчанию выключено) хук лимита также завершает интерактивную сессию, запущенную ccam, и продолжает её в другом аккаунте с запасом, но только того же вида: другом месте той же организации или другом личном тарифе ([`auto_switch`](/features/next#auto-switch)).
 
-См. [Переключение на следующий аккаунт](/features/next), [Выбор аккаунта для скриптов](/features/pick) и [Фоновые сессии всех аккаунтов](/features/agents).
+См. [Переключение на следующий аккаунт](/features/next), [Выбор аккаунта для скриптов](/features/pick), [Субагенты на других аккаунтах](/features/agent) и [Фоновые сессии всех аккаунтов](/features/agents).
 
 ## Обслуживание
 

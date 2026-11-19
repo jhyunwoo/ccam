@@ -1,10 +1,10 @@
 ---
 title: مدیریت حساب‌ها
 description: افزودن، ورود، فهرست، تغییر نام، حذف و وارد کردن حساب‌های Claude Code با ccam add، ccam login، ccam list، ccam rename، ccam remove و ccam import.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 هر حساب ccam یک پوشه پیکربندی جداگانه Claude Code با ورود مخصوص خودش است. با این فرمان‌ها حساب اضافه می‌کنید، با آن‌ها وارد می‌شوید و آن‌ها را فهرست، تغییر نام و حذف می‌کنید. این فرمان‌ها پوشه‌هایی را هم که از قبل دارید ثبت می‌کنند.
@@ -79,7 +79,7 @@ $ ccam list
 
 `ccam login` (جز `--expired`)، `ccam use` و `ccam rename` گزینه‌ای از خود ندارند. `ccam completion` مقدار `bash`، `zsh` یا `powershell` را می‌پذیرد؛ هر چیز دیگری با `only bash, zsh and powershell are supported` ناموفق می‌شود.
 
-نام حساب‌ها ۱ تا ۳۲ نویسه از `a-z`، `0-9`، `-` و `_` است و با یک حرف یا رقم شروع می‌شود. نام نمی‌تواند فقط از رقم تشکیل شود، چون `ccam 2` یعنی جایگاه ۲. نام همچنین نمی‌تواند یکی از فرمان‌های ccam باشد (`add`، `list`، `ls`، `run`، `use`، `next`، `usage`، `u`، `share`، `mcp`، `login`، `logout`، `rename`، `remove`، `rm`، `import`، `migrate`، `doctor`، `shims`، `shortcut`، `completion`، `help`، `version`، `statusline`، `update`، `uninstall`، `folder`، `pick`، `ext`، `group`، `groups`، `hook`، `agents`، `attach`، `ccusage`)، تا `ccam <name>` هرگز مبهم نباشد. این فهرست `config.Reserved` در `internal/config` است.
+نام حساب‌ها ۱ تا ۳۲ نویسه از `a-z`، `0-9`، `-` و `_` است و با یک حرف یا رقم شروع می‌شود. نام نمی‌تواند فقط از رقم تشکیل شود، چون `ccam 2` یعنی جایگاه ۲. نام همچنین نمی‌تواند یکی از فرمان‌های ccam باشد (`add`، `list`، `ls`، `run`، `use`، `next`، `usage`، `u`، `share`، `mcp`، `login`، `logout`، `rename`، `remove`، `rm`، `import`، `migrate`، `doctor`، `shims`، `shortcut`، `completion`، `help`، `version`، `statusline`، `update`، `uninstall`، `folder`، `pick`، `ext`، `group`، `groups`، `hook`، `agent`، `agents`، `attach`، `ccusage`)، تا `ccam <name>` هرگز مبهم نباشد. این فهرست `config.Reserved` در `internal/config` است.
 
 ## نحوه کار
 

@@ -155,6 +155,7 @@
     "shortcut": "Afficher, créer, renommer ou supprimer le raccourci d'un compte, par exemple ccwork",
     "folder": "Utiliser un compte dans un dossier et ses sous-dossiers quand aucun compte n'est nommé",
     "pick": "Afficher le compte qui a le plus de marge, pour les scripts et les workers en parallèle",
+    "agent": "Exécuter une tâche avec un autre compte, comme un sous-agent qui consomme l'utilisation de ce compte",
     "ext": "Afficher les skills, commandes, plugins, serveurs MCP et hooks que charge chaque compte",
     "agents": "Lister les agents en arrière-plan et les sessions ouvertes de tous les comptes",
     "attach": "Ouvrir une session en arrière-plan avec le compte qui l'a lancée",

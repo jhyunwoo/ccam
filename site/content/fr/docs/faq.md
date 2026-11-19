@@ -2,10 +2,10 @@
 title: "Questions fréquentes"
 metaTitle: "FAQ ccam : plusieurs comptes Claude Code"
 description: "Réponses sur ccam, les comptes Claude Code, les limites d'utilisation, le partage, la confidentialité et les systèmes pris en charge."
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## ccam est-il un outil officiel d'Anthropic ?
@@ -16,7 +16,7 @@ Non. ccam est un projet open source non officiel : il n'est ni affilié à Anth
 
 Cela dépend des conditions de chaque compte et, pour les comptes professionnels, de la politique de votre organisation : les [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) d'Anthropic pour Pro et Max, ses [Commercial Terms](https://www.anthropic.com/legal/commercial-terms) pour Team et Enterprise, et sa [Usage Policy](https://www.anthropic.com/legal/aup) pour tous. Vérifiez-les avant d'utiliser plusieurs comptes. ccam n'augmente, ne fusionne ni ne masque les limites d'un compte, et chaque compte s'arrête toujours aux siennes. Il déplace votre travail vers un autre de vos comptes quand vous le demandez, ou de lui-même à une limite quand vous activez [`auto_switch`](/features/next#auto-switch) (Linux et macOS). Vérifiez si cela est permis pour vos comptes avant de l'utiliser ; la décision vous appartient.
 
-**Sièges Team et Enterprise.** La sélection automatique de compte (`ccam next`, `--fallback`, `ccam pick`, la touche `n` du tableau de bord et [`auto_switch`](/features/next#auto-switch) lorsque vous l'activez) passe aussi d'un siège à l'autre au sein d'une même organisation Claude Team ou Enterprise. Le centre d'aide d'Anthropic indique : « Each seat on a Team plan is assigned to one named individual, and only that person may use it » (chaque siège d'une offre Team est attribué à une personne nommément désignée, et seule cette personne peut l'utiliser) et « Users can't route their work through another user's account to use that user's remaining usage » (les utilisateurs ne peuvent pas faire passer leur travail par le compte d'un autre utilisateur pour profiter de l'utilisation restante de celui-ci) ([offres Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129) ; de même pour les [offres Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Utiliser la sélection automatique entre plusieurs sièges peut donc enfreindre les conditions d'Anthropic. C'est à vous de décider si vous l'utilisez dans ce cas : renseignez-vous auprès de votre organisation et d'Anthropic avant de vous y fier. Les offres personnelles (Pro, Max) sont traitées dans le paragraphe ci-dessus.
+**Sièges Team et Enterprise.** La sélection automatique de compte (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), la touche `n` du tableau de bord et [`auto_switch`](/features/next#auto-switch) lorsque vous l'activez) passe aussi d'un siège à l'autre au sein d'une même organisation Claude Team ou Enterprise. Le centre d'aide d'Anthropic indique : « Each seat on a Team plan is assigned to one named individual, and only that person may use it » (chaque siège d'une offre Team est attribué à une personne nommément désignée, et seule cette personne peut l'utiliser) et « Users can't route their work through another user's account to use that user's remaining usage » (les utilisateurs ne peuvent pas faire passer leur travail par le compte d'un autre utilisateur pour profiter de l'utilisation restante de celui-ci) ([offres Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129) ; de même pour les [offres Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Utiliser la sélection automatique entre plusieurs sièges peut donc enfreindre les conditions d'Anthropic. C'est à vous de décider si vous l'utilisez dans ce cas : renseignez-vous auprès de votre organisation et d'Anthropic avant de vous y fier. Les offres personnelles (Pro, Max) sont traitées dans le paragraphe ci-dessus.
 
 ## ccam permet-il de contourner les limites d'utilisation ?
 

@@ -2,10 +2,10 @@
 title: "প্রায়ই জিজ্ঞাসিত প্রশ্ন"
 metaTitle: "ccam FAQ: একাধিক Claude Code অ্যাকাউন্ট"
 description: "ccam, Claude Code অ্যাকাউন্ট, ব্যবহারের সীমা, শেয়ার করা, গোপনীয়তা ও সমর্থিত সিস্টেম নিয়ে প্রশ্নের উত্তর।"
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## ccam কি Anthropic-এর অফিসিয়াল টুল?
@@ -16,7 +16,7 @@ sourceHash: "9b13b37391f2"
 
 তা প্রতিটি অ্যাকাউন্টের শর্তাবলির ওপর নির্ভর করে, আর কাজের অ্যাকাউন্টের ক্ষেত্রে আপনার প্রতিষ্ঠানের নীতির ওপরও: Pro ও Max-এর জন্য Anthropic-এর [Consumer Terms](https://www.anthropic.com/legal/consumer-terms), Team ও Enterprise-এর জন্য এর [Commercial Terms](https://www.anthropic.com/legal/commercial-terms), এবং সবার জন্য এর [Usage Policy](https://www.anthropic.com/legal/aup)। একাধিক অ্যাকাউন্ট ব্যবহারের আগে সেগুলো দেখে নিন। ccam কোনো অ্যাকাউন্টের সীমা বাড়ায় না, একত্র করে না বা লুকায় না, এবং প্রতিটি অ্যাকাউন্ট এখনও তার নিজের সীমায় থামে। আপনি চাইলে এটি আপনার কাজ আপনার অন্য একটি অ্যাকাউন্টে সরিয়ে নেয়, অথবা আপনি [`auto_switch`](/features/next#auto-switch) (Linux ও macOS) চালু করলে সীমায় পৌঁছে নিজে থেকেই তা করে। ব্যবহারের আগে দেখে নিন আপনার অ্যাকাউন্টগুলোর জন্য তা অনুমোদিত কি না; সিদ্ধান্ত আপনার।
 
-**Team ও Enterprise সিট।** স্বয়ংক্রিয় অ্যাকাউন্ট বাছাই (`ccam next`, `--fallback`, `ccam pick`, ড্যাশবোর্ডের `n` এবং আপনি চালু করলে [`auto_switch`](/features/next#auto-switch)) একই Claude Team বা Enterprise প্রতিষ্ঠানের সিটগুলোর মধ্যেও বদল করে। Anthropic-এর সহায়তা কেন্দ্রে বলা হয়েছে, "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (Team প্ল্যানের প্রতিটি সিট একজন নির্দিষ্ট ব্যক্তির নামে বরাদ্দ করা হয়, এবং কেবল সেই ব্যক্তিই সেটি ব্যবহার করতে পারেন) এবং "Users can't route their work through another user's account to use that user's remaining usage" (ব্যবহারকারীরা অন্য কোনো ব্যবহারকারীর অ্যাকাউন্টের মধ্য দিয়ে নিজেদের কাজ চালিয়ে তাঁর ব্যবহারের সীমার বাকি অংশ কাজে লাগাতে পারেন না) ([Team প্ল্যান](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); [Enterprise প্ল্যানের](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0) ক্ষেত্রেও একই কথা)। তাই সিটগুলোর মধ্যে স্বয়ংক্রিয় বাছাই ব্যবহার করলে Anthropic-এর শর্তাবলি লঙ্ঘন হতে পারে। সেখানে এটি ব্যবহার করবেন কি না, সে সিদ্ধান্ত আপনার: এর ওপর নির্ভর করার আগে আপনার প্রতিষ্ঠান ও Anthropic-এর কাছ থেকে জেনে নিন। ব্যক্তিগত প্ল্যানের (Pro, Max) কথা ওপরের অনুচ্ছেদে বলা আছে।
+**Team ও Enterprise সিট।** স্বয়ংক্রিয় অ্যাকাউন্ট বাছাই (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), ড্যাশবোর্ডের `n` এবং আপনি চালু করলে [`auto_switch`](/features/next#auto-switch)) একই Claude Team বা Enterprise প্রতিষ্ঠানের সিটগুলোর মধ্যেও বদল করে। Anthropic-এর সহায়তা কেন্দ্রে বলা হয়েছে, "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (Team প্ল্যানের প্রতিটি সিট একজন নির্দিষ্ট ব্যক্তির নামে বরাদ্দ করা হয়, এবং কেবল সেই ব্যক্তিই সেটি ব্যবহার করতে পারেন) এবং "Users can't route their work through another user's account to use that user's remaining usage" (ব্যবহারকারীরা অন্য কোনো ব্যবহারকারীর অ্যাকাউন্টের মধ্য দিয়ে নিজেদের কাজ চালিয়ে তাঁর ব্যবহারের সীমার বাকি অংশ কাজে লাগাতে পারেন না) ([Team প্ল্যান](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); [Enterprise প্ল্যানের](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0) ক্ষেত্রেও একই কথা)। তাই সিটগুলোর মধ্যে স্বয়ংক্রিয় বাছাই ব্যবহার করলে Anthropic-এর শর্তাবলি লঙ্ঘন হতে পারে। সেখানে এটি ব্যবহার করবেন কি না, সে সিদ্ধান্ত আপনার: এর ওপর নির্ভর করার আগে আপনার প্রতিষ্ঠান ও Anthropic-এর কাছ থেকে জেনে নিন। ব্যক্তিগত প্ল্যানের (Pro, Max) কথা ওপরের অনুচ্ছেদে বলা আছে।
 
 ## ccam কি ব্যবহারের সীমা এড়িয়ে যায়?
 

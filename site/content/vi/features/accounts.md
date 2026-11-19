@@ -1,10 +1,10 @@
 ---
 title: Quản lý tài khoản
 description: "Thêm, đăng nhập, liệt kê, đổi tên, xóa và nhập tài khoản Claude Code bằng ccam add, ccam login, ccam list, ccam rename, ccam remove và ccam import."
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 Mỗi tài khoản ccam là một thư mục cấu hình Claude Code riêng với thông tin đăng nhập riêng. Các lệnh này tạo, đăng nhập, liệt kê, đổi tên và xóa tài khoản, cũng như đăng ký các thư mục bạn đã có.
@@ -79,7 +79,7 @@ Với `--json`, mỗi tài khoản là một đối tượng gồm `slot`, `shor
 
 `ccam login` (ngoài `--expired`), `ccam use` và `ccam rename` không có tùy chọn riêng. `ccam completion` nhận `bash`, `zsh` hoặc `powershell`; giá trị khác sẽ thất bại với `only bash, zsh and powershell are supported`.
 
-Tên tài khoản dài từ 1 đến 32 ký tự gồm `a-z`, `0-9`, `-` và `_`, bắt đầu bằng một chữ cái hoặc chữ số. Tên không được chỉ gồm chữ số, vì `ccam 2` nghĩa là slot 2. Tên cũng không được trùng với một lệnh của ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), nên `ccam <name>` không bao giờ mơ hồ. Danh sách này là `config.Reserved` trong `internal/config`.
+Tên tài khoản dài từ 1 đến 32 ký tự gồm `a-z`, `0-9`, `-` và `_`, bắt đầu bằng một chữ cái hoặc chữ số. Tên không được chỉ gồm chữ số, vì `ccam 2` nghĩa là slot 2. Tên cũng không được trùng với một lệnh của ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), nên `ccam <name>` không bao giờ mơ hồ. Danh sách này là `config.Reserved` trong `internal/config`.
 
 ## Cách hoạt động
 

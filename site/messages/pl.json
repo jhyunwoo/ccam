@@ -155,6 +155,7 @@
     "shortcut": "Pokaż, utwórz, zmień nazwę lub usuń skrót konta, na przykład ccwork",
     "folder": "Używa konta w folderze i jego podfolderach, gdy nie podano nazwy konta",
     "pick": "Wypisuje konto z największym zapasem, dla skryptów i równoległych workerów",
+    "agent": "Uruchamia zadanie jako inne konto, jak subagent, który zużywa limit użycia tamtego konta",
     "ext": "Pokazuje skille, polecenia, pluginy, serwery MCP i hooki ładowane przez każde konto",
     "agents": "Wyświetla agentów w tle i otwarte sesje wszystkich kont",
     "attach": "Otwiera sesję w tle jako konto, które ją uruchomiło",

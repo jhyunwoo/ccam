@@ -2,10 +2,10 @@
 title: கட்டளைக் குறிப்பு
 metaTitle: ccam கட்டளைக் குறிப்பு
 description: ccam add, ccam <name> முதல் ccam usage, ccam next, ccam doctor வரை, ccam-இன் ஒவ்வொரு கட்டளையும் option-உம்.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: f4e7679d37de
+sourceHash: 28e1ad1dcbad
 ---
 
 ஒரு கட்டளை உண்மையில் எதையும் செய்யாமல் என்ன செய்யும் என்று பார்க்க, அதற்கு முன் `--dry-run` வையுங்கள், எடுத்துக்காட்டாக `ccam --dry-run work`. Claude Code-ஐத் தொடங்கும்போது (`ccam <name>`, `ccam run`, `ccam next`, `ccam attach`, `ccam ccusage`) மற்றும் `group`, `migrate`, `folder`, `shortcut`, `pick`, `update`, `uninstall`, `doctor --fix` ஆகியவற்றுடன் இது வேலை செய்யும். `list`, `usage`, `share`, `ext` போன்ற படிக்க மட்டுமே செய்யும் கட்டளைகள் இதை ஏற்றுக்கொள்கின்றன, எப்படியும் எதையும் மாற்றுவதில்லை. மற்றவை, `group rename` உட்பட, இயங்குவதற்குப் பதிலாக இதை மறுக்கும்.
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - `--wait` தன் மதிப்பை `=`-க்குப் பிறகு எடுக்கும் (`--wait=2h`); இடைவெளியுடன் எழுதினால் ஒரு குறிப்புடன் மறுக்கப்படும். எதையும் தேர்ந்தெடுக்க முடியாதபோது அவை code 75 உடன் வெளியேறும், அல்லது, `--wait` உடன், முதல் கணக்கு மீட்டமைக்கப்படும் வரை காத்திருக்கும்.
 - வரலாற்றைப் பகிராத கணக்குகளுக்கு இடையிலும் `ccam next --continue` உரையாடலைக் கொண்டுசெல்கிறது: அப்போது Claude Code அதைப் புதிய கணக்குக்குள் நகலெடுக்கிறது. `--brief` உடன், புதிய கணக்கு அதற்குப் பதிலாக ஒரு புதிய உரையாடலைத் தொடங்குகிறது, கடைசி உரையாடலைப் பற்றி ccam ஒரு model இல்லாமல் எழுதும் சுருக்கத்திலிருந்து ([`--brief`](/features/next#brief)).
 - `ccam <name>` போல அல்லாமல், `ccam next` தன் சொந்த options-ஐப் படிக்கிறது, எனவே Claude Code-இன் options `--`-க்குப் பிறகு வர வேண்டும்; அது இல்லாமல் ccam `unknown flag` என்று நின்றுவிடும்.
+- `ccam agent` இந்தக் கோப்புறையில், தான் அழைக்கப்படும் கணக்கு அல்லாத வேறொரு கணக்காக, அழைக்கும் அமர்வின் permission mode, effort ஆகியவற்றுடன் `claude -p` மூலம் ஒரு பணியை இயக்கி, Claude-இன் கடைசிப் பதிலை அச்சிடுகிறது. அந்தக் கணக்கு தன் வரம்பை எட்டினால், உரையாடல் வேறொரு கணக்காகத் தொடர்கிறது ([பிற கணக்குகளில் subagents](/features/agent)).
 - Claude Code-க்குள், plugin-இன் `/ccam:switch [account]` உரையாடலை ஒப்படைக்கிறது, அதன் hooks இயக்குவது `ccam hook`.
 - `config.toml`-இல் `auto_switch = true` இருந்தால் (Linux, macOS; இயல்பாக அணைக்கப்பட்டுள்ளது), ccam தொடங்கிய interactive அமர்வையும் வரம்பு hook முடித்து, இடம் உள்ள வேறொரு கணக்கில் அதைத் தொடர்கிறது, ஆனால் அதே வகைக் கணக்கில் மட்டுமே: அதே நிறுவனத்தின் வேறொரு இருக்கை, அல்லது வேறொரு தனிப்பட்ட திட்டம் ([`auto_switch`](/features/next#auto-switch)).
 
-[அடுத்த கணக்குக்கு மாறுதல்](/features/next), [scripts-க்கு ஒரு கணக்கைத் தேர்ந்தெடுத்தல்](/features/pick), [எல்லாக் கணக்குகளின் பின்னணி அமர்வுகள்](/features/agents) பாருங்கள்.
+[அடுத்த கணக்குக்கு மாறுதல்](/features/next), [scripts-க்கு ஒரு கணக்கைத் தேர்ந்தெடுத்தல்](/features/pick), [பிற கணக்குகளில் subagents](/features/agent), [எல்லாக் கணக்குகளின் பின்னணி அமர்வுகள்](/features/agents) பாருங்கள்.
 
 ## பராமரிப்பு
 

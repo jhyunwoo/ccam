@@ -155,6 +155,7 @@
     "shortcut": "Mostrar, crear, renombrar o quitar el atajo de una cuenta, como ccwork",
     "folder": "Usar una cuenta en una carpeta y sus subcarpetas cuando no se nombra ninguna cuenta",
     "pick": "Imprimir la cuenta con más margen, para scripts y workers en paralelo",
+    "agent": "Ejecutar una tarea con otra cuenta, como un subagente que gasta el uso de esa cuenta",
     "ext": "Mostrar los skills, comandos, plugins, servidores MCP y hooks que carga cada cuenta",
     "agents": "Listar los agentes en segundo plano y las sesiones abiertas de todas las cuentas",
     "attach": "Abrir una sesión en segundo plano con la cuenta que la inició",

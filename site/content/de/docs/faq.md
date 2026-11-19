@@ -2,10 +2,10 @@
 title: Häufig gestellte Fragen
 metaTitle: "ccam-FAQ: mehrere Claude Code-Konten"
 description: Antworten zu ccam, Claude Code-Konten, Nutzungslimits, Teilen, Datenschutz und unterstützten Systemen.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## Ist ccam ein offizielles Tool von Anthropic?
@@ -16,7 +16,7 @@ Nein. ccam ist ein inoffizielles Open-Source-Projekt und steht in keiner Verbind
 
 Das hängt von den Bedingungen jedes Kontos ab und bei Arbeitskonten von den Richtlinien deiner Organisation: den [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) von Anthropic für Pro und Max, seinen [Commercial Terms](https://www.anthropic.com/legal/commercial-terms) für Team und Enterprise und seiner [Usage Policy](https://www.anthropic.com/legal/aup) für alle. Prüfe sie, bevor du mehrere Konten nutzt. ccam erhöht die Limits eines Kontos nicht, legt sie nicht zusammen und verbirgt sie nicht, und jedes Konto hält weiterhin an seinen eigenen an. Es verschiebt deine Arbeit auf ein anderes deiner Konten, wenn du darum bittest, oder von selbst an einem Limit, wenn du [`auto_switch`](/features/next#auto-switch) einschaltest (Linux und macOS). Prüfe, ob das für deine Konten erlaubt ist, bevor du es nutzt; die Entscheidung liegt bei dir.
 
-**Team- und Enterprise-Plätze.** Die automatische Kontoauswahl (`ccam next`, `--fallback`, `ccam pick`, `n` im Dashboard und [`auto_switch`](/features/next#auto-switch), wenn du es einschaltest) wechselt auch zwischen Plätzen derselben Claude Team- oder Enterprise-Organisation. Im Hilfe-Center von Anthropic ([Team-Tarife](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); ebenso für [Enterprise-Tarife](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)) heißt es: „Each seat on a Team plan is assigned to one named individual, and only that person may use it“ (jeder Platz in einem Team-Tarif ist einer namentlich benannten Person zugewiesen, und nur diese Person darf ihn nutzen) und „Users can't route their work through another user's account to use that user's remaining usage“ (Benutzer dürfen ihre Arbeit nicht über das Konto eines anderen Benutzers leiten, um dessen verbleibendes Nutzungskontingent zu verwenden). Wenn du die automatische Auswahl zwischen Plätzen nutzt, kann das daher gegen die Bedingungen von Anthropic verstoßen. Ob du sie dort nutzt, ist deine Entscheidung: Kläre das mit deiner Organisation und mit Anthropic ab, bevor du dich darauf verlässt. Für private Tarife (Pro, Max) gilt der Absatz darüber.
+**Team- und Enterprise-Plätze.** Die automatische Kontoauswahl (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), `n` im Dashboard und [`auto_switch`](/features/next#auto-switch), wenn du es einschaltest) wechselt auch zwischen Plätzen derselben Claude Team- oder Enterprise-Organisation. Im Hilfe-Center von Anthropic ([Team-Tarife](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); ebenso für [Enterprise-Tarife](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)) heißt es: „Each seat on a Team plan is assigned to one named individual, and only that person may use it“ (jeder Platz in einem Team-Tarif ist einer namentlich benannten Person zugewiesen, und nur diese Person darf ihn nutzen) und „Users can't route their work through another user's account to use that user's remaining usage“ (Benutzer dürfen ihre Arbeit nicht über das Konto eines anderen Benutzers leiten, um dessen verbleibendes Nutzungskontingent zu verwenden). Wenn du die automatische Auswahl zwischen Plätzen nutzt, kann das daher gegen die Bedingungen von Anthropic verstoßen. Ob du sie dort nutzt, ist deine Entscheidung: Kläre das mit deiner Organisation und mit Anthropic ab, bevor du dich darauf verlässt. Für private Tarife (Pro, Max) gilt der Absatz darüber.
 
 ## Umgeht ccam Nutzungslimits?
 

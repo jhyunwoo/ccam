@@ -2,10 +2,10 @@
 title: Sanggunian ng mga command
 metaTitle: Sanggunian ng mga command ng ccam
 description: Bawat command at option ng ccam, mula sa ccam add at ccam <name> hanggang ccam usage, ccam next at ccam doctor.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: f4e7679d37de
+sourceHash: 28e1ad1dcbad
 ---
 
 Ilagay ang `--dry-run` bago ang isang command para makita kung ano ang gagawin nito nang hindi ito talagang ginagawa, halimbawa `ccam --dry-run work`. Gumagana ito kapag sinisimulan ang Claude Code (`ccam <name>`, `ccam run`, `ccam next`, `ccam attach`, `ccam ccusage`) at sa `group`, `migrate`, `folder`, `shortcut`, `pick`, `update`, `uninstall` at `doctor --fix`. Tinatanggap ito ng mga command na nagbabasa lang, gaya ng `list`, `usage`, `share` at `ext`, pero wala naman silang binabago. Tinatanggihan ito ng iba sa halip na tumakbo, kasama ang `group rename`.
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - Inilalagay ang value ng `--wait` pagkatapos ng `=` (`--wait=2h`); kapag isinulat nang may espasyo, tinatanggihan ito kasama ang isang pahiwatig. Kapag walang mapipili, lumalabas sila na may code 75, o, sa `--wait`, naghihintay sa unang account na mag-reset.
 - Dinadala ng `ccam next --continue` ang isang usapan kahit sa pagitan ng mga account na hindi nagshe-share ng kasaysayan: kinokopya ito ng Claude Code sa bagong account. Sa `--brief`, nagsisimula sa halip ang bagong account ng bagong usapan, mula sa buod na isinusulat ng ccam tungkol sa huling usapan nang walang model ([`--brief`](/features/next#brief)).
 - Hindi tulad ng `ccam <name>`, binabasa ng `ccam next` ang sarili nitong mga option, kaya inilalagay ang mga option ng Claude Code pagkatapos ng `--`; kapag wala ito, humihinto ang ccam sa `unknown flag`.
+- Pinapatakbo ng `ccam agent` ang isang task gamit ang `claude -p` sa folder na ito bilang ibang account kaysa sa pinagtawagan dito, sa permission mode at effort level ng tumawag na session, at ipi-print ang huling sagot ni Claude. Sa limit ng account na iyon, nagpapatuloy ang usapan bilang ibang account ([Mga subagent sa ibang account](/features/agent)).
 - Sa loob ng Claude Code, ipinapasa ng `/ccam:switch [account]` ng plugin ang isang usapan, at ang `ccam hook` ang pinapatakbo ng mga hook nito.
 - Kapag may `auto_switch = true` sa `config.toml` (Linux at macOS; naka-off bilang default), tinatapos din ng limit hook ang interactive session na sinimulan ng ccam at ipinagpapatuloy ito sa ibang account na may natitira, pero sa kauri lang nito: ibang seat ng parehong organisasyon, o ibang personal na plan ([`auto_switch`](/features/next#auto-switch)).
 
-Tingnan ang [Paglipat sa susunod na account](/features/next), ang [Pagpili ng account para sa mga script](/features/pick) at ang [Mga background session ng bawat account](/features/agents).
+Tingnan ang [Paglipat sa susunod na account](/features/next), ang [Pagpili ng account para sa mga script](/features/pick), ang [Mga subagent sa ibang account](/features/agent) at ang [Mga background session ng bawat account](/features/agents).
 
 ## Maintenance
 

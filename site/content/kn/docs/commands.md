@@ -2,10 +2,10 @@
 title: ಕಮಾಂಡ್ ಉಲ್ಲೇಖ
 metaTitle: ccam ಕಮಾಂಡ್ ಉಲ್ಲೇಖ
 description: ccam add ಮತ್ತು ccam <name> ನಿಂದ ccam usage, ccam next ಮತ್ತು ccam doctor ವರೆಗೆ, ccam ನ ಎಲ್ಲಾ ಕಮಾಂಡ್‌ಗಳು ಮತ್ತು ಆಯ್ಕೆಗಳು.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: "f4e7679d37de"
+sourceHash: "28e1ad1dcbad"
 ---
 
 ಕಮಾಂಡ್ ಏನು ಮಾಡುತ್ತದೆ ಎಂಬುದನ್ನು ನಿಜವಾಗಿ ಮಾಡದೆಯೇ ನೋಡಲು, ಅದರ ಮುಂದೆ `--dry-run` ಹಾಕಿ. ಉದಾಹರಣೆಗೆ `ccam --dry-run work`. ಇದು Claude Code ಆರಂಭಿಸುವಾಗ (`ccam <name>`, `ccam run`, `ccam next`, `ccam attach`, `ccam ccusage`) ಮತ್ತು `group`, `migrate`, `folder`, `shortcut`, `pick`, `update`, `uninstall` ಹಾಗೂ `doctor --fix` ಜೊತೆ ಕೆಲಸ ಮಾಡುತ್ತದೆ. `list`, `usage`, `share` ಮತ್ತು `ext` ನಂತಹ ಓದುವ ಕಮಾಂಡ್‌ಗಳು ಇದನ್ನು ಸ್ವೀಕರಿಸುತ್ತವೆ, ಹೇಗಿದ್ದರೂ ಅವು ಏನನ್ನೂ ಬದಲಾಯಿಸುವುದಿಲ್ಲ. ಉಳಿದವು, `group rename` ಸೇರಿದಂತೆ, ಚಾಲನೆಯಾಗುವ ಬದಲು ಇದನ್ನು ನಿರಾಕರಿಸುತ್ತವೆ.
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - `--wait` ತನ್ನ ಮೌಲ್ಯವನ್ನು `=` ನಂತರ ಪಡೆಯುತ್ತದೆ (`--wait=2h`); ಸ್ಪೇಸ್‌ನೊಂದಿಗೆ ಬರೆದರೆ, ಒಂದು ಸುಳಿವಿನೊಂದಿಗೆ ಅದನ್ನು ನಿರಾಕರಿಸಲಾಗುತ್ತದೆ. ಯಾವುದನ್ನೂ ಆಯ್ಕೆಮಾಡಲಾಗದಿದ್ದಾಗ ಅವು ಕೋಡ್ 75 ನೊಂದಿಗೆ ನಿರ್ಗಮಿಸುತ್ತವೆ, ಅಥವಾ, `--wait` ಇದ್ದರೆ, ಮೊದಲ ಖಾತೆ ರೀಸೆಟ್ ಆಗುವವರೆಗೆ ಕಾಯುತ್ತವೆ.
 - ಇತಿಹಾಸ ಹಂಚಿಕೊಳ್ಳದ ಖಾತೆಗಳ ನಡುವೆಯೂ `ccam next --continue` ಸಂಭಾಷಣೆಯನ್ನು ಕೊಂಡೊಯ್ಯುತ್ತದೆ: ಆಗ Claude Code ಅದನ್ನು ಹೊಸ ಖಾತೆಗೆ ನಕಲಿಸುತ್ತದೆ. `--brief` ಜೊತೆ, ಹೊಸ ಖಾತೆ ಬದಲಿಗೆ ಹೊಸ ಸಂಭಾಷಣೆಯನ್ನು ಆರಂಭಿಸುತ್ತದೆ, ಹಿಂದಿನದರ ಬಗ್ಗೆ ccam ಮಾಡೆಲ್ ಇಲ್ಲದೆ ಬರೆಯುವ ಸಾರಾಂಶದಿಂದ ([`--brief`](/features/next#brief)).
 - `ccam <name>` ನಂತಲ್ಲದೆ, `ccam next` ತನ್ನ ಆಯ್ಕೆಗಳನ್ನು ತಾನೇ ಓದುತ್ತದೆ, ಆದ್ದರಿಂದ Claude Code ನ ಆಯ್ಕೆಗಳು `--` ನಂತರ ಬರುತ್ತವೆ; ಅದಿಲ್ಲದೆ ccam `unknown flag` ನೊಂದಿಗೆ ನಿಲ್ಲುತ್ತದೆ.
+- `ccam agent` ಈ ಫೋಲ್ಡರ್‌ನಲ್ಲಿ `claude -p` ಮೂಲಕ ಒಂದು ಕಾರ್ಯವನ್ನು, ಅದನ್ನು ಕರೆದ ಖಾತೆಯನ್ನು ಹೊರತುಪಡಿಸಿ ಇನ್ನೊಂದು ಖಾತೆಯಾಗಿ, ಕರೆದ ಸೆಷನ್‌ನ ಅನುಮತಿ ಮೋಡ್ ಮತ್ತು effort ನಲ್ಲಿ ರನ್ ಮಾಡುತ್ತದೆ, ಮತ್ತು Claude ನ ಕೊನೆಯ ಉತ್ತರವನ್ನು ಮುದ್ರಿಸುತ್ತದೆ. ಆ ಖಾತೆಯ ಮಿತಿಯಲ್ಲಿ ಸಂಭಾಷಣೆ ಇನ್ನೊಂದು ಖಾತೆಯಾಗಿ ಮುಂದುವರಿಯುತ್ತದೆ ([ಇತರ ಖಾತೆಗಳಲ್ಲಿ subagent ಗಳು](/features/agent)).
 - Claude Code ಒಳಗೆ, ಪ್ಲಗಿನ್‌ನ `/ccam:switch [account]` ಸಂಭಾಷಣೆಯನ್ನು ಮುಂದಕ್ಕೆ ಒಪ್ಪಿಸುತ್ತದೆ, ಮತ್ತು ಅದರ ಹುಕ್‌ಗಳು ರನ್ ಮಾಡುವುದು `ccam hook`.
 - `config.toml` ನಲ್ಲಿ `auto_switch = true` ಇದ್ದರೆ (Linux ಮತ್ತು macOS; ಡೀಫಾಲ್ಟ್ ಆಗಿ ಆಫ್), ಮಿತಿಯ ಹುಕ್ ccam ಆರಂಭಿಸಿದ ಇಂಟರ್‌ಆಕ್ಟಿವ್ ಸೆಷನ್ ಅನ್ನು ಕೊನೆಗೊಳಿಸಿ, ಅವಕಾಶ ಇರುವ ಇನ್ನೊಂದು ಖಾತೆಯಲ್ಲಿ ಅದನ್ನು ಮುಂದುವರಿಸುತ್ತದೆ, ಆದರೆ ಅದೇ ಬಗೆಯ ಖಾತೆಯಲ್ಲಿ ಮಾತ್ರ: ಅದೇ ಸಂಸ್ಥೆಯ ಇನ್ನೊಂದು ಸೀಟು, ಅಥವಾ ಇನ್ನೊಂದು ವೈಯಕ್ತಿಕ ಪ್ಲಾನ್ ([`auto_switch`](/features/next#auto-switch)).
 
-[ಮುಂದಿನ ಖಾತೆಗೆ ಬದಲಾಯಿಸುವುದು](/features/next), [ಸ್ಕ್ರಿಪ್ಟ್‌ಗಳಿಗಾಗಿ ಖಾತೆ ಆಯ್ಕೆ](/features/pick) ಮತ್ತು [ಪ್ರತಿ ಖಾತೆಯ ಹಿನ್ನೆಲೆ ಸೆಷನ್‌ಗಳು](/features/agents) ನೋಡಿ.
+[ಮುಂದಿನ ಖಾತೆಗೆ ಬದಲಾಯಿಸುವುದು](/features/next), [ಸ್ಕ್ರಿಪ್ಟ್‌ಗಳಿಗಾಗಿ ಖಾತೆ ಆಯ್ಕೆ](/features/pick), [ಇತರ ಖಾತೆಗಳಲ್ಲಿ subagent ಗಳು](/features/agent) ಮತ್ತು [ಪ್ರತಿ ಖಾತೆಯ ಹಿನ್ನೆಲೆ ಸೆಷನ್‌ಗಳು](/features/agents) ನೋಡಿ.
 
 ## ನಿರ್ವಹಣೆ
 

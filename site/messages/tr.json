@@ -155,6 +155,7 @@
     "shortcut": "Bir hesabın ccwork gibi kısayol komutunu gösterir, oluşturur, yeniden adlandırır veya kaldırır",
     "folder": "Hesap adı verilmediğinde bir klasörde ve alt klasörlerinde bir hesap kullanır",
     "pick": "Betikler ve paralel çalışan süreçler için en çok payı kalan hesabı yazdırır",
+    "agent": "Bir görevi başka bir hesapla, o hesabın kullanımını harcayan bir alt ajan gibi çalıştırır",
     "ext": "Her hesabın yüklediği beceri, komut, eklenti, MCP sunucusu ve hook'ları gösterir",
     "agents": "Her hesabın arka plan ajanlarını ve açık oturumlarını listeler",
     "attach": "Arka plandaki bir oturumu, onu başlatan hesapla açar",

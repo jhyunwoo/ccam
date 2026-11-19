@@ -2,10 +2,10 @@
 title: 자주 묻는 질문
 metaTitle: "ccam FAQ: Claude Code 여러 계정 쓰기"
 description: ccam, Claude Code 계정, 사용량 한도, 공유, 개인정보, 지원 시스템에 관한 질문과 답변입니다.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## ccam은 Anthropic 공식 도구인가요?
@@ -16,7 +16,7 @@ sourceHash: "9b13b37391f2"
 
 각 계정의 약관과, 회사 계정이라면 소속 조직의 정책에 따라 다릅니다. Pro와 Max는 Anthropic의 [Consumer Terms](https://www.anthropic.com/legal/consumer-terms), Team과 Enterprise는 [Commercial Terms](https://www.anthropic.com/legal/commercial-terms), 그리고 모든 요금제에 [Usage Policy](https://www.anthropic.com/legal/aup)가 적용됩니다. 여러 계정을 쓰기 전에 확인하세요. ccam은 계정의 한도를 올리거나 합치거나 숨기지 않으며, 모든 계정은 여전히 자기 한도에서 멈춥니다. ccam은 사용자가 요청할 때, 또는 [`auto_switch`](/features/next#auto-switch)(Linux와 macOS)를 켜 두었다면 한도에서 스스로, 작업을 사용자의 다른 계정으로 옮깁니다. 쓰기 전에 이것이 사용자의 계정에 허용되는지 확인하세요. 결정은 사용자의 몫입니다.
 
-**Team·Enterprise 시트.** 자동 계정 선택(`ccam next`, `--fallback`, `ccam pick`, 대시보드의 `n`, 그리고 켜 두었을 때의 [`auto_switch`](/features/next#auto-switch))은 같은 Claude Team이나 Enterprise 조직의 시트 사이에서도 계정을 바꿉니다. Anthropic 고객센터는 "Each seat on a Team plan is assigned to one named individual, and only that person may use it"(팀 플랜의 각 시트는 한 명의 지정된 개인에게 할당되며, 그 사람만 사용할 수 있습니다), "Users can't route their work through another user's account to use that user's remaining usage"(사용자는 다른 사용자의 계정을 통해 작업을 라우팅하여 해당 사용자의 남은 사용량을 사용할 수 없습니다)라고 안내합니다([Team 요금제](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129), [Enterprise 요금제](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)도 마찬가지). 따라서 시트 사이에서 자동 계정 선택을 쓰면 Anthropic의 약관을 위반할 수 있습니다. 시트 사이에서 이 기능을 쓸지는 사용자가 판단할 일입니다. 의존하기 전에 소속 조직과 Anthropic에 확인하세요. 개인 요금제(Pro, Max)에 대해서는 위 문단을 참고하세요.
+**Team·Enterprise 시트.** 자동 계정 선택(`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), 대시보드의 `n`, 그리고 켜 두었을 때의 [`auto_switch`](/features/next#auto-switch))은 같은 Claude Team이나 Enterprise 조직의 시트 사이에서도 계정을 바꿉니다. Anthropic 고객센터는 "Each seat on a Team plan is assigned to one named individual, and only that person may use it"(팀 플랜의 각 시트는 한 명의 지정된 개인에게 할당되며, 그 사람만 사용할 수 있습니다), "Users can't route their work through another user's account to use that user's remaining usage"(사용자는 다른 사용자의 계정을 통해 작업을 라우팅하여 해당 사용자의 남은 사용량을 사용할 수 없습니다)라고 안내합니다([Team 요금제](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129), [Enterprise 요금제](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)도 마찬가지). 따라서 시트 사이에서 자동 계정 선택을 쓰면 Anthropic의 약관을 위반할 수 있습니다. 시트 사이에서 이 기능을 쓸지는 사용자가 판단할 일입니다. 의존하기 전에 소속 조직과 Anthropic에 확인하세요. 개인 요금제(Pro, Max)에 대해서는 위 문단을 참고하세요.
 
 ## ccam으로 사용량 한도를 우회할 수 있나요?
 

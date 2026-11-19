@@ -2,10 +2,10 @@
 title: Mga madalas itanong
 metaTitle: "ccam FAQ: maraming Claude Code account"
 description: Mga sagot tungkol sa ccam, mga Claude Code account, usage limit, sharing, privacy at mga suportadong system.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## Opisyal bang tool ng Anthropic ang ccam?
@@ -16,7 +16,7 @@ Hindi. Ang ccam ay hindi opisyal na open-source na proyekto at hindi kaanib o in
 
 Nakadepende iyan sa terms ng bawat account at, para sa mga work account, sa patakaran ng iyong organisasyon: ang [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) ng Anthropic para sa Pro at Max, ang [Commercial Terms](https://www.anthropic.com/legal/commercial-terms) nito para sa Team at Enterprise, at ang [Usage Policy](https://www.anthropic.com/legal/aup) nito para sa lahat. Suriin muna ang mga ito bago ka gumamit ng maraming account. Hindi tinataasan, pinagsasama o itinatago ng ccam ang mga limit ng isang account, at humihinto pa rin ang bawat account sa sarili nitong limit. Inililipat nito ang trabaho mo sa iba mo pang account kapag hiniling mo, o kusa sa isang limit kapag binuksan mo ang [`auto_switch`](/features/next#auto-switch) (Linux at macOS). Alamin kung pinapayagan iyon para sa mga account mo bago mo ito gamitin; ikaw ang magpapasya.
 
-**Mga seat ng Team at Enterprise.** Lumilipat din ang awtomatikong pagpili ng account (`ccam next`, `--fallback`, `ccam pick`, ang `n` ng dashboard at ang [`auto_switch`](/features/next#auto-switch) kapag binuksan mo ito) sa pagitan ng mga seat ng iisang Claude Team o Enterprise na organisasyon. Sinasabi ng help center ng Anthropic na "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (nakatalaga ang bawat seat ng Team plan sa iisang partikular na tao, at siya lang ang puwedeng gumamit nito) at "Users can't route their work through another user's account to use that user's remaining usage" (hindi puwedeng idaan ng mga user ang trabaho nila sa account ng ibang user para magamit ang natitirang usage ng user na iyon) ([mga Team plan](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); ganoon din sa [mga Enterprise plan](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Kaya maaaring lumabag sa terms ng Anthropic ang paggamit ng awtomatikong pagpili sa pagitan ng mga seat. Ikaw ang magpapasya kung gagamitin mo ito roon: magtanong muna sa iyong organisasyon at sa Anthropic bago ka umasa rito. Saklaw ng talata sa itaas ang mga personal na plan (Pro, Max).
+**Mga seat ng Team at Enterprise.** Lumilipat din ang awtomatikong pagpili ng account (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), ang `n` ng dashboard at ang [`auto_switch`](/features/next#auto-switch) kapag binuksan mo ito) sa pagitan ng mga seat ng iisang Claude Team o Enterprise na organisasyon. Sinasabi ng help center ng Anthropic na "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (nakatalaga ang bawat seat ng Team plan sa iisang partikular na tao, at siya lang ang puwedeng gumamit nito) at "Users can't route their work through another user's account to use that user's remaining usage" (hindi puwedeng idaan ng mga user ang trabaho nila sa account ng ibang user para magamit ang natitirang usage ng user na iyon) ([mga Team plan](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); ganoon din sa [mga Enterprise plan](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Kaya maaaring lumabag sa terms ng Anthropic ang paggamit ng awtomatikong pagpili sa pagitan ng mga seat. Ikaw ang magpapasya kung gagamitin mo ito roon: magtanong muna sa iyong organisasyon at sa Anthropic bago ka umasa rito. Saklaw ng talata sa itaas ang mga personal na plan (Pro, Max).
 
 ## Nalulusutan ba ng ccam ang mga usage limit?
 

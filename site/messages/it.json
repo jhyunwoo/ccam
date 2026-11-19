@@ -155,6 +155,7 @@
     "shortcut": "Mostra, crea, rinomina o rimuove la scorciatoia di un account, come ccwork",
     "folder": "Usa un account in una cartella e nelle sue sottocartelle quando non viene indicato alcun account",
     "pick": "Stampa l'account con più margine, per script e worker in parallelo",
+    "agent": "Esegue un'attività con un altro account, come un subagente che usa l'utilizzo di quell'account",
     "ext": "Mostra skill, comandi, plugin, server MCP e hook caricati da ogni account",
     "agents": "Elenca gli agenti in background e le sessioni aperte di ogni account",
     "attach": "Apre una sessione in background con l'account che l'ha avviata",
