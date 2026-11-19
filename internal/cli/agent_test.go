@@ -1,8 +1,14 @@
 package cli
 
 import (
+	"bytes"
+	"errors"
 	"regexp"
+	"strings"
 	"testing"
+
+	"github.com/jhyunwoo/ccam/internal/config"
+	"github.com/jhyunwoo/ccam/internal/launcher"
 )
 
 func TestSessionID(t *testing.T) {
@@ -37,5 +43,24 @@ func TestAgentResult(t *testing.T) {
 	}
 	if _, ok := agentResult([]byte("plain text\n{\"type\":\"system\"}\n")); ok {
 		t.Fatal("no result object")
+	}
+}
+
+// A run that ends with 0 but gives no result, or an error result, fails.
+func TestAgentFinishFails(t *testing.T) {
+	var out, errb bytes.Buffer
+	a := &agentRun{e: &env{stdout: &out, stderr: &errb}}
+	prof := &config.Profile{Name: "work"}
+	err := a.finish(prof, "id", []string{"work"}, claudeResult{}, false, []byte("oops\n"), 0)
+	var code launcher.ExitCode
+	if !errors.As(err, &code) || code != 1 || out.String() != "oops\n" || !strings.Contains(errb.String(), "the agent stopped as work") {
+		t.Fatalf("%v %q %q", err, out.String(), errb.String())
+	}
+	out.Reset()
+	if err := a.finish(prof, "id", []string{"work"}, claudeResult{Type: "result", Result: "done"}, true, nil, 0); err != nil || out.String() != "done\n" {
+		t.Fatalf("%v %q", err, out.String())
+	}
+	if err := a.finish(prof, "id", nil, claudeResult{Type: "result", IsError: true, Result: "no"}, true, nil, 0); !errors.As(err, &code) || code != 1 {
+		t.Fatalf("error result: %v", err)
 	}
 }

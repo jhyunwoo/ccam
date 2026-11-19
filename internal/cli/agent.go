@@ -112,14 +112,21 @@ func agentCmd(e *env) *cobra.Command {
 				return err
 			}
 			a := &agentRun{e: e, cfg: cfg, policy: p, wait: wait, org: newOrgs(e, cfg, choice.crossOrg), json: asJSON}
-			a.caller = callerProfile(cfg)
+			a.caller = callerProfile(e, cfg)
 			base := []string{"-p", "--output-format", "json"}
 			if model != "" {
 				base = append(base, "--model", model)
 			}
 			// The calling session's permission mode and effort, which a -p
 			// run needs to use tools at all: nobody is there to allow them.
-			base, _ = launcher.WithState(base, callerMode(e, a.caller), os.Getenv("CLAUDE_EFFORT"))
+			// A mode ccam cannot tell, or one Claude Code would refuse, is
+			// the default one, named so that the agent account's own
+			// settings cannot give it more.
+			mode := callerMode(e, a.caller)
+			base, dropped := launcher.WithState(base, mode, os.Getenv("CLAUDE_EFFORT"))
+			if mode == "" || len(dropped) > 0 {
+				base = append(base, "--permission-mode", "default")
+			}
 			a.base = base
 			if resume != "" {
 				return a.resume(resume, task)
@@ -148,10 +155,21 @@ type agentRun struct {
 }
 
 // callerProfile is the account ccam agent is called from: the one of the
-// session ccam started (CCAM_PROFILE), else the one this folder starts.
-func callerProfile(cfg *config.Config) *config.Profile {
-	if p, ok := cfg.Find(os.Getenv("CCAM_PROFILE")); ok && os.Getenv("CCAM_PROFILE") != "" {
-		return p
+// session ccam started (CCAM_PROFILE), else the one whose folder the
+// session runs on (CLAUDE_CONFIG_DIR, for a Claude Code started without
+// ccam), else the one this folder starts.
+func callerProfile(e *env, cfg *config.Config) *config.Profile {
+	if name := os.Getenv("CCAM_PROFILE"); name != "" {
+		if p, ok := cfg.Find(name); ok {
+			return p
+		}
+	}
+	if dir := os.Getenv("CLAUDE_CONFIG_DIR"); dir != "" {
+		for i := range cfg.Profiles {
+			if filepath.Clean(profile.Dir(e.paths, &cfg.Profiles[i])) == filepath.Clean(dir) {
+				return &cfg.Profiles[i]
+			}
+		}
 	}
 	p, _ := launcher.HereProfile(cfg)
 	return p
@@ -442,10 +460,13 @@ func (a *agentRun) finish(prof *config.Profile, id string, accounts []string, re
 		_, _ = e.stdout.Write(out)
 	}
 	follow := fmt.Sprintf("ccam agent --resume %s \"…\"", id)
-	if failed {
-		fmt.Fprintf(e.stderr, "ccam: the agent stopped as %s; its conversation goes on with: %s\n", prof.Name, follow)
-	} else {
+	if !failed {
 		fmt.Fprintf(e.stderr, "ccam: agent finished as %s; follow up with: %s\n", prof.Name, follow)
+		return nil
+	}
+	fmt.Fprintf(e.stderr, "ccam: the agent stopped as %s; its conversation goes on with: %s\n", prof.Name, follow)
+	if code == 0 {
+		code = 1 // no result, or one that is an error, is no success
 	}
 	return exitWith(code)
 }

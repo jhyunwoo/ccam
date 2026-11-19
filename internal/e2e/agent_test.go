@@ -64,7 +64,9 @@ func TestAgentRunsAsAnotherAccount(t *testing.T) {
 		t.Fatalf("ran as %v", accounts)
 	}
 	got := strings.Join(args[0], " ")
-	if !strings.Contains(got, "-p --output-format json --session-id "+m[1]+" -- fix the tests") || strings.Contains(got, "--permission-mode") {
+	// No calling session to take a mode from: the default mode, named so
+	// that the agent account's settings cannot give more.
+	if !strings.Contains(got, "-p --output-format json --permission-mode default --session-id "+m[1]+" -- fix the tests") {
 		t.Fatalf("args: %s", got)
 	}
 	// The agent knows it is one, and the caller's relay does not reach it.
@@ -132,13 +134,22 @@ func TestAgentCarriesTheSessionModeAndEffort(t *testing.T) {
 	if got := strings.Join(args[0], " "); argAfter(args[0], "--permission-mode") != "acceptEdits" || argAfter(args[0], "--effort") != "high" {
 		t.Fatalf("args: %s", got)
 	}
-	// An id that is no file name finds nothing: no mode.
+	// An id that is no file name finds nothing: the default mode.
 	env[2] = "CLAUDE_CODE_SESSION_ID=../caller-session"
 	if r := h.runIn(sub, "", env, "ccam", "agent", "task"); r.code != 0 {
 		t.Fatalf("agent: %+v", r)
 	}
-	if _, args := agentRuns(t, log); argAfter(args[0], "--permission-mode") != "" {
+	if _, args := agentRuns(t, log); argAfter(args[0], "--permission-mode") != "default" {
 		t.Fatalf("args: %v", args[0])
+	}
+	// A session ccam did not start is known by its config folder.
+	env[0], env[1] = "FAKE_AGENT_LOG="+log, "CLAUDE_CONFIG_DIR="+h.profileDir("c3")
+	env[2] = "CLAUDE_CODE_SESSION_ID=caller-session"
+	if r := h.runIn(sub, "", env, "ccam", "agent", "task"); r.code != 0 {
+		t.Fatalf("agent: %+v", r)
+	}
+	if accounts, args := agentRuns(t, log); accounts[0] == "c3" || argAfter(args[0], "--permission-mode") != "acceptEdits" {
+		t.Fatalf("by config folder: %v %v", accounts, args[0])
 	}
 	r := h.run("", append(env, "CCAM_AGENT=1"), "ccam", "agent", "task")
 	if r.code == 0 || !strings.Contains(r.stderr, "cannot start agents of its own") {
