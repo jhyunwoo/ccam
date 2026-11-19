@@ -11,7 +11,7 @@
 
 > **Check the terms first.** Whether using several accounts is allowed depends on each account's Anthropic terms (the [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) for Pro and Max, the [Commercial Terms](https://www.anthropic.com/legal/commercial-terms) for Team and Enterprise, the [Usage Policy](https://www.anthropic.com/legal/aup) for all) and your organization's policy. ccam does not raise, merge or hide an account's limits: every account still stops at its own. ccam carries your work on as another of your accounts when you ask, or by itself at a limit when you turn on `auto_switch` (Linux and macOS). Whether that is allowed for your accounts is your call.
 
-> **Team and Enterprise seats.** Automatic choice (`ccam next`, `--fallback`, `ccam pick`, the dashboard's `n`, and [`auto_switch`](https://ccam.dev/en/features/next/#auto-switch) when you turn it on) also switches between seats of the same Claude Team or Enterprise organization. Anthropic's help center says "Each seat on a Team plan is assigned to one named individual, and only that person may use it" and "Users can't route their work through another user's account to use that user's remaining usage" ([Team plans](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); likewise for [Enterprise plans](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Using automatic choice between seats may therefore violate Anthropic's terms. Whether you use it there is your call: check with your organization and Anthropic before you rely on it. Personal plans (Pro, Max) are covered by the note above.
+> **Team and Enterprise seats.** Automatic choice (`ccam next`, `--fallback`, `ccam pick`, `ccam agent`, the dashboard's `n`, and [`auto_switch`](https://ccam.dev/en/features/next/#auto-switch) when you turn it on) also switches between seats of the same Claude Team or Enterprise organization. Anthropic's help center says "Each seat on a Team plan is assigned to one named individual, and only that person may use it" and "Users can't route their work through another user's account to use that user's remaining usage" ([Team plans](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); likewise for [Enterprise plans](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Using automatic choice between seats may therefore violate Anthropic's terms. Whether you use it there is your call: check with your organization and Anthropic before you rely on it. Personal plans (Pro, Max) are covered by the note above.
 
 All program output (messages, prompts, help) is in English.
 
@@ -22,6 +22,7 @@ All program output (messages, prompts, help) is in English.
 - **Groups decide what is shared.** A group names the items it shares (MCP servers, settings, CLAUDE.md, extensions, history) and its accounts; an account can be in several. MCP servers go through `--mcp-config`, so a launch leaves `.claude.json` alone (ccam writes it, with a backup, only when an account leaves or rejoins MCP sharing, on `ccam mcp import`, and for Remote Control).
 - **Changes are planned and backed up.** A plan before any files move (naming the files inside folders that differ), backups, `--dry-run`, atomic writes, and `ccam doctor --fix`, which also finishes a change that stopped halfway.
 - **Limits handled for scripts too.** `ccam --fallback work -p "…"` runs the same command again as the account with the most room when `work` reaches its limit, and `ccam pick` gives each parallel worker its own account; both exit with 75 (or `--wait`) when nobody has room. Interactive sessions get a `ccam next --auto --continue` hint in the status line, and with `auto_switch = true` (Linux, macOS; off by default, experimental) ccam moves a session that Claude Code stops at its limit to another account with room by itself. Within one Team or Enterprise organization these choices, `auto_switch` included, also move work between seats, which may violate Anthropic's terms (see "Team and Enterprise seats" above).
+- **Subagents on your other accounts.** From a Claude Code session, `ccam agent "<task>"` runs the task with `claude -p` in the same folder as another of your accounts, in the session's permission mode and effort, and returns Claude's last reply, so parts of one long task use another account's usage. At that account's limit the agent's conversation goes on as the next one; `--resume <id>` follows an agent up. The ccam plugin teaches Claude Code when to use it. Within one Team or Enterprise organization it uses other seats, with the same caveat as above.
 - **The right account per project.** `ccam folder work ~/code/company` makes name-less launches there use `work`.
 - **One static binary.** Linux, macOS and Windows, no runtime to install, checksum-verified install and update, no telemetry.
 
@@ -43,7 +44,7 @@ irm https://ccam.dev/install.ps1 | iex
 
 This installs `%USERPROFILE%\.local\bin\ccam.exe` after verifying the checksum and adds the folder to your user `PATH`. Shared folders work as they are; sharing single files (`settings.json`, `CLAUDE.md`, `history.jsonl`) needs Developer Mode, because Windows lets only that mode (or an administrator) link files, so without it the first `ccam add` creates group `default` with MCP servers and extensions only. Running the script again updates ccam, also while a session runs from the old binary, and renews shortcuts that are hard links. Alternatives: the `.deb` from [Releases](https://github.com/jhyunwoo/ccam/releases), or `go install github.com/jhyunwoo/ccam/cmd/ccam@latest` (Go 1.26+; a build of a release tag reports its version, so `ccam update` works for it). Claude Code (`claude`) must be installed.
 
-Claude Code plugin (Claude Code 2.1.275+): `/plugin install ccam --marketplace jhyunwoo/ccam` teaches Claude Code to check usage, start workers on other accounts with `ccam pick`, and explain missing skills with `ccam ext`.
+Claude Code plugin (Claude Code 2.1.275+): `/plugin install ccam --marketplace jhyunwoo/ccam` teaches Claude Code to check usage, hand parts of a task to agents on your other accounts with `ccam agent`, start workers on other accounts with `ccam pick`, and explain missing skills with `ccam ext`.
 
 ## Update
 
@@ -67,6 +68,7 @@ ccam folder work ~/code/company   # name-less launches in that folder use work
 ccam usage           # 5-hour, weekly and per-model (Fable) usage of every account
 ccam next --continue # out of quota? continue the same conversation on the next account
 ccam --fallback work -p "fix the tests"   # in scripts: rerun on another account at the limit
+ccam agent "find why TestParse fails"     # from Claude Code: a subagent that runs as another account
 ```
 
 An existing `~/.claude` can be registered in place with `ccam import` (nothing is moved or copied).
@@ -90,6 +92,7 @@ Signing in on a remote machine over SSH: the browser on your computer ends on a 
 | `ccam --fallback [name] -p …` | Run again as the account with the most room when the account reaches its usage limit (`-p` runs only) |
 | `ccam next [--auto] [--continue [--brief]] [-- claude args]` | Next account; `--auto` picks by usage (`--max-usage`, `--strategy headroom\|expiring\|balance`, `--wait`) and says why; `--continue --brief` starts a new conversation from a summary of the last one. Claude's own options go after `--`: `ccam next -c --auto -- --dangerously-skip-permissions` |
 | `ccam pick [--json] [--model m] [--wait]` | Print the account with the most room for a script; workers started together get different accounts; exit 75 when none |
+| `ccam agent [--model m] [--resume id] [--json] <task>` | Run a task with `claude -p` in this folder as another account (never the one it is called from) in the calling session's permission mode and effort, and print Claude's last reply; at that account's limit the conversation goes on as another; `--resume` continues an agent's conversation; exit 75 when no account has room |
 | `ccam ext [name] [--json]` | Skills, commands, plugins, MCP servers and hooks each account loads, with their source and problems |
 | `ccam usage [--watch] [--json] [-v]` | Usage (`ccam u`) |
 | `ccam ccusage [-a name[,name…]] [ccusage args]` | [ccusage](https://ccusage.com)'s token and cost reports over the conversations of every account, or of the accounts `-a` names (one that shares its history through a group brings the group's conversations). ccusage's own arguments go on as typed, and it also counts the other coding tools it finds unless you name one: `ccam ccusage claude daily`. `blocks` needs one account, as each has its own 5-hour windows: `ccam ccusage -a work blocks --active`. Runs an installed ccusage, else `bun x ccusage`, else `npx ccusage@latest`; those two start in ccam's own folder, so the folder you are in cannot choose what they run, and ccam passes them `./.ccusage/ccusage.json` or a relative `--config` by its full path |
@@ -106,7 +109,7 @@ Signing in on a remote machine over SSH: the browser on your computer ends on a 
 | `ccam uninstall` | Remove every account (logged out first), the shortcuts, ccam's folders and ccam itself; an imported folder stays |
 | `ccam completion bash\|zsh\|powershell` | Shell completion |
 
-Put `--dry-run` first to print what would happen (`ccam --dry-run work`). It works for launching (`ccam <name>`, `run`, `next`), `group`, `migrate`, `shortcut`, `update`, `uninstall` and `doctor --fix`; other commands that change something refuse it rather than run for real.
+Put `--dry-run` first to print what would happen (`ccam --dry-run work`). It works for launching (`ccam <name>`, `run`, `next`, `agent`), `group`, `migrate`, `shortcut`, `update`, `uninstall` and `doctor --fix`; other commands that change something refuse it rather than run for real.
 
 ## Sharing
 
