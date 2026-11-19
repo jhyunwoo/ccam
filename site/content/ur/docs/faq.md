@@ -2,10 +2,10 @@
 title: "اکثر پوچھے جانے والے سوالات"
 metaTitle: "ccam سوالات: Claude Code کے کئی اکاؤنٹس"
 description: "ccam، Claude Code اکاؤنٹس، استعمال کی حدوں، شیئرنگ، پرائیویسی اور معاون سسٹمز کے بارے میں سوالات کے جوابات۔"
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## کیا ccam، Anthropic کا سرکاری ٹول ہے؟
@@ -16,7 +16,7 @@ sourceHash: "9b13b37391f2"
 
 یہ ہر اکاؤنٹ کی شرائط پر منحصر ہے، اور کام کے اکاؤنٹس کے معاملے میں آپ کے ادارے کی پالیسی پر بھی: Pro اور Max کے لیے Anthropic کی [Consumer Terms](https://www.anthropic.com/legal/consumer-terms)، Team اور Enterprise کے لیے اس کی [Commercial Terms](https://www.anthropic.com/legal/commercial-terms)، اور سب کے لیے اس کی [Usage Policy](https://www.anthropic.com/legal/aup)۔ کئی اکاؤنٹس استعمال کرنے سے پہلے انہیں چیک کریں۔ ccam کسی اکاؤنٹ کی حدیں نہ بڑھاتا ہے، نہ ملاتا ہے اور نہ چھپاتا ہے، اور ہر اکاؤنٹ اب بھی اپنی حد پر رک جاتا ہے۔ یہ آپ کا کام آپ کے کسی دوسرے اکاؤنٹ پر منتقل کرتا ہے جب آپ کہیں، یا جب آپ [`auto_switch`](/features/next#auto-switch) (Linux اور macOS) آن کریں تو کسی حد پر خود بخود۔ اسے استعمال کرنے سے پہلے چیک کریں کہ یہ آپ کے اکاؤنٹس کے لیے جائز ہے یا نہیں؛ فیصلہ آپ کا ہے۔
 
-**Team اور Enterprise سیٹیں۔** خودکار اکاؤنٹ انتخاب (`ccam next`، `--fallback`، `ccam pick`، ڈیش بورڈ کی `n` کلید اور جب آپ اسے آن کریں تو [`auto_switch`](/features/next#auto-switch)) ایک ہی Claude Team یا Enterprise تنظیم کی سیٹوں کے درمیان بھی اکاؤنٹ بدلتا ہے۔ Anthropic کا ہیلپ سینٹر کہتا ہے کہ "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (کسی Team پلان کی ہر سیٹ ایک نامزد فرد کو تفویض کی جاتی ہے، اور صرف اسی شخص کو اسے استعمال کرنے کی اجازت ہے) اور "Users can't route their work through another user's account to use that user's remaining usage" (صارفین کسی دوسرے صارف کا باقی ماندہ استعمال کام میں لانے کے لیے اپنا کام اس کے اکاؤنٹ کے ذریعے نہیں چلا سکتے) ([Team پلانز](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)؛ اسی طرح [Enterprise پلانز](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0) کے لیے بھی)۔ اس لیے سیٹوں کے درمیان خودکار انتخاب استعمال کرنے سے Anthropic کی شرائط کی خلاف ورزی ہو سکتی ہے۔ وہاں اسے استعمال کرنا ہے یا نہیں، یہ آپ کا فیصلہ ہے: اس پر انحصار کرنے سے پہلے اپنی تنظیم اور Anthropic سے تصدیق کر لیں۔ ذاتی پلانز (Pro، Max) کی بات اوپر والے پیراگراف میں کی گئی ہے۔
+**Team اور Enterprise سیٹیں۔** خودکار اکاؤنٹ انتخاب (`ccam next`، `--fallback`، `ccam pick`، [`ccam agent`](/features/agent)، ڈیش بورڈ کی `n` کلید اور جب آپ اسے آن کریں تو [`auto_switch`](/features/next#auto-switch)) ایک ہی Claude Team یا Enterprise تنظیم کی سیٹوں کے درمیان بھی اکاؤنٹ بدلتا ہے۔ Anthropic کا ہیلپ سینٹر کہتا ہے کہ "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (کسی Team پلان کی ہر سیٹ ایک نامزد فرد کو تفویض کی جاتی ہے، اور صرف اسی شخص کو اسے استعمال کرنے کی اجازت ہے) اور "Users can't route their work through another user's account to use that user's remaining usage" (صارفین کسی دوسرے صارف کا باقی ماندہ استعمال کام میں لانے کے لیے اپنا کام اس کے اکاؤنٹ کے ذریعے نہیں چلا سکتے) ([Team پلانز](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)؛ اسی طرح [Enterprise پلانز](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0) کے لیے بھی)۔ اس لیے سیٹوں کے درمیان خودکار انتخاب استعمال کرنے سے Anthropic کی شرائط کی خلاف ورزی ہو سکتی ہے۔ وہاں اسے استعمال کرنا ہے یا نہیں، یہ آپ کا فیصلہ ہے: اس پر انحصار کرنے سے پہلے اپنی تنظیم اور Anthropic سے تصدیق کر لیں۔ ذاتی پلانز (Pro، Max) کی بات اوپر والے پیراگراف میں کی گئی ہے۔
 
 ## کیا ccam استعمال کی حدوں کو بائی پاس کرتا ہے؟
 

@@ -2,10 +2,10 @@
 title: "Référence des commandes"
 metaTitle: "Référence des commandes ccam"
 description: "Toutes les commandes et options de ccam, de ccam add et ccam <name> à ccam usage, ccam next et ccam doctor."
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: f4e7679d37de
+sourceHash: 28e1ad1dcbad
 ---
 
 Placez `--dry-run` avant une commande pour voir ce qu'elle ferait sans l'exécuter, par exemple `ccam --dry-run work`. Cela fonctionne au démarrage de Claude Code (`ccam <name>`, `ccam run`, `ccam next`, `ccam attach`, `ccam ccusage`) et avec `group`, `migrate`, `folder`, `shortcut`, `pick`, `update`, `uninstall` et `doctor --fix`. Les commandes qui ne font que lire, comme `list`, `usage`, `share` et `ext`, l'acceptent et ne modifient rien de toute façon. Les autres la refusent au lieu de s'exécuter, y compris `group rename`.
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - `--wait` prend sa valeur après `=` (`--wait=2h`) ; écrit avec une espace, il est refusé avec une indication. Quand aucun ne peut être choisi, ils quittent avec le code 75 ou, avec `--wait`, attendent la réinitialisation du premier compte.
 - `ccam next --continue` transporte une conversation même entre des comptes qui ne partagent pas l'historique : Claude Code la copie alors dans le nouveau compte. Avec `--brief`, le nouveau compte démarre plutôt une nouvelle conversation, à partir d'un résumé de la précédente que ccam rédige sans modèle ([`--brief`](/features/next#brief)).
 - Contrairement à `ccam <name>`, `ccam next` lit ses propres options, donc les options de Claude Code se placent après `--` ; sans lui, ccam s'arrête avec `unknown flag`.
+- `ccam agent` exécute une tâche avec `claude -p` dans ce dossier avec un autre compte que celui depuis lequel il est appelé, dans le mode de permission et le niveau d'effort de la session appelante, et affiche la dernière réponse de Claude. À la limite de ce compte, la conversation continue avec un autre ([Des sous-agents sur d'autres comptes](/features/agent)).
 - Dans Claude Code, la commande `/ccam:switch [account]` du plugin passe une conversation à un autre compte, et `ccam hook` est ce que lancent ses hooks.
 - Avec `auto_switch = true` dans `config.toml` (Linux et macOS ; désactivé par défaut), le hook de limite met aussi fin à une session interactive lancée par ccam et la poursuit sur un autre compte qui a de la marge, mais uniquement un compte du même type : un autre siège de la même organisation, ou une autre offre personnelle ([`auto_switch`](/features/next#auto-switch)).
 
-Voir [Passer au compte suivant](/features/next), [Choisir un compte pour les scripts](/features/pick) et [Les sessions en arrière-plan de tous les comptes](/features/agents).
+Voir [Passer au compte suivant](/features/next), [Choisir un compte pour les scripts](/features/pick), [Des sous-agents sur d'autres comptes](/features/agent) et [Les sessions en arrière-plan de tous les comptes](/features/agents).
 
 ## Maintenance
 

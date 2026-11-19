@@ -1,10 +1,10 @@
 ---
 title: "অ্যাকাউন্ট পরিচালনা"
 description: "ccam add, ccam login, ccam list, ccam rename, ccam remove ও ccam import দিয়ে Claude Code অ্যাকাউন্ট যোগ, লগইন, তালিকা, নাম বদল, অপসারণ ও ইমপোর্ট করুন।"
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 প্রতিটি ccam অ্যাকাউন্ট নিজস্ব লগইনসহ আলাদা একটি Claude Code কনফিগ ফোল্ডার। অ্যাকাউন্ট যোগ করতে, সেগুলোতে সাইন ইন করাতে, তালিকা দেখতে, নাম বদলাতে ও সরাতে এই কমান্ডগুলো ব্যবহার করুন। এগুলো আপনার আগে থেকে থাকা ফোল্ডারও নিবন্ধন করে।
@@ -79,7 +79,7 @@ $ ccam list
 
 `ccam login` (`--expired` ছাড়া), `ccam use` ও `ccam rename`-এর নিজস্ব কোনো অপশন নেই। `ccam completion` নেয় `bash`, `zsh` বা `powershell`; অন্য কিছু দিলে `only bash, zsh and powershell are supported` দিয়ে ব্যর্থ হয়।
 
-অ্যাকাউন্টের নাম ১ থেকে ৩২ অক্ষরের, `a-z`, `0-9`, `-` ও `_` দিয়ে গঠিত, এবং কোনো অক্ষর বা অঙ্ক দিয়ে শুরু হয়। নাম শুধু অঙ্ক দিয়ে হতে পারে না, কারণ `ccam 2` মানে স্লট 2। নামটি কোনো ccam কমান্ডও হতে পারে না (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), তাই `ccam <name>` কখনও দ্ব্যর্থক হয় না। তালিকাটি `internal/config`-এর `config.Reserved`।
+অ্যাকাউন্টের নাম ১ থেকে ৩২ অক্ষরের, `a-z`, `0-9`, `-` ও `_` দিয়ে গঠিত, এবং কোনো অক্ষর বা অঙ্ক দিয়ে শুরু হয়। নাম শুধু অঙ্ক দিয়ে হতে পারে না, কারণ `ccam 2` মানে স্লট 2। নামটি কোনো ccam কমান্ডও হতে পারে না (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), তাই `ccam <name>` কখনও দ্ব্যর্থক হয় না। তালিকাটি `internal/config`-এর `config.Reserved`।
 
 ## এটি কীভাবে কাজ করে
 

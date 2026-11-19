@@ -232,6 +232,9 @@ func main() {
 		bg.Env = append(os.Environ(), "FAKE_ONLY_SLEEP="+s)
 		must(bg.Start())
 	}
+	if jsonPrint(args) && after(args, "--session-id") != "" {
+		printJSON(args, dir, profile) // ccam agent's run
+	}
 	if slices.Contains(strings.Split(os.Getenv("FAKE_LIMITED"), ","), profile) && profile != "" {
 		fmt.Println(cmp.Or(os.Getenv("FAKE_LIMIT_TEXT"), "You've hit your limit · resets 3pm"))
 		os.Exit(1)

@@ -2,10 +2,10 @@
 title: 常见问题
 metaTitle: "ccam 常见问题：Claude Code 多账号"
 description: 关于 ccam、Claude Code 多账号、用量限制、共享、隐私和支持的操作系统的常见问题解答。
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## ccam 是 Anthropic 的官方工具吗？
@@ -16,7 +16,7 @@ sourceHash: "9b13b37391f2"
 
 这取决于每个账号适用的条款；如果是工作账号，还取决于你所在组织的政策：Pro 和 Max 适用 Anthropic 的[消费者条款](https://www.anthropic.com/legal/consumer-terms)（Consumer Terms），Team 和 Enterprise 适用其[商业条款](https://www.anthropic.com/legal/commercial-terms)（Commercial Terms），所有账号都适用其[使用政策](https://www.anthropic.com/legal/aup)（Usage Policy）。在使用多个账号之前，请先确认这些规定。ccam 不会提高、合并或隐藏账号的用量限制，每个账号仍会在达到自己的限制时停止。在你要求时，它会把你的工作移到你的另一个账号上；如果你开启了 [`auto_switch`](/features/next#auto-switch)（Linux 和 macOS），它也会在达到限制时自行这样做。在使用之前，请先确认你的账号是否允许这样做；决定由你自己做出。
 
-**Team 和 Enterprise 席位。** 自动选择账号（`ccam next`、`--fallback`、`ccam pick`、仪表盘中的 `n`，以及你开启后的 [`auto_switch`](/features/next#auto-switch)）也会在同一个 Claude Team 或 Enterprise 组织的席位之间切换。Anthropic 帮助中心关于 [Team 套餐](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)的说明写道："Each seat on a Team plan is assigned to one named individual, and only that person may use it"（Team 套餐的每个席位都分配给一位指定的个人，只有此人可以使用），以及 "Users can't route their work through another user's account to use that user's remaining usage"（用户不能通过另一位用户的账号完成自己的工作，以使用该用户剩余的用量）；关于 [Enterprise 套餐](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)的说明也是如此。因此，在席位之间使用自动选择账号可能违反 Anthropic 的条款。在这些席位之间是否使用，由你自己决定：在依赖这项功能之前，请先向你所在的组织和 Anthropic 确认。个人套餐（Pro、Max）的情况请参见上一段。
+**Team 和 Enterprise 席位。** 自动选择账号（`ccam next`、`--fallback`、`ccam pick`、[`ccam agent`](/features/agent)、仪表盘中的 `n`，以及你开启后的 [`auto_switch`](/features/next#auto-switch)）也会在同一个 Claude Team 或 Enterprise 组织的席位之间切换。Anthropic 帮助中心关于 [Team 套餐](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)的说明写道："Each seat on a Team plan is assigned to one named individual, and only that person may use it"（Team 套餐的每个席位都分配给一位指定的个人，只有此人可以使用），以及 "Users can't route their work through another user's account to use that user's remaining usage"（用户不能通过另一位用户的账号完成自己的工作，以使用该用户剩余的用量）；关于 [Enterprise 套餐](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)的说明也是如此。因此，在席位之间使用自动选择账号可能违反 Anthropic 的条款。在这些席位之间是否使用，由你自己决定：在依赖这项功能之前，请先向你所在的组织和 Anthropic 确认。个人套餐（Pro、Max）的情况请参见上一段。
 
 ## ccam 能绕过用量限制吗？
 

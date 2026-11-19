@@ -84,6 +84,15 @@
 - [ ] `x` → No면 그대로, Yes면 실제 `claude stop`으로 멈추고 행이 사라짐(탭은 `--all` 없이 보여 줌). `ccam attach <id>`로 다시 열림
 - [ ] agent view가 꺼진 계정은 `✘ <계정>: could not list its sessions: …` 줄로 보임. job id 없는 `bg` 기록이 얼마나 자주 보이는지
 
+## 다른 계정의 작업자(`ccam agent`)
+
+- [ ] 플러그인 0.4.0을 설치한 계정의 세션에서 "이 작업의 일부는 내 다른 계정들로 처리해 줘" → Claude Code가 `ccam agent "…"`를 Bash의 `run_in_background`로 띄우고, 끝난 뒤 출력의 답을 읽어 이어 감
+- [ ] 부른 세션이 bypassPermissions·acceptEdits·기본 모드일 때 작업자가 각각 같은 모드로 돎(기본 모드면 편집이 거절되고 답에 그렇게 나옴). 긴 턴 중간(대화 파일 끝 1 MB에 모드 행이 없음)에서도 같음
+- [ ] 작업자 계정이 실제로 한도에 걸릴 때: `-p --output-format json`의 결과 줄이 한도 문장이고, 작업자 대화에 한도 행이 남아 `state/usage/<이름>.limit.json`이 기록되며, `ccam: <이름> reached its usage limit; the agent goes on as <다음>` 뒤 다음 계정에서 같은 대화가 이어짐
+- [ ] `ccam agent --resume <id> "…"`가 같은 계정에서(여유가 있으면) 앞 대화를 기억한 채 이어 감
+- [ ] 백그라운드 작업자가 도는 동안 Bash 작업을 멈추면(Claude Code에서 그 작업 중지) 작업자 claude도 끝남(`ccam agents`에서 사라짐)
+- [ ] 작업자가 돈 폴더에서 `ccam next --continue`가 사람의 대화를 이어 감
+
 ## 공유
 
 - [ ] settings 공유: 한 계정에서 `/config` 변경 → 다른 계정에 반영, 링크 유지

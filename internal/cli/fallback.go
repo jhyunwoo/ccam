@@ -324,7 +324,11 @@ func limitMessage(b []byte) bool {
 // never); accounts whose usage is unknown (offline, lookup refused) come
 // after them in number order. It also returns the reports, for waiting.
 func fallbackTarget(e *env, cfg *config.Config, from *config.Profile, tried map[string]bool, args []string, p usage.Policy) (*config.Profile, []*usage.Report) {
-	org := newOrgs(e, cfg, false)
+	return targetIn(e, cfg, newOrgs(e, cfg, false), from, tried, args, p)
+}
+
+// targetIn is fallbackTarget with the organization rule org.
+func targetIn(e *env, cfg *config.Config, org *orgs, from *config.Profile, tried map[string]bool, args []string, p usage.Policy) (*config.Profile, []*usage.Report) {
 	fits := func(prof *config.Profile) bool {
 		for name := range tried {
 			if t, ok := cfg.Find(name); ok && !org.fits(t, prof) {

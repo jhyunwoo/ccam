@@ -155,6 +155,7 @@
     "shortcut": "Show, create, rename or remove an account's shortcut command, such as ccwork",
     "folder": "Use an account in a folder and its subfolders when no account is named",
     "pick": "Print the account with the most room, for scripts and parallel workers",
+    "agent": "Run a task as another account, like a subagent that uses that account's usage",
     "ext": "Show the skills, commands, plugins, MCP servers and hooks each account loads",
     "agents": "List the background agents and open sessions of every account",
     "attach": "Open a background session as the account that started it",

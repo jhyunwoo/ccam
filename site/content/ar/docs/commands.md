@@ -2,10 +2,10 @@
 title: مرجع الأوامر
 metaTitle: مرجع أوامر ccam
 description: كل أوامر ccam وخياراتها، من ccam add وccam <name> إلى ccam usage وccam next وccam doctor.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: "f4e7679d37de"
+sourceHash: "28e1ad1dcbad"
 ---
 
 ضع `--dry-run` قبل أمر لترى ما سيفعله دون أن يفعله، مثلًا `ccam --dry-run work`. يعمل ذلك عند تشغيل Claude Code (`ccam <name>` و`ccam run` و`ccam next` و`ccam attach` و`ccam ccusage`) ومع `group` و`migrate` و`folder` و`shortcut` و`pick` و`update` و`uninstall` و`doctor --fix`. أما الأوامر التي تقرأ فقط، مثل `list` و`usage` و`share` و`ext`، فتقبله ولا تغيّر شيئًا في كل الأحوال. وترفضه بقية الأوامر بدلًا من أن تعمل، ومنها `group rename`.
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - يأخذ `--wait` قيمته بعد `=` (`--wait=2h`)؛ وإذا كُتبت بمسافة يُرفض مع تلميح. وعندما يتعذر اختيار أي حساب تخرج بالرمز 75، أو تنتظر، مع `--wait`، حتى يُعاد ضبط أول حساب.
 - ينقل `ccam next --continue` المحادثة حتى بين حسابات لا تتشارك السجل: فينسخها Claude Code حينئذٍ إلى الحساب الجديد. ومع `--brief`، يبدأ الحساب الجديد بدلًا من ذلك محادثة جديدة، من ملخص يكتبه ccam للمحادثة الأخيرة دون نموذج ([`--brief`](/features/next#brief)).
 - على خلاف `ccam <name>`، يقرأ `ccam next` خياراته بنفسه، لذا توضع خيارات Claude Code بعد `--`؛ ومن دونه يتوقف ccam برسالة `unknown flag`.
+- يشغّل `ccam agent` مهمة باستخدام `claude -p` في هذا المجلد بحساب غير الحساب الذي يُستدعى منه، بوضع الأذونات ومستوى الجهد الخاصين بالجلسة المستدعية، ويطبع آخر رد من Claude. وعند بلوغ ذلك الحساب حده، تستمر المحادثة بحساب آخر ([وكلاء فرعيون على حسابات أخرى](/features/agent)).
 - داخل Claude Code، يسلّم الأمر `/ccam:switch [account]` من المكوّن الإضافي المحادثة إلى حساب آخر، و`ccam hook` هو ما تشغّله خطافاته.
 - مع `auto_switch = true` في `config.toml` (على Linux وmacOS؛ وهو متوقف افتراضيًا)، يُنهي خطاف الحد أيضًا الجلسة التفاعلية التي شغّلها ccam ويتابعها على حساب آخر لديه متسع، لكن فقط على حساب من النوع نفسه: مقعد آخر في المؤسسة نفسها، أو خطة شخصية أخرى ([`auto_switch`](/features/next#auto-switch)).
 
-راجع [التبديل إلى الحساب التالي](/features/next) و[اختيار حساب للسكربتات](/features/pick) و[الجلسات الخلفية لكل الحسابات](/features/agents).
+راجع [التبديل إلى الحساب التالي](/features/next) و[اختيار حساب للسكربتات](/features/pick) و[وكلاء فرعيون على حسابات أخرى](/features/agent) و[الجلسات الخلفية لكل الحسابات](/features/agents).
 
 ## الصيانة
 

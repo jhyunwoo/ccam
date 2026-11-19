@@ -42,6 +42,10 @@ type Plan struct {
 	// is not the working one, as ccusage's bun x and npx do. Only the dry
 	// run reads it: their caller changes to the folder itself.
 	WorkDir string
+	// PassInterrupt makes Run pass Ctrl+C (SIGINT) on to claude as well:
+	// for a run no terminal shares, such as ccam agent's under a tool that
+	// interrupts only ccam.
+	PassInterrupt bool
 
 	sessions []string // session folders this process is registered in
 	keyVar   string   // dry run of an API account: the key variable, not set,
@@ -303,8 +307,9 @@ func (e ExitCode) Error() string { return fmt.Sprintf("claude exited with code %
 
 // Run starts claude as a child process with the given standard streams,
 // waits for it and returns its exit code (128+n when signal n ended it).
-// Ctrl+C is not passed on: the terminal sends it to claude as well. Run
-// records claude's process and the signals ccam got (pl.run).
+// Ctrl+C is not passed on (the terminal sends it to claude as well) unless
+// pl.PassInterrupt says so. Run records claude's process and the signals
+// ccam got (pl.run).
 func (pl *Plan) Run(p paths.Paths, stdin io.Reader, stdout, stderr io.Writer) (int, error) {
 	setTitle(pl.Profile.Name)
 	cmd := &exec.Cmd{Path: pl.Bin, Args: pl.Argv}
@@ -331,7 +336,9 @@ func (pl *Plan) Run(p paths.Paths, stdin io.Reader, stdout, stderr io.Writer) (i
 			case s := <-sig:
 				if s == os.Interrupt {
 					pl.run.interrupt.Store(time.Now().UnixNano())
-					continue
+					if !pl.PassInterrupt {
+						continue
+					}
 				}
 				pl.run.signaled.Store(true)
 				_ = cmd.Process.Signal(s)

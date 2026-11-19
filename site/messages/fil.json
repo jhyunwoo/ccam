@@ -155,6 +155,7 @@
     "shortcut": "Ipakita, gawin, palitan ang pangalan o alisin ang shortcut command ng isang account, gaya ng ccwork",
     "folder": "Gumamit ng isang account sa isang folder at sa mga subfolder nito kapag walang pinangalanang account",
     "pick": "I-print ang account na may pinakamaraming natitirang puwang, para sa mga script at parallel worker",
+    "agent": "Magpatakbo ng task bilang ibang account, gaya ng subagent na gumagamit ng usage ng account na iyon",
     "ext": "Ipakita ang mga skill, command, plugin, MCP server at hook na nilo-load ng bawat account",
     "agents": "Ilista ang mga background agent at bukas na session ng bawat account",
     "attach": "Buksan ang isang background session bilang account na nagsimula nito",

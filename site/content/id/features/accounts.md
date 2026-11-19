@@ -1,10 +1,10 @@
 ---
 title: Mengelola akun
 description: Tambahkan, login, tampilkan, ganti nama, hapus, dan impor akun Claude Code dengan ccam add, ccam login, ccam list, ccam rename, ccam remove, dan ccam import.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 Setiap akun ccam adalah folder konfigurasi Claude Code tersendiri dengan login-nya sendiri. Gunakan perintah-perintah ini untuk menambahkan akun, memasukkan login-nya, menampilkan, mengganti nama, dan menghapusnya. Perintah-perintah ini juga mendaftarkan folder yang sudah Anda miliki.
@@ -79,7 +79,7 @@ Dengan `--json`, setiap akun adalah objek dengan `slot`, `shortcut`, `name`, `em
 
 `ccam login` (selain `--expired`), `ccam use`, dan `ccam rename` tidak memiliki opsi sendiri. `ccam completion` menerima `bash`, `zsh`, atau `powershell`; selain itu gagal dengan `only bash, zsh and powershell are supported`.
 
-Nama akun terdiri dari 1 sampai 32 karakter `a-z`, `0-9`, `-`, dan `_`, diawali huruf atau angka. Nama tidak boleh seluruhnya angka, karena `ccam 2` berarti slot 2. Nama juga tidak boleh berupa perintah ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), sehingga `ccam <name>` tidak pernah ambigu. Daftarnya adalah `config.Reserved` di `internal/config`.
+Nama akun terdiri dari 1 sampai 32 karakter `a-z`, `0-9`, `-`, dan `_`, diawali huruf atau angka. Nama tidak boleh seluruhnya angka, karena `ccam 2` berarti slot 2. Nama juga tidak boleh berupa perintah ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), sehingga `ccam <name>` tidak pernah ambigu. Daftarnya adalah `config.Reserved` di `internal/config`.
 
 ## Cara kerjanya
 

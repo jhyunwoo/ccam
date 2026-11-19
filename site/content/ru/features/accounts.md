@@ -1,10 +1,10 @@
 ---
 title: Управление аккаунтами
 description: "Добавляйте, входите, просматривайте, переименовывайте, удаляйте и импортируйте аккаунты Claude Code: ccam add, login, list, rename, remove и import."
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 Каждый аккаунт ccam представляет собой отдельную папку конфигурации Claude Code с собственным входом. С помощью этих команд можно добавлять аккаунты, выполнять в них вход, выводить их список, переименовывать и удалять их. Они также регистрируют уже существующие папки.
@@ -79,7 +79,7 @@ $ ccam list
 
 У `ccam login` (кроме `--expired`), `ccam use` и `ccam rename` нет собственных параметров. `ccam completion` принимает `bash`, `zsh` или `powershell`; любое другое значение завершается ошибкой `only bash, zsh and powershell are supported`.
 
-Имя аккаунта содержит от 1 до 32 символов из `a-z`, `0-9`, `-` и `_` и начинается с буквы или цифры. Имя не может состоять только из цифр, потому что `ccam 2` означает слот 2. Имя также не может совпадать с командой ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), поэтому `ccam <name>` никогда не бывает неоднозначным. Этот список задан в `config.Reserved` в `internal/config`.
+Имя аккаунта содержит от 1 до 32 символов из `a-z`, `0-9`, `-` и `_` и начинается с буквы или цифры. Имя не может состоять только из цифр, потому что `ccam 2` означает слот 2. Имя также не может совпадать с командой ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), поэтому `ccam <name>` никогда не бывает неоднозначным. Этот список задан в `config.Reserved` в `internal/config`.
 
 ## Как это работает
 

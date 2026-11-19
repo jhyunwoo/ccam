@@ -2,10 +2,10 @@
 title: Tambayoyin da ake yawan yi
 metaTitle: "Tambayoyi game da ccam: asusun Claude Code da dama"
 description: Amsoshi game da ccam, asusun Claude Code, iyakokin amfani, rabawa, sirri da tsarukan da ake tallafawa.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## Shin ccam kayan aikin Anthropic ne na hukuma?
@@ -16,7 +16,7 @@ A'a. ccam aikin open-source ne da ba na hukuma ba, ba shi da alaƙa da Anthropic
 
 Wannan ya dogara da sharuɗɗan kowane asusu kuma, ga asusan aiki, da manufofin ƙungiyarka: [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) na Anthropic don Pro da Max, [Commercial Terms](https://www.anthropic.com/legal/commercial-terms) ɗinta don Team da Enterprise, da [Usage Policy](https://www.anthropic.com/legal/aup) ɗinta ga kowa. Ka duba su kafin ka yi amfani da asusai da dama. ccam ba ya ɗaga, haɗawa ko ɓoye iyakokin asusu, kuma har yanzu kowane asusu yana tsayawa a nasa iyakar. Yana motsa aikinka zuwa wani daga cikin asusanka idan ka nema, ko da kansa a iyaka idan ka kunna [`auto_switch`](/features/next#auto-switch) (Linux da macOS). Ka duba ko an yarda da hakan ga asusanka kafin ka yi amfani da shi; kai ne za ka yanke shawara.
 
-**Kujeru (seats) na Team da Enterprise.** Zaɓin asusu na atomatik (`ccam next`, `--fallback`, `ccam pick`, maɓallin `n` na dashboard, da [`auto_switch`](/features/next#auto-switch) idan ka kunna shi) yana kuma sauyawa tsakanin kujerun ƙungiyar Claude Team ko Enterprise iri ɗaya. Cibiyar taimako ta Anthropic ta ce "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (ana ba da kowace kujera a tsarin Team da sunan takamaiman mutum ɗaya, kuma wannan mutumin kaɗai ne aka yarda ya yi amfani da ita) da "Users can't route their work through another user's account to use that user's remaining usage" (masu amfani ba za su iya tura aikinsu ta asusun wani mai amfani ba domin su ci gajiyar ragowar amfanin wannan mai amfanin) ([Tsare-tsaren Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); haka ma ga [tsare-tsaren Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Don haka yin amfani da zaɓin asusu na atomatik tsakanin kujeru na iya saɓa wa sharuɗɗan Anthropic. Ko za ka yi amfani da shi a can ya rage naka: ka tuntuɓi ƙungiyarka da Anthropic kafin ka dogara da shi. Don tsare-tsaren kai (Pro, Max), duba sakin layin da ke sama.
+**Kujeru (seats) na Team da Enterprise.** Zaɓin asusu na atomatik (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), maɓallin `n` na dashboard, da [`auto_switch`](/features/next#auto-switch) idan ka kunna shi) yana kuma sauyawa tsakanin kujerun ƙungiyar Claude Team ko Enterprise iri ɗaya. Cibiyar taimako ta Anthropic ta ce "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (ana ba da kowace kujera a tsarin Team da sunan takamaiman mutum ɗaya, kuma wannan mutumin kaɗai ne aka yarda ya yi amfani da ita) da "Users can't route their work through another user's account to use that user's remaining usage" (masu amfani ba za su iya tura aikinsu ta asusun wani mai amfani ba domin su ci gajiyar ragowar amfanin wannan mai amfanin) ([Tsare-tsaren Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); haka ma ga [tsare-tsaren Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Don haka yin amfani da zaɓin asusu na atomatik tsakanin kujeru na iya saɓa wa sharuɗɗan Anthropic. Ko za ka yi amfani da shi a can ya rage naka: ka tuntuɓi ƙungiyarka da Anthropic kafin ka dogara da shi. Don tsare-tsaren kai (Pro, Max), duba sakin layin da ke sama.
 
 ## Shin ccam yana kauce wa iyakokin amfani?
 

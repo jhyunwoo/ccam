@@ -2,10 +2,10 @@
 title: அடிக்கடி கேட்கப்படும் கேள்விகள்
 metaTitle: "ccam FAQ: பல Claude Code கணக்குகள்"
 description: ccam, Claude Code கணக்குகள், பயன்பாட்டு வரம்புகள், பகிர்வு, தனியுரிமை, ஆதரிக்கப்படும் கணினி அமைப்புகள் பற்றிய பதில்கள்.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## ccam, Anthropic-இன் அதிகாரப்பூர்வ கருவியா?
@@ -16,7 +16,7 @@ sourceHash: "9b13b37391f2"
 
 அது ஒவ்வொரு கணக்கின் விதிமுறைகளையும், வேலைக் கணக்குகளுக்கு உங்கள் நிறுவனத்தின் கொள்கையையும் பொறுத்தது: Pro, Max-க்கு Anthropic-இன் [Consumer Terms](https://www.anthropic.com/legal/consumer-terms), Team, Enterprise-க்கு அதன் [Commercial Terms](https://www.anthropic.com/legal/commercial-terms), எல்லாவற்றுக்கும் அதன் [Usage Policy](https://www.anthropic.com/legal/aup). பல கணக்குகளைப் பயன்படுத்தும் முன் அவற்றைச் சரிபாருங்கள். ccam ஒரு கணக்கின் வரம்புகளை உயர்த்துவதோ, இணைப்பதோ, மறைப்பதோ இல்லை; ஒவ்வொரு கணக்கும் அப்போதும் தன் சொந்த வரம்பில் நிற்கிறது. நீங்கள் கேட்கும்போது, அல்லது [`auto_switch`](/features/next#auto-switch)-ஐ (Linux, macOS) நீங்கள் இயக்கியிருந்தால் ஒரு வரம்பில் தானாகவே, அது உங்கள் வேலையை உங்கள் வேறொரு கணக்குக்கு நகர்த்துகிறது. அதைப் பயன்படுத்தும் முன், உங்கள் கணக்குகளுக்கு அது அனுமதிக்கப்பட்டதா என்று சரிபாருங்கள்; முடிவு உங்களுடையது.
 
-**Team மற்றும் Enterprise இருக்கைகள்.** தானியங்கிக் கணக்குத் தேர்வு (`ccam next`, `--fallback`, `ccam pick`, டாஷ்போர்டின் `n`, நீங்கள் இயக்கும்போது [`auto_switch`](/features/next#auto-switch)) ஒரே Claude Team அல்லது Enterprise நிறுவனத்தின் இருக்கைகளுக்கு இடையேயும் மாறுகிறது. Anthropic-இன் உதவி மையம் "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (Team திட்டத்தின் ஒவ்வொரு இருக்கையும் பெயர் குறிப்பிடப்பட்ட ஒரு நபருக்கு ஒதுக்கப்படுகிறது, அந்த நபர் மட்டுமே அதைப் பயன்படுத்தலாம்) என்றும், "Users can't route their work through another user's account to use that user's remaining usage" (மற்றொரு பயனரின் மீதமுள்ள பயன்பாட்டைப் பயன்படுத்திக்கொள்ள, பயனர்கள் தங்கள் வேலையை அந்தப் பயனரின் கணக்கு வழியாக அனுப்ப முடியாது) என்றும் கூறுகிறது ([Team திட்டங்கள்](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); இதேபோல் [Enterprise திட்டங்களுக்கும்](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). எனவே, இருக்கைகளுக்கு இடையே தானியங்கித் தேர்வைப் பயன்படுத்துவது Anthropic-இன் விதிமுறைகளை மீறக்கூடும். அங்கே அதைப் பயன்படுத்துவதா என்பது உங்கள் முடிவு: அதை நம்பியிருக்கும் முன், உங்கள் நிறுவனத்திடமும் Anthropic-இடமும் கேட்டு உறுதிசெய்துகொள்ளுங்கள். தனிப்பட்ட திட்டங்கள் (Pro, Max) பற்றி மேலே உள்ள பத்தி விளக்குகிறது.
+**Team மற்றும் Enterprise இருக்கைகள்.** தானியங்கிக் கணக்குத் தேர்வு (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), டாஷ்போர்டின் `n`, நீங்கள் இயக்கும்போது [`auto_switch`](/features/next#auto-switch)) ஒரே Claude Team அல்லது Enterprise நிறுவனத்தின் இருக்கைகளுக்கு இடையேயும் மாறுகிறது. Anthropic-இன் உதவி மையம் "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (Team திட்டத்தின் ஒவ்வொரு இருக்கையும் பெயர் குறிப்பிடப்பட்ட ஒரு நபருக்கு ஒதுக்கப்படுகிறது, அந்த நபர் மட்டுமே அதைப் பயன்படுத்தலாம்) என்றும், "Users can't route their work through another user's account to use that user's remaining usage" (மற்றொரு பயனரின் மீதமுள்ள பயன்பாட்டைப் பயன்படுத்திக்கொள்ள, பயனர்கள் தங்கள் வேலையை அந்தப் பயனரின் கணக்கு வழியாக அனுப்ப முடியாது) என்றும் கூறுகிறது ([Team திட்டங்கள்](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); இதேபோல் [Enterprise திட்டங்களுக்கும்](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). எனவே, இருக்கைகளுக்கு இடையே தானியங்கித் தேர்வைப் பயன்படுத்துவது Anthropic-இன் விதிமுறைகளை மீறக்கூடும். அங்கே அதைப் பயன்படுத்துவதா என்பது உங்கள் முடிவு: அதை நம்பியிருக்கும் முன், உங்கள் நிறுவனத்திடமும் Anthropic-இடமும் கேட்டு உறுதிசெய்துகொள்ளுங்கள். தனிப்பட்ட திட்டங்கள் (Pro, Max) பற்றி மேலே உள்ள பத்தி விளக்குகிறது.
 
 ## ccam பயன்பாட்டு வரம்புகளைத் தவிர்க்க உதவுமா?
 

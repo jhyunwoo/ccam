@@ -11,7 +11,7 @@
 
 > **이용약관을 먼저 확인하세요.** 계정을 여러 개 쓰는 것이 허용되는지는 각 계정의 Anthropic 이용약관(Pro·Max는 [Consumer Terms](https://www.anthropic.com/legal/consumer-terms), Team·Enterprise는 [Commercial Terms](https://www.anthropic.com/legal/commercial-terms), 모두에게 [Usage Policy](https://www.anthropic.com/legal/aup))과 소속 조직의 정책에 따릅니다. ccam은 계정의 한도를 늘리거나 합치거나 숨기지 않으며, 모든 계정은 자기 한도에서 멈춥니다. ccam은 요청할 때, 또는 `auto_switch`를 켜 두면(Linux, macOS) 한도에서 스스로, 작업을 다른 계정으로 이어 갈 뿐입니다. 그것이 내 계정들에 허용되는지는 사용자가 판단할 일입니다.
 
-> **Team·Enterprise 시트.** 자동 선택(`ccam next`, `--fallback`, `ccam pick`, 대시보드의 `n`, 그리고 켜 두었다면 [`auto_switch`](https://ccam.dev/ko/features/next/#auto-switch))은 같은 Claude Team이나 Enterprise 조직의 시트 사이에서도 계정을 바꿉니다. Anthropic 고객센터는 "팀 플랜의 각 시트는 한 명의 지정된 개인에게 할당되며, 그 사람만 사용할 수 있습니다", "사용자는 다른 사용자의 계정을 통해 작업을 라우팅하여 해당 사용자의 남은 사용량을 사용할 수 없습니다"라고 안내합니다([Team 플랜](https://support.claude.com/ko/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129), [Enterprise 플랜](https://support.claude.com/ko/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)도 마찬가지). 따라서 시트 사이에서 자동 선택을 쓰면 Anthropic 이용약관을 위반할 수 있습니다. 시트 사이에서 쓸지는 사용자가 판단할 일이니, 이 기능에 기대기 전에 소속 조직과 Anthropic에 확인하세요. 개인 요금제(Pro, Max)는 위의 안내를 따릅니다.
+> **Team·Enterprise 시트.** 자동 선택(`ccam next`, `--fallback`, `ccam pick`, `ccam agent`, 대시보드의 `n`, 그리고 켜 두었다면 [`auto_switch`](https://ccam.dev/ko/features/next/#auto-switch))은 같은 Claude Team이나 Enterprise 조직의 시트 사이에서도 계정을 바꿉니다. Anthropic 고객센터는 "팀 플랜의 각 시트는 한 명의 지정된 개인에게 할당되며, 그 사람만 사용할 수 있습니다", "사용자는 다른 사용자의 계정을 통해 작업을 라우팅하여 해당 사용자의 남은 사용량을 사용할 수 없습니다"라고 안내합니다([Team 플랜](https://support.claude.com/ko/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129), [Enterprise 플랜](https://support.claude.com/ko/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)도 마찬가지). 따라서 시트 사이에서 자동 선택을 쓰면 Anthropic 이용약관을 위반할 수 있습니다. 시트 사이에서 쓸지는 사용자가 판단할 일이니, 이 기능에 기대기 전에 소속 조직과 Anthropic에 확인하세요. 개인 요금제(Pro, Max)는 위의 안내를 따릅니다.
 
 프로그램 출력(메시지, 질문, 도움말)은 모두 영어입니다.
 
@@ -22,6 +22,7 @@
 - **그룹이 공유할 것을 정합니다.** 그룹은 공유할 항목(MCP 서버·설정·CLAUDE.md·확장 기능·대화 내역)과 계정을 정하고, 계정은 여러 그룹에 들 수 있습니다. MCP 서버는 `--mcp-config`로 넘기므로 실행할 때 `.claude.json`을 고치지 않습니다. (계정이 MCP 공유를 그만두거나 다시 시작할 때, `ccam mcp import`, Remote Control에서만 백업을 남기고 고칩니다.)
 - **바꾸기 전에 계획을 보여 주고 백업합니다.** 파일을 옮기기 전의 계획 출력(폴더 안에서 서로 다른 파일도 알려 줌), 백업, `--dry-run`, 원자적 쓰기, 그리고 중간에 멈춘 변경까지 마무리하는 `ccam doctor --fix`.
 - **스크립트도 한도에 대응합니다.** `ccam --fallback work -p "…"`는 `work`가 한도에 걸리면 여유가 가장 많은 계정으로 같은 명령을 다시 실행하고, `ccam pick`은 병렬 작업자마다 다른 계정을 줍니다. 여유 있는 계정이 없으면 둘 다 종료 코드 75로 끝내거나 `--wait`로 기다립니다. 대화형 세션은 상태줄이 `ccam next --auto --continue`를 알려 주고, `auto_switch = true`(Linux, macOS. 기본은 꺼짐, 실험적 기능)면 Claude Code가 한도에서 멈춘 세션을 ccam이 여유 있는 다른 계정으로 스스로 옮깁니다. 같은 Team이나 Enterprise 조직 안에서는 `auto_switch`를 포함한 이 선택이 작업을 다른 시트로 옮기므로 Anthropic 이용약관 위반이 될 수 있습니다(위의 "Team·Enterprise 시트" 참고).
+- **다른 계정에서 도는 subagent.** Claude Code 세션에서 `ccam agent "<작업>"`을 부르면 같은 폴더에서 다른 계정의 `claude -p`가 세션의 권한 모드·effort로 작업을 하고 Claude의 마지막 답을 돌려줍니다. 그래서 긴 작업의 일부가 다른 계정의 사용량을 씁니다. 그 계정이 한도에 걸리면 에이전트의 대화는 다음 계정에서 이어지고, `--resume <id>`로 에이전트에 후속 작업을 줍니다. ccam 플러그인이 Claude Code에 언제 쓰는지 알려 줍니다. 한 Team·Enterprise 조직 안에서는 다른 시트를 쓰므로 위와 같은 주의가 필요합니다.
 - **프로젝트마다 맞는 계정.** `ccam folder work ~/code/company`로 그 폴더에서 이름 없이 실행하면 `work`가 열립니다.
 - **정적 바이너리 하나입니다.** Linux, macOS, Windows를 지원하고, 설치할 런타임이 없고, 설치와 업데이트는 체크섬을 확인하며, 텔레메트리가 없습니다.
 
@@ -41,7 +42,7 @@ curl -fsSL https://ccam.dev/install.sh | sh
 
 Claude Code(`claude`)가 먼저 설치되어 있어야 합니다.
 
-Claude Code 플러그인(Claude Code 2.1.275 이상): `/plugin install ccam --marketplace jhyunwoo/ccam`을 설치하면 Claude Code가 사용량을 확인하고, `ccam pick`으로 다른 계정에서 작업자를 띄우고, `ccam ext`로 빠진 스킬의 원인을 설명합니다.
+Claude Code 플러그인(Claude Code 2.1.275 이상): `/plugin install ccam --marketplace jhyunwoo/ccam`을 설치하면 Claude Code가 사용량을 확인하고, `ccam agent`로 작업의 일부를 다른 계정의 에이전트에 맡기고, `ccam pick`으로 다른 계정에서 작업자를 띄우고, `ccam ext`로 빠진 스킬의 원인을 설명합니다.
 
 ## 업데이트
 
@@ -65,6 +66,7 @@ ccam folder work ~/code/company   # 그 폴더에서 이름 없이 실행하면 
 ccam usage           # 모든 계정의 5시간·주간·모델별(Fable) 사용률
 ccam next --continue # 한도에 걸리면 다음 계정에서 같은 대화 이어가기
 ccam --fallback work -p "fix the tests"   # 스크립트: 한도에 걸리면 다른 계정으로 다시 실행
+ccam agent "find why TestParse fails"     # Claude Code 안에서: 다른 계정으로 도는 subagent
 ```
 
 이미 쓰던 `~/.claude`가 있으면 `ccam import`로 제자리에 등록합니다 (옮기거나 복사하지 않음).
@@ -88,6 +90,7 @@ SSH로 접속한 원격 서버에서 로그인할 때는 내 컴퓨터의 브라
 | `ccam --fallback [이름] -p …` | 계정이 사용량 한도에 걸리면 여유가 가장 많은 계정으로 다시 실행 (`-p` 실행만) |
 | `ccam next [--auto] [--continue [--brief]] [-- claude 인자]` | 다음 계정으로. `--auto`는 사용량으로 고르고 이유를 알려 줌 (`--max-usage`, `--strategy headroom\|expiring\|balance`, `--wait`). `--continue --brief`는 마지막 대화의 요약으로 새 대화를 시작함. claude 옵션은 `--` 뒤에: `ccam next -c --auto -- --dangerously-skip-permissions` |
 | `ccam pick [--json] [--model m] [--wait]` | 스크립트용으로 여유가 가장 많은 계정 이름 출력. 함께 시작한 작업자는 서로 다른 계정, 없으면 종료 코드 75 |
+| `ccam agent [--model m] [--resume id] [--json] <작업>` | 이 폴더에서 다른 계정(부른 계정은 제외)으로 `claude -p`를 부른 세션의 권한 모드·effort로 실행하고 Claude의 마지막 답을 출력. 그 계정이 한도에 걸리면 다른 계정에서 대화를 이어 감. `--resume`은 에이전트의 대화를 이어 감, 여유 있는 계정이 없으면 종료 코드 75 |
 | `ccam ext [이름] [--json]` | 계정마다 로드되는 스킬·명령·플러그인·MCP 서버·훅과 그 출처, 문제 |
 | `ccam usage [--watch] [--json] [-v]` | 사용량 (줄임 `ccam u`) |
 | `ccam ccusage [-a 이름[,이름…]] [ccusage 인자]` | 모든 계정(또는 `-a`로 고른 계정)의 대화로 [ccusage](https://ccusage.com)의 토큰·비용 보고서. 그룹으로 대화 기록을 공유하는 계정은 그 그룹의 대화가 모두 들어감. ccusage 인자는 그대로 전달되고, 도구를 지정하지 않으면 찾은 다른 코딩 도구(Codex 등)도 함께 셈: `ccam ccusage claude daily`. `blocks`는 5시간 구간이 계정마다 따로라 계정 하나를 지정: `ccam ccusage -a work blocks --active`. 설치된 ccusage, 없으면 `bun x ccusage`, 그다음 `npx ccusage@latest`로 실행. 뒤의 둘은 ccam 자신의 폴더에서 시작하므로 지금 폴더가 실행할 프로그램을 고를 수 없고, `./.ccusage/ccusage.json`이나 상대 경로 `--config`는 전체 경로로 넘김 |
@@ -104,7 +107,7 @@ SSH로 접속한 원격 서버에서 로그인할 때는 내 컴퓨터의 브라
 | `ccam uninstall` | 모든 계정(먼저 로그아웃), 단축 명령, ccam 폴더, ccam 자신을 지움. 가져온 폴더는 그대로 |
 | `ccam completion bash\|zsh\|powershell` | 자동완성 |
 
-앞에 `--dry-run`을 붙이면 실행하지 않고 할 일만 보여줍니다 (`ccam --dry-run work`). 실행(`ccam <이름>`, `run`, `next`), `group`, `migrate`, `shortcut`, `update`, `uninstall`, `doctor --fix`에서 쓸 수 있고, 무언가를 바꾸는 다른 명령은 실제로 실행하는 대신 거절합니다.
+앞에 `--dry-run`을 붙이면 실행하지 않고 할 일만 보여줍니다 (`ccam --dry-run work`). 실행(`ccam <이름>`, `run`, `next`, `agent`), `group`, `migrate`, `shortcut`, `update`, `uninstall`, `doctor --fix`에서 쓸 수 있고, 무언가를 바꾸는 다른 명령은 실제로 실행하는 대신 거절합니다.
 
 ## 공유
 

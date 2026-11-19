@@ -2,10 +2,10 @@
 title: Câu hỏi thường gặp
 metaTitle: "ccam FAQ: dùng nhiều tài khoản Claude Code"
 description: "Giải đáp về ccam, tài khoản Claude Code, giới hạn sử dụng, việc dùng chung, quyền riêng tư và các hệ điều hành được hỗ trợ."
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## ccam có phải là công cụ chính thức của Anthropic không?
@@ -16,7 +16,7 @@ Không. ccam là dự án mã nguồn mở không chính thức, không liên k�
 
 Điều đó phụ thuộc vào điều khoản của từng tài khoản và, với tài khoản công việc, vào chính sách của tổ chức bạn: [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) của Anthropic cho Pro và Max, [Commercial Terms](https://www.anthropic.com/legal/commercial-terms) cho Team và Enterprise, và [Usage Policy](https://www.anthropic.com/legal/aup) cho tất cả. Hãy kiểm tra trước khi dùng nhiều tài khoản. ccam không nâng, gộp hay che giấu giới hạn của một tài khoản, và mỗi tài khoản vẫn dừng ở giới hạn của riêng nó. Nó chuyển công việc của bạn sang một tài khoản khác của bạn khi bạn yêu cầu, hoặc tự làm việc đó khi chạm giới hạn nếu bạn bật [`auto_switch`](/features/next#auto-switch) (Linux và macOS). Hãy kiểm tra xem việc đó có được phép với các tài khoản của bạn hay không trước khi dùng; quyết định là của bạn.
 
-**Seat của gói Team và Enterprise.** Việc tự động chọn tài khoản (`ccam next`, `--fallback`, `ccam pick`, phím `n` trên bảng điều khiển và [`auto_switch`](/features/next#auto-switch) khi bạn bật nó) cũng chuyển đổi giữa các seat của cùng một tổ chức Claude Team hoặc Enterprise. Trung tâm trợ giúp của Anthropic ghi rằng "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (mỗi seat của gói Team được gán cho đích danh một cá nhân, và chỉ người đó được phép sử dụng) và "Users can't route their work through another user's account to use that user's remaining usage" (người dùng không được chuyển công việc của mình qua tài khoản của một người dùng khác để dùng phần hạn mức còn lại của người đó) ([gói Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); tương tự đối với [gói Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Vì vậy, dùng tính năng tự động chọn tài khoản giữa các seat có thể vi phạm điều khoản của Anthropic. Có dùng nó ở đó hay không là quyết định của bạn: hãy xác nhận với tổ chức của bạn và Anthropic trước khi dựa vào nó. Các gói cá nhân (Pro, Max) được đề cập trong đoạn ở trên.
+**Seat của gói Team và Enterprise.** Việc tự động chọn tài khoản (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), phím `n` trên bảng điều khiển và [`auto_switch`](/features/next#auto-switch) khi bạn bật nó) cũng chuyển đổi giữa các seat của cùng một tổ chức Claude Team hoặc Enterprise. Trung tâm trợ giúp của Anthropic ghi rằng "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (mỗi seat của gói Team được gán cho đích danh một cá nhân, và chỉ người đó được phép sử dụng) và "Users can't route their work through another user's account to use that user's remaining usage" (người dùng không được chuyển công việc của mình qua tài khoản của một người dùng khác để dùng phần hạn mức còn lại của người đó) ([gói Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); tương tự đối với [gói Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Vì vậy, dùng tính năng tự động chọn tài khoản giữa các seat có thể vi phạm điều khoản của Anthropic. Có dùng nó ở đó hay không là quyết định của bạn: hãy xác nhận với tổ chức của bạn và Anthropic trước khi dựa vào nó. Các gói cá nhân (Pro, Max) được đề cập trong đoạn ở trên.
 
 ## ccam có giúp vượt qua giới hạn sử dụng không?
 

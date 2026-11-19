@@ -2,10 +2,10 @@
 title: Maswali yanayoulizwa mara kwa mara
 metaTitle: "Maswali kuhusu ccam: akaunti kadhaa za Claude Code"
 description: Majibu kuhusu ccam, akaunti za Claude Code, vikomo vya matumizi, kushiriki, faragha na mifumo inayotumika.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## Je, ccam ni zana rasmi ya Anthropic?
@@ -16,7 +16,7 @@ Hapana. ccam ni mradi usio rasmi wa open source na hauhusiani na Anthropic wala 
 
 Hilo linategemea masharti ya kila akaunti na, kwa akaunti za kazi, sera ya shirika lako: [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) za Anthropic kwa Pro na Max, [Commercial Terms](https://www.anthropic.com/legal/commercial-terms) zake kwa Team na Enterprise, na [Usage Policy](https://www.anthropic.com/legal/aup) yake kwa zote. Yakague kabla ya kutumia akaunti kadhaa. ccam haiongezi, haiunganishi wala haifichi vikomo vya akaunti, na kila akaunti bado husimama kwenye vikomo vyake yenyewe. Huhamisha kazi yako kwenda akaunti nyingine kati ya akaunti zako unapoomba, au yenyewe kwenye kikomo unapowasha [`auto_switch`](/features/next#auto-switch) (Linux na macOS). Hakikisha kama hilo linaruhusiwa kwa akaunti zako kabla ya kulitumia; uamuzi ni wako.
 
-**Viti (seats) vya Team na Enterprise.** Uchaguzi wa akaunti wa kiotomatiki (`ccam next`, `--fallback`, `ccam pick`, kitufe `n` cha dashibodi na [`auto_switch`](/features/next#auto-switch) unapokiwasha) pia hubadili kati ya viti vya shirika lile lile la Claude Team au Enterprise. Kituo cha usaidizi cha Anthropic kinasema "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (kila kiti katika mpango wa Team hutolewa kwa mtu mmoja aliyetajwa kwa jina, na ni mtu huyo pekee anayeruhusiwa kukitumia) na "Users can't route their work through another user's account to use that user's remaining usage" (watumiaji hawaruhusiwi kuelekeza kazi yao kupitia akaunti ya mtumiaji mwingine ili kutumia kiasi cha matumizi kilichobaki cha mtumiaji huyo) ([mipango ya Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); vivyo hivyo kwa [mipango ya Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Kwa hiyo, kutumia uchaguzi wa kiotomatiki kati ya viti kunaweza kukiuka masharti ya Anthropic. Kama utazitumia huko ni uamuzi wako: wasiliana na shirika lako na Anthropic kabla ya kuzitegemea. Mipango ya binafsi (Pro, Max) inaelezwa katika aya iliyo hapo juu.
+**Viti (seats) vya Team na Enterprise.** Uchaguzi wa akaunti wa kiotomatiki (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), kitufe `n` cha dashibodi na [`auto_switch`](/features/next#auto-switch) unapokiwasha) pia hubadili kati ya viti vya shirika lile lile la Claude Team au Enterprise. Kituo cha usaidizi cha Anthropic kinasema "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (kila kiti katika mpango wa Team hutolewa kwa mtu mmoja aliyetajwa kwa jina, na ni mtu huyo pekee anayeruhusiwa kukitumia) na "Users can't route their work through another user's account to use that user's remaining usage" (watumiaji hawaruhusiwi kuelekeza kazi yao kupitia akaunti ya mtumiaji mwingine ili kutumia kiasi cha matumizi kilichobaki cha mtumiaji huyo) ([mipango ya Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); vivyo hivyo kwa [mipango ya Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Kwa hiyo, kutumia uchaguzi wa kiotomatiki kati ya viti kunaweza kukiuka masharti ya Anthropic. Kama utazitumia huko ni uamuzi wako: wasiliana na shirika lako na Anthropic kabla ya kuzitegemea. Mipango ya binafsi (Pro, Max) inaelezwa katika aya iliyo hapo juu.
 
 ## Je, ccam hukwepa vikomo vya matumizi?
 

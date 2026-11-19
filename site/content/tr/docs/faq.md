@@ -2,10 +2,10 @@
 title: Sık sorulan sorular
 metaTitle: "ccam SSS: birden fazla Claude Code hesabı"
 description: ccam, Claude Code hesapları, kullanım limitleri, paylaşım, gizlilik ve desteklenen sistemler hakkında yanıtlar.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## ccam resmi bir Anthropic aracı mı?
@@ -16,7 +16,7 @@ Hayır. ccam resmi olmayan, açık kaynaklı bir projedir; Anthropic ile bağlan
 
 Bu, her hesabın koşullarına ve iş hesapları için kurumunuzun politikasına bağlıdır: Pro ve Max için Anthropic'in [Tüketici Koşulları](https://www.anthropic.com/legal/consumer-terms), Team ve Enterprise için [Ticari Koşulları](https://www.anthropic.com/legal/commercial-terms) ve hepsi için [Kullanım Politikası](https://www.anthropic.com/legal/aup). Birden fazla hesap kullanmadan önce bunları kontrol edin. ccam bir hesabın limitlerini yükseltmez, birleştirmez veya gizlemez; her hesap yine kendi limitinde durur. İşinizi, siz istediğinizde ya da [`auto_switch`](/features/next#auto-switch) özelliğini (Linux ve macOS) açtığınızda bir limitte kendiliğinden, başka bir hesabınıza taşır. Kullanmadan önce bunun hesaplarınız için izinli olup olmadığını kontrol edin; karar sizindir.
 
-**Team ve Enterprise koltukları.** Otomatik hesap seçimi (`ccam next`, `--fallback`, `ccam pick`, kontrol panelindeki `n` tuşu ve açtığınızda [`auto_switch`](/features/next#auto-switch)), aynı Claude Team veya Enterprise kuruluşunun koltukları arasında da geçiş yapar. Anthropic'in yardım merkezinde şöyle belirtilir: "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (Team planındaki her koltuk, adı belirli tek bir kişiye atanır ve onu yalnızca o kişi kullanabilir) ve "Users can't route their work through another user's account to use that user's remaining usage" (kullanıcılar, başka bir kullanıcının kalan kullanım hakkından yararlanmak için işlerini o kullanıcının hesabı üzerinden yürütemez) ([Team planları](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); [Enterprise planları](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0) için de durum aynıdır). Bu nedenle otomatik hesap seçimini koltuklar arasında kullanmak Anthropic'in koşullarını ihlal edebilir. Orada kullanıp kullanmamak sizin kararınızdır: buna güvenmeden önce kuruluşunuza ve Anthropic'e danışın. Kişisel planlar (Pro, Max) yukarıdaki paragrafta ele alınır.
+**Team ve Enterprise koltukları.** Otomatik hesap seçimi (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), kontrol panelindeki `n` tuşu ve açtığınızda [`auto_switch`](/features/next#auto-switch)), aynı Claude Team veya Enterprise kuruluşunun koltukları arasında da geçiş yapar. Anthropic'in yardım merkezinde şöyle belirtilir: "Each seat on a Team plan is assigned to one named individual, and only that person may use it" (Team planındaki her koltuk, adı belirli tek bir kişiye atanır ve onu yalnızca o kişi kullanabilir) ve "Users can't route their work through another user's account to use that user's remaining usage" (kullanıcılar, başka bir kullanıcının kalan kullanım hakkından yararlanmak için işlerini o kullanıcının hesabı üzerinden yürütemez) ([Team planları](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); [Enterprise planları](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0) için de durum aynıdır). Bu nedenle otomatik hesap seçimini koltuklar arasında kullanmak Anthropic'in koşullarını ihlal edebilir. Orada kullanıp kullanmamak sizin kararınızdır: buna güvenmeden önce kuruluşunuza ve Anthropic'e danışın. Kişisel planlar (Pro, Max) yukarıdaki paragrafta ele alınır.
 
 ## ccam kullanım limitlerini atlatmanızı sağlar mı?
 

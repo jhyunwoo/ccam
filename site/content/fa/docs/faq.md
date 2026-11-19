@@ -2,10 +2,10 @@
 title: پرسش‌های متداول
 metaTitle: "پرسش‌های متداول ccam: چند حساب Claude Code"
 description: پاسخ به پرسش‌هایی درباره ccam، حساب‌های Claude Code، سقف مصرف، اشتراک‌گذاری، حریم خصوصی و سیستم‌های پشتیبانی‌شده.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## آیا ccam ابزار رسمی Anthropic است؟
@@ -16,7 +16,7 @@ sourceHash: "9b13b37391f2"
 
 این به شرایط هر حساب و، در مورد حساب‌های کاری، به سیاست سازمان شما بستگی دارد: [شرایط مصرف‌کننده (Consumer Terms)](https://www.anthropic.com/legal/consumer-terms) Anthropic برای Pro و Max، [شرایط تجاری (Commercial Terms)](https://www.anthropic.com/legal/commercial-terms) آن برای Team و Enterprise، و [سیاست استفاده (Usage Policy)](https://www.anthropic.com/legal/aup) آن برای همه. پیش از استفاده از چند حساب، آن‌ها را بررسی کنید. ccam سقف‌های یک حساب را بالا نمی‌برد، ادغام نمی‌کند یا پنهان نمی‌کند، و هر حساب همچنان در سقف خودش متوقف می‌شود. ccam کار شما را وقتی بخواهید به حساب دیگری از حساب‌های خودتان منتقل می‌کند، یا وقتی [`auto_switch`](/features/next#auto-switch) (Linux و macOS) را روشن کنید، خودش در سقف مصرف این کار را می‌کند. پیش از استفاده بررسی کنید که این کار برای حساب‌های شما مجاز است یا نه؛ تصمیم با خودتان است.
 
-**صندلی‌های Team و Enterprise.** انتخاب خودکار حساب (`ccam next`، `--fallback`، `ccam pick`، کلید `n` در داشبورد و [`auto_switch`](/features/next#auto-switch) وقتی آن را روشن کنید) میان صندلی‌های همان سازمان Claude Team یا Enterprise هم جابه‌جا می‌شود. مرکز راهنمای Anthropic می‌گوید: «Each seat on a Team plan is assigned to one named individual, and only that person may use it» (هر صندلی در طرح Team به نام یک فرد مشخص اختصاص داده می‌شود و فقط همان شخص اجازه دارد از آن استفاده کند) و «Users can't route their work through another user's account to use that user's remaining usage» (کاربران نمی‌توانند کار خود را از طریق حساب کاربر دیگری انجام دهند تا از سهمیه مصرف باقی‌مانده آن کاربر استفاده کنند) ([طرح‌های Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)؛ و همین‌طور برای [طرح‌های Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). بنابراین استفاده از انتخاب خودکار میان صندلی‌ها ممکن است شرایط Anthropic را نقض کند. اینکه در آنجا از آن استفاده کنید یا نه، تصمیم خودتان است: پیش از آنکه به آن تکیه کنید، از سازمان خود و Anthropic بپرسید. برای طرح‌های شخصی (Pro، Max)، پاراگراف بالا را ببینید.
+**صندلی‌های Team و Enterprise.** انتخاب خودکار حساب (`ccam next`، `--fallback`، `ccam pick`، [`ccam agent`](/features/agent)، کلید `n` در داشبورد و [`auto_switch`](/features/next#auto-switch) وقتی آن را روشن کنید) میان صندلی‌های همان سازمان Claude Team یا Enterprise هم جابه‌جا می‌شود. مرکز راهنمای Anthropic می‌گوید: «Each seat on a Team plan is assigned to one named individual, and only that person may use it» (هر صندلی در طرح Team به نام یک فرد مشخص اختصاص داده می‌شود و فقط همان شخص اجازه دارد از آن استفاده کند) و «Users can't route their work through another user's account to use that user's remaining usage» (کاربران نمی‌توانند کار خود را از طریق حساب کاربر دیگری انجام دهند تا از سهمیه مصرف باقی‌مانده آن کاربر استفاده کنند) ([طرح‌های Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)؛ و همین‌طور برای [طرح‌های Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). بنابراین استفاده از انتخاب خودکار میان صندلی‌ها ممکن است شرایط Anthropic را نقض کند. اینکه در آنجا از آن استفاده کنید یا نه، تصمیم خودتان است: پیش از آنکه به آن تکیه کنید، از سازمان خود و Anthropic بپرسید. برای طرح‌های شخصی (Pro، Max)، پاراگراف بالا را ببینید.
 
 ## آیا ccam سقف مصرف را دور می‌زند؟
 

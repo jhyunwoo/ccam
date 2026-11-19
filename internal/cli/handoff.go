@@ -44,7 +44,9 @@ func lastConversation(e *env, cfg *config.Config, cands []next.Candidate, cwd st
 	var best *conversation
 	var at time.Time
 	for _, dir := range dirs {
-		if path, t, ok := transcript.Latest(dir); ok && (best == nil || t.After(at)) {
+		// An agent's conversation (ccam agent) is not the person's to continue.
+		skip := func(path string) bool { return agentConversation(e, path) }
+		if path, t, ok := transcript.Latest(dir, skip); ok && (best == nil || t.After(at)) {
 			owner := sharers[dir][0]
 			if p := ranLast(e, sharers[dir], transcript.ID(path)); p != nil {
 				owner = p

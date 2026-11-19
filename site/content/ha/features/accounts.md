@@ -1,10 +1,10 @@
 ---
 title: Sarrafa asusai
 description: Ƙara, shiga, lissafa, sake suna, cire da shigo da asusun Claude Code da ccam add, ccam login, ccam list, ccam rename, ccam remove da ccam import.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 Kowane asusun ccam foldar saitin Claude Code ce ta daban mai nata shiga. Yi amfani da waɗannan umarnai don ƙara asusai, shigar da su, lissafa su, sake musu suna da cire su. Suna kuma yin rajistar foldojin da kake da su tuni.
@@ -79,7 +79,7 @@ Da `--json`, kowane asusu abu ne mai `slot`, `shortcut`, `name`, `email` (na shi
 
 `ccam login` (banda `--expired`), `ccam use` da `ccam rename` ba su da zaɓuɓɓukan kansu. `ccam completion` yana karɓar `bash`, `zsh` ko `powershell`; duk wani abu dabam yana gazawa da `only bash, zsh and powershell are supported`.
 
-Sunayen asusai haruffa 1 zuwa 32 ne na `a-z`, `0-9`, `-` da `_`, suna farawa da harafi ko lamba. Suna ba zai iya zama lambobi kawai ba, domin `ccam 2` yana nufin ramin 2. Haka kuma suna ba zai iya zama umarnin ccam ba (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), don haka `ccam <name>` ba ya taɓa yin shubuha. Jerin shi ne `config.Reserved` a `internal/config`.
+Sunayen asusai haruffa 1 zuwa 32 ne na `a-z`, `0-9`, `-` da `_`, suna farawa da harafi ko lamba. Suna ba zai iya zama lambobi kawai ba, domin `ccam 2` yana nufin ramin 2. Haka kuma suna ba zai iya zama umarnin ccam ba (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), don haka `ccam <name>` ba ya taɓa yin shubuha. Jerin shi ne `config.Reserved` a `internal/config`.
 
 ## Yadda yake aiki
 

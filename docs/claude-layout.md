@@ -487,6 +487,28 @@ for the API), 2026-10-31 and 2026-11-01. ccam's hop carries the agent on (`launc
   writes rows that name the earlier agent. `conversationAgent` therefore takes the session's own `--agent` and the
   `agent` setting before the rows.
 
+## Print-mode agents (2.1.328)
+
+Read from the 2.1.328 binary and `claude --help`, and run with the real 2.1.328 in scratch config folders that had
+no login (no request reached the API), 2026-11-19. `ccam agent` builds on these.
+
+- `-p --output-format json` prints one line, the result object: `type: "result"`, `subtype`, `is_error`, `result`
+  (Claude's last reply, or the error: `Not logged in · Please run /login` here), `session_id`, `num_turns`,
+  `total_cost_usd`, `terminal_reason`, `permission_denials`, `subagent_stats` and more. It exits 1 when `is_error`.
+- `--session-id <uuid>` names the conversation: the file is `projects/<slug of the folder>/<uuid>.jsonl` in the config
+  folder. An id in use stops Claude Code (`Session ID … is already in use.`), and beside `--resume` or `--continue` it
+  needs `--fork-session` (`Error: --session-id with --continue or --resume also needs --fork-session.`). So a
+  `-p --session-id` run, and a `-p` fork, always writes a conversation file of its own.
+- `-p --resume <file> --fork-session --session-id <new uuid>` as another config folder copied the conversation's rows
+  into that folder's `projects/<slug>/<new uuid>.jsonl` and went on there; the original file was left as it was.
+- A prompt after `--` that starts with `-` (`-- "-x say hi"`) is taken as the prompt. A `-p` prompt row has
+  `promptSource: "sdk"` and the run's `permissionMode`.
+- A Bash command of a session gets `CLAUDECODE=1`, `CLAUDE_CODE_SESSION_ID`, `CLAUDE_CODE_CHILD_SESSION=1`,
+  `CLAUDE_CODE_SESSION_ATTENDED`, `CLAUDE_PID` and `CLAUDE_EFFORT` (and ccam's `CCAM_PROFILE`, `CCAM_RELAY`,
+  `CLAUDE_CONFIG_DIR`). A Claude Code started from there notes the sessions that launched it
+  (`CLAUDE_CODE_LAUNCHED_BY_SESSION_IDS`), and a `-p` start turns an inherited `CLAUDE_CODE_ENTRYPOINT=cli` into
+  `sdk-cli`, so ccam's hook in it does nothing (binary).
+
 ## Scheduled prompts (2.1.314)
 
 Seen with the real 2.1.314 in the security audit's sandbox (offline, against a stub API), 2026-10-31 and

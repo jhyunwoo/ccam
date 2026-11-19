@@ -1,10 +1,10 @@
 ---
 title: Gerenciar contas
 description: Adicione, faça login, liste, renomeie, remova e importe contas do Claude Code com ccam add, ccam login, ccam list, ccam rename, ccam remove e ccam import.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 Cada conta do ccam é uma pasta de configuração separada do Claude Code, com o próprio login. Use estes comandos para adicionar contas, fazer login nelas, listá-las, renomeá-las e removê-las. Eles também registram pastas que você já tem.
@@ -79,7 +79,7 @@ Com `--json`, cada conta é um objeto com `slot`, `shortcut`, `name`, `email` (o
 
 `ccam login` (além de `--expired`), `ccam use` e `ccam rename` não têm opções próprias. `ccam completion` aceita `bash`, `zsh` ou `powershell`; qualquer outro valor falha com `only bash, zsh and powershell are supported`.
 
-Os nomes de conta têm de 1 a 32 caracteres entre `a-z`, `0-9`, `-` e `_`, começando por uma letra ou um dígito. Um nome não pode ter só dígitos, porque `ccam 2` significa o slot 2. Um nome também não pode ser um comando do ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), então `ccam <name>` nunca é ambíguo. A lista é `config.Reserved`, em `internal/config`.
+Os nomes de conta têm de 1 a 32 caracteres entre `a-z`, `0-9`, `-` e `_`, começando por uma letra ou um dígito. Um nome não pode ter só dígitos, porque `ccam 2` significa o slot 2. Um nome também não pode ser um comando do ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), então `ccam <name>` nunca é ambíguo. A lista é `config.Reserved`, em `internal/config`.
 
 ## Como funciona
 

@@ -2,10 +2,10 @@
 title: Bayanin umarnai
 metaTitle: Bayanin umarnan ccam
 description: Kowane umarni da zaɓi na ccam, daga ccam add da ccam <name> zuwa ccam usage, ccam next da ccam doctor.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: f4e7679d37de
+sourceHash: 28e1ad1dcbad
 ---
 
 Saka `--dry-run` kafin umarni don ganin abin da zai yi ba tare da ya yi shi ba, misali `ccam --dry-run work`. Yana aiki lokacin fara Claude Code (`ccam <name>`, `ccam run`, `ccam next`, `ccam attach`, `ccam ccusage`) da kuma tare da `group`, `migrate`, `folder`, `shortcut`, `pick`, `update`, `uninstall` da `doctor --fix`. Umarnan da ke karantawa kawai, kamar `list`, `usage`, `share` da `ext`, suna karɓar sa kuma ba sa canza komai ko ta yaya. Sauran suna ƙin shi maimakon su gudana, har da `group rename`.
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - `--wait` yana ɗaukar ƙimarsa bayan `=` (`--wait=2h`); idan an rubuta shi da sarari ana ƙin shi tare da shawara. Idan ba za a iya zaɓar kowanne ba, suna fita da code 75, ko kuma, da `--wait`, suna jiran asusun farko ya sake saitawa.
 - `ccam next --continue` yana kai tattaunawa gaba har ma tsakanin asusan da ba sa raba tarihi: a lokacin Claude Code yana kwafar ta cikin sabon asusun. Da `--brief`, sabon asusun yana fara sabuwar tattaunawa maimakon haka, daga taƙaitaccen bayanin da ccam ya rubuta na ta ƙarshe ba tare da model ba ([`--brief`](/features/next#brief)).
 - Ba kamar `ccam <name>` ba, `ccam next` yana karanta zaɓuɓɓukansa da kansa, don haka zaɓuɓɓukan Claude Code suna zuwa bayan `--`; ba tare da shi ba ccam yana tsayawa da `unknown flag`.
+- `ccam agent` yana gudanar da aiki da `claude -p` a cikin wannan foldar a matsayin wani asusu banda wanda aka kira shi daga gare shi, a cikin yanayin izini (permission mode) da matakin ƙoƙari (effort) na zaman da ya kira shi, kuma yana buga amsar Claude ta ƙarshe. A iyakar wannan asusun, tattaunawar tana ci gaba a matsayin wani asusu ([Subagents a kan wasu asusai](/features/agent)).
 - A cikin Claude Code, `/ccam:switch [account]` na plugin ɗin yana miƙa tattaunawa gaba, kuma `ccam hook` shi ne abin da hooks ɗinsa ke gudanarwa.
 - Da `auto_switch = true` a `config.toml` (Linux da macOS; a kashe ta tsohuwa), hook na iyaka yana kuma kawo ƙarshen zaman mu'amala da ccam ya fara kuma yana ci gaba da shi a wani asusu mai sarari, amma iri ɗaya kaɗai: wata kujerar ƙungiya iri ɗaya, ko wani tsarin kai ([`auto_switch`](/features/next#auto-switch)).
 
-Duba [Sauyawa zuwa asusu na gaba](/features/next), [Zaɓar asusu don rubutun umarni](/features/pick) da [Zaman bayan fage na kowane asusu](/features/agents).
+Duba [Sauyawa zuwa asusu na gaba](/features/next), [Zaɓar asusu don rubutun umarni](/features/pick), [Subagents a kan wasu asusai](/features/agent) da [Zaman bayan fage na kowane asusu](/features/agents).
 
 ## Kulawa
 

@@ -1,10 +1,10 @@
 ---
 title: Gestire gli account
 description: Aggiungi, collega, elenca, rinomina, rimuovi e importa account Claude Code con ccam add, ccam login, ccam list, ccam rename, ccam remove e ccam import.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 Ogni account di ccam è una cartella di configurazione di Claude Code separata, con il proprio login. Usa questi comandi per aggiungere gli account, effettuarne il login, elencarli, rinominarli e rimuoverli. Servono anche a registrare le cartelle che hai già.
@@ -79,7 +79,7 @@ Con `--json`, ogni account è un oggetto con `slot`, `shortcut`, `name`, `email`
 
 `ccam login` (a parte `--expired`), `ccam use` e `ccam rename` non hanno opzioni proprie. `ccam completion` accetta `bash`, `zsh` o `powershell`; qualsiasi altro valore fallisce con `only bash, zsh and powershell are supported`.
 
-I nomi degli account sono lunghi da 1 a 32 caratteri tra `a-z`, `0-9`, `-` e `_`, e iniziano con una lettera o una cifra. Un nome non può essere composto solo da cifre, perché `ccam 2` indica lo slot 2. Un nome non può nemmeno essere un comando di ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), così `ccam <name>` non è mai ambiguo. L'elenco è `config.Reserved` in `internal/config`.
+I nomi degli account sono lunghi da 1 a 32 caratteri tra `a-z`, `0-9`, `-` e `_`, e iniziano con una lettera o una cifra. Un nome non può essere composto solo da cifre, perché `ccam 2` indica lo slot 2. Un nome non può nemmeno essere un comando di ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), così `ccam <name>` non è mai ambiguo. L'elenco è `config.Reserved` in `internal/config`.
 
 ## Come funziona
 

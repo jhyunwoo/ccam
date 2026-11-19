@@ -236,21 +236,27 @@ func opensSession(args []string) bool {
 }
 
 // newPrint reports whether claude args run -p in a conversation of their
-// own, not one they continue (-c, --resume, --session-id …).
+// own: a new one, or the copy --fork-session makes of the one they resume
+// (-c, --resume …), which writes a file of its own. --session-id names a
+// new conversation: Claude Code refuses an id in use, and takes one beside
+// --resume only with --fork-session (2.1.328).
 func newPrint(args []string) bool {
-	printing := false
+	printing, resumes, fork := false, false, false
 	for _, a := range args {
 		name, _, _ := strings.Cut(a, "=")
+		if name == "--" {
+			break
+		}
 		switch name {
-		case "--":
-			return printing
 		case "-p", "--print":
 			printing = true
-		case "-c", "--continue", "-r", "--resume", "--session-id", "--from-pr", "--teleport":
-			return false
+		case "-c", "--continue", "-r", "--resume", "--from-pr", "--teleport":
+			resumes = true
+		case "--fork-session":
+			fork = true
 		}
 	}
-	return printing
+	return printing && (!resumes || fork)
 }
 
 // remoteControlMCP offers to copy the group's servers into the account's

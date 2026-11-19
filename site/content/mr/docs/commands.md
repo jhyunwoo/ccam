@@ -2,10 +2,10 @@
 title: कमांड संदर्भ
 metaTitle: "ccam कमांड संदर्भ"
 description: ccam add आणि ccam <name> पासून ccam usage, ccam next आणि ccam doctor पर्यंत ccam ची प्रत्येक कमांड आणि पर्याय.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 3
 translation: machine
-sourceHash: f4e7679d37de
+sourceHash: 28e1ad1dcbad
 ---
 
 एखादी कमांड प्रत्यक्ष न चालवता ती काय करेल हे पाहण्यासाठी तिच्या आधी `--dry-run` लावा, उदाहरणार्थ `ccam --dry-run work`. हे Claude Code सुरू करताना (`ccam <name>`, `ccam run`, `ccam next`, `ccam attach`, `ccam ccusage`) आणि `group`, `migrate`, `folder`, `shortcut`, `pick`, `update`, `uninstall` व `doctor --fix` सोबत चालते. फक्त वाचणाऱ्या कमांड्स, जसे `list`, `usage`, `share` आणि `ext`, हा पर्याय स्वीकारतात आणि तसेही काहीच बदलत नाहीत. बाकीच्या कमांड्स, `group rename` सह, चालण्याऐवजी हा पर्याय नाकारतात.
@@ -130,6 +130,8 @@ ccam next --auto --max-usage 80 --wait
 ccam next -c --auto -- --dangerously-skip-permissions   # claude's own options after --
 ccam pick                       # the account with the most room, for a script
 ccam "$(ccam pick)" -p "…"      # start a worker on it
+ccam agent "…"                  # from Claude Code: a subagent that runs as another account
+ccam agent --resume <id> "…"    # follow that agent up
 ccam agents                     # background sessions of every account
 ccam attach 49ec0028            # open one, as the account that started it (or by its name)
 ccam ccusage claude daily       # Claude Code's tokens and costs, every account (ccusage)
@@ -140,10 +142,11 @@ ccam ccusage -a work blocks --active   # one account's current 5-hour block
 - `--wait` त्याचे मूल्य `=` नंतर घेते (`--wait=2h`); space ने लिहिल्यास ते एका सूचनेसह नाकारले जाते. काहीच निवडता येत नसेल तर ते code 75 ने बाहेर पडतात, किंवा `--wait` सह पहिले खाते reset होण्याची वाट पाहतात.
 - `ccam next --continue` इतिहास शेअर न करणाऱ्या खात्यांमध्येही संभाषण पुढे नेते: तेव्हा Claude Code ते नवीन खात्यात कॉपी करते. `--brief` सह, नवीन खाते त्याऐवजी नवीन संभाषण सुरू करते, ccam ने model शिवाय मागच्या संभाषणाचा लिहिलेल्या सारांशापासून ([`--brief`](/features/next#brief)).
 - `ccam <name>` च्या उलट, `ccam next` स्वतःचे पर्याय वाचते, म्हणून Claude Code चे पर्याय `--` नंतर येतात; त्याशिवाय ccam `unknown flag` देऊन थांबते.
+- `ccam agent` या फोल्डरमध्ये, ज्या खात्यातून ते बोलावले जाते त्याहून वेगळ्या खात्याने, बोलावणाऱ्या सत्राच्या permission mode आणि effort सह, `claude -p` ने काम चालवते आणि Claude चे शेवटचे उत्तर छापते. त्या खात्याची मर्यादा आल्यावर संभाषण दुसऱ्या खात्याने पुढे चालू राहते ([इतर खात्यांवरील subagents](/features/agent)).
 - Claude Code मध्ये plugin चे `/ccam:switch [account]` संभाषण पुढे सोपवते, आणि `ccam hook` हे त्याचे hooks चालवतात.
 - `config.toml` मध्ये `auto_switch = true` असेल (Linux आणि macOS; डीफॉल्टनुसार बंद), तर मर्यादेचा hook ccam ने सुरू केलेले interactive सत्रही संपवतो आणि जागा असलेल्या दुसऱ्या खात्यावर ते पुढे चालू ठेवतो, पण फक्त त्याच प्रकारच्या खात्यावर: त्याच organization ची दुसरी सीट, किंवा दुसरा वैयक्तिक प्लॅन ([`auto_switch`](/features/next#auto-switch)).
 
-[पुढच्या खात्यावर जाणे](/features/next), [scripts साठी खाते निवडणे](/features/pick) आणि [प्रत्येक खात्याची पार्श्वभूमीतील सत्रे](/features/agents) पहा.
+[पुढच्या खात्यावर जाणे](/features/next), [scripts साठी खाते निवडणे](/features/pick), [इतर खात्यांवरील subagents](/features/agent) आणि [प्रत्येक खात्याची पार्श्वभूमीतील सत्रे](/features/agents) पहा.
 
 ## देखभाल
 

@@ -1,6 +1,7 @@
 package transcript
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -50,7 +51,7 @@ func TestLatestSizeAndTitle(t *testing.T) {
 	}, "\n") + "\n"
 	write(t, filepath.Join(dir, "abc-123.jsonl"), conv, now)
 	os.MkdirAll(filepath.Join(dir, "abc-123", "subagents"), 0o700) // folders are not conversations
-	path, _, ok := Latest(dir)
+	path, _, ok := Latest(dir, nil)
 	if !ok || ID(path) != "abc-123" {
 		t.Fatalf("%q %v", path, ok)
 	}
@@ -64,7 +65,7 @@ func TestLatestSizeAndTitle(t *testing.T) {
 	if got := Title(path); got != "release prep" {
 		t.Fatal(got)
 	}
-	if _, _, ok := Latest(filepath.Join(cfg, "projects", "nothing")); ok {
+	if _, _, ok := Latest(filepath.Join(cfg, "projects", "nothing"), nil); ok {
 		t.Fatal("no folder")
 	}
 }
@@ -322,7 +323,7 @@ func TestLatestSkipsSessionsWithoutAConversation(t *testing.T) {
 		write(t, old, earlier, now.Add(-time.Hour))
 		f := filepath.Join(dir, "s2.jsonl")
 		write(t, f, c.body, now)
-		path, _, ok := Latest(dir)
+		path, _, ok := Latest(dir, nil)
 		if want := map[bool]string{true: f, false: old}[c.counts]; !ok || path != want {
 			t.Errorf("%s: %s, want %s", c.name, filepath.Base(path), filepath.Base(want))
 		}
@@ -331,7 +332,7 @@ func TestLatestSkipsSessionsWithoutAConversation(t *testing.T) {
 	dir := t.TempDir()
 	write(t, filepath.Join(dir, "s1.jsonl"), earlier+`{"type":"cost-state"}`+"\n", now)
 	write(t, filepath.Join(dir, "s2.jsonl"), `{"type":"assistant","message":{"content":[]},"timestamp":"`+ts(-10*time.Minute)+`"}`+"\n", now.Add(-10*time.Minute))
-	if path, at, ok := Latest(dir); !ok || ID(path) != "s2" || !at.Equal(now.Add(-10*time.Minute)) {
+	if path, at, ok := Latest(dir, nil); !ok || ID(path) != "s2" || !at.Equal(now.Add(-10*time.Minute)) {
 		t.Fatalf("%s %v", path, at)
 	}
 	// File times kept to the second: s4's message is the later one although
@@ -339,8 +340,13 @@ func TestLatestSkipsSessionsWithoutAConversation(t *testing.T) {
 	dir = t.TempDir()
 	write(t, filepath.Join(dir, "s3.jsonl"), `{"type":"assistant","message":{"content":[]},"timestamp":"`+now.Add(900*time.Millisecond).UTC().Format(time.RFC3339Nano)+`"}`+"\n", now.Add(time.Second))
 	write(t, filepath.Join(dir, "s4.jsonl"), `{"type":"assistant","message":{"content":[]},"timestamp":"`+now.Add(950*time.Millisecond).UTC().Format(time.RFC3339Nano)+`"}`+"\n", now)
-	if path, _, _ := Latest(dir); ID(path) != "s4" {
+	if path, _, _ := Latest(dir, nil); ID(path) != "s4" {
 		t.Fatalf("%s", path)
+	}
+	// A skipped file does not count, however new: the one before it does.
+	skip := func(path string) bool { return ID(path) == "s4" }
+	if path, _, ok := Latest(dir, skip); !ok || ID(path) != "s3" {
+		t.Fatalf("skip: %s", path)
 	}
 }
 
@@ -511,5 +517,47 @@ func TestAgent(t *testing.T) {
 	}
 	if got := Agent(filepath.Join(t.TempDir(), "none.jsonl")); got != "" {
 		t.Errorf("no conversation: %q", got)
+	}
+}
+
+// A long turn can run for megabytes after the prompt that began it with no
+// row that says the mode: PermissionMode, which reads the end only, does
+// not see it, and LastPermissionMode reads back until it does, also across
+// a row longer than what it reads at a time.
+func TestLastPermissionModeReadsBack(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "c.jsonl")
+	prompt := `{"type":"user","message":{"role":"user","content":"do the long task"},"permissionMode":"bypassPermissions","timestamp":"2026-11-19T10:00:00Z"}` + "\n"
+	big := strings.Repeat("x", 300<<10)
+	var b strings.Builder
+	b.WriteString(`{"type":"permission-mode","permissionMode":"default"}` + "\n")
+	b.WriteString(prompt)
+	for i := 0; i < 8; i++ { // 2.4 MB of tool output, in rows smaller than a read
+		fmt.Fprintf(&b, `{"type":"user","message":{"role":"user","content":[{"type":"tool_result","content":%q}]}}`+"\n", big)
+	}
+	write(t, path, b.String(), time.Now())
+	if m := PermissionMode(path); m != "" {
+		t.Fatalf("PermissionMode reads the end only: %q", m)
+	}
+	if m := LastPermissionMode(path); m != "bypassPermissions" {
+		t.Fatalf("LastPermissionMode: %q", m)
+	}
+	// One row of 3 MB, longer than a read, after the prompt.
+	huge := strings.Repeat("y", 3<<20)
+	write(t, path, prompt+`{"type":"assistant","message":{"content":[{"type":"text","text":"`+huge+`"}]}}`+"\n", time.Now())
+	if m := LastPermissionMode(path); m != "bypassPermissions" {
+		t.Fatalf("across a long row: %q", m)
+	}
+	// A later change wins; a tool result that mentions permissionMode does not count.
+	write(t, path, prompt+`{"type":"permission-mode","permissionMode":"acceptEdits"}`+"\n"+
+		`{"type":"user","message":{"role":"user","content":[{"type":"tool_result","content":"x"}]},"permissionMode":"plan"}`+"\n", time.Now())
+	if m := LastPermissionMode(path); m != "acceptEdits" {
+		t.Fatalf("later change: %q", m)
+	}
+	write(t, path, `{"type":"assistant","message":{"content":[]}}`+"\n", time.Now())
+	if m := LastPermissionMode(path); m != "" {
+		t.Fatalf("no mode: %q", m)
+	}
+	if m := LastPermissionMode(filepath.Join(t.TempDir(), "missing.jsonl")); m != "" {
+		t.Fatalf("missing: %q", m)
 	}
 }

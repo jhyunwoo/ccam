@@ -1,10 +1,10 @@
 ---
 title: खाती व्यवस्थापित करणे
 description: ccam add, ccam login, ccam list, ccam rename, ccam remove आणि ccam import ने Claude Code खाती जोडा, लॉग इन करा, यादी पाहा, नाव बदला, काढा आणि इम्पोर्ट करा.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 प्रत्येक ccam खाते हा स्वतःचे लॉगिन असलेला वेगळा Claude Code config फोल्डर आहे. खाती जोडण्यासाठी, त्यांत साइन इन करण्यासाठी, त्यांची यादी पाहण्यासाठी, नाव बदलण्यासाठी आणि ती काढण्यासाठी या कमांड्स वापरा. त्या तुमच्याकडे आधीच असलेले फोल्डरही नोंदवतात.
@@ -79,7 +79,7 @@ $ ccam list
 
 `ccam login` (`--expired` सोडून), `ccam use` आणि `ccam rename` यांना स्वतःचे पर्याय नाहीत. `ccam completion` `bash`, `zsh` किंवा `powershell` घेते; इतर काहीही दिल्यास ते `only bash, zsh and powershell are supported` देऊन अयशस्वी होते.
 
-खात्यांची नावे `a-z`, `0-9`, `-` आणि `_` यांपासून बनलेली 1 ते 32 अक्षरांची असतात, आणि अक्षराने किंवा अंकाने सुरू होतात. नाव फक्त अंकांचे असू शकत नाही, कारण `ccam 2` म्हणजे slot 2. नाव ccam ची कमांडही असू शकत नाही (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), त्यामुळे `ccam <name>` कधीच संदिग्ध होत नाही. ही यादी `internal/config` मधील `config.Reserved` आहे.
+खात्यांची नावे `a-z`, `0-9`, `-` आणि `_` यांपासून बनलेली 1 ते 32 अक्षरांची असतात, आणि अक्षराने किंवा अंकाने सुरू होतात. नाव फक्त अंकांचे असू शकत नाही, कारण `ccam 2` म्हणजे slot 2. नाव ccam ची कमांडही असू शकत नाही (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), त्यामुळे `ccam <name>` कधीच संदिग्ध होत नाही. ही यादी `internal/config` मधील `config.Reserved` आहे.
 
 ## हे कसे काम करते
 

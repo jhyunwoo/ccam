@@ -155,6 +155,7 @@
     "shortcut": "Den Kurzbefehl eines Kontos, etwa ccwork, anzeigen, anlegen, umbenennen oder entfernen",
     "folder": "Ein Konto in einem Ordner und seinen Unterordnern verwenden, wenn kein Konto genannt wird",
     "pick": "Das Konto mit dem meisten Spielraum ausgeben, für Skripte und parallele Worker",
+    "agent": "Eine Aufgabe mit einem anderen Konto ausführen, wie ein Subagent, der die Nutzung dieses Kontos verbraucht",
     "ext": "Die Skills, Befehle, Plugins, MCP-Server und Hooks zeigen, die jedes Konto lädt",
     "agents": "Die Hintergrund-Agents und offenen Sitzungen aller Konten auflisten",
     "attach": "Eine Hintergrundsitzung mit dem Konto öffnen, das sie gestartet hat",

@@ -2,10 +2,10 @@
 title: よくある質問
 metaTitle: "ccamのよくある質問：Claude Codeの複数アカウント"
 description: ccam、Claude Codeのアカウント、使用量の上限、共有、プライバシー、対応システムについての回答です。
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## ccamはAnthropicの公式ツールですか？
@@ -16,7 +16,7 @@ sourceHash: "9b13b37391f2"
 
 それは各アカウントの規約によります。仕事用のアカウントの場合は、組織のポリシーにもよります。ProとMaxにはAnthropicの[消費者向け利用規約](https://www.anthropic.com/legal/consumer-terms)、TeamとEnterpriseには[商用利用規約](https://www.anthropic.com/legal/commercial-terms)、すべてに[利用ポリシー](https://www.anthropic.com/legal/aup)が適用されます。複数のアカウントを使う前に確認してください。ccamはアカウントの上限を引き上げたり、まとめたり、隠したりはせず、どのアカウントも自身の上限で止まります。ccamは、あなたが求めたとき、または[`auto_switch`](/features/next#auto-switch)（LinuxとmacOS）を有効にしていれば上限に達した時点で自動的に、あなたの別のアカウントに作業を移します。使う前に、それがあなたのアカウントで許されるかどうかを確認してください。判断するのはあなたです。
 
-**TeamとEnterpriseのシート。** 自動的なアカウント選択（`ccam next`、`--fallback`、`ccam pick`、ダッシュボードの`n`、有効にした場合の[`auto_switch`](/features/next#auto-switch)）は、同じClaude TeamまたはEnterpriseの組織に属するシート間でも切り替えます。Anthropicのヘルプセンターには、「Each seat on a Team plan is assigned to one named individual, and only that person may use it」（Teamプランの各シートは1人の指定ユーザーに割り当てられ、そのユーザーのみが使用できます）、「Users can't route their work through another user's account to use that user's remaining usage」（ユーザーは別のユーザーのアカウントを通じて作業をルーティングして、そのユーザーの残りの使用量を使用することはできません）と書かれています（[Teamプラン](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)。[Enterpriseプラン](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)も同様です）。そのため、シート間で自動的なアカウント選択を使うと、Anthropicの規約に違反するおそれがあります。そこで使うかどうかはご自身の判断です。頼る前に、所属する組織とAnthropicに確認してください。個人プラン（Pro、Max）については、上の段落を参照してください。
+**TeamとEnterpriseのシート。** 自動的なアカウント選択（`ccam next`、`--fallback`、`ccam pick`、[`ccam agent`](/features/agent)、ダッシュボードの`n`、有効にした場合の[`auto_switch`](/features/next#auto-switch)）は、同じClaude TeamまたはEnterpriseの組織に属するシート間でも切り替えます。Anthropicのヘルプセンターには、「Each seat on a Team plan is assigned to one named individual, and only that person may use it」（Teamプランの各シートは1人の指定ユーザーに割り当てられ、そのユーザーのみが使用できます）、「Users can't route their work through another user's account to use that user's remaining usage」（ユーザーは別のユーザーのアカウントを通じて作業をルーティングして、そのユーザーの残りの使用量を使用することはできません）と書かれています（[Teamプラン](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)。[Enterpriseプラン](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)も同様です）。そのため、シート間で自動的なアカウント選択を使うと、Anthropicの規約に違反するおそれがあります。そこで使うかどうかはご自身の判断です。頼る前に、所属する組織とAnthropicに確認してください。個人プラン（Pro、Max）については、上の段落を参照してください。
 
 ## ccamで使用量の上限を回避できますか？
 

@@ -1,10 +1,10 @@
 ---
 title: "Gérer les comptes"
 description: "Ajoutez, connectez, listez, renommez, retirez et importez des comptes Claude Code : ccam add, ccam login, ccam list, ccam rename, ccam remove et ccam import."
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 Chaque compte ccam est un dossier de configuration Claude Code distinct, avec sa propre connexion. Utilisez ces commandes pour ajouter des comptes, les connecter, les lister, les renommer et les supprimer. Elles enregistrent aussi les dossiers que vous avez déjà.
@@ -79,7 +79,7 @@ Avec `--json`, chaque compte est un objet avec `slot`, `shortcut`, `name`, `emai
 
 `ccam login` (en dehors de `--expired`), `ccam use` et `ccam rename` n'ont pas d'options propres. `ccam completion` accepte `bash`, `zsh` ou `powershell` ; toute autre valeur échoue avec `only bash, zsh and powershell are supported`.
 
-Les noms de compte comptent de 1 à 32 caractères parmi `a-z`, `0-9`, `-` et `_`, et commencent par une lettre ou un chiffre. Un nom ne peut pas être composé uniquement de chiffres, car `ccam 2` désigne l'emplacement 2. Un nom ne peut pas non plus être une commande ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), si bien que `ccam <name>` n'est jamais ambigu. La liste est `config.Reserved` dans `internal/config`.
+Les noms de compte comptent de 1 à 32 caractères parmi `a-z`, `0-9`, `-` et `_`, et commencent par une lettre ou un chiffre. Un nom ne peut pas être composé uniquement de chiffres, car `ccam 2` désigne l'emplacement 2. Un nom ne peut pas non plus être une commande ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), si bien que `ccam <name>` n'est jamais ambigu. La liste est `config.Reserved` dans `internal/config`.
 
 ## Fonctionnement
 

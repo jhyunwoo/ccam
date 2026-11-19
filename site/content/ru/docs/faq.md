@@ -2,10 +2,10 @@
 title: Часто задаваемые вопросы
 metaTitle: "FAQ по ccam: несколько аккаунтов Claude Code"
 description: Ответы о ccam, аккаунтах Claude Code, лимитах использования, общем доступе, конфиденциальности и поддерживаемых системах.
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## Является ли ccam официальным инструментом Anthropic?
@@ -16,7 +16,7 @@ sourceHash: "9b13b37391f2"
 
 Это зависит от условий каждого аккаунта, а для рабочих аккаунтов также от политики вашей организации: для Pro и Max это [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) Anthropic, для Team и Enterprise её [Commercial Terms](https://www.anthropic.com/legal/commercial-terms), а для всех её [Usage Policy](https://www.anthropic.com/legal/aup). Проверьте их, прежде чем использовать несколько аккаунтов. ccam не повышает, не объединяет и не скрывает лимиты аккаунта, и каждый аккаунт по-прежнему останавливается на своих. Он переносит вашу работу в другой ваш аккаунт, когда вы об этом просите, или сам на лимите, если вы включите [`auto_switch`](/features/next#auto-switch) (Linux и macOS). Прежде чем этим пользоваться, проверьте, разрешено ли это для ваших аккаунтов; решение за вами.
 
-**Места в тарифах Team и Enterprise.** При автоматическом выборе аккаунта (`ccam next`, `--fallback`, `ccam pick`, клавиша `n` на панели, а также [`auto_switch`](/features/next#auto-switch), если вы его включите) ccam переключается и между местами одной и той же организации Claude Team или Enterprise. В справочном центре Anthropic ([тарифы Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); аналогично для [тарифов Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)) сказано: «Each seat on a Team plan is assigned to one named individual, and only that person may use it» (каждое место в тарифе Team закреплено за одним конкретным человеком, и пользоваться им может только этот человек) и «Users can't route their work through another user's account to use that user's remaining usage» (пользователи не могут направлять свою работу через аккаунт другого пользователя, чтобы расходовать оставшийся лимит этого пользователя). Поэтому использование автоматического выбора между местами может нарушать условия Anthropic. Пользоваться ли им в этом случае, решать вам: прежде чем на него полагаться, уточните это у своей организации и у Anthropic. О личных тарифах (Pro, Max) см. абзац выше.
+**Места в тарифах Team и Enterprise.** При автоматическом выборе аккаунта (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), клавиша `n` на панели, а также [`auto_switch`](/features/next#auto-switch), если вы его включите) ccam переключается и между местами одной и той же организации Claude Team или Enterprise. В справочном центре Anthropic ([тарифы Team](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); аналогично для [тарифов Enterprise](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)) сказано: «Each seat on a Team plan is assigned to one named individual, and only that person may use it» (каждое место в тарифе Team закреплено за одним конкретным человеком, и пользоваться им может только этот человек) и «Users can't route their work through another user's account to use that user's remaining usage» (пользователи не могут направлять свою работу через аккаунт другого пользователя, чтобы расходовать оставшийся лимит этого пользователя). Поэтому использование автоматического выбора между местами может нарушать условия Anthropic. Пользоваться ли им в этом случае, решать вам: прежде чем на него полагаться, уточните это у своей организации и у Anthropic. О личных тарифах (Pro, Max) см. абзац выше.
 
 ## Позволяет ли ccam обойти лимиты использования?
 

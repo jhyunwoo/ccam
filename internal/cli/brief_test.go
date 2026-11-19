@@ -383,7 +383,7 @@ func TestBriefFindsNothingToSummarize(t *testing.T) {
 	os.MkdirAll(filepath.Dir(conv), 0o700)
 	os.WriteFile(conv, []byte(`{"isSidechain":false,"type":"user","message":{"role":"user","content":"<command-name>/mcp</command-name>\n<command-message>mcp</command-message>\n<command-args></command-args>"}}`+"\n"+
 		`{"isSidechain":false,"type":"assistant","message":{"id":"m1","model":"claude-opus-5-5","role":"assistant","content":[{"type":"tool_use","id":"t1","name":"Bash","input":{"command":"ls"}}]}}`+"\n"), 0o600)
-	if _, _, ok := transcript.Latest(filepath.Dir(conv)); !ok {
+	if _, _, ok := transcript.Latest(filepath.Dir(conv), nil); !ok {
 		t.Fatal("Latest does not find it")
 	}
 	handoff.Save(c.p.State, handoff.Ticket{Account: "work", SessionID: "s1", Transcript: conv, Cwd: cwd, At: time.Now(), Reason: handoff.Switch, Target: "personal"})

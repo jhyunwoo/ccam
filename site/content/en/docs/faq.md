@@ -2,7 +2,7 @@
 title: Frequently asked questions
 metaTitle: "ccam FAQ: multiple Claude Code accounts"
 description: Answers about ccam, Claude Code accounts, usage limits, sharing, privacy and supported systems.
-updated: 2026-11-17
+updated: 2026-11-19
 published: 2026-10-19
 order: 6
 translation: source
@@ -16,7 +16,7 @@ No. ccam is an unofficial open-source project and is not affiliated with or endo
 
 That depends on the terms of each account and, for work accounts, your organization's policy: Anthropic's [Consumer Terms](https://www.anthropic.com/legal/consumer-terms) for Pro and Max, its [Commercial Terms](https://www.anthropic.com/legal/commercial-terms) for Team and Enterprise, and its [Usage Policy](https://www.anthropic.com/legal/aup) for all. Check them before you use several accounts. ccam does not raise, merge or hide an account's limits, and every account still stops at its own. It moves your work to another of your accounts when you ask, or by itself at a limit when you turn on [`auto_switch`](/features/next#auto-switch) (Linux and macOS). Check whether that is allowed for your accounts before you use it; the decision is yours.
 
-**Team and Enterprise seats.** Automatic account selection (`ccam next`, `--fallback`, `ccam pick`, the dashboard's `n` and [`auto_switch`](/features/next#auto-switch) when you turn it on) also switches between seats of the same Claude Team or Enterprise organization. Anthropic's help center says "Each seat on a Team plan is assigned to one named individual, and only that person may use it" and "Users can't route their work through another user's account to use that user's remaining usage" ([Team plans](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); likewise for [Enterprise plans](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Using automatic selection between seats may therefore violate Anthropic's terms. Whether you use it there is your call: check with your organization and Anthropic before you rely on it. Personal plans (Pro, Max) are covered by the paragraph above.
+**Team and Enterprise seats.** Automatic account selection (`ccam next`, `--fallback`, `ccam pick`, [`ccam agent`](/features/agent), the dashboard's `n` and [`auto_switch`](/features/next#auto-switch) when you turn it on) also switches between seats of the same Claude Team or Enterprise organization. Anthropic's help center says "Each seat on a Team plan is assigned to one named individual, and only that person may use it" and "Users can't route their work through another user's account to use that user's remaining usage" ([Team plans](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129); likewise for [Enterprise plans](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)). Using automatic selection between seats may therefore violate Anthropic's terms. Whether you use it there is your call: check with your organization and Anthropic before you rely on it. Personal plans (Pro, Max) are covered by the paragraph above.
 
 ## Does ccam get around usage limits?
 

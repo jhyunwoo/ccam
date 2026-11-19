@@ -155,6 +155,7 @@
     "shortcut": "Onyesha, unda, badilisha jina au ondoa amri ya njia fupi ya akaunti, kama ccwork",
     "folder": "Tumia akaunti katika folda na folda zake ndogo wakati hakuna akaunti iliyotajwa",
     "pick": "Chapisha akaunti yenye nafasi kubwa zaidi, kwa script na workers wanaoendeshwa sambamba",
+    "agent": "Endesha kazi kama akaunti nyingine, kama subagent anayetumia matumizi ya akaunti hiyo",
     "ext": "Onyesha skills, commands, plugins, seva za MCP na hooks ambazo kila akaunti hupakia",
     "agents": "Orodhesha agents wa chinichini na vipindi vilivyo wazi vya kila akaunti",
     "attach": "Fungua kipindi cha chinichini kama akaunti iliyokianzisha",

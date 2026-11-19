@@ -1,10 +1,10 @@
 ---
 title: Kusimamia akaunti
 description: Ongeza, ingia, orodhesha, badilisha jina, ondoa na ingiza akaunti za Claude Code kwa ccam add, ccam login, ccam list, ccam rename, ccam remove na ccam import.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 Kila akaunti ya ccam ni folda tofauti ya usanidi wa Claude Code yenye taarifa zake za kuingia. Tumia amri hizi kuongeza akaunti, kuziingiza, kuziorodhesha, kubadilisha majina yake na kuziondoa. Pia husajili folda ambazo tayari unazo.
@@ -79,7 +79,7 @@ Kwa `--json`, kila akaunti ni kitu chenye `slot`, `shortcut`, `name`, `email` (y
 
 `ccam login` (mbali na `--expired`), `ccam use` na `ccam rename` hazina chaguo zao wenyewe. `ccam completion` hupokea `bash`, `zsh` au `powershell`; kitu kingine chochote hushindwa kwa `only bash, zsh and powershell are supported`.
 
-Majina ya akaunti yana herufi 1 hadi 32 za `a-z`, `0-9`, `-` na `_`, yakianza na herufi au tarakimu. Jina haliwezi kuwa tarakimu tu, kwa sababu `ccam 2` inamaanisha namba 2. Jina pia haliwezi kuwa amri ya ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), ili `ccam <name>` isiwe na utata kamwe. Orodha hiyo ni `config.Reserved` katika `internal/config`.
+Majina ya akaunti yana herufi 1 hadi 32 za `a-z`, `0-9`, `-` na `_`, yakianza na herufi au tarakimu. Jina haliwezi kuwa tarakimu tu, kwa sababu `ccam 2` inamaanisha namba 2. Jina pia haliwezi kuwa amri ya ccam (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), ili `ccam <name>` isiwe na utata kamwe. Orodha hiyo ni `config.Reserved` katika `internal/config`.
 
 ## Jinsi inavyofanya kazi
 

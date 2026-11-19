@@ -1,10 +1,10 @@
 ---
 title: Konten verwalten
 description: "Claude Code-Konten anlegen, anmelden, auflisten, umbenennen, entfernen und importieren: mit ccam add, login, list, rename, remove und import."
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: machine
-sourceHash: "23f13f163cf2"
+sourceHash: "3bb475df8b0e"
 ---
 
 Jedes ccam-Konto ist ein eigener Claude Code-Konfigurationsordner mit eigener Anmeldung. Mit diesen Befehlen legst du Konten an, meldest sie an, listest sie auf, benennst sie um und entfernst sie. Sie registrieren auch Ordner, die du bereits hast.
@@ -79,7 +79,7 @@ Mit `--json` ist jedes Konto ein Objekt mit `slot`, `shortcut`, `name`, `email` 
 
 `ccam login` (abgesehen von `--expired`), `ccam use` und `ccam rename` haben keine eigenen Optionen. `ccam completion` nimmt `bash`, `zsh` oder `powershell`; alles andere schlägt mit `only bash, zsh and powershell are supported` fehl.
 
-Kontonamen bestehen aus 1 bis 32 Zeichen aus `a-z`, `0-9`, `-` und `_` und beginnen mit einem Buchstaben oder einer Ziffer. Ein Name darf nicht nur aus Ziffern bestehen, weil `ccam 2` Slot 2 bedeutet. Ein Name darf auch kein ccam-Befehl sein (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), damit `ccam <name>` nie mehrdeutig ist. Die Liste ist `config.Reserved` in `internal/config`.
+Kontonamen bestehen aus 1 bis 32 Zeichen aus `a-z`, `0-9`, `-` und `_` und beginnen mit einem Buchstaben oder einer Ziffer. Ein Name darf nicht nur aus Ziffern bestehen, weil `ccam 2` Slot 2 bedeutet. Ein Name darf auch kein ccam-Befehl sein (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), damit `ccam <name>` nie mehrdeutig ist. Die Liste ist `config.Reserved` in `internal/config`.
 
 ## So funktioniert es
 

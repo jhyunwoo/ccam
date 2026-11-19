@@ -1,7 +1,7 @@
 ---
 title: Managing accounts
 description: Add, log in, list, rename, remove and import Claude Code accounts with ccam add, ccam login, ccam list, ccam rename, ccam remove and ccam import.
-updated: 2026-10-28
+updated: 2026-11-19
 order: 2
 translation: source
 ---
@@ -78,7 +78,7 @@ With `--json`, each account is an object with `slot`, `shortcut`, `name`, `email
 
 `ccam login` (besides `--expired`), `ccam use` and `ccam rename` have no options of their own. `ccam completion` takes `bash`, `zsh` or `powershell`; anything else fails with `only bash, zsh and powershell are supported`.
 
-Account names are 1 to 32 characters of `a-z`, `0-9`, `-` and `_`, starting with a letter or digit. A name cannot be all digits, because `ccam 2` means slot 2. A name cannot be a ccam command either (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agents`, `attach`, `ccusage`), so `ccam <name>` is never ambiguous. The list is `config.Reserved` in `internal/config`.
+Account names are 1 to 32 characters of `a-z`, `0-9`, `-` and `_`, starting with a letter or digit. A name cannot be all digits, because `ccam 2` means slot 2. A name cannot be a ccam command either (`add`, `list`, `ls`, `run`, `use`, `next`, `usage`, `u`, `share`, `mcp`, `login`, `logout`, `rename`, `remove`, `rm`, `import`, `migrate`, `doctor`, `shims`, `shortcut`, `completion`, `help`, `version`, `statusline`, `update`, `uninstall`, `folder`, `pick`, `ext`, `group`, `groups`, `hook`, `agent`, `agents`, `attach`, `ccusage`), so `ccam <name>` is never ambiguous. The list is `config.Reserved` in `internal/config`.
 
 ## How it works
 

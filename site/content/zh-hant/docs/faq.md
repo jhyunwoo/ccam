@@ -2,10 +2,10 @@
 title: 常見問題
 metaTitle: "ccam 常見問題：Claude Code 多帳號"
 description: 關於 ccam、Claude Code 多帳號、用量限制、共用、隱私和支援的作業系統的常見問題解答。
-updated: 2026-11-17
+updated: 2026-11-19
 order: 6
 translation: machine
-sourceHash: "9b13b37391f2"
+sourceHash: "090ecc3a34bd"
 ---
 
 ## ccam 是 Anthropic 的官方工具嗎？
@@ -16,7 +16,7 @@ sourceHash: "9b13b37391f2"
 
 這取決於各帳號的條款；如果是工作帳號，也取決於你所屬組織的政策：Pro 和 Max 適用 Anthropic 的[消費者條款](https://www.anthropic.com/legal/consumer-terms)（Consumer Terms），Team 和 Enterprise 適用它的[商業條款](https://www.anthropic.com/legal/commercial-terms)（Commercial Terms），所有方案都適用它的[使用政策](https://www.anthropic.com/legal/aup)（Usage Policy）。使用多個帳號前請先確認這些規定。ccam 不會提高、合併或隱藏帳號的限制，每個帳號仍會在自己的限制處停下。它會在你要求時，把你的工作移到你的另一個帳號；或在你開啟 [`auto_switch`](/features/next#auto-switch)（Linux 和 macOS）後，在達到上限時自行這麼做。使用前請先確認你的帳號是否允許這麼做；決定權在你。
 
-**Team 和 Enterprise 席位。** 自動選擇帳號（`ccam next`、`--fallback`、`ccam pick`、儀表板的 `n`，以及你開啟後的 [`auto_switch`](/features/next#auto-switch)）也會在同一個 Claude Team 或 Enterprise 組織的席位之間切換。Anthropic 說明中心關於 [Team 方案](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)的文章寫道：「Each seat on a Team plan is assigned to one named individual, and only that person may use it」（Team 方案的每個席位都指派給一位具名的個人，而且只有這個人可以使用），以及「Users can't route their work through another user's account to use that user's remaining usage」（使用者不能經由其他使用者的帳號處理自己的工作，藉此使用對方剩餘的用量）；關於 [Enterprise 方案](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)的文章也是如此。因此，在席位之間使用自動選擇可能會違反 Anthropic 的條款。要不要在這種情況下使用它由你決定：在依賴這項功能之前，請先向你所屬的組織和 Anthropic 確認。個人方案（Pro、Max）的情況請參閱上一段。
+**Team 和 Enterprise 席位。** 自動選擇帳號（`ccam next`、`--fallback`、`ccam pick`、[`ccam agent`](/features/agent)、儀表板的 `n`，以及你開啟後的 [`auto_switch`](/features/next#auto-switch)）也會在同一個 Claude Team 或 Enterprise 組織的席位之間切換。Anthropic 說明中心關於 [Team 方案](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans#h_b8a7d07129)的文章寫道：「Each seat on a Team plan is assigned to one named individual, and only that person may use it」（Team 方案的每個席位都指派給一位具名的個人，而且只有這個人可以使用），以及「Users can't route their work through another user's account to use that user's remaining usage」（使用者不能經由其他使用者的帳號處理自己的工作，藉此使用對方剩餘的用量）；關於 [Enterprise 方案](https://support.claude.com/en/articles/13393991-purchase-and-manage-seats-on-enterprise-plans#h_fa6b9cade0)的文章也是如此。因此，在席位之間使用自動選擇可能會違反 Anthropic 的條款。要不要在這種情況下使用它由你決定：在依賴這項功能之前，請先向你所屬的組織和 Anthropic 確認。個人方案（Pro、Max）的情況請參閱上一段。
 
 ## ccam 能規避用量限制嗎？
 
